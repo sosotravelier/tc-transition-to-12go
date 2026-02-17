@@ -244,52 +244,89 @@ flowchart TD
 
 ## Client Endpoint to 12go API Mapping
 
-This diagram shows exactly which 12go endpoints each of our client-facing operations ultimately calls.
+### Mapping Table
+
+| Our Client Endpoint | 12go API Call(s) | Notes |
+|---|---|---|
+| **Search** `GET /v1/{client_id}/itineraries` | `GET /search/{from}p/{to}p/{date}` | Single 12go call |
+| **GetItinerary** `GET /{client_id}/itineraries/{id}` | `GET /trip/{tripId}/{datetime}` | 3 calls total |
+| | `POST /cart/{tripId}/{datetime}` | Creates cart |
+| | `GET /checkout/{cartId}` | Gets booking schema |
+| **SeatLock** `POST /{client_id}/bookings/lock_seats` | _(none)_ | Local validation only; 12go has no seat lock |
+| **CreateBooking** `POST /{client_id}/bookings` | `POST /reserve/{bookingId}` | + status fetch |
+| | `GET /booking/{bookingId}` | Gets price/status |
+| **ConfirmBooking** `POST /{client_id}/bookings/{id}/confirm` | `POST /confirm/{bookingId}` | + status fetch |
+| | `GET /booking/{bookingId}` | Gets final status |
+| **GetBookingDetails** `GET /{client_id}/bookings/{id}` | _(none, usually)_ | Reads from local DB |
+| | `GET /booking/{bookingId}` | Only for lazy ticket fetch |
+| **GetTicket** `GET /{client_id}/bookings/{id}/ticket` | `GET /booking/{bookingId}` | Gets ticket URL |
+| **CancelBooking** `POST /{client_id}/bookings/{id}/cancel` | `GET /booking/{bookingId}/refund-options` | 2 calls |
+| | `POST /booking/{bookingId}/refund` | Executes refund |
+| **GetStations** `GET /v1/{client_id}/stations` | MySQL `station_v` table | Via OneTwoGoDbWrapper (periodic sync) |
+| **GetOperators** `GET /v1/{client_id}/operators` | MySQL `operator_v` table | Via OneTwoGoDbWrapper (periodic sync) |
+
+### Visual: Booking Funnel to 12go
 
 ```mermaid
-flowchart LR
-    subgraph ClientEndpoints ["Client-Facing Endpoints"]
-        Search["GET /v1/{client_id}/itineraries\n(Search)"]
-        GetItin["GET /{client_id}/itineraries/{id}\n(GetItinerary)"]
-        SeatLock["POST /{client_id}/bookings/lock_seats\n(SeatLock)"]
-        CreateBook["POST /{client_id}/bookings\n(CreateBooking)"]
-        Confirm["POST /{client_id}/bookings/{id}/confirm\n(ConfirmBooking)"]
-        GetDetails["GET /{client_id}/bookings/{id}\n(GetBookingDetails)"]
-        GetTicket["GET /{client_id}/bookings/{id}/ticket\n(GetTicket)"]
-        Cancel["POST /{client_id}/bookings/{id}/cancel\n(CancelBooking)"]
-        Stations["GET /v1/{client_id}/stations"]
-        Operators["GET /v1/{client_id}/operators"]
+sequenceDiagram
+    participant Client
+    participant Us as Our Services
+    participant TGo as 12go API
+
+    rect rgb(40, 40, 60)
+    Note over Client,TGo: Search Phase
+    Client->>Us: Search itineraries
+    Us->>TGo: GET /search/{from}p/{to}p/{date}
+    TGo-->>Us: trips, operators, stations
+    Us-->>Client: itineraries with IDs
     end
 
-    subgraph TwelveGoAPI ["12go API Endpoints"]
-        S12["/search/{from}p/{to}p/{date}"]
-        Trip12["/trip/{tripId}/{datetime}"]
-        CartAdd12["/cart/{tripId}/{datetime}"]
-        CartGet12["/cart/{cartId}"]
-        Checkout12["/checkout/{cartId}"]
-        Reserve12["/reserve/{bookingId}"]
-        Confirm12["/confirm/{bookingId}"]
-        BookDet12["/booking/{bookingId}"]
-        Refund12["/booking/{bookingId}/refund-options\n/booking/{bookingId}/refund"]
-        StationDB12["MySQL station_v table\n(via OneTwoGoDbWrapper)"]
-        OperatorDB12["MySQL operator_v table\n(via OneTwoGoDbWrapper)"]
+    rect rgb(40, 60, 40)
+    Note over Client,TGo: Checkout Phase
+    Client->>Us: GetItinerary(id)
+    Us->>TGo: GET /trip/{tripId}/{datetime}
+    Us->>TGo: POST /cart/{tripId}/{datetime}
+    Us->>TGo: GET /checkout/{cartId}
+    TGo-->>Us: trip + cart + schema
+    Us-->>Client: PreBookingSchema + BookingToken
     end
 
-    Search --> S12
-    GetItin --> Trip12
-    GetItin --> CartAdd12
-    GetItin --> Checkout12
-    SeatLock -.->|"No 12go call\n(local validation only)"| SeatLock
-    CreateBook --> Reserve12
-    CreateBook --> BookDet12
-    Confirm --> Confirm12
-    Confirm --> BookDet12
-    GetDetails -.->|"Reads from local DB\n(no 12go call)"| GetDetails
-    GetDetails -.->|"Lazy ticket fetch"| BookDet12
-    GetTicket --> BookDet12
-    Cancel --> Refund12
-    Stations --> StationDB12
-    Operators --> OperatorDB12
+    rect rgb(60, 40, 40)
+    Note over Client,TGo: Booking Phase
+    Client->>Us: SeatLock (optional)
+    Note right of Us: No 12go call (local only)
+    Us-->>Client: validated seats
+
+    Client->>Us: CreateBooking
+    Us->>TGo: POST /reserve/{bookingId}
+    Us->>TGo: GET /booking/{bookingId}
+    TGo-->>Us: reservation + price
+    Us-->>Client: booking with ID
+
+    Client->>Us: ConfirmBooking
+    Us->>TGo: POST /confirm/{bookingId}
+    Us->>TGo: GET /booking/{bookingId}
+    TGo-->>Us: confirmed + ticket info
+    Us-->>Client: confirmed booking
+    end
+
+    rect rgb(40, 50, 60)
+    Note over Client,TGo: Post-Booking Phase
+    Client->>Us: GetBookingDetails
+    Note right of Us: Reads from local DB
+    Us-->>Client: booking details
+
+    Client->>Us: GetTicket
+    Us->>TGo: GET /booking/{bookingId}
+    TGo-->>Us: ticket URL
+    Us-->>Client: ticket PDF/URL
+
+    Client->>Us: CancelBooking
+    Us->>TGo: GET /booking/{bookingId}/refund-options
+    Us->>TGo: POST /booking/{bookingId}/refund
+    TGo-->>Us: refund result
+    Us-->>Client: cancellation details
+    end
 ```
 
 **Key observations:**
@@ -297,7 +334,7 @@ flowchart LR
 - **SeatLock** makes no 12go call at all (12go doesn't support it; we validate locally)
 - **GetBookingDetails** reads from our local DB, not 12go (except lazy ticket URL fetch)
 - **CreateBooking** and **ConfirmBooking** both call `/booking/{id}` after their main call to get updated status/price
-- **Stations/Operators** don't use the REST API -- they read directly from 12go's MySQL via OneTwoGoDbWrapper
+- **Stations/Operators** don't use the REST API -- they read from 12go's MySQL via OneTwoGoDbWrapper periodic sync
 
 ## Data Storage Map
 
