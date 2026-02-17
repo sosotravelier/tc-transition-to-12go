@@ -242,6 +242,63 @@ flowchart TD
 
 **What can go away**: DynamoDB caching (12go stores bookings), SI framework abstraction (only one integration). Credit line and markup may need to stay.
 
+## Client Endpoint to 12go API Mapping
+
+This diagram shows exactly which 12go endpoints each of our client-facing operations ultimately calls.
+
+```mermaid
+flowchart LR
+    subgraph ClientEndpoints ["Client-Facing Endpoints"]
+        Search["GET /v1/{client_id}/itineraries\n(Search)"]
+        GetItin["GET /{client_id}/itineraries/{id}\n(GetItinerary)"]
+        SeatLock["POST /{client_id}/bookings/lock_seats\n(SeatLock)"]
+        CreateBook["POST /{client_id}/bookings\n(CreateBooking)"]
+        Confirm["POST /{client_id}/bookings/{id}/confirm\n(ConfirmBooking)"]
+        GetDetails["GET /{client_id}/bookings/{id}\n(GetBookingDetails)"]
+        GetTicket["GET /{client_id}/bookings/{id}/ticket\n(GetTicket)"]
+        Cancel["POST /{client_id}/bookings/{id}/cancel\n(CancelBooking)"]
+        Stations["GET /v1/{client_id}/stations"]
+        Operators["GET /v1/{client_id}/operators"]
+    end
+
+    subgraph TwelveGoAPI ["12go API Endpoints"]
+        S12["/search/{from}p/{to}p/{date}"]
+        Trip12["/trip/{tripId}/{datetime}"]
+        CartAdd12["/cart/{tripId}/{datetime}"]
+        CartGet12["/cart/{cartId}"]
+        Checkout12["/checkout/{cartId}"]
+        Reserve12["/reserve/{bookingId}"]
+        Confirm12["/confirm/{bookingId}"]
+        BookDet12["/booking/{bookingId}"]
+        Refund12["/booking/{bookingId}/refund-options\n/booking/{bookingId}/refund"]
+        StationDB12["MySQL station_v table\n(via OneTwoGoDbWrapper)"]
+        OperatorDB12["MySQL operator_v table\n(via OneTwoGoDbWrapper)"]
+    end
+
+    Search --> S12
+    GetItin --> Trip12
+    GetItin --> CartAdd12
+    GetItin --> Checkout12
+    SeatLock -.->|"No 12go call\n(local validation only)"| SeatLock
+    CreateBook --> Reserve12
+    CreateBook --> BookDet12
+    Confirm --> Confirm12
+    Confirm --> BookDet12
+    GetDetails -.->|"Reads from local DB\n(no 12go call)"| GetDetails
+    GetDetails -.->|"Lazy ticket fetch"| BookDet12
+    GetTicket --> BookDet12
+    Cancel --> Refund12
+    Stations --> StationDB12
+    Operators --> OperatorDB12
+```
+
+**Key observations:**
+- **GetItinerary** is the most 12go-intensive -- it calls 3 endpoints (trip details, add to cart, checkout/schema)
+- **SeatLock** makes no 12go call at all (12go doesn't support it; we validate locally)
+- **GetBookingDetails** reads from our local DB, not 12go (except lazy ticket URL fetch)
+- **CreateBooking** and **ConfirmBooking** both call `/booking/{id}` after their main call to get updated status/price
+- **Stations/Operators** don't use the REST API -- they read directly from 12go's MySQL via OneTwoGoDbWrapper
+
 ## Data Storage Map
 
 | Store | Service | Purpose | Can It Go? |
