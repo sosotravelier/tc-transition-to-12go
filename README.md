@@ -1,18 +1,32 @@
 # 12go System Transition Design
 
+> **AI Agents**: Start with [AGENTS.md](AGENTS.md) for orientation, key findings, source file paths, and role definitions.
+
 Design documentation for migrating from the current multi-service architecture (Denali, Etna, Fuji, Supply-Integration) to 12go as the core system while preserving all client-facing API contracts.
 
 ## Timeline
 
-| Day | Milestone |
-|-----|-----------|
-| **Tuesday (Feb 17)** | Phase 1: Document current state - all endpoints, contracts, flows |
-| **Wednesday (Feb 18)** | Questions for 12go representative |
-| **Thursday (Feb 19)** | Draft design with proposed solutions, pros/cons, diagrams |
+| Day | Milestone | Status |
+|-----|-----------|--------|
+| **Tuesday (Feb 17)** | Phase 1: Document current state | DONE |
+| **Wednesday (Feb 18)** | Questions for 12go representative | Ready for review |
+| **Thursday (Feb 19)** | Draft design with proposed solutions | Pending |
 
 ## Context
 
 We are transitioning from a multi-service .NET architecture to using 12go (PHP/Symfony) as the core system. The challenge is that existing clients depend on our API contracts (Denali for booking, Etna for search, Fuji for master data), which are vastly different from 12go's APIs. We need to maintain backward compatibility while simplifying the architecture.
+
+## Key Findings (from Phase 1)
+
+1. **Station ID mapping is the hardest problem** -- clients have Fuji IDs, 12go uses different IDs
+2. **Most local storage (DynamoDB) can be eliminated** -- 12go already stores the data
+3. **SI framework abstraction is unnecessary** -- only the OneTwoGoApi call logic matters
+4. **Authentication is decorative** -- real auth is at the API gateway
+5. **Seat locking is faked** -- 12go doesn't support it; we validate locally
+6. **Refund calculations diverge** between our system and 12go's
+7. **Search pipeline is massively over-engineered** -- only direct 12go call path survives
+
+See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 
 ## Phase 1: Current State Documentation
 

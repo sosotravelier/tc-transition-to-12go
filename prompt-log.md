@@ -74,3 +74,28 @@ I need to define now what are things that we need to keep. Which endpoints and w
 ### 12go Side
 
 PHP system, frontend3 contains endpoints we call. Uses MySQL, Redis, PHP, Kafka. Own monitoring tools. OpenTelemetry for tracing/metrics (somewhat compatible). Station data pulled periodically to Fuji.
+
+---
+
+## Session 1 Decisions (Feb 17, 2026)
+
+During the first working session, the following decisions were made through discussion:
+
+1. **Folder location**: `~/RiderProjects/transition-design/` (outside all repo folders since it spans them)
+2. **Git**: Standalone git repo initialized
+3. **Agent strategy**: Single Cursor session with Task subagents for parallel work (up to 4 per wave), rather than multiple Cursor windows
+4. **Execution approach**: 5 waves of subagents:
+   - Wave 1: Scaffolding (main agent -- AGENTS.md, README, overview with diagrams)
+   - Wave 2: Core booking flow endpoints (4 parallel -- search, get-itinerary, create-booking, confirm+seat-lock)
+   - Wave 3: Post-booking + master data (4 parallel -- post-booking endpoints, Fuji endpoints, notifications+incomplete, 12go API+SI framework)
+   - Wave 4: Cross-cutting concerns (4 parallel -- auth, monitoring, storage+caching, messaging)
+   - Wave 5: Synthesis (main agent -- questions for 12go, README status update, git commit)
+5. **Phase approach**: Phase 1 (document what exists) -> Phase 2 (design solutions) -> Phase 3 (implement)
+
+## Session 1 Outputs
+
+- 25 markdown files, 7,386 lines of documentation
+- 13 endpoint docs, 4 cross-cutting docs, 3 integration analysis docs
+- 1 overview with architecture diagrams
+- 20 prioritized questions for 12go representative
+- All committed as initial git history
