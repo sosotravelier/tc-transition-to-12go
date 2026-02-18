@@ -99,3 +99,32 @@ During the first working session, the following decisions were made through disc
 - 1 overview with architecture diagrams
 - 20 prioritized questions for 12go representative
 - All committed as initial git history
+
+## Session 2 Prompt (Feb 17, 2026 — evening)
+
+Come up with 3 different transition designs with pros/cons and evaluation criteria. Station mapping out of scope. Consider scale (12go is one of the biggest travel tech companies), search needs to be fast, recheck logic, observability (filter by clientId, operator, bookingId, itinerary).
+
+Three approaches:
+1. **Trim .NET, keep on 12go infra** — How many microservices, scaling, DDD/BDD, MediatR?
+2. **PHP native** — Direct DB, use f3 modules, or keep HTTP calls?
+3. **Thin gateway** — Minimal translation layer
+
+Research online for "by the book" patterns. Use separate agents exploring alternatives. Analyze with reviewer agents playing different roles (event-driven/FP architect, AI-focused architect, business risk assessor, DevOps engineer).
+
+Design output in separate folders. All files are trial/disposable.
+
+## Session 2 Decisions
+
+1. **4-wave execution**: Research (4 agents) → Design (3 agents) → Review (4 agents) → Synthesis (1 agent)
+2. **12 total agents** across 4 waves
+3. **Reviewer personas**: Event-driven/FP architect, AI-first development architect, business risk assessor, DevOps/platform engineer
+4. **Output structure**: `design/research/`, `design/option-{a,b,c}/`, `design/reviews/`, `design/evaluation-matrix.md`
+
+## Session 2 Outputs
+
+- 12 markdown files, 8,232 lines of design documentation
+- 4 research docs (dotnet trimming, PHP capability, industry patterns, scale/observability)
+- 3 architecture option docs (trimmed .NET, PHP native, thin gateway)
+- 4 reviewer perspective docs (event-driven/FP, AI-first, business risk, DevOps)
+- 1 evaluation matrix with weighted scoring, sensitivity analysis, and decision tree
+- Updated README.md, AGENTS.md, prompt-log.md

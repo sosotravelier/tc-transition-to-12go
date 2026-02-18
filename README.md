@@ -9,8 +9,9 @@ Design documentation for migrating from the current multi-service architecture (
 | Day | Milestone | Status |
 |-----|-----------|--------|
 | **Tuesday (Feb 17)** | Phase 1: Document current state | DONE |
+| **Tuesday (Feb 17)** | Phase 2: Design exploration (3 options, 4 reviews, evaluation matrix) | DONE |
 | **Wednesday (Feb 18)** | Questions for 12go representative | Ready for review |
-| **Thursday (Feb 19)** | Draft design with proposed solutions | Pending |
+| **Thursday (Feb 19)** | Finalize design based on 12go answers | Pending |
 
 ## Context
 
@@ -69,10 +70,49 @@ See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 
 [Questions for 12go representative](questions/for-12go.md)
 
-## Phase 3: Design (Thursday)
+## Phase 2b: Design Exploration (Trial Run)
 
-- [Proposed Architecture](design/proposed-architecture.md)
-- [Migration Plan](design/migration-plan.md)
+> **Note**: This is a trial run. All design files may be discarded and regenerated after the Wednesday 12go meeting provides answers to Q1-Q20.
+
+### Research
+
+| Topic | Document | Agent |
+|-------|----------|-------|
+| .NET Trimming Analysis | [dotnet-trimming-analysis.md](design/research/dotnet-trimming-analysis.md) | R1 |
+| PHP/Frontend3 Capability | [php-capability-analysis.md](design/research/php-capability-analysis.md) | R2 |
+| Industry Patterns | [industry-patterns.md](design/research/industry-patterns.md) | R3 |
+| Scale & Observability | [scale-observability.md](design/research/scale-observability.md) | R4 |
+
+### Architecture Options
+
+| Option | Document | Summary |
+|--------|----------|---------|
+| **A: Trimmed .NET** | [architecture.md](design/option-a-trimmed-dotnet/architecture.md) | Keep .NET, strip 90%+ code, 1-2 services, deploy on 12go K8s |
+| **B: PHP Native** | [architecture.md](design/option-b-php-native/architecture.md) | Symfony bundle inside frontend3, call internal services directly |
+| **C: Thin Gateway** | [architecture.md](design/option-c-thin-gateway/architecture.md) | Minimal stateless translation layer (ACL pattern) |
+
+### Reviews (4 Perspectives)
+
+| Reviewer Persona | Document | Preferred Option |
+|-----------------|----------|-----------------|
+| Event-Driven / FP Architect | [event-driven-fp-review.md](design/reviews/event-driven-fp-review.md) | Option C (29/40) |
+| AI-First Development Architect | [ai-first-review.md](design/reviews/ai-first-review.md) | Option C (39/40) |
+| Business Risk Assessor | [business-risk-review.md](design/reviews/business-risk-review.md) | Option A bridge → B |
+| DevOps / Platform Engineer | [devops-platform-review.md](design/reviews/devops-platform-review.md) | Option B (35/40) |
+
+### Evaluation Matrix
+
+**[Evaluation Matrix](design/evaluation-matrix.md)** — Comprehensive scoring of all 3 options across 10 criteria, with sensitivity analysis for unanswered Q1-Q20 questions and a decision tree.
+
+**Weighted scores**: Option C (48.0) > Option A (44.5) > Option B (38.5)
+
+**Critical dependency**: The winner depends on answers to Q1 (integration method), Q2 (language), Q3 (infrastructure) at the Wednesday meeting.
+
+## Phase 3: Final Design (Thursday)
+
+- Finalize architecture based on 12go meeting answers
+- Detailed migration plan
+- Per-endpoint design documents
 
 ## Architecture Overview
 

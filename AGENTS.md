@@ -219,37 +219,59 @@ When referencing another doc, use relative links:
 - **Output**: `questions/for-12go.md`
 - **Must**: Read every doc's "Open Questions" section, synthesize, prioritize
 
-### Phase 2 Roles (Design)
+### Phase 2 Roles — Design Exploration (Complete — Trial Run)
+
+> **Note**: Phase 2 was executed as a trial run with 12 parallel agents across 4 waves. All output is in `design/` and may be discarded after the Wednesday 12go meeting.
+
+#### Research Agents (Wave 1)
+
+| Agent | Purpose | Output |
+|-------|---------|--------|
+| **R1: .NET Trimming Analyst** | Analyze what to keep/trim/discard in all .NET services | `design/research/dotnet-trimming-analysis.md` |
+| **R2: PHP/f3 Capability Analyst** | Map frontend3 capabilities to our endpoint needs | `design/research/php-capability-analysis.md` |
+| **R3: Industry Patterns Researcher** | Research best practices (Strangler Fig, BFF, ACL, travel tech) | `design/research/industry-patterns.md` |
+| **R4: Scale & Observability Researcher** | Research scaling, latency targets, observability patterns | `design/research/scale-observability.md` |
+
+#### Design Agents (Wave 2)
+
+| Agent | Purpose | Output |
+|-------|---------|--------|
+| **D1: Option A Architect** | Design trimmed .NET architecture on 12go infra | `design/option-a-trimmed-dotnet/architecture.md` |
+| **D2: Option B Architect** | Design PHP native Symfony bundle architecture | `design/option-b-php-native/architecture.md` |
+| **D3: Option C Architect** | Design thin stateless API gateway architecture | `design/option-c-thin-gateway/architecture.md` |
+
+#### Review Agents (Wave 3)
+
+| Agent | Persona | Output |
+|-------|---------|--------|
+| **V1: Event-Driven/FP Architect** | Values immutability, composability, explicit data flow | `design/reviews/event-driven-fp-review.md` |
+| **V2: AI-First Development Architect** | Values AI-friendly code, navigability, type safety | `design/reviews/ai-first-review.md` |
+| **V3: Business Risk Assessor** | Values risk mitigation, realistic timelines, rollback | `design/reviews/business-risk-review.md` |
+| **V4: DevOps/Platform Engineer** | Values operational simplicity, resource efficiency | `design/reviews/devops-platform-review.md` |
+
+#### Synthesis Agent (Wave 4)
+
+| Agent | Purpose | Output |
+|-------|---------|--------|
+| **S1: Evaluation Matrix Builder** | Synthesize all designs + reviews into scored comparison | `design/evaluation-matrix.md` |
+
+### Phase 2 Roles — Final Design (Pending Q1-Q20 Answers)
 
 #### Solution Architect
-- **Purpose**: Propose architecture options for the transition
-- **Input**: Read `current-state/overview.md`, `questions/for-12go.md`, and answers from 12go meeting
-- **Output**: `design/proposed-architecture.md` with multiple options, pros/cons, diagrams
-- **Key decisions to address**:
-  - Integration method (HTTP proxy vs code reference vs direct DB)
-  - Programming language for adapter services
-  - Whether to keep local state (DynamoDB/PostgreSQL) or go stateless
-  - Station ID mapping strategy
-  - Monitoring/observability unification
-- **Must**: Reference specific current-state docs for each decision. Use the Design Document Template.
+- **Purpose**: Finalize architecture based on 12go meeting answers and Phase 2 exploration
+- **Input**: `design/evaluation-matrix.md`, Q1-Q20 answers, selected option architecture doc
+- **Output**: `design/final-architecture.md`
 
 #### Migration Planner
-- **Purpose**: Define the step-by-step migration plan with ordering and dependencies
-- **Input**: Read `design/proposed-architecture.md` and all endpoint docs
-- **Output**: `design/migration-plan.md` with phased migration steps
-- **Must**: Consider which endpoints can be migrated independently, what needs to migrate together, rollback strategy, and how to test each step
+- **Purpose**: Define step-by-step migration plan for the chosen architecture
+- **Input**: Final architecture doc + all endpoint docs
+- **Output**: `design/migration-plan.md` with phased steps, rollback points, parallel run strategy
 
 #### Endpoint Designer
-- **Purpose**: Design the new implementation for a specific endpoint
-- **Input**: Read the corresponding `current-state/endpoints/{endpoint}.md` and `design/proposed-architecture.md`
-- **Output**: Design doc for the endpoint in `design/endpoints/{endpoint}.md`
-- **Must**: Show the new call flow (mermaid), the contract preservation strategy, what code changes are needed, and what tests are required
-
-#### Risk Analyst
-- **Purpose**: Identify and evaluate risks in the proposed design
-- **Input**: Read all design docs and cross-cutting concern docs
-- **Output**: Risk assessment section in `design/proposed-architecture.md`
-- **Must**: Consider client breakage, data loss, performance degradation, monitoring gaps, security gaps
+- **Purpose**: Design new implementation for each specific endpoint
+- **Input**: `current-state/endpoints/{endpoint}.md` + final architecture
+- **Output**: `design/endpoints/{endpoint}.md`
+- **Must**: Show new call flow, contract preservation, code changes, tests
 
 ### Phase 3 Roles (Implementation)
 
@@ -279,3 +301,8 @@ Decisions made during this project, for context in future sessions.
 | 2026-02-17 | Phase 1 first (document what exists), then Phase 2 (design), then Phase 3 (implement) | Need to know what we have before deciding what to build |
 | 2026-02-17 | Each endpoint gets its own file | Enables parallel work by different agents without merge conflicts |
 | 2026-02-17 | Questions for 12go compiled from all doc open questions | Centralized list prioritized by architecture impact |
+| 2026-02-17 | Phase 2 as trial run with 3 options + 4 reviewer personas | Explore design space before Q1-Q20 answers constrain it |
+| 2026-02-17 | 12 agents across 4 waves for design exploration | Research → Design → Review → Synthesize pipeline |
+| 2026-02-17 | Design output is disposable | May regenerate after Wednesday 12go meeting |
+| 2026-02-17 | Weighted evaluation: Option C (48.0) > A (44.5) > B (38.5) | But winner depends on Q1-Q3 answers; no final decision yet |
+| 2026-02-17 | Reviewer disagreement captured: FP/AI prefer C, DevOps prefers B, Risk suggests A→B bridge | Multiple valid perspectives; decision tree in evaluation-matrix.md |
