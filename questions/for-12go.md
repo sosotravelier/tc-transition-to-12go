@@ -1,6 +1,29 @@
 ---
 status: draft
-last_updated: 2026-02-17
+last_updated: 2026-02-18
+---
+
+### Answers Received (2026-02-18)
+
+**From 12go meeting:**
+- Go is being considered as future language but not decided; PHP remains current
+- Search is backed by MariaDB; rechecks go to actual integrations (up to 1 min latency)
+- Infrastructure is DevOps-managed; environments: Local (Docker), Staging, PreProd (Canary), Prod
+- Tech stack: MariaDB, Redis, Kafka (business events), ClickHouse (analytics)
+- Logs on Datadog; basic CPU/memory metrics
+- Documentation via Jira/Atlassian; code traceability via git blame -> Jira
+- Static data endpoints: still open (forgot to ask)
+
+**From management (Shauly):**
+- Pricing/Ushba goes away -- use 12go prices directly
+- Seat lock is being developed on 12go's side
+- Scope: all B2B endpoints (static data, search, booking)
+- Out of scope: distribution, Ushba, station mapping ID migration, client onboarding
+- Client notifications: 12go has capability but different shape; need transformer service
+- Most Kafka events are redundant (no trip lake, no data team)
+- Monitoring needs: client, operator, action, outcome, bookingId, itineraryId, traceId
+- API key mapping issue: clientId+apiKey (ours) vs apiKey-only (12go)
+
 ---
 
 # Questions for 12go Representative
@@ -23,14 +46,14 @@ Currently we call 12go via HTTP REST endpoints (e.g., `/search/{from}p/{to}p/{da
 
 Which approach does 12go prefer? Is there a fourth option (e.g., gRPC, shared library, message queue)?
 
-### Q2. What is the vision for the programming language of new services?
+### Q2. [RESOLVED] What is the vision for the programming language of new services?
 
 Our current services are .NET. 12go is PHP. For the adapter/proxy services we need to maintain for client compatibility:
 - Should we rewrite them in PHP to align with 12go's ecosystem?
 - Should we keep them in .NET since they're just thin translation layers?
 - Is there a plan to introduce a different language for new services?
 
-### Q3. Where will our services run?
+### Q3. [RESOLVED] Where will our services run?
 
 We need to migrate infrastructure to 12go's cloud. Key questions:
 - What cloud provider and orchestration does 12go use (K8s, ECS, etc.)?
@@ -68,7 +91,7 @@ We currently generate PDF tickets ourselves (with QR codes, maps, logos) for som
 - Can the ticket PDF be customized (branding, layout) per client?
 - Is the ticket available immediately after confirmation, or is there a generation delay? (Our clients poll for this)
 
-### Q7. Does 12go support seat locking?
+### Q7. [RESOLVED] Does 12go support seat locking?
 
 Our `LockSeats` endpoint is client-facing, but OneTwoGo's `IBookingFunnel.LockSeats()` throws `NotImplementedException`. Currently we fake seat locking by validating availability and storing the selection locally.
 
@@ -130,7 +153,7 @@ Our POIs map to 12go provinces. Clients can search by POI instead of specific st
 
 ## Priority 4: Observability & Operations
 
-### Q14. Monitoring and logging unification
+### Q14. [RESOLVED] Monitoring and logging unification
 
 We use Coralogix for logs/tracing and Grafana for metrics. 12go uses OpenTelemetry.
 
@@ -157,7 +180,7 @@ We publish several Kafka events (BookSucceeded, ReservationChanged, etc.). Some 
 
 ## Priority 5: Operational Details
 
-### Q17. Credit line and pricing
+### Q17. [RESOLVED] Credit line and pricing
 
 Our system checks a "credit line" balance before booking and confirmation. We also apply markup per-client using Ushba Revenue SDK.
 
@@ -200,3 +223,11 @@ We fetch the booking schema from `GET /checkout/{cartId}?people=1` which returns
 | Q5 (Booking storage) | Determines if we keep DynamoDB/PostgreSQL |
 | Q11 (Station mapping) | Determines if we keep Fuji or build translation layer |
 | Q14 (Monitoring) | Determines observability architecture |
+
+---
+
+## Still Open
+
+- **Static data endpoints** — Forgot to ask in meeting
+- **Integration team relevance/details** — TBD
+- **Webhook authentication (12go→us)** — TBD

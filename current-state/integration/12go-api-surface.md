@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-17
+last_updated: 2026-02-18
 ---
 
 # 12go API Surface (Current Usage)
@@ -16,6 +16,12 @@ Search → GetTripDetails → AddToCart → GetCartDetails → GetBookingSchema 
 ```
 
 Post-booking operations include `GetBookingDetails`, `GetRefundOptions`, and `Refund`.
+
+---
+
+## Infrastructure
+
+Infrastructure is managed by DevOps. We do not need to worry about scaling details or deployment topology. Configuration changes go through release requests.
 
 ---
 
@@ -118,6 +124,8 @@ Used as the failure type in `Result<T, OneTwoGoApiError>` returns:
 | **Path** | `/search/{fromProvinceId}p/{toProvinceId}p/{yyyy-MM-dd}?seats={n}&direct=true` |
 | **C# Method** | `OneTwoGoApi.Search(SearchRoute route, DateOnly departureDate, uint numberOfSeats)` |
 | **Notes** | Province IDs come from `route.From.AdditionalProperties["provinceId"]` / `route.To.AdditionalProperties["provinceId"]`, suffixed with `p`. The `direct=true` flag is always set. |
+
+**Backend:** Search is backed by MariaDB (MySQL-compatible). Rechecks — when you validate availability before booking — go to actual supplier integrations and can take up to 1 minute.
 
 #### Request Parameters
 

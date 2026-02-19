@@ -1,9 +1,14 @@
 ---
-status: complete
-last_updated: 2026-02-17
+status: updated
+last_updated: 2026-02-18
 ---
 
 # Current System Architecture Overview
+
+## Scope
+
+- **In scope**: All B2B client-facing endpoints (static data, search, booking funnel, post-booking)
+- **Out of scope**: Distribution service, Ushba (pricing module -- being sunset separately), station mapping ID migration, client onboarding process
 
 ## Services Summary
 
@@ -39,11 +44,12 @@ flowchart TD
         HybridCache["HybridCache\n(SI layer)"]
     end
 
-    subgraph TwelveGo ["12go Platform (PHP)"]
+    subgraph TwelveGo ["12go Platform (PHP) -- Infra managed by DevOps"]
         Frontend3["frontend3\n(Symfony API)"]
-        MySQL["MySQL"]
+        MariaDB["MariaDB\n(MySQL-compatible)"]
         Redis["Redis"]
-        Kafka12go["Kafka"]
+        Kafka12go["Kafka\n(business events)"]
+        ClickHouse["ClickHouse\n(analytics)"]
     end
 
     Client -->|"GET /stations\nGET /operators"| Fuji
@@ -65,9 +71,10 @@ flowchart TD
     DenaliPostBooking --> DynamoDB
     SIFramework --> HybridCache
 
-    Frontend3 --> MySQL
+    Frontend3 --> MariaDB
     Frontend3 --> Redis
     Frontend3 --> Kafka12go
+    Frontend3 --> ClickHouse
 
     Frontend3 -->|"Webhooks"| DenaliNotifications
 ```
@@ -252,7 +259,7 @@ flowchart TD
 | **GetItinerary** `GET /{client_id}/itineraries/{id}` | `GET /trip/{tripId}/{datetime}` | 3 calls total |
 | | `POST /cart/{tripId}/{datetime}` | Creates cart |
 | | `GET /checkout/{cartId}` | Gets booking schema |
-| **SeatLock** `POST /{client_id}/bookings/lock_seats` | _(none)_ | Local validation only; 12go has no seat lock |
+| **SeatLock** `POST /{client_id}/bookings/lock_seats` | _(none yet)_ | Local validation only; 12go is developing native seat lock |
 | **CreateBooking** `POST /{client_id}/bookings` | `POST /reserve/{bookingId}` | + status fetch |
 | | `GET /booking/{bookingId}` | Gets price/status |
 | **ConfirmBooking** `POST /{client_id}/bookings/{id}/confirm` | `POST /confirm/{bookingId}` | + status fetch |
@@ -262,8 +269,8 @@ flowchart TD
 | **GetTicket** `GET /{client_id}/bookings/{id}/ticket` | `GET /booking/{bookingId}` | Gets ticket URL |
 | **CancelBooking** `POST /{client_id}/bookings/{id}/cancel` | `GET /booking/{bookingId}/refund-options` | 2 calls |
 | | `POST /booking/{bookingId}/refund` | Executes refund |
-| **GetStations** `GET /v1/{client_id}/stations` | MySQL `station_v` table | Via OneTwoGoDbWrapper (periodic sync) |
-| **GetOperators** `GET /v1/{client_id}/operators` | MySQL `operator_v` table | Via OneTwoGoDbWrapper (periodic sync) |
+| **GetStations** `GET /v1/{client_id}/stations` | MariaDB `station_v` table | Via OneTwoGoDbWrapper (periodic sync) |
+| **GetOperators** `GET /v1/{client_id}/operators` | MariaDB `operator_v` table | Via OneTwoGoDbWrapper (periodic sync) |
 
 ### Visual: Booking Funnel to 12go
 
@@ -331,10 +338,10 @@ sequenceDiagram
 
 **Key observations:**
 - **GetItinerary** is the most 12go-intensive -- it calls 3 endpoints (trip details, add to cart, checkout/schema)
-- **SeatLock** makes no 12go call at all (12go doesn't support it; we validate locally)
+- **SeatLock** makes no 12go call yet (12go is developing native seat lock; we currently validate locally)
 - **GetBookingDetails** reads from our local DB, not 12go (except lazy ticket URL fetch)
 - **CreateBooking** and **ConfirmBooking** both call `/booking/{id}` after their main call to get updated status/price
-- **Stations/Operators** don't use the REST API -- they read from 12go's MySQL via OneTwoGoDbWrapper periodic sync
+- **Stations/Operators** don't use the REST API -- they read from 12go's MariaDB via OneTwoGoDbWrapper periodic sync
 
 ## Data Storage Map
 
@@ -346,9 +353,10 @@ sequenceDiagram
 | DynamoDB - BookingEntity | Denali post-booking-service | Store confirmed bookings | Yes - proxy to 12go |
 | HybridCache | Supply-Integration | Cache trip data (price, operator) between search and checkout | Likely yes - re-fetch from 12go |
 | MemoryCache | Etna Search | Cache index search results, station mappings | Yes - no index search needed |
-| MySQL | Fuji (via OneTwoGoDbWrapper) | Station/operator master data from 12go | Keep - still need station mapping |
-| MySQL | 12go (frontend3) | Core data store | Keep - this is the source of truth |
+| MariaDB | Fuji (via OneTwoGoDbWrapper) | Station/operator master data from 12go | Keep - still need station mapping |
+| MariaDB | 12go (frontend3) | Core data store (MySQL-compatible) | Keep - this is the source of truth |
 | Redis | 12go (frontend3) | Caching layer | Keep - 12go internal |
+| ClickHouse | 12go (frontend3) | Analytics | Keep - 12go internal |
 
 ## Communication Map
 
@@ -365,3 +373,53 @@ sequenceDiagram
 | Fuji | 12go (OneTwoGoDbWrapper) | HTTP REST + MySQL | Station sync |
 | 12go | Denali notification-service | HTTP Webhook | Booking status changes |
 | Denali services | Kafka | Async messaging | Internal events |
+
+## 12go Platform Details
+
+### Tech Stack
+
+| Component | Technology | Notes |
+|-----------|-----------|-------|
+| Application | PHP 8.3 / Symfony 6.4 | Monolith application |
+| Database | MariaDB | MySQL-compatible; primary data store |
+| Cache | Redis | Application caching |
+| Messaging | Kafka | Business events only (not infrastructure/ops events) |
+| Analytics | ClickHouse | Analytics data store |
+| Logs/Metrics | Datadog | Logs + basic CPU/memory metrics |
+| Search backing | MariaDB | Search queries go to DB; rechecks go to actual integrations (up to 1 minute latency) |
+
+### Infrastructure
+
+Infrastructure is fully managed by DevOps -- we don't need to concern ourselves with what's under the hood (scaling, deployment topology, etc.). DevOps also handles configurations; config changes go through release requests.
+
+### Environments
+
+| Environment | Purpose | Notes |
+|-------------|---------|-------|
+| Local | Development | Docker-based |
+| Staging | Testing | Separate IDs from production |
+| PreProd | Canary | Real connections to external services |
+| Prod | Production | Live traffic |
+
+Dev environment URL: `https://integration-dev.travelier.com/v1/{client_id}/`
+
+### Documentation & Traceability
+
+- Documentation via Jira/Atlassian
+- Code traceability: git blame -> Jira tickets
+- Integrations handled by a separate team on 12go side
+
+## Team Composition
+
+| Role | Count | Expertise |
+|------|-------|-----------|
+| .NET Developers | 3-4 | 2 senior (12yr experience), 1-2 mid/junior |
+| Team Lead | 1 | Deep system knowledge across all services |
+| DevOps | 2 | Transitioning to 12go infrastructure but supporting us |
+| 12go Veterans | available | PHP experts available for advice/clarification |
+
+**Key constraints:**
+- All development expertise is in .NET
+- Go is being considered as a future language on 12go's side, but nothing is decided
+- Developer experience and maintainability are priorities given team transitions
+- PHP is not being adopted by this team

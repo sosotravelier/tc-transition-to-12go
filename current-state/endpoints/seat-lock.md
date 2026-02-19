@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-17
+last_updated: 2026-02-18
 ---
 # LockSeats (Seat Lock)
 
@@ -186,13 +186,15 @@ sequenceDiagram
 
 ## 12go Equivalent
 
-### 12go does NOT support native seat locking
+### 12go is actively developing seat lock functionality
 
-The `OneTwoGoBookingFunnel` does **not** implement `LockSeats()` or `IsSeatLockSupported()`. There is no `LockSeats` or `IsSeatLockSupported` method in the `OneTwoGoBookingFunnel` class — searching the codebase confirms zero matches.
+**12go is actively developing native seat lock functionality** — this was confirmed by management. Native seat lock is in development on 12go's side.
 
-This means `IBookingFunnel.IsSeatLockSupported()` returns `false` for 12go, and the system follows the **fallback path**.
+Today, the `OneTwoGoBookingFunnel` does **not** implement `LockSeats()` or `IsSeatLockSupported()`. There is no `LockSeats` or `IsSeatLockSupported` method in the `OneTwoGoBookingFunnel` class — searching the codebase confirms zero matches.
 
-### What actually happens for 12go
+This means we **won't need to fake seat lock long-term**; once 12go ships native seat lock, we can pass through directly. The **client-facing contract still needs to be preserved regardless** — our LockSeats endpoint and request/response shapes remain the same whether we use the fallback path or native 12go seat lock.
+
+### What actually happens for 12go (current state)
 
 1. **No supplier call to lock seats** — no `POST` or `PUT` to the 12go API
 2. Instead, Denali **re-fetches the booking schema** from 12go via `BookingSiHost.GetBookingSchema()` → which internally calls the 12go schema endpoint

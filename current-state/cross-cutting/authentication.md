@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-17
+last_updated: 2026-02-18
 ---
 # Authentication
 
@@ -191,6 +191,18 @@ When 12go sends webhook notifications to our `booking-notification-service`:
 |---|---|---|
 | **Our services → 12go API** | API key as query param `k` | `?k=<key>` appended to URL |
 | **12go → Our webhook** | None | Unauthenticated POST |
+
+### ClientId + API Key Mapping Gap
+
+Our public API identifies clients via `clientId` (in the URL path) plus `x-api-key` (header). However, 12go only uses a single `apiKey` for authentication. This creates a **mapping gap** where we need to somehow associate our clientId/apiKey pair with 12go's apiKey.
+
+**Options for bridging this gap** (from management):
+
+- **Option A: Associate gateway keys with 12go** — Map our existing API gateway keys to corresponding 12go API keys.
+- **Option B: New gateway** — Create a new API gateway that handles the clientId+apiKey to 12go-apiKey translation.
+- **Option C: Use 12go apiKey directly** — Have clients migrate to using 12go's API keys directly (requires client changes, may not be feasible).
+
+**Monitoring impact**: If we cannot correlate `clientId` to the 12go `apiKey`, we lose the ability to track per-client metrics across systems.
 
 ## Transition Considerations
 

@@ -1,6 +1,6 @@
 ---
-status: draft
-last_updated: 2026-02-17
+status: updated
+last_updated: 2026-02-18
 ---
 # Kafka Messaging
 
@@ -416,6 +416,7 @@ flowchart TB
 - **MySQL binlog → Kafka**: 12go streams database changes to Kafka topics for internal event processing
 - **Internal event bus**: Used for order processing, payment events, and operational workflows
 - **Shared Kafka cluster**: Some topics may be on a shared Kafka cluster that both 12go and Connect services access
+- **Business events only**: 12go uses Kafka for business events (e.g., order, payment, booking) — not for infrastructure or operational events
 
 ### Cross-boundary Topics (12go ↔ Connect)
 
@@ -435,6 +436,24 @@ The primary question for transition: **Which of our Kafka topics are consumed by
 ---
 
 ## Transition Considerations
+
+### Management Clarification: Most Kafka Events Are Redundant
+
+Per management confirmation, **most Kafka events are no longer needed** because:
+
+- **No trip lake**: There is no trip lake anymore. Events such as `SupplierItineraryFetched` and trip lake indexing events (availability writers, itinerary data writer, routes writer) are **redundant**.
+- **No data team**: There is no data team consuming events for analytics or reporting.
+- **Only client notifications remain relevant**: From the Kafka events perspective, only **client notifications** are still required. The rest of the event pipeline can be retired or simplified.
+
+### Client Notifications Require a Transformer Service
+
+12go has its own notification capability, but the data shape differs from what our clients expect. A **notification transformer service** is needed that:
+
+1. Subscribes to 12go's notifications (via webhook or Kafka)
+2. Transforms them to our client-facing notification contract
+3. Delivers to clients in the expected format
+
+This service bridges the gap between 12go's notification format and our clients' expectations.
 
 ### Inter-service Events (Our Services Only)
 
@@ -480,24 +499,24 @@ Different services use different Kafka cluster configurations:
 
 ---
 
-## Open Questions
+## Open Questions (Resolved)
 
-1. **Which topics does 12go actually consume?** Need to audit 12go's Kafka consumer configurations to determine which Connect-produced topics they subscribe to.
+1. **Which topics does 12go actually consume?** **Resolved**: Most Kafka events go away. Only the **client notification pipeline** remains relevant. No need to audit 12go's consumer configurations for the bulk of events.
 
-2. **Is `ReservationChanged` consumed externally?** This is the primary booking status update event — if 12go or other systems consume it, we must continue producing it or provide an alternative.
+2. **Is `ReservationChanged` consumed externally?** **Resolved**: With most events redundant, only client notifications matter. The notification transformer service (see above) will handle delivery to clients in the expected format.
 
-3. **Can `BookingEntityToPersist` be eliminated?** Once DynamoDB is removed and all booking data is written directly to PostgreSQL during the booking flow, this event may be unnecessary.
+3. **Can `BookingEntityToPersist` be eliminated?** **Resolved**: Yes. Most events are redundant; this event is part of the internal flow that can be retired.
 
-4. **Can `RestoreReservationConfirmationSucceeded` be eliminated?** This appears to be a recovery mechanism for when PostgreSQL persistence fails. With a more robust persistence strategy, this restore path may not be needed.
+4. **Can `RestoreReservationConfirmationSucceeded` be eliminated?** **Resolved**: Yes. Most events go away; only the client notification pipeline remains.
 
 5. **What is the Kafka retention policy?** Understanding retention periods helps assess whether consumers can tolerate brief producer outages during migration.
 
-6. **Are there any Kafka consumers outside these repos?** Other services (analytics pipelines, data warehouses, monitoring) may consume these topics. Need a full consumer group audit.
+6. **Are there any Kafka consumers outside these repos?** **Resolved**: No data team. Most consumers (trip lake, analytics) are redundant. Only client notification pipeline remains.
 
-7. **Should the `SoldOutItinerariesIdentified` event be unified?** Both Denali (booking-service) and Etna (supplier-integration) publish this event type, but to different namespaces (`Denali.Booking.Messages` vs `Etna.Messages.supply`). Should these be consolidated?
+7. **Should the `SoldOutItinerariesIdentified` event be unified?** **Resolved**: With most events redundant, this becomes moot — these events go away.
 
 8. **Feature flag dependencies**: Several events are gated behind feature flags (`KafkaPublishSwitch`, `PublishReserveBookingEvents`, `PersistReserveBookingEvents`, `RestoreBookings`, `SendSoldOutEvent`). What is the current state of these flags?
 
 9. **Fuji pipeline migration**: The Fuji content pipeline (Station/Operator/POI) is tightly coupled to the 12go OneTwoGo API. How does this pipeline change as we transition away from the current architecture?
 
-10. **Etna prefetch topic producer**: Who publishes `SearchSupplier` messages that the Etna prefetch consumer reads? Is this an external scheduler or internal system?
+10. **Etna prefetch topic producer**: Who publishes `SearchSupplier` messages that the Etna prefetch consumer reads? **Resolved**: Trip lake and related indexing events (including `SupplierItineraryFetched` and prefetch) are **explicitly redundant** — no trip lake exists.

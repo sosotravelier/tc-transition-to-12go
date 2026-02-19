@@ -11,20 +11,37 @@
 
 ## Project Context
 
-We are transitioning from a multi-service .NET architecture to using 12go (PHP/Symfony) as the core system. Existing clients depend on our API contracts which are vastly different from 12go's APIs. We must maintain backward compatibility.
+We are transitioning from a multi-service .NET architecture (branded "Travelier Connect API") to using 12go (One Two Go) as the core system. 12go runs PHP/Symfony on infrastructure managed by their DevOps team. Existing clients depend on our API contracts which are vastly different from 12go's APIs. We must maintain backward compatibility.
 
-### Key Findings from Phase 1
+### Scope
 
-1. **Station ID mapping is the hardest problem** -- clients have Fuji station IDs embedded in their systems, 12go uses different IDs. No matter what architecture we choose, a mapping layer is required.
+- **In scope**: All B2B client-facing endpoints (static data, search, booking funnel, post-booking)
+- **Out of scope**: Distribution service, Ushba (pricing module -- being sunset), station mapping ID migration, client onboarding process
+
+### Team
+
+- 3-4 .NET developers (2 senior with 12yr experience, 1-2 mid/junior recently onboarded)
+- 1 team lead with deep system knowledge
+- 2 DevOps engineers (transitioning to 12go but supporting us)
+- 12go side has veteran PHP developers available for advice/clarification
+- Go is being considered as future language on 12go side, but nothing is decided
+- Team expertise is .NET; PHP is not being adopted by this team
+- Developer experience and maintainability for future team are priorities
+
+### Key Findings
+
+1. **Station ID mapping is the hardest problem** -- clients have Fuji station IDs embedded in their systems, 12go uses different IDs. A mapping layer is required regardless of architecture.
 2. **Most local storage can be eliminated** -- DynamoDB tables (ItineraryCache, PreBookingCache, BookingCache, BookingEntity) and HybridCache all store data that 12go already has. We can proxy to 12go instead.
 3. **The SI framework abstraction is unnecessary** -- designed for multi-supplier support, but we only need 12go. The OneTwoGoApi call logic (endpoints, models, error handling) is the valuable part.
-4. **Authentication is mostly decorative** -- API key checks in our services are no-ops; real auth is at the API gateway level.
-5. **Seat locking is faked** -- 12go doesn't support it natively; Denali validates locally and stores in DynamoDB. The client-facing contract must be preserved.
-6. **Refund calculation diverges** -- Denali computes its own refund amounts which may differ from 12go's. Need a decision on source of truth.
+4. **Authentication has a mapping gap** -- our API uses clientId + apiKey, but 12go only has apiKey. API key checks in our services are no-ops; real auth is at the gateway. Three options exist for bridging this.
+5. **Seat lock is being developed by 12go** -- currently we fake it (validate locally, store in DynamoDB). Once 12go ships native seat lock, we can pass through directly.
+6. **Pricing/Ushba goes away** -- confirmed by management. We use prices from 12go response directly. No more separate pricing module.
 7. **Triple-caching exists** -- search results are cached in HybridCache, DynamoDB, and MemoryCache simultaneously. Can collapse to zero or one layer.
-8. **The Etna search pipeline is massively over-engineered for our needs** -- 10+ MediatR behaviors, trip lake, index cache, operator health, experiments -- only the direct 12go call path survives.
-9. **GetBookingDetails reads entirely from local DB** -- no 12go call at runtime. Transition means either keeping a local store or switching to proxy 12go's `/booking/{id}`.
-10. **Webhook notifications from 12go have zero authentication** -- security concern that should be addressed in the new architecture.
+8. **The Etna search pipeline is massively over-engineered** -- 10+ MediatR behaviors, trip lake, index cache, operator health, experiments -- only the direct 12go call path survives.
+9. **Most Kafka events are redundant** -- trip lake events, data team events (SupplierItineraryFetched etc.) are no longer needed. No trip lake, no data team consuming them.
+10. **Client notifications need a transformer** -- 12go has its own notification capability but the data shape differs from what our clients expect. A transformer service is needed.
+11. **API versioning must be preserved** -- clients send `Travelier-Version` header (YYYY-MM-DD format). Current version: `2023-07-01`. Deprecation mechanism exists.
+12. **Correlation headers must be preserved** -- `x-correlation-id`, `x-api-experiment`, `X-REQUEST-Id` are used by clients for conversion tracking and A/B test consistency.
 
 ## Source Repositories
 
@@ -219,59 +236,37 @@ When referencing another doc, use relative links:
 - **Output**: `questions/for-12go.md`
 - **Must**: Read every doc's "Open Questions" section, synthesize, prioritize
 
-### Phase 2 Roles — Design Exploration (Complete — Trial Run)
-
-> **Note**: Phase 2 was executed as a trial run with 12 parallel agents across 4 waves. All output is in `design/` and may be discarded after the Wednesday 12go meeting.
-
-#### Research Agents (Wave 1)
-
-| Agent | Purpose | Output |
-|-------|---------|--------|
-| **R1: .NET Trimming Analyst** | Analyze what to keep/trim/discard in all .NET services | `design/research/dotnet-trimming-analysis.md` |
-| **R2: PHP/f3 Capability Analyst** | Map frontend3 capabilities to our endpoint needs | `design/research/php-capability-analysis.md` |
-| **R3: Industry Patterns Researcher** | Research best practices (Strangler Fig, BFF, ACL, travel tech) | `design/research/industry-patterns.md` |
-| **R4: Scale & Observability Researcher** | Research scaling, latency targets, observability patterns | `design/research/scale-observability.md` |
-
-#### Design Agents (Wave 2)
-
-| Agent | Purpose | Output |
-|-------|---------|--------|
-| **D1: Option A Architect** | Design trimmed .NET architecture on 12go infra | `design/option-a-trimmed-dotnet/architecture.md` |
-| **D2: Option B Architect** | Design PHP native Symfony bundle architecture | `design/option-b-php-native/architecture.md` |
-| **D3: Option C Architect** | Design thin stateless API gateway architecture | `design/option-c-thin-gateway/architecture.md` |
-
-#### Review Agents (Wave 3)
-
-| Agent | Persona | Output |
-|-------|---------|--------|
-| **V1: Event-Driven/FP Architect** | Values immutability, composability, explicit data flow | `design/reviews/event-driven-fp-review.md` |
-| **V2: AI-First Development Architect** | Values AI-friendly code, navigability, type safety | `design/reviews/ai-first-review.md` |
-| **V3: Business Risk Assessor** | Values risk mitigation, realistic timelines, rollback | `design/reviews/business-risk-review.md` |
-| **V4: DevOps/Platform Engineer** | Values operational simplicity, resource efficiency | `design/reviews/devops-platform-review.md` |
-
-#### Synthesis Agent (Wave 4)
-
-| Agent | Purpose | Output |
-|-------|---------|--------|
-| **S1: Evaluation Matrix Builder** | Synthesize all designs + reviews into scored comparison | `design/evaluation-matrix.md` |
-
-### Phase 2 Roles — Final Design (Pending Q1-Q20 Answers)
+### Phase 2 Roles (Design)
 
 #### Solution Architect
-- **Purpose**: Finalize architecture based on 12go meeting answers and Phase 2 exploration
-- **Input**: `design/evaluation-matrix.md`, Q1-Q20 answers, selected option architecture doc
-- **Output**: `design/final-architecture.md`
+- **Purpose**: Propose architecture options for the transition
+- **Input**: Read `current-state/overview.md`, `questions/for-12go.md`, and answers from 12go meeting
+- **Output**: `design/proposed-architecture.md` with multiple options, pros/cons, diagrams
+- **Key decisions to address**:
+  - Integration method (HTTP proxy vs code reference vs direct DB)
+  - Programming language for adapter services
+  - Whether to keep local state (DynamoDB/PostgreSQL) or go stateless
+  - Station ID mapping strategy
+  - Monitoring/observability unification
+- **Must**: Reference specific current-state docs for each decision. Use the Design Document Template.
 
 #### Migration Planner
-- **Purpose**: Define step-by-step migration plan for the chosen architecture
-- **Input**: Final architecture doc + all endpoint docs
-- **Output**: `design/migration-plan.md` with phased steps, rollback points, parallel run strategy
+- **Purpose**: Define the step-by-step migration plan with ordering and dependencies
+- **Input**: Read `design/proposed-architecture.md` and all endpoint docs
+- **Output**: `design/migration-plan.md` with phased migration steps
+- **Must**: Consider which endpoints can be migrated independently, what needs to migrate together, rollback strategy, and how to test each step
 
 #### Endpoint Designer
-- **Purpose**: Design new implementation for each specific endpoint
-- **Input**: `current-state/endpoints/{endpoint}.md` + final architecture
-- **Output**: `design/endpoints/{endpoint}.md`
-- **Must**: Show new call flow, contract preservation, code changes, tests
+- **Purpose**: Design the new implementation for a specific endpoint
+- **Input**: Read the corresponding `current-state/endpoints/{endpoint}.md` and `design/proposed-architecture.md`
+- **Output**: Design doc for the endpoint in `design/endpoints/{endpoint}.md`
+- **Must**: Show the new call flow (mermaid), the contract preservation strategy, what code changes are needed, and what tests are required
+
+#### Risk Analyst
+- **Purpose**: Identify and evaluate risks in the proposed design
+- **Input**: Read all design docs and cross-cutting concern docs
+- **Output**: Risk assessment section in `design/proposed-architecture.md`
+- **Must**: Consider client breakage, data loss, performance degradation, monitoring gaps, security gaps
 
 ### Phase 3 Roles (Implementation)
 
@@ -301,8 +296,11 @@ Decisions made during this project, for context in future sessions.
 | 2026-02-17 | Phase 1 first (document what exists), then Phase 2 (design), then Phase 3 (implement) | Need to know what we have before deciding what to build |
 | 2026-02-17 | Each endpoint gets its own file | Enables parallel work by different agents without merge conflicts |
 | 2026-02-17 | Questions for 12go compiled from all doc open questions | Centralized list prioritized by architecture impact |
-| 2026-02-17 | Phase 2 as trial run with 3 options + 4 reviewer personas | Explore design space before Q1-Q20 answers constrain it |
-| 2026-02-17 | 12 agents across 4 waves for design exploration | Research → Design → Review → Synthesize pipeline |
-| 2026-02-17 | Design output is disposable | May regenerate after Wednesday 12go meeting |
-| 2026-02-17 | Weighted evaluation: Option C (48.0) > A (44.5) > B (38.5) | But winner depends on Q1-Q3 answers; no final decision yet |
-| 2026-02-17 | Reviewer disagreement captured: FP/AI prefer C, DevOps prefers B, Risk suggests A→B bridge | Multiple valid perspectives; decision tree in evaluation-matrix.md |
+| 2026-02-18 | Scope: B2B endpoints only; distribution/Ushba/station-migration/onboarding out of scope | Confirmed by team lead |
+| 2026-02-18 | Ushba (pricing module) sunset confirmed; use 12go prices directly | No need for separate pricing service |
+| 2026-02-18 | Seat lock being developed on 12go side | Will be native; no need for long-term fake implementation |
+| 2026-02-18 | Most Kafka events redundant (no trip lake, no data team) | Only client notifications remain relevant |
+| 2026-02-18 | Client notifications need transformer service | 12go has notifications but different data shape from our client contract |
+| 2026-02-18 | 12go infra is DevOps-managed; we don't worry about what's under the hood | Environments: Local, Staging, PreProd (Canary), Prod |
+| 2026-02-18 | 12go logs on Datadog (not OpenTelemetry as assumed) | Need to evaluate monitoring unification strategy |
+| 2026-02-18 | Go being considered as future language on 12go side | Not decided; PHP remains current |

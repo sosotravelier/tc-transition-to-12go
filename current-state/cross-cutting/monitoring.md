@@ -1,6 +1,6 @@
 ---
-status: draft
-last_updated: 2026-02-17
+status: updated
+last_updated: 2026-02-18
 ---
 # Monitoring, Logging, Tracing & Metrics
 
@@ -345,27 +345,48 @@ The `supply-integration` library provides shared metrics classes used by all sup
 
 ## 12go Monitoring
 
-12go uses **OpenTelemetry** for tracing and metrics, making it fundamentally compatible with the Connect observability stack:
+12go uses **Datadog** for logs and has **basic CPU/memory metrics**. They do **not** use OpenTelemetry for tracing or metrics.
 
-- **Tracing**: OpenTelemetry-based, W3C Trace Context propagation — compatible with Connect's `AddConnectTracing()` which also uses OpenTelemetry
-- **Metrics**: OpenTelemetry metrics — compatible with `System.Diagnostics.Metrics` export pipeline
-- **Logging**: Likely uses its own logging infrastructure (details TBD)
+### 12go Capabilities (Datadog)
 
-### Compatibility Assessment
+- **Logging**: Datadog for log aggregation and search
+- **Metrics**: Basic CPU and memory metrics (host-level, not application-level business metrics)
+- **Tracing**: No OpenTelemetry or distributed tracing
+
+### Monitoring Unification Challenge
 
 | Aspect | Connect Stack | 12go Stack | Compatible? |
 |---|---|---|---|
-| Trace propagation | W3C Trace Context (OpenTelemetry) | W3C Trace Context (OpenTelemetry) | Yes |
-| Metrics format | OTLP (System.Diagnostics.Metrics) | OTLP (OpenTelemetry) | Yes |
-| Trace correlation | `Activity.TraceId` | OpenTelemetry span context | Yes |
-| Log aggregator | Coralogix | TBD | TBD |
-| Dashboards | Grafana | TBD | TBD |
+| Log aggregator | Coralogix | Datadog | No — different platforms |
+| Dashboards | Grafana | Datadog | No — different platforms |
+| Trace propagation | W3C Trace Context (OpenTelemetry) | None | No |
+| Metrics format | OTLP (System.Diagnostics.Metrics) | Basic host metrics (Datadog) | No — different scopes |
+| Trace correlation | `Activity.TraceId` | N/A | No |
+
+Unifying monitoring across Connect (Coralogix + Grafana) and 12go (Datadog) will require either cross-platform correlation (e.g., shared trace IDs in both systems) or migration of one stack to the other.
+
+---
+
+## Required Monitoring Dimensions
+
+Per Shauly (manager), the following dimensions are required for monitoring:
+
+| Dimension | Description |
+|---|---|
+| **client** | Which client made the request |
+| **operator** | Which bus/transport operator |
+| **action** | What operation: search, book, confirm, etc. |
+| **outcome** | Success or failure |
+| **bookingId** | Booking identifier |
+| **itineraryId** | Itinerary identifier |
+| **traceId** | Distributed trace identifier |
+| **clientId + apiKey mapping** | Our API uses `clientId` + `apiKey`, but 12go only has `apiKey` — this creates a mapping gap for monitoring correlation |
 
 ---
 
 ## Transition Considerations
 
-1. **Unified trace context propagation** — Both Connect and 12go use OpenTelemetry with W3C Trace Context. Cross-service traces should propagate naturally if HTTP headers are forwarded correctly.
+1. **Trace context propagation** — Connect uses OpenTelemetry with W3C Trace Context; 12go does not use OpenTelemetry. Cross-service traces will require explicit propagation and correlation if 12go services are integrated.
 
 2. **IntegrationId as key dimension** — `IntegrationId` is the primary dimension for metrics tagging across all Denali services (via `IntegrationIdMetricInricherMiddleware`, `IntegrationIdEnricher`, and direct tags on custom metrics). Any new service must support this enrichment pattern.
 
@@ -373,9 +394,9 @@ The `supply-integration` library provides shared metrics classes used by all sup
 
 4. **Common tag dimensions** — Most Denali metrics use `client_id`, `integration_id`, `contract_code` as standard tags. Grafana dashboards likely filter on these dimensions.
 
-5. **Coralogix log aggregation** — All Connect services ship logs to Coralogix. 12go's log aggregation solution needs to be assessed for potential unification or at minimum cross-referencing via trace IDs.
+5. **Log aggregation unification** — Connect uses Coralogix; 12go uses Datadog. Unification or cross-referencing via trace IDs will require coordination across both platforms.
 
-6. **Grafana dashboard migration** — Existing Grafana dashboards reference specific meter names and tag keys. Changes to meter names or tag keys would require dashboard updates.
+6. **Dashboard and metrics platform** — Connect uses Grafana; 12go uses Datadog. Dashboard migration or cross-platform visibility will be needed for unified monitoring.
 
 7. **Dynamic vs static metrics** — The booking-notification-service uses dynamic counter creation (`ConcurrentDictionary`-based), while other services use static metrics. This should be standardized.
 
@@ -389,7 +410,7 @@ The `supply-integration` library provides shared metrics classes used by all sup
 
 ## Open Questions
 
-1. **What logging infrastructure does 12go use?** Can it be unified with Coralogix, or should logs be correlated via shared trace IDs?
+1. **Log correlation across Coralogix and Datadog** — How can logs be correlated or unified given Connect uses Coralogix and 12go uses Datadog?
 
 2. **What Grafana dashboards exist today?** Which dashboards are critical for operations and would need to survive the transition?
 
@@ -399,7 +420,7 @@ The `supply-integration` library provides shared metrics classes used by all sup
 
 5. **What is the `Connect.Infra.Observability` library's export configuration?** (OTLP endpoint, batching, sampling rates) — this is configured externally via AWS AppConfig but affects compatibility.
 
-6. **Does 12go have existing Grafana dashboards** that could conflict with or complement the Connect dashboards?
+6. **clientId + apiKey mapping** — Our API uses `clientId` + `apiKey` but 12go only has `apiKey`. How will we bridge this gap for monitoring correlation?
 
 7. **What SLOs/SLIs are currently tracked** using these metrics? These must be preserved during transition.
 

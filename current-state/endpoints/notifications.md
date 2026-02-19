@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-17
+last_updated: 2026-02-18
 ---
 # Booking Notification Webhook
 
@@ -126,12 +126,12 @@ services.AddKeyedTransient<INotificationResponseHandler, NotificationResponseHan
 
 ## 12go Equivalent
 
-In the 12go monolith, booking status change notifications are handled differently:
+12go **has its own notification capability**, but the data shape differs from what our clients expect:
 
-- 12go **is** the supplier for its own inventory, so there is no webhook — status changes happen internally within the monolith's database
+- 12go sends notifications in a different format than our client-facing notification contract
 - For third-party suppliers that 12go aggregates, the monolith likely has its own webhook/polling mechanisms
 - The concept maps to: **"When a booking status changes on the supplier side, update our records and notify downstream systems"**
-- In the transition, if we're keeping only 12go as the supplier, this webhook pattern may be replaced by direct database events or internal service calls within the 12go ecosystem
+- A **notification transformer service** is needed — it would subscribe to 12go's notifications and transform them to our client-facing notification contract
 
 ## Data Dependencies
 
@@ -151,7 +151,7 @@ In the 12go monolith, booking status change notifications are handled differentl
 - **PostgreSQL database** (for integration mapping) — Only needed by the mapper which OneTwoGo doesn't use
 - **si.integrations.settings API dependency** — Only needed by the mapper
 - **IntegrationCreated Kafka consumer** — Only feeds the mapper
-- **The entire service** — If 12go handles booking status changes internally (no external webhook needed), this service can be eliminated entirely. The `SupplierReservationChanged` Kafka event could be published directly by whatever system detects the status change.
+- **The current webhook receiver** — Can eventually be replaced by the notification transformer service, which would subscribe to 12go's notifications and transform them to our client-facing contract. The transformer would publish `SupplierReservationChanged` (or equivalent) for downstream consumers.
 - **Feature management (IntegrationIdFilter)** — Used for per-integration feature flags, unnecessary with a single integration
 - **Multi-integration keyed service pattern** — With only OneTwoGo, the keyed DI lookup and null-check pattern in the controller is unnecessary overhead
 
