@@ -385,7 +385,7 @@ sequenceDiagram
 | Cache | Redis | Application caching |
 | Messaging | Kafka | Business events only (not infrastructure/ops events) |
 | Analytics | ClickHouse | Analytics data store |
-| Logs/Metrics | Datadog | Logs + basic CPU/memory metrics |
+| Logs/Metrics | Datadog | Standard logging; comprehensive metrics available (varies by team) |
 | Search backing | MariaDB | Search queries go to DB; rechecks go to actual integrations (up to 1 minute latency) |
 
 ### Infrastructure
@@ -422,4 +422,4 @@ Dev environment URL: `https://integration-dev.travelier.com/v1/{client_id}/`
 - All development expertise is in .NET
 - Go is being considered as a future language on 12go's side, but nothing is decided
 - Developer experience and maintainability are priorities given team transitions
-- PHP is not being adopted by this team
+- PHP is feasible if necessary (likely with AI assistance), but not the team's preference

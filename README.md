@@ -2,43 +2,31 @@
 
 > **AI Agents**: Start with [AGENTS.md](AGENTS.md) for orientation, key findings, source file paths, and role definitions.
 
-Design documentation for migrating the Travelier Connect API from the current multi-service .NET architecture (Denali, Etna, Fuji, Supply-Integration) to use 12go (One Two Go) as the core system while preserving all client-facing API contracts.
-
-## Scope
-
-- **In scope**: All B2B client-facing endpoints (static data, search, booking funnel, post-booking)
-- **Out of scope**: Distribution service, Ushba (pricing -- being sunset), station mapping ID migration, client onboarding
-
-## Team
-
-3-4 .NET developers (2 senior, 1-2 mid/junior) + team lead + 2 DevOps. Go is being considered on 12go's side but not decided. All our expertise is .NET.
+Design documentation for migrating from the current multi-service architecture (Denali, Etna, Fuji, Supply-Integration) to 12go as the core system while preserving all client-facing API contracts.
 
 ## Timeline
 
 | Day | Milestone | Status |
 |-----|-----------|--------|
 | **Tuesday (Feb 17)** | Phase 1: Document current state | DONE |
-| **Wednesday (Feb 18)** | Questions for 12go representative + integrate clarifications | DONE |
+| **Wednesday (Feb 18)** | Questions for 12go representative | Ready for review |
 | **Thursday (Feb 19)** | Draft design with proposed solutions | Pending |
 
 ## Context
 
-We are transitioning from a multi-service .NET architecture (branded "Travelier Connect API") to using 12go (One Two Go, PHP/Symfony) as the core system. The challenge is that existing clients depend on our API contracts (Denali for booking, Etna for search, Fuji for master data), which are vastly different from 12go's APIs. We need to maintain backward compatibility while simplifying the architecture. 12go infrastructure is managed by their DevOps team.
+We are transitioning from a multi-service .NET architecture to using 12go (PHP/Symfony) as the core system. The challenge is that existing clients depend on our API contracts (Denali for booking, Etna for search, Fuji for master data), which are vastly different from 12go's APIs. We need to maintain backward compatibility while simplifying the architecture.
 
-## Key Findings
+## Key Findings (from Phase 1)
 
 1. **Station ID mapping is the hardest problem** -- clients have Fuji IDs, 12go uses different IDs
 2. **Most local storage (DynamoDB) can be eliminated** -- 12go already stores the data
 3. **SI framework abstraction is unnecessary** -- only the OneTwoGoApi call logic matters
-4. **Authentication has a mapping gap** -- our API uses clientId + apiKey, 12go only has apiKey
-5. **Seat lock is being developed by 12go** -- we currently fake it, but native support is coming
-6. **Pricing/Ushba goes away** -- use 12go prices directly (confirmed by management)
+4. **Authentication is decorative** -- real auth is at the API gateway
+5. **Seat locking is faked** -- 12go doesn't support it; we validate locally
+6. **Refund calculations diverge** between our system and 12go's
 7. **Search pipeline is massively over-engineered** -- only direct 12go call path survives
-8. **Most Kafka events are redundant** -- no trip lake, no data team consuming them
-9. **Client notifications need a transformer** -- 12go has notifications but different data shape
-10. **API versioning and correlation headers must be preserved** -- `Travelier-Version`, `x-correlation-id`, `x-api-experiment`
 
-See [AGENTS.md](AGENTS.md) for the full list of 12 key findings with details.
+See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 
 ## Phase 1: Current State Documentation
 
@@ -64,11 +52,10 @@ See [AGENTS.md](AGENTS.md) for the full list of 12 key findings with details.
 
 | Topic | Document | Status |
 |-------|----------|--------|
-| Authentication | [authentication.md](current-state/cross-cutting/authentication.md) | updated |
-| Monitoring | [monitoring.md](current-state/cross-cutting/monitoring.md) | updated |
+| Authentication | [authentication.md](current-state/cross-cutting/authentication.md) | complete |
+| Monitoring | [monitoring.md](current-state/cross-cutting/monitoring.md) | complete |
 | Data Storage | [data-storage.md](current-state/cross-cutting/data-storage.md) | complete |
-| Messaging | [messaging.md](current-state/cross-cutting/messaging.md) | updated |
-| API Contract Conventions | [api-contract-conventions.md](current-state/cross-cutting/api-contract-conventions.md) | new |
+| Messaging | [messaging.md](current-state/cross-cutting/messaging.md) | complete |
 
 ### Integration Analysis
 
@@ -109,11 +96,9 @@ Clients
 
 ### What 12go Provides
 
-12go (One Two Go, frontend3) is a PHP 8.3/Symfony 6.4 system that:
+12go (frontend3) is a PHP/Symfony system that:
 - Manages trips, operators, stations internally
 - Provides search, cart, booking, confirmation APIs
-- Handles ticket generation and notifications
-- Uses MariaDB (MySQL-compatible), Redis, Kafka (business events), ClickHouse (analytics)
-- Logs on Datadog; basic CPU/memory monitoring
-- Infrastructure fully managed by their DevOps team
-- Is developing native seat lock functionality
+- Handles ticket generation
+- Uses MySQL, Redis, Kafka
+- Has its own monitoring (OpenTelemetry compatible)

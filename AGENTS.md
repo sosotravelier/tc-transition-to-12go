@@ -11,37 +11,20 @@
 
 ## Project Context
 
-We are transitioning from a multi-service .NET architecture (branded "Travelier Connect API") to using 12go (One Two Go) as the core system. 12go runs PHP/Symfony on infrastructure managed by their DevOps team. Existing clients depend on our API contracts which are vastly different from 12go's APIs. We must maintain backward compatibility.
+We are transitioning from a multi-service .NET architecture to using 12go (PHP/Symfony) as the core system. Existing clients depend on our API contracts which are vastly different from 12go's APIs. We must maintain backward compatibility.
 
-### Scope
+### Key Findings from Phase 1
 
-- **In scope**: All B2B client-facing endpoints (static data, search, booking funnel, post-booking)
-- **Out of scope**: Distribution service, Ushba (pricing module -- being sunset), station mapping ID migration, client onboarding process
-
-### Team
-
-- 3-4 .NET developers (2 senior with 12yr experience, 1-2 mid/junior recently onboarded)
-- 1 team lead with deep system knowledge
-- 2 DevOps engineers (transitioning to 12go but supporting us)
-- 12go side has veteran PHP developers available for advice/clarification
-- Go is being considered as future language on 12go side, but nothing is decided
-- Team expertise is .NET; PHP is not being adopted by this team
-- Developer experience and maintainability for future team are priorities
-
-### Key Findings
-
-1. **Station ID mapping is the hardest problem** -- clients have Fuji station IDs embedded in their systems, 12go uses different IDs. A mapping layer is required regardless of architecture.
+1. **Station ID mapping is the hardest problem** -- clients have Fuji station IDs embedded in their systems, 12go uses different IDs. No matter what architecture we choose, a mapping layer is required.
 2. **Most local storage can be eliminated** -- DynamoDB tables (ItineraryCache, PreBookingCache, BookingCache, BookingEntity) and HybridCache all store data that 12go already has. We can proxy to 12go instead.
 3. **The SI framework abstraction is unnecessary** -- designed for multi-supplier support, but we only need 12go. The OneTwoGoApi call logic (endpoints, models, error handling) is the valuable part.
-4. **Authentication has a mapping gap** -- our API uses clientId + apiKey, but 12go only has apiKey. API key checks in our services are no-ops; real auth is at the gateway. Three options exist for bridging this.
-5. **Seat lock is being developed by 12go** -- currently we fake it (validate locally, store in DynamoDB). Once 12go ships native seat lock, we can pass through directly.
-6. **Pricing/Ushba goes away** -- confirmed by management. We use prices from 12go response directly. No more separate pricing module.
+4. **Authentication is mostly decorative** -- API key checks in our services are no-ops; real auth is at the API gateway level.
+5. **Seat locking is faked** -- 12go doesn't support it natively; Denali validates locally and stores in DynamoDB. The client-facing contract must be preserved.
+6. **Refund calculation diverges** -- Denali computes its own refund amounts which may differ from 12go's. Need a decision on source of truth.
 7. **Triple-caching exists** -- search results are cached in HybridCache, DynamoDB, and MemoryCache simultaneously. Can collapse to zero or one layer.
-8. **The Etna search pipeline is massively over-engineered** -- 10+ MediatR behaviors, trip lake, index cache, operator health, experiments -- only the direct 12go call path survives.
-9. **Most Kafka events are redundant** -- trip lake events, data team events (SupplierItineraryFetched etc.) are no longer needed. No trip lake, no data team consuming them.
-10. **Client notifications need a transformer** -- 12go has its own notification capability but the data shape differs from what our clients expect. A transformer service is needed.
-11. **API versioning must be preserved** -- clients send `Travelier-Version` header (YYYY-MM-DD format). Current version: `2023-07-01`. Deprecation mechanism exists.
-12. **Correlation headers must be preserved** -- `x-correlation-id`, `x-api-experiment`, `X-REQUEST-Id` are used by clients for conversion tracking and A/B test consistency.
+8. **The Etna search pipeline is massively over-engineered for our needs** -- 10+ MediatR behaviors, trip lake, index cache, operator health, experiments -- only the direct 12go call path survives.
+9. **GetBookingDetails reads entirely from local DB** -- no 12go call at runtime. Transition means either keeping a local store or switching to proxy 12go's `/booking/{id}`.
+10. **Webhook notifications from 12go have zero authentication** -- security concern that should be addressed in the new architecture.
 
 ## Source Repositories
 
@@ -296,11 +279,3 @@ Decisions made during this project, for context in future sessions.
 | 2026-02-17 | Phase 1 first (document what exists), then Phase 2 (design), then Phase 3 (implement) | Need to know what we have before deciding what to build |
 | 2026-02-17 | Each endpoint gets its own file | Enables parallel work by different agents without merge conflicts |
 | 2026-02-17 | Questions for 12go compiled from all doc open questions | Centralized list prioritized by architecture impact |
-| 2026-02-18 | Scope: B2B endpoints only; distribution/Ushba/station-migration/onboarding out of scope | Confirmed by team lead |
-| 2026-02-18 | Ushba (pricing module) sunset confirmed; use 12go prices directly | No need for separate pricing service |
-| 2026-02-18 | Seat lock being developed on 12go side | Will be native; no need for long-term fake implementation |
-| 2026-02-18 | Most Kafka events redundant (no trip lake, no data team) | Only client notifications remain relevant |
-| 2026-02-18 | Client notifications need transformer service | 12go has notifications but different data shape from our client contract |
-| 2026-02-18 | 12go infra is DevOps-managed; we don't worry about what's under the hood | Environments: Local, Staging, PreProd (Canary), Prod |
-| 2026-02-18 | 12go logs on Datadog (not OpenTelemetry as assumed) | Need to evaluate monitoring unification strategy |
-| 2026-02-18 | Go being considered as future language on 12go side | Not decided; PHP remains current |

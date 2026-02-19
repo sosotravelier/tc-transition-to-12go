@@ -345,7 +345,7 @@ The `supply-integration` library provides shared metrics classes used by all sup
 
 ## 12go Monitoring
 
-12go uses **Datadog** for logs and has **basic CPU/memory metrics**. They do **not** use OpenTelemetry for tracing or metrics.
+12go uses **Datadog** for logs and metrics. Comprehensive monitoring is available, though usage varies by team. They do **not** use OpenTelemetry for tracing or metrics.
 
 ### 12go Capabilities (Datadog)
 

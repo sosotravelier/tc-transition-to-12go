@@ -10,7 +10,7 @@ last_updated: 2026-02-18
 - Search is backed by MariaDB; rechecks go to actual integrations (up to 1 min latency)
 - Infrastructure is DevOps-managed; environments: Local (Docker), Staging, PreProd (Canary), Prod
 - Tech stack: MariaDB, Redis, Kafka (business events), ClickHouse (analytics)
-- Logs on Datadog; basic CPU/memory metrics
+- Logs and metrics on Datadog (comprehensive monitoring available, varies by team)
 - Documentation via Jira/Atlassian; code traceability via git blame -> Jira
 - Static data endpoints: still open (forgot to ask)
 
