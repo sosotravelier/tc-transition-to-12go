@@ -14,7 +14,8 @@ prompts/
 │   ├── php-design.md
 │   ├── golang-design.md
 │   ├── hybrid-bff-design.md
-│   └── typescript-design.md
+│   ├── typescript-design.md
+│   └── migration-strategy.md   # Cross-cutting: how to transition clients
 ├── reviewer-agents/            # One prompt per reviewer persona
 │   ├── systems-architect.md
 │   ├── ai-augmented-architect.md

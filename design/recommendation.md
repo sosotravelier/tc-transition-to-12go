@@ -23,7 +23,7 @@ The .NET team ships reliable .NET code on day one. Every other option introduces
 - Every week of delay is a week of increased technical debt in the legacy system
 - The current 342-project system is a maintenance burden that compounds daily
 
-The math is unambiguous: 26 person-days and 3 weeks to MVP in .NET vs. 38+ person-days and 4-6+ weeks in any other language. That delta buys 1-3 weeks of production validation that no alternative can match.
+The math is unambiguous: 26 person-days and 3-4 weeks to MVP in .NET vs. 38+ person-days and 4-6+ weeks in any other language. That delta buys 1-3 weeks of production validation that no alternative can match.
 
 ### Key Strengths
 
@@ -33,7 +33,7 @@ The math is unambiguous: 26 person-days and 3 weeks to MVP in .NET vs. 38+ perso
 
 3. **Team continuity.** During a major system transition, asking developers to abandon 12+ years of expertise for a new language is a significant cognitive burden. .NET removes that variable. The team channels their energy into the 98% code reduction — a major architectural simplification — rather than fighting a new ecosystem.
 
-4. **Operationally minimal.** One Docker container replaces 6+ services. DevOps adds one health check instead of managing a fleet. Datadog `dd-trace-dotnet` auto-instruments everything. Build time drops from 5-10 minutes to under 30 seconds. Startup from 5-15 seconds to under 2 seconds.
+4. **Operationally minimal.** One Docker container replaces 7 services. DevOps adds one health check instead of managing a fleet. Datadog `dd-trace-dotnet` auto-instruments everything. Build time drops from 5-10 minutes to under 30 seconds. Startup from 5-15 seconds to under 2 seconds.
 
 5. **Cheap to replace.** At ~6K LOC with vertical slices, the entire service can be rewritten in Go, TypeScript, or PHP in 2-4 weeks by anyone who understands the domain. The architecture — handler → client → transformer — translates directly to any language. This is not a 5-year commitment; it's a bridge that works.
 
@@ -61,7 +61,7 @@ A single Fastify service on Node.js 22 LTS (~5K LOC). Same architecture as the .
 
 ### Why It's Second
 
-TypeScript scores second-highest across reviewers (~112-113/140 adjusted vs. ~122-126 for .NET). It loses on two criteria that matter most right now — Team Competency Match and Implementation Effort — but wins on two criteria that matter most later — AI-Friendliness and future maintainer availability.
+TypeScript scores second-highest across reviewers (113/140 adjusted vs. 123 for .NET). It loses on two criteria that matter most right now — Team Competency Match and Implementation Effort — but wins on two criteria that matter most later — AI-Friendliness and future maintainer availability.
 
 The 1-2 week learning tax is genuine but the smallest of any non-.NET option. TypeScript was designed by the same person as C# (Anders Hejlsberg), and the concept mapping is mechanical: `Task<T>` → `Promise<T>`, `IMiddleware` → Fastify plugin, `Dictionary<K,V>` → `Record<K,V>`. The booking schema parser — the hardest code in the system — is actually *simpler* in TypeScript because iterating over dynamic JSON keys and regex-matching is native JavaScript, not a `JsonExtensionData` + `Dictionary<string, JsonElement>` conversion.
 
@@ -92,6 +92,8 @@ The alternatives are not mutually exclusive in their insights. Regardless of whi
 Do not attempt to split the service by language (e.g., "search in Go, booking in .NET"). The 13 endpoints share a single 12go HTTP client, common middleware, and unified configuration. Splitting creates 2 services, 2 deployment pipelines, 2 monitoring dashboards, and coordination overhead for a team of 3-4 developers. The entire point is radical simplification.
 
 ## Phased Migration Plan
+
+> **Note:** This phased plan assumes a transparent infrastructure-level switch (all clients moved at once by changing the gateway target). The [Migration Strategy](migration-strategy.md) document analyzes this assumption in depth and proposes alternative approaches — including new endpoints and hybrid migration — with detailed analysis of authentication bridging, gateway routing constraints, and validation strategy. Read that document before committing to a migration approach.
 
 ### Phase 1: Foundation (Week 1-2)
 
@@ -189,7 +191,7 @@ If leadership needs to decide between the top two options (.NET vs. TypeScript),
 
 | Factor | Choose .NET If... | Choose TypeScript If... |
 |--------|-------------------|------------------------|
-| **Timeline pressure** | Need MVP in 3 weeks | Can absorb 4-5 weeks |
+| **Timeline pressure** | Need MVP in 3-4 weeks | Can absorb 4-5 weeks |
 | **Team sentiment** | Team wants stability and comfort | Team is interested in TypeScript |
 | **Retention confidence** | Delivery-focused | Higher (12+ months expected) |
 | **12go's direction** | Unknown or PHP-focused | Doesn't matter (TS is a neutral choice) |
@@ -204,7 +206,7 @@ If leadership needs to decide between the top two options (.NET vs. TypeScript),
 
 ### Alternative 2: PHP Integration (Inside f3) — REJECTED
 
-**Score: ~98-100/140 (lowest)**
+**Score: 93/140 (lowest)**
 
 The technical design is sound — direct MariaDB access eliminates HTTP round-trips and delivers the best possible search latency. But the execution risk is high:
 
@@ -217,7 +219,7 @@ The technical design is sound — direct MariaDB access eliminates HTTP round-tr
 
 ### Alternative 3: Go Service — REJECTED
 
-**Score: ~103-106/140**
+**Score: 108/140**
 
 Go produces a beautiful artifact — 10MB binary, sub-millisecond GC, 100ms startup. But the strategic justification depends on 12go adopting Go, which hasn't been decided:
 
@@ -230,7 +232,7 @@ Go produces a beautiful artifact — 10MB binary, sub-millisecond GC, 100ms star
 
 ### Alternative 4: Hybrid BFF (TypeScript/Bun) — REJECTED
 
-**Score: ~93-95/140 (adjusted for Bun risk)**
+**Score: 107/140**
 
 The endpoint analysis and "where thin breaks down" framework are the most analytically valuable artifacts in the entire evaluation. But the design is undermined by the Bun runtime recommendation:
 

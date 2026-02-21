@@ -106,6 +106,28 @@ A replacement for the B2B API layer that currently sits between external clients
 | Customer Success | 1 | |
 | Product | 1 | |
 
+## Current API Gateway
+
+- **Technology**: AWS API Gateway -- sits in front of all B2B client-facing endpoints
+- **Routing**: Routes by path + HTTP method. All requests to `/v1/{client_id}/itineraries` go to the same backend integration regardless of which `client_id` is in the URL.
+- **Authentication**: Real API key enforcement happens at the gateway level. Service-level auth handlers are passthroughs (always succeed).
+- **Per-client routing**: AWS API Gateway does NOT natively support routing to different backends based on path parameter values. This is a key constraint for gradual per-client migration.
+- **Status**: Exact gateway configuration (Lambda authorizers, integration targets, stage setup) is **not yet investigated** -- needs DevOps input.
+
+## Authentication Mapping Gap
+
+This is one of the hardest operational problems in the transition:
+
+- **Our API**: Clients call with `client_id` in URL path + `x-api-key` header. Gateway validates the key. Services receive the request with client identity resolved.
+- **12go API**: Single `apiKey` passed as query parameter `?k=<api-key>`. No concept of `client_id`.
+- **No existing mapping** between our clientId/apiKey pairs and 12go apiKeys.
+- **Three options identified** (from management):
+  - A: Map existing gateway keys to 12go keys (config table)
+  - B: New gateway that handles the translation
+  - C: Clients use 12go keys directly (requires client changes)
+
+See `current-state/cross-cutting/authentication.md` for full analysis.
+
 ## Key Constraints
 - All development expertise is in .NET
 - PHP is not preferred by the team, feasible with AI assistance
@@ -117,10 +139,11 @@ A replacement for the B2B API layer that currently sits between external clients
 - Configurations: 12go uses .env files + DB-stored integration configs
 
 ## Critical Open Questions
-1. **API key mapping**: Our API uses clientId + apiKey; 12go only has apiKey
-2. **Monitoring unification**: We use Coralogix/Grafana; 12go uses Datadog
-3. **Multi-client configuration**: How does 12go handle per-client pricing/markup?
-4. **Notification transformation**: 12go notifications have different shape than what clients expect
-5. **Static data (stations/operators)**: Current system uses Fuji IDs; 12go uses different IDs (out of scope but affects design)
-6. **Credit line**: Does 12go have equivalent functionality?
-7. **Seat lock**: Being developed on 12go side -- timeline unknown
+1. **API key mapping**: Our API uses clientId + apiKey; 12go only has apiKey (see Authentication Mapping Gap above)
+2. **Gateway routing for migration**: Can AWS API Gateway be configured for per-client backend routing? Needs DevOps investigation.
+3. **Monitoring unification**: We use Coralogix/Grafana; 12go uses Datadog
+4. **Multi-client configuration**: How does 12go handle per-client pricing/markup?
+5. **Notification transformation**: 12go notifications have different shape than what clients expect
+6. **Static data (stations/operators)**: Current system uses Fuji IDs; 12go uses different IDs (out of scope but affects design)
+7. **Credit line**: Does 12go have equivalent functionality?
+8. **Seat lock**: Being developed on 12go side -- timeline unknown

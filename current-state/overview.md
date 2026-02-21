@@ -146,7 +146,7 @@ sequenceDiagram
 
     Note over Client,TwelveGo: Phase 6: Post-Booking
     Client->>PostBooking: GET /{client_id}/bookings/{booking_id}
-    PostBooking-->>Client: Booking details (from DynamoDB)
+    PostBooking-->>Client: Booking details (from PostgreSQL)
 
     Client->>PostBooking: GET /{client_id}/bookings/{booking_id}/ticket
     PostBooking->>SI: GetTicket (if needed)
@@ -350,7 +350,7 @@ sequenceDiagram
 | DynamoDB - ItineraryCache | Denali booking-service | Cache itinerary between search and booking | Yes - can re-fetch from 12go |
 | DynamoDB - PreBookingCache | Denali booking-service | Cache booking schema + locked seats | Yes - can re-fetch from 12go |
 | DynamoDB - BookingCache | Denali booking-service | Store active bookings | Yes - 12go stores bookings |
-| DynamoDB - BookingEntity | Denali post-booking-service | Store confirmed bookings | Yes - proxy to 12go |
+| PostgreSQL - BookingEntities | Denali post-booking-service | Store confirmed bookings | Yes - proxy to 12go |
 | HybridCache | Supply-Integration | Cache trip data (price, operator) between search and checkout | Likely yes - re-fetch from 12go |
 | MemoryCache | Etna Search | Cache index search results, station mappings | Yes - no index search needed |
 | MariaDB | Fuji (via OneTwoGoDbWrapper) | Station/operator master data from 12go | Keep - still need station mapping |

@@ -153,7 +153,7 @@ flowchart LR
 | **Scaling** | Tied to f3 monolith scaling (cannot scale B2B independently) |
 | **Observability** | dd-trace-php (already in f3), Monolog, shared Datadog dashboards |
 | **LOC** | ~3-4K |
-| **MVP Timeline** | 6-8 weeks (includes PHP ramp-up + f3 orientation) |
+| **MVP Timeline** | 10-14 weeks (includes PHP ramp-up + f3 orientation) |
 
 ---
 
@@ -291,7 +291,7 @@ flowchart LR
 | **Startup time** | <2s | N/A (f3 process) | <100ms | ~15-30ms | ~60-120ms |
 | **LOC estimate** | ~6K | ~3-4K | ~3-5K | ~2.8K | ~5K |
 | **Team ramp-up** | 0 weeks | 1-2 weeks (PHP) + 3-4 weeks (f3) | 2-4 weeks | 1-2 weeks | 1 week |
-| **MVP timeline** | 3 weeks | 6-8 weeks | 4-6 weeks | 4-5 weeks | 4-5 weeks |
+| **MVP timeline** | 3 weeks | 10-14 weeks | 4-6 weeks | 4-5 weeks | 4-5 weeks |
 | **Total migration** | 7-8 weeks | 13-21 weeks | 10-12 weeks | 8-10 weeks | 8-9 weeks |
 | **Weighted score** | **123/140 (#1)** | **93/140 (#5)** | **108/140 (#3)** | **107/140 (#4)** | **113/140 (#2)** |
 
