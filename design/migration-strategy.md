@@ -342,7 +342,7 @@ A canary rollout means routing a single low-risk client's production traffic to 
 
 12go sends [unauthenticated webhook notifications](../current-state/endpoints/notifications.md) to our booking-notification-service when booking statuses change. During the transition, both old and new systems may need to handle these notifications.
 
-Per [management input](../questions/questions%20to%20shauly.md), a notification transformer service is needed regardless — 12go's notification shape differs from what clients expect. Most [Kafka events are redundant](../current-state/cross-cutting/messaging.md) (no trip lake, no data team). Only client-facing notifications survive.
+Per [management input](../questions/questions%20to%20management.md), a notification transformer service is needed regardless — 12go's notification shape differs from what clients expect. Most [Kafka events are redundant](../current-state/cross-cutting/messaging.md) (no trip lake, no data team). Only client-facing notifications survive.
 
 **Option 1: 12go sends webhooks to the new service only.**
 Change the webhook URL registered with 12go from the old notification service to the new service. Simple, but creates a hard cutover for notifications — if the new service has a bug, notifications are lost.

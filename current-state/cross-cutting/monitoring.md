@@ -369,7 +369,7 @@ Unifying monitoring across Connect (Coralogix + Grafana) and 12go (Datadog) will
 
 ## Required Monitoring Dimensions
 
-Per Shauly (manager), the following dimensions are required for monitoring:
+Per Team Lead (manager), the following dimensions are required for monitoring:
 
 | Dimension | Description |
 |---|---|

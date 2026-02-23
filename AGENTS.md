@@ -229,39 +229,25 @@ When referencing another doc, use relative links:
 - **Output**: `questions/for-12go.md`
 - **Must**: Read every doc's "Open Questions" section, synthesize, prioritize
 
-### Phase 2 Roles (Design)
+### Phase 2 Roles (Design - Complete)
 
 #### Solution Architect
 - **Purpose**: Propose architecture options for the transition
 - **Input**: Read `current-state/overview.md`, `questions/for-12go.md`, and answers from 12go meeting
-- **Output**: `design/proposed-architecture.md` with multiple options, pros/cons, diagrams
-- **Key decisions to address**:
-  - Integration method (HTTP proxy vs code reference vs direct DB)
-  - Programming language for adapter services
-  - Whether to keep local state (DynamoDB/PostgreSQL) or go stateless
-  - Station ID mapping strategy
-  - Monitoring/observability unification
-- **Must**: Reference specific current-state docs for each decision. Use the Design Document Template.
+- **Output**: `design/recommendation.md`, `design/decision-map.md`, `design/comparison-matrix.md`
+- **Key decisions addressed**:
+  - Integration method (HTTP proxy)
+  - Programming language (.NET 8 Minimal API with AOT)
+  - Stateless approach (no local DynamoDB/PostgreSQL for bookings)
+  - Station ID mapping via S3 snapshot artifacts
+- **Must**: Reference specific current-state docs for each decision.
 
 #### Migration Planner
 - **Purpose**: Define the step-by-step migration plan with ordering and dependencies
-- **Input**: Read `design/proposed-architecture.md` and all endpoint docs
-- **Output**: `design/migration-plan.md` with phased migration steps
-- **Must**: Consider which endpoints can be migrated independently, what needs to migrate together, rollback strategy, and how to test each step
+- **Input**: Read `design/recommendation.md` and all endpoint docs
+- **Output**: `design/migration-strategy.md` with phased migration steps
 
-#### Endpoint Designer
-- **Purpose**: Design the new implementation for a specific endpoint
-- **Input**: Read the corresponding `current-state/endpoints/{endpoint}.md` and `design/proposed-architecture.md`
-- **Output**: Design doc for the endpoint in `design/endpoints/{endpoint}.md`
-- **Must**: Show the new call flow (mermaid), the contract preservation strategy, what code changes are needed, and what tests are required
-
-#### Risk Analyst
-- **Purpose**: Identify and evaluate risks in the proposed design
-- **Input**: Read all design docs and cross-cutting concern docs
-- **Output**: Risk assessment section in `design/proposed-architecture.md`
-- **Must**: Consider client breakage, data loss, performance degradation, monitoring gaps, security gaps
-
-### Phase 3 Roles (Implementation)
+### Phase 3 Roles (Implementation - Ready)
 
 #### Implementation Agent
 - **Purpose**: Implement the migration for a specific endpoint/service
@@ -289,3 +275,5 @@ Decisions made during this project, for context in future sessions.
 | 2026-02-17 | Phase 1 first (document what exists), then Phase 2 (design), then Phase 3 (implement) | Need to know what we have before deciding what to build |
 | 2026-02-17 | Each endpoint gets its own file | Enables parallel work by different agents without merge conflicts |
 | 2026-02-17 | Questions for 12go compiled from all doc open questions | Centralized list prioritized by architecture impact |
+| 2026-02-20 | .NET 8 Microservice Architecture recommended | Maximizes team velocity, minimizes transition risk, allows porting existing SI logic |
+| 2026-02-23 | Sensitive data scrub (Phase 1-2 docs) | Removed personal names and verified gitignore coverage before potential public/internal commit |

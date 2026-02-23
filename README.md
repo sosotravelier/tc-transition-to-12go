@@ -9,14 +9,15 @@ Design documentation for migrating from the current multi-service architecture (
 | Day | Milestone | Status |
 |-----|-----------|--------|
 | **Tuesday (Feb 17)** | Phase 1: Document current state | DONE |
-| **Wednesday (Feb 18)** | Questions for 12go representative | Ready for review |
-| **Thursday (Feb 19)** | Draft design with proposed solutions | Pending |
+| **Wednesday (Feb 18)** | Phase 2: Questions for 12go representative | DONE |
+| **Friday (Feb 20)** | Phase 3: Draft design & Recommendation | DONE |
+| **Monday (Feb 23)** | Final review & sensitive data scrub | IN PROGRESS |
 
 ## Context
 
 We are transitioning from a multi-service .NET architecture to using 12go (PHP/Symfony) as the core system. The challenge is that existing clients depend on our API contracts (Denali for booking, Etna for search, Fuji for master data), which are vastly different from 12go's APIs. We need to maintain backward compatibility while simplifying the architecture.
 
-## Key Findings (from Phase 1)
+## Key Findings (from Phase 1 & 2)
 
 1. **Station ID mapping is the hardest problem** -- clients have Fuji IDs, 12go uses different IDs
 2. **Most local storage (DynamoDB) can be eliminated** -- 12go already stores the data
@@ -25,6 +26,7 @@ We are transitioning from a multi-service .NET architecture to using 12go (PHP/S
 5. **Seat locking is faked** -- 12go doesn't support it; we validate locally
 6. **Refund calculations diverge** between our system and 12go's
 7. **Search pipeline is massively over-engineered** -- only direct 12go call path survives
+8. **.NET 8 is recommended** for the new transition services (Minimal APIs + AOT)
 
 See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 
@@ -67,12 +69,16 @@ See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 
 ## Phase 2: Questions for 12go
 
-[Questions for 12go representative](questions/for-12go.md)
+[Questions for 12go representative](questions/for-12go.md) (Answered)
 
-## Phase 3: Design (Thursday)
+## Phase 3: Design & Recommendation
 
-- [Proposed Architecture](design/proposed-architecture.md)
-- [Migration Plan](design/migration-plan.md)
+- [Recommendation (Primary: .NET 8 Microservices)](design/recommendation.md)
+- [Decision Map](design/decision-map.md)
+- [Comparison Matrix](design/comparison-matrix.md)
+- [Migration Strategy](design/migration-strategy.md)
+- [Alternatives Analysis](design/alternatives/)
+- [Risk Analysis](design/analysis/risk-migration.md)
 
 ## Architecture Overview
 

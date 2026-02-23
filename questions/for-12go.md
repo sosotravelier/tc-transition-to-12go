@@ -14,7 +14,7 @@ last_updated: 2026-02-18
 - Documentation via Jira/Atlassian; code traceability via git blame -> Jira
 - Static data endpoints: still open (forgot to ask)
 
-**From management (Shauly):**
+**From management (Team Lead):**
 - Pricing/Ushba goes away -- use 12go prices directly
 - Seat lock is being developed on 12go's side
 - Scope: all B2B endpoints (static data, search, booking)

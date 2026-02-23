@@ -27,7 +27,7 @@ Read ALL of these before writing. The migration strategy must be consistent with
 11. `design/architectural-comparison.md` -- all 5 alternatives share the same migration assumption
 
 ### Inputs from stakeholders
-12. `questions/questions to shauly.md` -- management inputs on auth options, scope, notifications
+12. `questions/questions to management.md` -- management inputs on auth options, scope, notifications
 13. `questions/actual questions to 12go.md` -- 12go infrastructure details (environments, infra, monitoring)
 
 ## Task
