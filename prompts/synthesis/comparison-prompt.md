@@ -5,30 +5,34 @@ You are an analytical decision-maker who synthesizes complex multi-dimensional e
 
 ## Context Files to Read
 1. `design/evaluation-criteria.md` -- scoring rubric with weights
-2. All 5 design documents in `design/alternatives/*/design.md`
-3. All review documents in `design/alternatives/*/reviews/*.md`
+2. `design/alternatives/A-monolith/design.md`
+3. `design/alternatives/B-microservice/design.md`
+4. All language exploration docs in `design/alternatives/B-microservice/languages/*.md`
+5. All analysis docs in `design/analysis/*.md`
 
 ## Task
-
 Create a comprehensive comparison matrix that:
+1. **Collects scores** from each of the 4 analyzer agents' outputs.
+2. **Calculates weighted totals** using the formula from evaluation-criteria.md.
+3. **Ranks alternatives** by final weighted score.
+4. **Highlights** where alternatives significantly differ (decision-driving criteria).
 
-1. **Collects scores** from each design's self-assessment
-2. **Adjusts scores** based on reviewer feedback (where reviewers suggested changes)
-3. **Calculates weighted totals** using the formula from evaluation-criteria.md
-4. **Ranks alternatives** by final weighted score
-5. **Highlights** where alternatives significantly differ (decision-driving criteria)
+## Alternatives to Compare
+1. **A: Monolith (PHP/Symfony)**
+2. **B: Microservice (.NET 8)**
+3. **B: Microservice (PHP/Symfony)**
+4. **B: Microservice (Go)**
+5. **B: Microservice (TypeScript/Node.js)**
 
 ## Output Format
-
 Write to `design/comparison-matrix.md`:
-
 ```markdown
 # Comparison Matrix
 
 ## Score Summary
 
-| Criterion (Weight) | .NET (01) | PHP (02) | Go (03) | BFF (04) | TS (05) |
-|---------------------|-----------|----------|---------|----------|---------|
+| Criterion (Weight) | Monolith-PHP (A) | Micro-.NET (B1) | Micro-PHP (B2) | Micro-Go (B3) | Micro-TS (B4) |
+|---|---|---|---|---|---|
 | Implementation Effort (x3) | | | | | |
 | Team Competency Match (x3) | | | | | |
 | Search Performance (x3) | | | | | |
@@ -47,24 +51,6 @@ Write to `design/comparison-matrix.md`:
 | **Rank** | | | | | |
 
 ## Key Differentiators
-(Where do alternatives significantly diverge? What criteria drive the decision?)
-
-## Reviewer Consensus
-(Where did all 6 reviewers agree? Where did they disagree?)
-
+## Analyzer Consensus
 ## Risk Heat Map
-| Risk Category | .NET | PHP | Go | BFF | TS |
-|---------------|------|-----|-----|-----|-----|
-| Migration Timeline | | | | | |
-| Team Retention | | | | | |
-| Client Disruption | | | | | |
-| Knowledge Transfer | | | | | |
-| Operational | | | | | |
-(Use: LOW / MEDIUM / HIGH)
 ```
-
-## Constraints
-- Be fair and objective -- let data drive the ranking
-- Note where self-assessments were overridden by reviewers
-- Highlight close races where small score differences shouldn't be decisive
-- Include a brief note on scoring methodology
