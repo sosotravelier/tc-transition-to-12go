@@ -1,6 +1,6 @@
 ---
 status: updated
-last_updated: 2026-02-18
+last_updated: 2026-02-23
 ---
 
 # Current System Architecture Overview
@@ -96,7 +96,7 @@ sequenceDiagram
 
     Note over Client,Fuji: Phase 1: Setup
     Client->>Fuji: GET /v1/{client_id}/stations
-    Fuji-->>Client: Station list (IDs, names, coords)
+    Fuji-->>Client: Pre-signed S3 URL (station snapshot JSON)
     Client->>Fuji: GET /v1/{client_id}/operators
     Fuji-->>Client: Operator list
 
@@ -146,7 +146,7 @@ sequenceDiagram
 
     Note over Client,TwelveGo: Phase 6: Post-Booking
     Client->>PostBooking: GET /{client_id}/bookings/{booking_id}
-    PostBooking-->>Client: Booking details (from DynamoDB)
+    PostBooking-->>Client: Booking details (from PostgreSQL)
 
     Client->>PostBooking: GET /{client_id}/bookings/{booking_id}/ticket
     PostBooking->>SI: GetTicket (if needed)
@@ -269,7 +269,7 @@ flowchart TD
 | **GetTicket** `GET /{client_id}/bookings/{id}/ticket` | `GET /booking/{bookingId}` | Gets ticket URL |
 | **CancelBooking** `POST /{client_id}/bookings/{id}/cancel` | `GET /booking/{bookingId}/refund-options` | 2 calls |
 | | `POST /booking/{bookingId}/refund` | Executes refund |
-| **GetStations** `GET /v1/{client_id}/stations` | MariaDB `station_v` table | Via OneTwoGoDbWrapper (periodic sync) |
+| **GetStations** `GET /v1/{client_id}/stations` | MariaDB `station_v` table | Exported via periodic sync and returned as pre-signed S3 snapshot URL |
 | **GetOperators** `GET /v1/{client_id}/operators` | MariaDB `operator_v` table | Via OneTwoGoDbWrapper (periodic sync) |
 
 ### Visual: Booking Funnel to 12go
@@ -342,6 +342,7 @@ sequenceDiagram
 - **GetBookingDetails** reads from our local DB, not 12go (except lazy ticket URL fetch)
 - **CreateBooking** and **ConfirmBooking** both call `/booking/{id}` after their main call to get updated status/price
 - **Stations/Operators** don't use the REST API -- they read from 12go's MariaDB via OneTwoGoDbWrapper periodic sync
+- **Stations endpoint response is artifact-based** -- clients receive an S3 URL to a generated JSON snapshot, not a direct inline station array from a live DB query
 
 ## Data Storage Map
 
@@ -350,7 +351,7 @@ sequenceDiagram
 | DynamoDB - ItineraryCache | Denali booking-service | Cache itinerary between search and booking | Yes - can re-fetch from 12go |
 | DynamoDB - PreBookingCache | Denali booking-service | Cache booking schema + locked seats | Yes - can re-fetch from 12go |
 | DynamoDB - BookingCache | Denali booking-service | Store active bookings | Yes - 12go stores bookings |
-| DynamoDB - BookingEntity | Denali post-booking-service | Store confirmed bookings | Yes - proxy to 12go |
+| PostgreSQL - BookingEntities | Denali post-booking-service | Store confirmed bookings | Yes - proxy to 12go |
 | HybridCache | Supply-Integration | Cache trip data (price, operator) between search and checkout | Likely yes - re-fetch from 12go |
 | MemoryCache | Etna Search | Cache index search results, station mappings | Yes - no index search needed |
 | MariaDB | Fuji (via OneTwoGoDbWrapper) | Station/operator master data from 12go | Keep - still need station mapping |
@@ -370,7 +371,7 @@ sequenceDiagram
 | Denali | Etna SI Host | HTTP REST | Get itinerary details |
 | Denali | SI Framework | In-process | Booking operations |
 | SI Framework | 12go (frontend3) | HTTP REST | All supplier operations |
-| Fuji | 12go (OneTwoGoDbWrapper) | HTTP REST + MySQL | Station sync |
+| Fuji | 12go (OneTwoGoDbWrapper) | HTTP REST + MySQL | Daily station export/sync used to build S3 snapshots |
 | 12go | Denali notification-service | HTTP Webhook | Booking status changes |
 | Denali services | Kafka | Async messaging | Internal events |
 

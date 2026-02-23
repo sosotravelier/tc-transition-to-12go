@@ -99,3 +99,48 @@ During the first working session, the following decisions were made through disc
 - 1 overview with architecture diagrams
 - 20 prioritized questions for 12go representative
 - All committed as initial git history
+
+
+
+
+## Session 2 Decisions (Feb 23, 2026) - Phase 2 Design Exploration
+
+During this session, we explored specific architectural and language implementation options for the transition.
+
+1. **Plan Splitting**: The design phase was split into two parts:
+   - **Wave 1**: High-level designs (Monolith vs. Microservice).
+   - **Waves 2-4**: Language exploration, detailed analysis, and synthesis.
+2. **Architecture Refinement**: 
+   - Focused on two primary paths: **A-monolith (PHP/Symfony)** and **B-microservice (Multiple Languages)**.
+   - Clarified that **Stations/Operators** data must remain artifact-based (S3 pre-signed URL) to preserve client contracts.
+   - Identified 12go's internal service layer (`SearchService`, `BookingProcessor`) for potential monolith integration.
+3. **Language Exploration**: Concretized 4 microservice variants:
+   - **.NET 8**: Immediate productivity, porting existing C# logic.
+   - **TypeScript/Node.js (NestJS)**: Highest AI synergy, familiar async/await for .NET devs.
+   - **Go**: Strategic alignment with 12go's future, highest performance.
+   - **PHP/Symfony**: Natural infrastructure alignment with 12go.
+4. **Scoring Model**: Consolidated 6 reviewer personas into 4 analyzer roles (Team/Velocity, Architecture/Performance, Operations/Infra, Risk/Migration) using a weighted 14-criterion rubric.
+
+### Session 2 Outputs (Phase 2)
+
+- **Detailed Design Docs**:
+  - `design/alternatives/A-monolith/design.md`
+  - `design/alternatives/B-microservice/design.md`
+- **Language Exploration Docs**:
+  - `design/alternatives/B-microservice/languages/dotnet.md`
+  - `design/alternatives/B-microservice/languages/typescript.md`
+  - `design/alternatives/B-microservice/languages/golang.md`
+  - `design/alternatives/B-microservice/languages/php-symfony.md`
+- **Analysis Reports**:
+  - 4 specialized analyzer reports in `design/analysis/`
+- **Final Synthesis**:
+  - `design/comparison-matrix.md`
+  - `design/recommendation.md` (Primary recommendation: **.NET 8 Microservice (B1)**)
+
+### Core Strategy Decisions
+
+- **Recommendation**: **.NET 8 Microservice** is the primary path due to zero learning curve and 10-week timeline.
+- **Modernization**: Use **.NET 8 AOT** to achieve container sizes and performance comparable to Go/PHP.
+- **Fallback**: **TypeScript/Node.js** is the preferred fallback if .NET is rejected by 12go DevOps.
+- **Contract Preservation**: All alternatives must preserve all 13 client-facing endpoints exactly, including money as strings and Fuji station IDs.
+- **Simplicity**: Enforce a **10K LOC hard limit** on the new service to prevent re-introduction of "enterprise" complexity.

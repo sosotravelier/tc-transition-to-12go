@@ -1,0 +1,15 @@
+{
+  "name": "transition-design-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for transition-design project (e.g. export Cursor user messages)",
+  "type": "module",
+  "scripts": {
+    "export-prompts": "node export-user-messages.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cursor-history": "^0.11.0"
+  }
+}
