@@ -13,61 +13,53 @@ Design A adds a new B2B API layer directly inside the 12go PHP/Symfony monolith 
 
 ## Architecture Overview
 
-```mermaid
-flowchart TD
-    Client["B2B Clients\n(x-api-key + client_id)"]
+The diagram below shows the main components and data flows. See [Frontend3 Internals Discovery](#frontend3-internals-discovery) for the specific service classes reused per endpoint.
 
-    subgraph frontend3 ["frontend3 (PHP 8.3 / Symfony 6.4)"]
-        subgraph B2bApi ["src/B2bApi/ — NEW"]
-            B2bCtrl["B2B Controllers\n(Search, Booking, PostBooking,\nStations, Notifications)"]
+```mermaid
+flowchart TB
+    subgraph ingress["1. Ingress"]
+        Client["B2B Clients\n(x-api-key + client_id)"]
+    end
+
+    subgraph frontend3["2. frontend3 (PHP 8.3 / Symfony 6.4)"]
+        direction TB
+
+        subgraph B2bApi["src/B2bApi/ — NEW"]
             AuthMw["B2bAuthMiddleware\n(clientId + x-api-key → ApiAgent)"]
-            Mappers["Response Mappers\n(SearchMapper, BookingMapper,\nSchemaMapper, StationMapper)"]
+            B2bCtrl["B2B Controllers\n(Search, Booking, PostBooking,\nStations, Notifications)"]
             NotifTransformer["NotificationTransformer\n(12go shape → client shape)"]
-            B2bClientRepo["B2bClientRepository\n(MariaDB: b2b_client table)"]
-            StationMappingRepo["StationMappingRepository\n(MariaDB: b2b_station_mapping table)"]
             StationSnapshotJob["StationSnapshotJob\n(periodic export to S3)"]
         end
 
-        subgraph Existing ["Existing 12go Services (reused in-process)"]
-            SearchService["SearchService\n+ SearchFilterBuilder"]
-            CartHandler["CartHandler\n+ Cart (Redis)"]
-            BookingProcessor["BookingProcessor\n(reserve, confirm)"]
-            BookingManager["BookingManager\n+ BookingDetailsManager"]
-            StationRepo["StationRepository\n+ OperatorRepository"]
-            WebhookCtrl["WebhookController\n(extended)"]
-        end
-
-        subgraph VersionedApiBundle["VersionedApiBundle (existing)"]
-            VersionListener["ApiVersionListener\n(Travelier-Version header)"]
+        subgraph existing["Existing 12go (reused in-process)"]
+            TwelveGoSvc["Search, Cart, Booking,\nStation/Operator services"]
+            WebhookCtrl["WebhookController\n(extended for B2B)"]
         end
     end
 
-    subgraph Storage ["Storage (all existing)"]
-        MariaDB["MariaDB\n(trip_pool, booking, station,\noperator, b2b_client, b2b_station_mapping)"]
-        Redis["Redis\n(cart state, session)"]
-        S3["S3\n(station snapshot artifacts)"]
+    subgraph storage["3. Storage"]
+        direction LR
+        MariaDB["MariaDB"]
+        Redis["Redis"]
+        S3["S3\n(station artifacts)"]
     end
 
-    Client -->|"x-api-key + client_id"| AuthMw
+    subgraph outbound["4. Outbound"]
+        Webhooks["Client webhook URLs"]
+    end
+
+    Client --> AuthMw
     AuthMw --> B2bCtrl
-    B2bCtrl --> Mappers
-    B2bCtrl --> SearchService
-    B2bCtrl --> CartHandler
-    B2bCtrl --> BookingProcessor
-    B2bCtrl --> BookingManager
-    B2bCtrl --> StationRepo
-    B2bCtrl --> NotifTransformer
-    NotifTransformer -->|"per-client webhook"| Client
-    WebhookCtrl -->|"booking status events"| NotifTransformer
-    B2bClientRepo --> MariaDB
-    StationMappingRepo --> MariaDB
+    B2bCtrl --> TwelveGoSvc
+    B2bCtrl -->|pre-signed URL| S3
+
+    WebhookCtrl -->|booking status events| NotifTransformer
+    NotifTransformer --> Webhooks
+
+    TwelveGoSvc --> MariaDB
+    TwelveGoSvc --> Redis
     StationSnapshotJob --> MariaDB
     StationSnapshotJob --> S3
-    SearchService --> MariaDB
-    CartHandler --> Redis
-    BookingManager --> MariaDB
-    StationRepo --> MariaDB
-    B2bCtrl -->|"pre-signed URL"| S3
 ```
 
 ---

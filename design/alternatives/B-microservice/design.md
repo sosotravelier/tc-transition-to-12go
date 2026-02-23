@@ -13,67 +13,62 @@ Design B replaces the four .NET repositories with one or two independent service
 
 ## Architecture Overview
 
+The diagram below shows the main components and data flows. See the [Endpoint Distribution](#endpoint-distribution) table for the full list of endpoints per service.
+
 ```mermaid
-flowchart TD
-    subgraph Clients["B2B Clients"]
+flowchart TB
+    subgraph ingress["1. Ingress"]
+        direction LR
         C1["Client A"]
         C2["Client B"]
         C3["Client N"]
+        GW["API Gateway\nx-api-key + client_id"]
     end
 
-    GW["AWS API Gateway\n(x-api-key validation + routing)"]
-
-    subgraph NewServices["New Proxy Services (on 12go infra)"]
+    subgraph proxy["2. Proxy Services (12go infra)"]
         direction TB
-        SearchSvc["Search & Master Data Service\n\nGET /v1/{client_id}/itineraries\nGET /v1/{client_id}/stations\nGET /v1/{client_id}/operating_carriers\nGET /v1/{client_id}/pois\nGET /v1/{client_id}/incomplete_results/{id}"]
-        BookingSvc["Booking Service\n\nGET /{client_id}/itineraries/{id}\nPOST /{client_id}/bookings\nPOST /{client_id}/bookings/{id}/confirm\nPOST /{client_id}/bookings/lock_seats\nGET /{client_id}/bookings/{id}\nGET /{client_id}/bookings/{id}/ticket\nPOST /{client_id}/bookings/{id}/cancel\nPOST /v1/notifications/onetwogo/..."]
-        SeatLockCache["In-process seat lock store\n(transient, per-deployment)"]
-        SnapshotJob["MasterDataSnapshotJob\n(periodic station/operator export)"]
+        SearchSvc["Search & Master Data\n(Search, Stations, Operators, POIs, IncompleteResults)"]
+        BookingSvc["Booking Service\n(GetItinerary, CreateBooking, Confirm, SeatLock,\nGetBookingDetails, Ticket, Cancel, Notifications)"]
+        SeatLock["Seat lock store\n(transient, in-process)"]
     end
 
-    subgraph AuthConfig["Auth & Config Store"]
-        AuthMap["clientId → 12go apiKey\nmapping\n(env vars / secrets manager)"]
-        StationMap["Fuji stationId → 12go stationId\nmapping\n(config file / DB)"]
-    end
-
-    subgraph TwelveGo["12go Platform (frontend3)"]
+    subgraph twelvego["3. 12go Platform"]
+        direction TB
         TGApi["12go HTTP API\n(PHP/Symfony)"]
-        MariaDB["MariaDB"]
-        Redis["Redis"]
+        TGApi --> MariaDB["MariaDB"]
+        TGApi --> Redis["Redis"]
     end
 
-    S3["S3\n(station/operator snapshot artifacts)"]
-
-    subgraph ClientWebhooks["B2B Client Webhook Endpoints"]
-        CW1["Client A webhook URL"]
-        CW2["Client B webhook URL"]
+    subgraph data["4. Data & Config"]
+        direction TB
+        AuthConfig["Auth: clientId → 12go apiKey\nStation map: Fuji → 12go IDs"]
+        SnapshotJob["MasterDataSnapshotJob\n(periodic export)"]
+        S3["S3\n(station/operator artifacts)"]
     end
 
-    subgraph Observability["Observability"]
-        DD["Datadog\n(logs + metrics + traces)"]
+    subgraph outbound["5. Outbound"]
+        direction LR
+        Webhooks["Client webhook URLs"]
+        DD["Datadog\n(logs, metrics, traces)"]
     end
 
-    C1 & C2 & C3 -->|"x-api-key + client_id"| GW
-    GW -->|"Search + Master Data\nrequests"| SearchSvc
-    GW -->|"Booking + Post-booking\n+ Notifications"| BookingSvc
+    C1 & C2 & C3 --> GW
+    GW -->|Search + Master Data| SearchSvc
+    GW -->|Booking + Post-booking| BookingSvc
 
     SearchSvc -->|"?k=apiKey"| TGApi
     BookingSvc -->|"?k=apiKey"| TGApi
+    BookingSvc <--> SeatLock
+
+    AuthConfig --> SearchSvc
+    AuthConfig --> BookingSvc
+
+    SnapshotJob -->|export| S3
     SnapshotJob -->|"?k=apiKey"| TGApi
-    SnapshotJob --> S3
-    SearchSvc -->|"pre-signed URL"| S3
-    BookingSvc <-->|"transient seat\nlock state"| SeatLockCache
+    SearchSvc -->|pre-signed URL| S3
 
-    SearchSvc --> AuthMap
-    SearchSvc --> StationMap
-    BookingSvc --> AuthMap
-    BookingSvc --> StationMap
-
-    TGApi --> MariaDB
-    TGApi --> Redis
-
-    TGApi -->|"POST {bid}"| BookingSvc
-    BookingSvc -->|"transformed notification"| CW1 & CW2
+    TGApi -->|"webhook POST {bid}"| BookingSvc
+    BookingSvc -->|transformed notification| Webhooks
 
     SearchSvc & BookingSvc --> DD
 ```
