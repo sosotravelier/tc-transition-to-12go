@@ -16,7 +16,7 @@ Each node is a **decision** (a question that must be answered). Each branch is a
 ---
 
 ```mermaid
-flowchart TD
+flowchart LR
     D1["D1: Where does the B2B API layer live?"]
     D1 -->|Option A| A["A: Inside 12go monolith\n(frontend3 / PHP/Symfony)"]
     D1 -->|Option B| B["B: Separate microservice(s)\n(language TBD)"]
@@ -60,7 +60,7 @@ flowchart TD
 ---
 
 ```mermaid
-flowchart TD
+flowchart LR
     D2["D2: Client migration strategy"]
     D2 -->|Option A| MA["A: Transparent switch\n(same URLs, infra re-route)"]
     D2 -->|Option B| MB["B: New endpoints\n(clients update base URL)"]
@@ -93,7 +93,7 @@ flowchart TD
 ---
 
 ```mermaid
-flowchart TD
+flowchart LR
     D4["D4: Where is the auth mapping table stored?"]
     D4 -->|1| S1["Config file / env vars\n(simple, redeploy to change)"]
     D4 -->|★ 2| S2["In-memory with file/S3 backing\n(hot-reload without restart)"]
@@ -118,7 +118,7 @@ flowchart TD
 ---
 
 ```mermaid
-flowchart TD
+flowchart LR
     D8["D8: Booking schema complexity\n(20+ dynamic fields, wildcard patterns)"]
     D8 -->|A: Monolith| BSM1["Call BookingFormManager directly\n(in-process, already handles it)"]
     D8 -->|B: Microservice| BSM2["Port existing C# BookingSchemaMapper\n(~500 lines, high test priority)"]
