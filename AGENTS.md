@@ -164,6 +164,16 @@ depends_on_questions: [Q1, Q5, Q11]  # from questions/for-12go.md
 ## Risks
 ```
 
+## Prompt Log Convention
+
+**When to update**: When adding new prompts, sessions, or significant contextual inputs that shape the project direction.
+
+**Where**: `prompt-log.md`
+
+**What to add**: A new section with date, description of the prompt or session, and any decisions or outputs. Preserve the Initial Prompt and prior sessions; append new entries chronologically.
+
+**Why**: The prompt log preserves historic context and the original task description. Design agents, reviewers, and future sessions rely on this to understand *why* we are doing this transition.
+
 ## Document Status Convention
 
 Every document must have YAML frontmatter:

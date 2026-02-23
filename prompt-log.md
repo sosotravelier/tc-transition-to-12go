@@ -99,3 +99,8 @@ During the first working session, the following decisions were made through disc
 - 1 overview with architecture diagrams
 - 20 prioritized questions for 12go representative
 - All committed as initial git history
+
+
+
+
+# prompt-log from later

@@ -2,6 +2,16 @@
 
 > Inject this context block into every design and reviewer agent prompt.
 
+## Historic Context
+
+We are in a big transition. As part of it, we want to **demolish all of our services** (Denali, Etna, Fuji, Supply-Integration) and use **12go as the main core of the system**. 12go has the capability to handle integrations. Without existing clients, it would be straightforward to kill all of Etna and Denali — but we have clients depending on API contracts that are vastly different from 12go's. We must preserve those contracts while simplifying the architecture.
+
+**Infrastructure**: We will migrate our infrastructure to 12go's cloud. The exact approach (copy minimal services vs. write from scratch) is part of the design.
+
+**Design goal**: Clients must not break, and the new system must be easy to maintain.
+
+See `prompt-log.md` for the full initial prompt and session history.
+
 ## What We're Building
 
 A replacement for the B2B API layer that currently sits between external clients and 12go's travel platform. The current system is 4 .NET repositories (~340 projects total) that essentially proxy HTTP calls to 12go. The new system must preserve the client-facing API contract while dramatically simplifying the architecture.
@@ -130,7 +140,7 @@ See `current-state/cross-cutting/authentication.md` for full analysis.
 
 ## Key Constraints
 - All development expertise is in .NET
-- PHP is not preferred by the team, feasible with AI assistance
+- **Technology choice**: The team does not prefer PHP; business sees PHP as less risky (alignment with 12go's stack). Both perspectives are inputs to consider, not a source of truth. If the team will work with PHP, the solution must be designed so that all parties feel comfortable: AI-accelerated development and patterns that do not require deep PHP expertise from team members.
 - Go is being considered by 12go but nothing is decided
 - Developer experience is a priority -- team focus and stability are prioritized during major system changes
 - AI-augmented development is heavily used (Cursor, Claude)

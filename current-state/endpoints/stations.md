@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-17
+last_updated: 2026-02-23
 ---
 # Stations Endpoint
 
@@ -13,6 +13,8 @@ last_updated: 2026-02-17
 ### GET /v1/{client_id}/stations
 
 Returns a pre-signed S3 URL pointing to a JSON file containing all stations for the requested locale.
+
+Important behavior: this endpoint is artifact-based. Clients are expected to download a generated JSON file from S3; the API does not stream the full station payload inline.
 
 | Parameter   | In    | Type   | Required | Description                        |
 |-------------|-------|--------|----------|------------------------------------|
@@ -137,24 +139,33 @@ sequenceDiagram
     Mapper->>S3: Upload locale-specific station JSON files
 ```
 
-### Client Request Flow
+### Client Request Flow (artifact-based response)
 
 ```mermaid
 sequenceDiagram
     participant Client as Client
     participant ExposureAPI as Fuji Exposure API
+    participant Snapshot as Station Snapshot Artifact
     participant S3 as S3 Bucket
 
     Client->>ExposureAPI: GET /v1/{client_id}/stations?locale=en
-    ExposureAPI->>S3: Download StationRepo_{locale} data
-    S3-->>ExposureAPI: Station data (from DynamoDB export)
-    ExposureAPI->>ExposureAPI: Transform StationRepo → Station entities
-    ExposureAPI->>S3: Upload transformed data to S3 (temporary)
+    ExposureAPI->>Snapshot: Resolve latest snapshot for locale
+    Snapshot-->>ExposureAPI: Snapshot metadata (s3 key, generation time)
+    ExposureAPI->>S3: Generate pre-signed URL for snapshot object
     S3-->>ExposureAPI: Pre-signed URL
     ExposureAPI-->>Client: Pre-signed S3 URL (string)
     Client->>S3: Download station JSON from pre-signed URL
     S3-->>Client: Array of station objects
 ```
+
+### Clarification: current operational flow
+
+The station payload is produced by a periodic export process, not by querying all stations at request time:
+
+1. 12go station data is exported periodically (currently daily cadence)
+2. TC side receives a full copy and materializes a structured station snapshot
+3. Snapshot JSON is written to S3 (per locale)
+4. `GET /v1/{client_id}/stations` returns a pre-signed URL to the latest snapshot object
 
 ## 12go Equivalent
 
@@ -219,7 +230,7 @@ Theoretically possible, but would require:
 | SI Integration Job (stations) | Yes          | If there's no need to maintain a Fuji-side copy               |
 | Kafka station messages     | Yes             | If sync pipeline is replaced                                  |
 | DynamoDB station storage   | Yes             | If data is served from a different store                      |
-| S3 pre-signed URL pattern  | Yes             | If API returns data directly instead of via S3                |
+| S3 pre-signed URL pattern  | No (for now)    | Client contract expects S3 URL response shape; changing it requires client migration |
 | Exposure API /stations     | Possibly        | Only if all clients migrate to a new endpoint                 |
 | Station ID mapping layer   | **No (critical)**| Clients have Fuji station IDs embedded; migration needed     |
 | Locale transformation      | Depends         | 12go already has localized names; if used directly, this is simpler |
