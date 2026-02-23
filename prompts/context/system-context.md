@@ -100,7 +100,7 @@ A replacement for the B2B API layer that currently sits between external clients
 |------|-------|-------|
 | Senior .NET Developers | 2 | 12 years experience each, 2 years at company |
 | Mid/Junior .NET Developer | 1-2 | Recently onboarded |
-| Team Lead | 1 | Deep system knowledge, less current on coding/AI |
+| Team Lead | 1 | Deep system knowledge, as well as good prioritizer and main decision maker. He takes responsibilities of many different area, therefore less available for coding. |
 | DevOps | 2 | Transitioning to 12go infra but supporting us |
 | 12go Veterans | available | PHP experts for advice/clarification |
 | Customer Success | 1 | |
