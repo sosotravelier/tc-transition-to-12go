@@ -1,7 +1,6 @@
 # B2B Transition: Two Decisions
 
 **Meeting** | Feb 25, 2026 | 30 min
-**Attendees** | Team Lead, R&D, Architect, Veteran 12go Developer
 
 ---
 
@@ -198,13 +197,13 @@ flowchart TD
 
 ## What We Need From This Meeting
 
-| # | Question | Who Can Answer |
-|---|---|---|
-| 1 | **Monolith or Microservice?** Analysis points to microservice. Do we agree? | Architect + R&D |
-| 2 | **Language**: .NET (our team) vs Go (potential alignment) vs PHP (their ecosystem)? | All |
-| 3 | **Will DevOps support a .NET container on 12go infra?** If not, .NET is off the table. | 12go Developer → DevOps |
-| 4 | **Is Go the strategic direction for new services at 12go?** This changes Go's score significantly. | 12go Developer |
-| 5 | **Who will own and maintain this service in 12+ months?** This is the deciding factor for language. | R&D + Team Lead |
+| # | Question |
+|---|----------|
+| 1 | **Monolith or Microservice?** Analysis points to microservice. Do we agree? |
+| 2 | **Language**: .NET (our team) vs Go (potential alignment) vs PHP (their ecosystem)? |
+| 3 | **Will DevOps support a .NET container on 12go infra?** If not, .NET is off the table. |
+| 4 | **Is Go the strategic direction for new services at 12go?** This changes Go's score significantly. |
+| 5 | **Who will own and maintain this service in 12+ months?** This is the deciding factor for language. |
 
 ---
 
