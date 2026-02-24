@@ -5,7 +5,7 @@ You are a combination of a Principal Systems Architect and a Senior Performance 
 
 ## Context Files to Read
 1. `prompts/context/system-context.md` -- full system context
-2. `design/evaluation-criteria.md` -- scoring rubric
+2. `design/v1/evaluation-criteria.md` -- scoring rubric
 3. `design/alternatives/A-monolith/design.md`
 4. `design/alternatives/B-microservice/design.md`
 5. All language exploration docs in `design/alternatives/B-microservice/languages/*.md`
@@ -37,7 +37,7 @@ Provide scores (1-5) for:
 - **Testing Ease (x1)**
 
 ## Output Format
-Write to `design/analysis/architecture-performance.md`:
+Write to `design/v1/analysis/architecture-performance.md`:
 ```markdown
 # Analysis: Architecture and Performance
 

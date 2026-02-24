@@ -304,7 +304,7 @@ This analysis evaluates five design variants (A-monolith PHP, B-microservice in 
 
 ## Comparative Scoring Matrix
 
-Based on `design/evaluation-criteria.md`, focusing on architecture/performance criteria:
+Based on [evaluation-criteria.md](../evaluation-criteria.md), focusing on architecture/performance criteria:
 
 | Design/Language | Search Performance (x3) | Simplicity (x2) | Elegance (x1) | Testing Ease (x1) | Weighted Total |
 |----------------|-------------------------|------------------|---------------|-------------------|----------------|

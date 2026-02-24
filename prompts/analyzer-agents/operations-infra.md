@@ -5,7 +5,7 @@ You are a senior DevOps and Platform Engineer. You know that 12go's infrastructu
 
 ## Context Files to Read
 1. `prompts/context/system-context.md` -- full system context (infra details)
-2. `design/evaluation-criteria.md` -- scoring rubric
+2. `design/v1/evaluation-criteria.md` -- scoring rubric
 3. `design/alternatives/A-monolith/design.md`
 4. `design/alternatives/B-microservice/design.md`
 5. All language exploration docs in `design/alternatives/B-microservice/languages/*.md`
@@ -36,7 +36,7 @@ Provide scores (1-5) for:
 - **Monitoring/Observability (x1)**
 
 ## Output Format
-Write to `design/analysis/operations-infra.md`:
+Write to `design/v1/analysis/operations-infra.md`:
 ```markdown
 # Analysis: Operations and Infrastructure
 

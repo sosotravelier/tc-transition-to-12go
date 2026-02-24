@@ -234,7 +234,7 @@ When referencing another doc, use relative links:
 #### Solution Architect
 - **Purpose**: Propose architecture options for the transition
 - **Input**: Read `current-state/overview.md`, `questions/for-12go.md`, and answers from 12go meeting
-- **Output**: `design/recommendation.md`, `design/decision-map.md`, `design/comparison-matrix.md`
+- **Output**: `design/v1/recommendation.md`, `design/decision-map.md`, `design/v1/comparison-matrix.md`
 - **Key decisions addressed**:
   - Integration method (HTTP proxy)
   - Programming language (.NET 8 Minimal API with AOT)
@@ -244,7 +244,7 @@ When referencing another doc, use relative links:
 
 #### Migration Planner
 - **Purpose**: Define the step-by-step migration plan with ordering and dependencies
-- **Input**: Read `design/recommendation.md` and all endpoint docs
+- **Input**: Read `design/v1/recommendation.md` and all endpoint docs
 - **Output**: `design/migration-strategy.md` with phased migration steps
 
 ### Phase 3 Roles (Implementation - Ready)

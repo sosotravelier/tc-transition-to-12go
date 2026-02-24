@@ -4,11 +4,11 @@
 You are an analytical decision-maker who synthesizes complex multi-dimensional evaluations into clear, actionable comparisons. You present data fairly and let the numbers tell the story.
 
 ## Context Files to Read
-1. `design/evaluation-criteria.md` -- scoring rubric with weights
+1. `design/v1/evaluation-criteria.md` -- scoring rubric with weights
 2. `design/alternatives/A-monolith/design.md`
 3. `design/alternatives/B-microservice/design.md`
 4. All language exploration docs in `design/alternatives/B-microservice/languages/*.md`
-5. All analysis docs in `design/analysis/*.md`
+5. All analysis docs in `design/v1/analysis/*.md`
 
 ## Task
 Create a comprehensive comparison matrix that:
@@ -25,7 +25,7 @@ Create a comprehensive comparison matrix that:
 5. **B: Microservice (TypeScript/Node.js)**
 
 ## Output Format
-Write to `design/comparison-matrix.md`:
+Write to `design/v1/comparison-matrix.md`:
 ```markdown
 # Comparison Matrix
 

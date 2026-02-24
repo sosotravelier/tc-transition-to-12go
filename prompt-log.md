@@ -144,3 +144,12 @@ During this session, we explored specific architectural and language implementat
 - **Fallback**: **TypeScript/Node.js** is the preferred fallback if .NET is rejected by 12go DevOps.
 - **Contract Preservation**: All alternatives must preserve all 13 client-facing endpoints exactly, including money as strings and Fuji station IDs.
 - **Simplicity**: Enforce a **10K LOC hard limit** on the new service to prevent re-introduction of "enterprise" complexity.
+
+### Reorganization (Feb 24, 2026)
+
+Design evaluation docs were reorganized into versioned folders:
+- **v1**: Original evaluation (design/v1/) — recommendation: .NET 8 Microservice
+- **v2**: Refined criteria, 14 criteria (design/v2/)
+- **v3**: Further refined, 15 criteria, emphasis on long-term platform alignment (design/v3/)
+
+See [design/README.md](design/README.md) for the full index.

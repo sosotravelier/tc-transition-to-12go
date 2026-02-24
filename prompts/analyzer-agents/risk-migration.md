@@ -5,7 +5,7 @@ You are a senior Technology Risk Manager and Migration Architect. You've seen la
 
 ## Context Files to Read
 1. `prompts/context/system-context.md` -- full system context
-2. `design/evaluation-criteria.md` -- scoring rubric
+2. `design/v1/evaluation-criteria.md` -- scoring rubric
 3. `design/migration-strategy.md` -- existing strategy
 4. `design/alternatives/A-monolith/design.md`
 5. `design/alternatives/B-microservice/design.md`
@@ -37,7 +37,7 @@ Provide scores (1-5) for:
 - **Future Extensibility (x1)**
 
 ## Output Format
-Write to `design/analysis/risk-migration.md`:
+Write to `design/v1/analysis/risk-migration.md`:
 ```markdown
 # Analysis: Risk and Migration
 

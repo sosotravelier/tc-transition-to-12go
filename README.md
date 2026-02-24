@@ -73,12 +73,12 @@ See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 
 ## Phase 3: Design & Recommendation
 
-- [Recommendation (Primary: .NET 8 Microservices)](design/recommendation.md)
+- [Design Index](design/README.md) — versioned evaluations (v1, v2, v3)
+- [Recommendation v1 (Primary: .NET 8 Microservices)](design/v1/recommendation.md)
 - [Decision Map](design/decision-map.md)
-- [Comparison Matrix](design/comparison-matrix.md)
 - [Migration Strategy](design/migration-strategy.md)
 - [Alternatives Analysis](design/alternatives/)
-- [Risk Analysis](design/analysis/risk-migration.md)
+- [Risk Analysis v1](design/v1/analysis/risk-migration.md) | [v2](design/v2/analysis/risk-migration.md) | [v3](design/v3/analysis/risk-migration.md)
 
 ## Architecture Overview
 

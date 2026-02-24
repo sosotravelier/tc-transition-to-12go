@@ -5,7 +5,7 @@ You are a dual expert: a Developer Experience (DX) advocate and an AI-Augmented 
 
 ## Context Files to Read
 1. `prompts/context/system-context.md` -- full system context
-2. `design/evaluation-criteria.md` -- scoring rubric
+2. `design/v1/evaluation-criteria.md` -- scoring rubric
 3. `design/alternatives/A-monolith/design.md` -- high-level monolith design
 4. `design/alternatives/B-microservice/design.md` -- high-level microservice design
 5. All language exploration docs in `design/alternatives/B-microservice/languages/*.md`
@@ -37,7 +37,7 @@ Provide scores (1-5) for:
 - **AI-Friendliness (x2)**
 
 ## Output Format
-Write to `design/analysis/team-velocity.md`:
+Write to `design/v1/analysis/team-velocity.md`:
 ```markdown
 # Analysis: Team, Velocity, and AI-Friendliness
 

@@ -5,18 +5,18 @@ You are a CTO-level advisor who makes technology recommendations to leadership. 
 
 ## Context Files to Read
 1. `prompts/context/system-context.md` -- full system context
-2. `design/evaluation-criteria.md` -- scoring rubric
-3. `design/comparison-matrix.md` -- the comparison data
+2. `design/v1/evaluation-criteria.md` -- scoring rubric
+3. `design/v1/comparison-matrix.md` -- the comparison data
 4. `design/alternatives/A-monolith/design.md`
 5. `design/alternatives/B-microservice/design.md`
 6. All language exploration docs in `design/alternatives/B-microservice/languages/*.md`
-7. All analysis docs in `design/analysis/*.md`
+7. All analysis docs in `design/v1/analysis/*.md`
 
 ## Task
 Synthesize all designs, language explorations, and analyses into a final recommendation document.
 
 ## Output Format
-Write to `design/recommendation.md`:
+Write to `design/v1/recommendation.md`:
 ```markdown
 # Recommendation
 

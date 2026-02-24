@@ -23,8 +23,8 @@ Read ALL of these before writing. The migration strategy must be consistent with
 9. `current-state/integration/12go-api-surface.md` -- the 12go API endpoints we call
 
 ### Design context (what we're migrating TO)
-10. `design/recommendation.md` -- phased migration plan (sections starting from "## Phased Migration Plan"). NOTE: this plan assumed transparent gateway switching -- your document should qualify/challenge that assumption.
-11. `design/architectural-comparison.md` -- all 5 alternatives share the same migration assumption
+10. `design/v1/recommendation.md` -- phased migration plan (sections starting from "## Phased Migration Plan"). NOTE: this plan assumed transparent gateway switching -- your document should qualify/challenge that assumption.
+11. `design/v1/comparison-matrix.md` -- all 5 alternatives share the same migration assumption
 
 ### Inputs from stakeholders
 12. `questions/questions to management.md` -- management inputs on auth options, scope, notifications
