@@ -19,6 +19,15 @@ flowchart LR
 
 **Goal**: Replace these services with something simple that preserves the client API contract, removes our local storage, and fits into 12go's infrastructure.
 
+### Concrete Target Design Changes
+
+| Change | Today | After |
+|--------|-------|-------|
+| **MediatR pipeline** | 10+ behaviors (SearchEvents, DistributionRules, SourceAvailability, Markup, ExecutionPlanBuilder, CacheDirectSupport, ManualProduct, ContractResolution, OperatorHealth, RoutesDiscovery, IndexSearch) | Only ~3 relevant: direct 12go call path, MarkupBehavior (price markup), RoutesDiscovery (station-to-route mapping). Everything else (trip lake, index cache, operator health, experiments) eliminated. |
+| **Trip lake** | Search designed for multiple sources (trip lake pre-fetch, direct integration, experiments). Kafka events published: `SupplierItineraryFetched`, trip lake indexing events. | **Eliminated.** No trip lake, no data team. No need to publish these events. Search = direct 12go call only. |
+| **Search architecture** | Etna Search → MediatR pipeline → SI Host → SI Library → 12go. HybridCache, DynamoDB caches. | Single HTTP call to 12go. Search service scales independently (2-service topology: Search & Master Data + Booking). |
+| **Kafka events** | 20+ event types (CheckoutRequested, BookSucceeded, SupplierItineraryFetched, etc.) for trip lake, analytics, data team. | Only client-facing notifications survive. All search/booking lifecycle events redundant. |
+
 ---
 
 ## Decision 1: Monolith or Microservice?
@@ -43,24 +52,19 @@ flowchart LR
 | **Performance**       | Zero network hop -- in-process calls                                                                                       | Negligible added latency -- services are co-located in the same cloud. B2B clients already tolerate the HTTP hop latency in the current architecture. |
 | **Coupling**          | Deep -- tied to 25+ internal 12go classes (`BookingProcessor`, `SearchService`, `CartHandler`). Breaks when they refactor. | Loose -- depends only on 12go's public HTTP API contract                                                                                              |
 | **Deployment**        | Ships with the monolith -- same release cycle as all of 12go                                                               | Independent deploy, independent rollback                                                                                                              |
-| **Team impact**       | Stuck with PHP — no language flexibility                                                                                  | Language flexibility — can choose a language the team is productive in                                                                                |
-| **12go team impact**  | They own our code -- it lives in their repo, their CI, their review process                                                | They host our Docker container -- standard infra, no code ownership                                                                                   |
+| **Language choice**   | Stuck with PHP — no language flexibility                                                                                  | Language flexibility — can choose a language the team is productive in                                                                                |
 | **Failure isolation** | A bug in our B2B code can affect the entire monolith                                                                       | Our service fails independently -- 12go core is unaffected                                                                                            |
 | **Adapting to 12go changes**  | Implement cross-cutting changes in one place — deploy with monolith                                                                                     | Must release monolith first, then modify microservice(s) to reflect the changes — two-step process                                                                                                                   |
 | **Webhook transformation**    | B2B clients expect different notification shape than 12go provides. Subscribe to internal event in-process, new service lives in same process, call client webhook directly.                                             | Monolith would call our microservice via HTTP; we transform to client shape and deliver — extra network hop and service boundary                                                                                     |
 
 
-**With a microservice**: 12go's HTTP API is a stable, documented contract. We already call it today. The microservice simply removes the 6 layers of abstraction (.NET framework, SI Host, MediatR pipeline, DynamoDB caching, Kafka events) between us and that API.
+**Monolith advantage**: If we chose A, we would gain automatic tracing (correlation IDs + Datadog APM), client identity propagation (ApiAgent), and versioning (VersionedApiBundle) out of the box — frontend3 already has these. The microservice must implement them explicitly. ([Monolith design — Cross-Cutting Concerns](../design/alternatives/A-monolith/design.md#cross-cutting-concerns))
+
+**With a microservice**: 12go's HTTP API is a stable, documented contract. We already call it today. The microservice removes the 6 layers: .NET framework, SI Host, MediatR pipeline (10+ behaviors → 3 relevant), DynamoDB caching, Kafka events (trip lake/data team events eliminated). Search scales separately: the recommended 2-service topology (Search & Master Data + Booking) lets Search — which generates the vast majority of traffic — be deployed and scaled independently; booking failures do not affect search availability.
 
 ### We Evaluated This From 3 Angles
 
-To avoid bias, we scored all options using three different weighting frameworks. Each one shifts priorities to stress-test whether the winner changes. ([Evaluation criteria](../design/README.md#versioned-evaluations-v1-v2-v3) — v1, v2, v3)
-
-- **v1** -- weights favor execution speed and team productivity
-- **v2** -- balanced weights across execution, infrastructure, and strategy
-- **v3** -- weights heavily favor infrastructure fit and strategic alignment (deliberately designed to give the monolith/PHP the best possible chance)
-
-All three reached the same conclusion on this decision:
+We scored options under three weighting frameworks (execution-focused, balanced, strategic). All three reached the same conclusion on this decision. ([Evaluation criteria](../design/README.md#versioned-evaluations-v1-v2-v3))
 
 
 | Analysis               | Monolith (A)? | Microservice (B)? |
@@ -124,7 +128,7 @@ flowchart LR
 
 ### How the 3 Analyses Scored Languages
 
-The same three weighting frameworks introduced above were applied to the language decision. ([Evaluation criteria](../design/README.md#versioned-evaluations-v1-v2-v3)) Here's how the weights shifted across versions:
+The same three weighting frameworks were applied to the language decision. How the weights shifted:
 
 ```mermaid
 flowchart TD
@@ -156,14 +160,7 @@ flowchart TD
 
 ### v3 Was Designed to Give PHP Every Advantage
 
-In v3, we deliberately cranked up the weights that favor PHP:
-
-- **Infrastructure Fit at x7** (PHP scores 5/5 here -- identical runtime to frontend3)
-- **Future Extensibility at x5** (PHP scores 5/5 here)
-- **Operational Complexity at x5** (PHP scores 4-5/5 here)
-- **Team Competency Match dropped to x3** (where .NET dominates)
-
-Even with these weights maximally favoring PHP, it came in second (178 pts). Go edged it out (180 pts) because Go matches PHP on future extensibility (if Go is indeed the strategic direction) while being more approachable for our .NET team in terms of velocity and code elegance.
+In v3 we maximized weights favoring PHP (Infrastructure Fit x7, Future Extensibility x5, Operational Complexity x5; Team Match at x3). Even then, PHP came second (178 pts). Go edged it out (180 pts) by matching PHP on strategic fit while being more approachable for our .NET team.
 
 ### Score Comparison Across All 3 Analyses
 
@@ -215,6 +212,6 @@ flowchart TB
 
 
 
-**What gets eliminated**: Etna (2 services), Denali (3 services), Fuji (1 service), SI Framework, all DynamoDB tables, PostgreSQL, HybridCache, Kafka events, 340+ .NET projects.
+**What gets eliminated**: Etna (2 services), Denali (3 services), Fuji (1 service), SI Framework, all DynamoDB tables, PostgreSQL, HybridCache, Kafka events, 340+ .NET projects. MediatR pipeline: 10+ behaviors → only direct 12go call path + Markup + RoutesDiscovery. Trip lake, index cache, and Kafka events for trip lake/data team: eliminated.
 
 **What remains**: ~5-8K lines of proxy logic, station ID mapping, booking schema parser.
