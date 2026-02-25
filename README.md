@@ -58,6 +58,8 @@ See [AGENTS.md](AGENTS.md) for the full list of 10 key findings with details.
 | Monitoring | [monitoring.md](current-state/cross-cutting/monitoring.md) | complete |
 | Data Storage | [data-storage.md](current-state/cross-cutting/data-storage.md) | complete |
 | Messaging | [messaging.md](current-state/cross-cutting/messaging.md) | complete |
+| API Contract Conventions | [api-contract-conventions.md](current-state/cross-cutting/api-contract-conventions.md) | complete |
+| **Transition Complexity** | [transition-complexity.md](current-state/cross-cutting/transition-complexity.md) | **draft** |
 
 ### Integration Analysis
 
