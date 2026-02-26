@@ -19,12 +19,14 @@ flowchart TB
     SIHost["Etna SI Host"]
     Fuji["Fuji"]
     SI["SI Framework"]
+    Ushba["Ushba"]
     TripLake[(Trip Lake)]
     TG["12go\n(PHP/Symfony)\nsource of truth"]
 
     Client --> Denali
     Client --> Etna
     Denali --> SI
+    Denali --> Ushba
     Etna --> MediatR
     Etna --> Fuji
     MediatR --> SIHost
