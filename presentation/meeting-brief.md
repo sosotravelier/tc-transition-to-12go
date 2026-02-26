@@ -41,14 +41,17 @@ flowchart TB
 
 **Goal**: Replace these services with something simple that preserves the client API contract, removes our local storage, and fits into 12go's infrastructure.
 
-### Concrete Target Design Changes
+### Target Design Changes
 
-| Change | Today | After |
-|--------|-------|-------|
-| **MediatR pipeline** | 10+ behaviors (SearchEvents, DistributionRules, SourceAvailability, Markup, ExecutionPlanBuilder, CacheDirectSupport, ManualProduct, ContractResolution, OperatorHealth, RoutesDiscovery, IndexSearch) | Only ~3 relevant: direct 12go call path, MarkupBehavior (price markup), RoutesDiscovery (station-to-route mapping). Everything else (trip lake, index cache, operator health, experiments) eliminated. |
-| **Trip lake** | Search designed for multiple sources (trip lake pre-fetch, direct integration, experiments). Kafka events published: `SupplierItineraryFetched`, trip lake indexing events. | **Eliminated.** No trip lake, no data team. No need to publish these events. Search = direct 12go call only. |
-| **Search architecture** | Etna Search → MediatR pipeline → SI Host → SI Library → 12go. HybridCache, DynamoDB caches. | Single HTTP call to 12go. Search service scales independently (2-service topology: Search & Master Data + Booking). |
-| **Kafka events** | 20+ event types (CheckoutRequested, BookSucceeded, SupplierItineraryFetched, etc.) for trip lake, analytics, data team. | Only client-facing notifications survive. All search/booking lifecycle events redundant. |
+
+| Change                  | Today                                                                                                                                                                                                  | After                                                                                                                                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **MediatR pipeline**    | 10+ behaviors (SearchEvents, DistributionRules, SourceAvailability, Markup, ExecutionPlanBuilder, CacheDirectSupport, ManualProduct, ContractResolution, OperatorHealth, RoutesDiscovery, IndexSearch) | Only ~3 relevant: direct 12go call path, MarkupBehavior (price markup), RoutesDiscovery (station-to-route mapping). Everything else (trip lake, index cache, operator health, experiments) eliminated. |
+| **Trip lake**           | Search designed for multiple sources (trip lake pre-fetch, direct integration, experiments). Kafka events published: `SupplierItineraryFetched`, trip lake indexing events.                            | **Eliminated.** No trip lake, no data team. No need to publish these events. Search = direct 12go call only.                                                                                           |
+| **Search architecture** | Etna Search → MediatR pipeline → SI Host → SI Library → 12go. HybridCache, DynamoDB caches.                                                                                                            | Single HTTP call to 12go. Search service scales independently (2-service topology: Search & Master Data + Booking).                                                                                    |
+| **Kafka events**        | 20+ event types (CheckoutRequested, BookSucceeded, SupplierItineraryFetched, etc.) for trip lake, analytics, data team.                                                                                | Only client-facing notifications survive. All search/booking lifecycle events redundant.                                                                                                               |
+| **Price calculations**  | Ushba used for markup and sell-price calculation (per-client pricing, exchange rates).                                                                                                                | Take price directly from 12go response. Ushba eliminated.                                                                                                                                               |
+
 
 ---
 
@@ -62,6 +65,8 @@ flowchart LR
     Q -->|"Option A"| A["Inside 12go monolith\n(frontend3 / PHP)"]
     Q -->|"Option B"| B["Separate microservice\n(language TBD)"]
 ```
+
+
 
 ### Target Architectures
 
@@ -90,6 +95,8 @@ flowchart TB
     TwelveGo --> Redis
     B2b -->|"pre-signed URL"| S3
 ```
+
+
 
 **Option B: Microservice(s)**
 
@@ -122,19 +129,21 @@ flowchart TB
     API --> Redis
 ```
 
+
+
 ### Side-by-Side
 
 
-|                       | **A: Monolith**                                                                                                            | **B: Microservice(s)**                                                                                                                                 |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **What it means**     | New Symfony controllers inside frontend3 calling 12go service classes in-process                                           | Standalone HTTP proxy service(s) deployed on 12go infra, calling 12go's HTTP API                                                                      |
-| **Performance**       | Zero network hop -- in-process calls                                                                                       | Negligible added latency -- services are co-located in the same cloud. B2B clients already tolerate the HTTP hop latency in the current architecture. |
-| **Coupling**          | Deep -- tied to 25+ internal 12go classes (`BookingProcessor`, `SearchService`, `CartHandler`). Breaks when they refactor. | Loose -- depends only on 12go's public HTTP API contract                                                                                              |
-| **Deployment**        | Ships with the monolith -- same release cycle as all of 12go                                                               | Independent deploy, independent rollback                                                                                                              |
-| **Language choice**   | Stuck with PHP — no language flexibility                                                                                  | Language flexibility — can choose a language the team is productive in                                                                                |
-| **Failure isolation** | A bug in our B2B code can affect the entire monolith                                                                       | Our service fails independently -- 12go core is unaffected                                                                                            |
-| **Adapting to 12go changes**  | Implement cross-cutting changes in one place — deploy with monolith                                                                                     | Must release monolith first, then modify microservice(s) to reflect the changes — two-step process                                                                                                                   |
-| **Webhook transformation**    | B2B clients expect different notification shape than 12go provides. Subscribe to internal event in-process, new service lives in same process, call client webhook directly.                                             | Monolith would call our microservice via HTTP; we transform to client shape and deliver — extra network hop and service boundary                                                                                     |
+|                              | **A: Monolith**                                                                                                                                                              | **B: Microservice(s)**                                                                                                                                |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **What it means**            | New Symfony controllers inside frontend3 calling 12go service classes in-process                                                                                             | Standalone HTTP proxy service(s) deployed on 12go infra, calling 12go's HTTP API                                                                      |
+| **Performance**              | Zero network hop -- in-process calls                                                                                                                                         | Negligible added latency -- services are co-located in the same cloud. B2B clients already tolerate the HTTP hop latency in the current architecture. |
+| **Coupling**                 | Deep -- tied to 25+ internal 12go classes (`BookingProcessor`, `SearchService`, `CartHandler`). Breaks when they refactor.                                                   | Loose -- depends only on 12go's public HTTP API contract                                                                                              |
+| **Deployment**               | Ships with the monolith -- same release cycle as all of 12go                                                                                                                 | Independent deploy, independent rollback                                                                                                              |
+| **Language choice**          | Stuck with PHP — no language flexibility                                                                                                                                     | Language flexibility — can choose a language the team is productive in                                                                                |
+| **Failure isolation**        | A bug in our B2B code can affect the entire monolith                                                                                                                         | Our service fails independently -- 12go core is unaffected                                                                                            |
+| **Adapting to 12go changes** | Implement cross-cutting changes in one place — deploy with monolith                                                                                                          | Must release monolith first, then modify microservice(s) to reflect the changes — two-step process                                                    |
+| **Webhook transformation**   | B2B clients expect different notification shape than 12go provides. Subscribe to internal event in-process, new service lives in same process, call client webhook directly. | Monolith would call our microservice via HTTP; we transform to client shape and deliver — extra network hop and service boundary                      |
 
 
 **Monolith advantage**: If we chose A, we would gain automatic tracing (correlation IDs + Datadog APM), client identity propagation (ApiAgent), and versioning (VersionedApiBundle) out of the box — frontend3 already has these. The microservice must implement them explicitly. ([Monolith design — Cross-Cutting Concerns](../design/alternatives/A-monolith/design.md#cross-cutting-concerns))
@@ -147,10 +156,10 @@ We scored options under three weighting frameworks (execution-focused, balanced,
 
 
 | Analysis               | Monolith (A)? | Microservice(s) (B)? |
-| ---------------------- | ------------- | ----------------- |
-| v1 (execution-focused) | --            | **B**             |
-| v2 (balanced)          | --            | **B**             |
-| v3 (strategic-focused) | --            | **B**             |
+| ---------------------- | ------------- | -------------------- |
+| v1 (execution-focused) | --            | **B**                |
+| v2 (balanced)          | --            | **B**                |
+| v3 (strategic-focused) | --            | **B**                |
 
 
 **Consensus is unanimous.** Microservice wins because the coupling cost of the monolith outweighs the in-process performance benefit, and the latency overhead is negligible when co-located.
@@ -251,6 +260,7 @@ In v3 we maximized weights favoring PHP (Infrastructure Fit x7, Future Extensibi
 | **Go**           | 105 (3rd)     | 112 (3rd)     | **180** (1st) | Rises when strategic alignment is weighted highest                           |
 | **PHP/Symfony**  | 102 (4th)     | 108 (4th)     | 178 (2nd)     | Strong only when infra fit matters most *and* we accept the productivity hit |
 | **Monolith PHP** | 98 (5th)      | 102 (5th)     | 168 (3rd)     | Best infra fit, but coupling + team impact drag it down                      |
+
 
 ---
 
