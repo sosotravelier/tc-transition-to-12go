@@ -121,9 +121,9 @@ Used as the failure type in `Result<T, OneTwoGoApiError>` returns:
 | Aspect | Detail |
 |---|---|
 | **Method** | `GET` |
-| **Path** | `/search/{fromProvinceId}p/{toProvinceId}p/{yyyy-MM-dd}?seats={n}&direct=true` |
+| **Path** | `/search/{fromId}{suffix}/{toId}{suffix}/{yyyy-MM-dd}?seats={n}&direct=true` |
 | **C# Method** | `OneTwoGoApi.Search(SearchRoute route, DateOnly departureDate, uint numberOfSeats)` |
-| **Notes** | Province IDs come from `route.From.AdditionalProperties["provinceId"]` / `route.To.AdditionalProperties["provinceId"]`, suffixed with `p`. The `direct=true` flag is always set. |
+| **Notes** | Province IDs come from `route.From.AdditionalProperties["provinceId"]` / `route.To.AdditionalProperties["provinceId"]`, suffixed with `p`. The `direct=true` flag is always set. **12go supports two suffixes**: `p` = province (POI) ID, `s` = station ID; each endpoint can use either, enabling POI→POI, station→station, POI→station, station→POI. Our implementation currently uses `p` for both. |
 
 **Backend:** Search is backed by MariaDB (MySQL-compatible). Rechecks — when you validate availability before booking — go to actual supplier integrations and can take up to 1 minute.
 

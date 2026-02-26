@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-25
+last_updated: 2026-02-26
 ---
 
 # Transition Complexity Concentrations
@@ -63,6 +63,33 @@ Related documents:
 3. How many stations are in the mapping? (Determines feasibility of static config vs dynamic refresh.)
 
 **References**: [stations.md](../endpoints/stations.md), [pois.md](../endpoints/pois.md), [decision-map D5](../../design/decision-map.md)
+
+---
+
+### Search Kind Support and 12go URL Format
+
+**What**: 12go's search API natively supports all four search kinds: POI→POI, station→station, POI→station, and station→POI. The URL path uses a suffix to indicate the ID type:
+
+| Suffix | Meaning | Example |
+|--------|---------|---------|
+| `p` | Province (POI) ID | `/search/1p/44p/2026-03-01` — province 1 to province 44 |
+| `s` | Station ID | `/search/12345s/67890s/2026-03-01` — station to station |
+
+Each endpoint (from/to) can independently use `p` or `s`, enabling mixed searches (e.g. `1p/67890s` for POI→station).
+
+**Current implementation**: Our `OneTwoGoUriBuilder` always uses province IDs with the `p` suffix for both endpoints. Station-based searches are handled by mapping Fuji station IDs to their province IDs (via `AdditionalProperties["provinceId"]`) and sending province-province to 12go. This works because a province search returns all trips between any stations in those provinces.
+
+**Why document this**:
+- **Client usage investigation**: Which search kinds do clients actually use? If most traffic is station→station, we could consider using the `s` suffix for more precise results (fewer trips to filter). If POI→POI dominates, the current province-based approach is optimal.
+- **Transition simplification**: Knowing that 12go supports all kinds natively reduces integration risk — we are not working around a 12go limitation.
+- **Optimization opportunity**: Using `s` for station pairs could reduce response size when clients search between specific stations, though the current province-based approach benefits from one 12go call per province pair (cached in Etna SI Host).
+
+**Open questions**:
+1. What is the distribution of search kinds in production (POI→POI vs station→station vs mixed)?
+2. Does 12go return different or more precise results for station→station (`s` suffix) vs province→province (`p` suffix) when both endpoints are in the same province?
+3. Should the new proxy support mixed searches (POI→station, station→POI) explicitly, or is the current "always province" approach sufficient?
+
+**References**: [search.md](../endpoints/search.md), [12go-api-surface.md](../integration/12go-api-surface.md), [pois.md](../endpoints/pois.md)
 
 ---
 
