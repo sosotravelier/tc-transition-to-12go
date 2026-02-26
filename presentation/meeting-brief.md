@@ -41,12 +41,69 @@ flowchart LR
     Q -->|"Option B"| B["Separate microservice\n(language TBD)"]
 ```
 
+### Target Architectures
 
+**Option A: Monolith** ([full design](../design/alternatives/A-monolith/design.md))
+
+```mermaid
+flowchart TB
+    Client["B2B Clients"]
+    GW["API Gateway"]
+    Client --> GW
+
+    subgraph frontend3["frontend3 (PHP/Symfony) — single process"]
+        B2b["B2B Controllers\n(13 endpoints)"]
+        TwelveGo["12go services\n(in-process)"]
+    end
+
+    subgraph storage["Storage"]
+        MariaDB["MariaDB"]
+        Redis["Redis"]
+        S3["S3\n(station artifacts)"]
+    end
+
+    GW --> B2b
+    B2b --> TwelveGo
+    TwelveGo --> MariaDB
+    TwelveGo --> Redis
+    B2b -->|"pre-signed URL"| S3
+```
+
+**Option B: Microservice(s)**
+
+```mermaid
+flowchart TB
+    Client["B2B Clients"]
+    GW["API Gateway"]
+
+    Client --> GW
+
+    subgraph services["Our Services (new)"]
+        Search["Search & Master Data\n5 endpoints, stateless"]
+        Booking["Booking Service\n8 endpoints, minimal state"]
+    end
+
+    subgraph twelvego["12go Platform (existing)"]
+        API["12go HTTP API"]
+        DB["MariaDB"]
+        Redis["Redis"]
+    end
+
+    S3["S3\n(station snapshots)"]
+
+    GW --> Search
+    GW --> Booking
+    Search -->|"HTTP"| API
+    Booking -->|"HTTP"| API
+    Search -->|"pre-signed URL"| S3
+    API --> DB
+    API --> Redis
+```
 
 ### Side-by-Side
 
 
-|                       | **A: Monolith**                                                                                                            | **B: Microservice**                                                                                                                                   |
+|                       | **A: Monolith**                                                                                                            | **B: Microservice(s)**                                                                                                                                 |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **What it means**     | New Symfony controllers inside frontend3 calling 12go service classes in-process                                           | Standalone HTTP proxy service(s) deployed on 12go infra, calling 12go's HTTP API                                                                      |
 | **Performance**       | Zero network hop -- in-process calls                                                                                       | Negligible added latency -- services are co-located in the same cloud. B2B clients already tolerate the HTTP hop latency in the current architecture. |
@@ -67,7 +124,7 @@ flowchart LR
 We scored options under three weighting frameworks (execution-focused, balanced, strategic). All three reached the same conclusion on this decision. ([Evaluation criteria](../design/README.md#versioned-evaluations-v1-v2-v3))
 
 
-| Analysis               | Monolith (A)? | Microservice (B)? |
+| Analysis               | Monolith (A)? | Microservice(s) (B)? |
 | ---------------------- | ------------- | ----------------- |
 | v1 (execution-focused) | --            | **B**             |
 | v2 (balanced)          | --            | **B**             |
@@ -116,7 +173,7 @@ flowchart LR
 
 ### The Case for Each Language
 
-**.NET** -- The team has 12+ years of .NET expertise. Zero ramp-up. The existing booking schema parser, station mapping logic, and reserve data serializer can be ported line-by-line from the current C# codebase. Ships as a standard Docker image. The risk: .NET is a foreign runtime in 12go's PHP/Go ecosystem. 12go's DevOps team would need to support new Microsoft base images, new CI/CD vulnerability scanning, and .NET-specific profiling tools (`dotnet-trace`, `dotnet-dump`) that nobody else in the organization uses.
+**.NET** -- The team has 10+ years of .NET expertise. Zero ramp-up. The existing booking schema parser, station mapping logic, and reserve data serializer can be ported line-by-line from the current C# codebase. Ships as a standard Docker image. The risk: .NET is a foreign runtime in 12go's PHP/Go ecosystem. 12go's DevOps team would need to support new Microsoft base images, new CI/CD vulnerability scanning, and .NET-specific profiling tools (`dotnet-trace`, `dotnet-dump`) that nobody else in the organization uses.
 
 **PHP/Symfony** -- Native alignment with 12go's core stack. Same base images, same CI/CD pipeline, same debugging tools. If 12go engineers ever need to touch the service, it's familiar territory. The downside: our team has no PHP experience. Every line of code would be a learning exercise. The booking schema parser -- the most complex piece -- would need to be rewritten in an unfamiliar language. AI tools can help, but validating AI-generated PHP when you don't know the idioms is risky.
 
@@ -175,42 +232,7 @@ In v3 we maximized weights favoring PHP (Infrastructure Fit x7, Future Extensibi
 
 ---
 
-## Appendix A: Target Architecture
-
-([Monolith design](../design/alternatives/A-monolith/design.md) — Option A for comparison)
-
-Two services, deployed as Docker containers on 12go infra:
-
-```mermaid
-flowchart TB
-    Client["B2B Clients"]
-    GW["API Gateway"]
-
-    Client --> GW
-
-    subgraph services["Our Services (new)"]
-        Search["Search & Master Data\n5 endpoints, stateless"]
-        Booking["Booking Service\n8 endpoints, minimal state"]
-    end
-
-    subgraph twelvego["12go Platform (existing)"]
-        API["12go HTTP API"]
-        DB["MariaDB"]
-        Redis["Redis"]
-    end
-
-    S3["S3\n(station snapshots)"]
-
-    GW --> Search
-    GW --> Booking
-    Search -->|"HTTP"| API
-    Booking -->|"HTTP"| API
-    Search -->|"pre-signed URL"| S3
-    API --> DB
-    API --> Redis
-```
-
-
+## Appendix A: What Gets Eliminated (Both Options)
 
 **What gets eliminated**: Etna (2 services), Denali (3 services), Fuji (1 service), SI Framework, all DynamoDB tables, PostgreSQL, HybridCache, Kafka events, 340+ .NET projects. MediatR pipeline: 10+ behaviors → only direct 12go call path + Markup + RoutesDiscovery. Trip lake, index cache, and Kafka events for trip lake/data team: eliminated.
 
