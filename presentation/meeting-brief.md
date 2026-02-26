@@ -25,6 +25,7 @@ flowchart TB
 
     Client --> Denali
     Client --> Etna
+    Client --> Fuji
     Denali --> SI
     Denali --> Ushba
     Etna --> MediatR
@@ -75,8 +76,6 @@ flowchart LR
 ```mermaid
 flowchart TB
     Client["B2B Clients"]
-    GW["API Gateway"]
-    Client --> GW
 
     subgraph frontend3["frontend3 (PHP/Symfony) — single process"]
         B2b["B2B Controllers\n(13 endpoints)"]
@@ -89,11 +88,12 @@ flowchart TB
         S3["S3\n(station artifacts)"]
     end
 
-    GW --> B2b
+    Client --> B2b
     B2b --> TwelveGo
     TwelveGo --> MariaDB
     TwelveGo --> Redis
     B2b -->|"pre-signed URL"| S3
+    B2b -->|"booking notifications"| Client
 ```
 
 
@@ -103,13 +103,10 @@ flowchart TB
 ```mermaid
 flowchart TB
     Client["B2B Clients"]
-    GW["API Gateway"]
-
-    Client --> GW
 
     subgraph services["Our Services (new)"]
-        Search["Search & Master Data\n5 endpoints, stateless"]
-        Booking["Booking Service\n8 endpoints, minimal state"]
+        Search["Search\nstateless"]
+        Booking["Booking & Master Data\n13 endpoints, minimal state"]
     end
 
     subgraph twelvego["12go Platform (existing)"]
@@ -120,11 +117,12 @@ flowchart TB
 
     S3["S3\n(station snapshots)"]
 
-    GW --> Search
-    GW --> Booking
+    Client --> Search
+    Client --> Booking
     Search -->|"HTTP"| API
     Booking -->|"HTTP"| API
     Search -->|"pre-signed URL"| S3
+    Booking -->|"booking notifications"| Client
     API --> DB
     API --> Redis
 ```
