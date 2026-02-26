@@ -9,10 +9,30 @@
 We have 7 .NET services that act as an HTTP proxy layer between B2B clients and 12go. All data originates from 12go. Every piece of local storage we maintain (DynamoDB, PostgreSQL, HybridCache) is a copy of what 12go already has.
 
 ```mermaid
-flowchart LR
-    Client["B2B Clients"] -->|"13 endpoints"| NET[".NET Services\n(Etna, Denali, Fuji, SI)\n7 services, 340+ projects"]
-    NET -->|"HTTP proxy"| TG["12go\n(PHP/Symfony)\nsource of truth"]
-    NET -.->|"can be\neliminated"| NET
+flowchart TB
+    Client["B2B Clients"]
+
+    Denali["Denali"]
+    Etna["Etna"]
+
+    MediatR["MediatR pipeline"]
+    SIHost["Etna SI Host"]
+    Fuji["Fuji"]
+    SI["SI Framework"]
+    TripLake[(Trip Lake)]
+    TG["12go\n(PHP/Symfony)\nsource of truth"]
+
+    Client --> Denali
+    Client --> Etna
+    Denali --> SI
+    Etna --> MediatR
+    Etna --> Fuji
+    MediatR --> SIHost
+    MediatR --> TripLake
+    SIHost --> SI
+    SIHost --> Fuji
+    SI --> TG
+    Fuji --> TG
 ```
 
 
