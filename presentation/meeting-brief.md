@@ -49,7 +49,7 @@ flowchart TB
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **MediatR pipeline**    | 10+ behaviors (SearchEvents, DistributionRules, SourceAvailability, Markup, ExecutionPlanBuilder, CacheDirectSupport, ManualProduct, ContractResolution, OperatorHealth, RoutesDiscovery, IndexSearch) | Only ~3 relevant: direct 12go call path, MarkupBehavior (price markup), RoutesDiscovery (station-to-route mapping). Everything else (trip lake, index cache, operator health, experiments) eliminated. |
 | **Trip lake**           | Search designed for multiple sources (trip lake pre-fetch, direct integration, experiments). Kafka events published: `SupplierItineraryFetched`, trip lake indexing events.                            | **Eliminated.** No trip lake, no data team. No need to publish these events. Search = direct 12go call only.                                                                                           |
-| **Search architecture** | Etna Search → MediatR pipeline → SI Host → SI Library → 12go. HybridCache, DynamoDB caches.                                                                                                            | Single HTTP call to 12go. Search service scales independently (2-service topology: Search + Booking & Master Data).                                                                                    |
+| **Search architecture** | Etna Search → MediatR pipeline → SI Host → SI Library → 12go. HybridCache, DynamoDB caches.                                                                                                            | Single HTTP call to 12go. Search service scales independently (3-service topology: Search + Booking + Master Data).                                                                                    |
 | **Kafka events**        | 20+ event types (CheckoutRequested, BookSucceeded, SupplierItineraryFetched, etc.) for trip lake, analytics, data team.                                                                                | Only client-facing notifications survive. All search/booking lifecycle events redundant.                                                                                                               |
 | **Price calculations**  | Ushba used for markup and sell-price calculation (per-client pricing, exchange rates).                                                                                                                | Take price directly from 12go response. Ushba eliminated.                                                                                                                                               |
 
@@ -105,8 +105,9 @@ flowchart TB
     Client["B2B Clients"]
 
     subgraph services["Our Services (new)"]
-        Search["Search\nstateless"]
-        Booking["Booking & Master Data\n13 endpoints, minimal state"]
+        Search["Search"]
+        Booking["Booking"]
+        MasterData["Master Data"]
     end
 
     subgraph twelvego["12go Platform (existing)"]
@@ -119,10 +120,12 @@ flowchart TB
 
     Client --> Search
     Client --> Booking
+    Client --> MasterData
     Search -->|"HTTP"| API
     Booking -->|"HTTP"| API
-    Search -->|"pre-signed URL"| S3
     Booking -->|"booking notifications"| Client
+    MasterData --> S3
+    MasterData --> DB
     API --> DB
     API --> Redis
 ```
@@ -145,7 +148,7 @@ flowchart TB
 | **Cross-cutting / Ops**     | Automatic tracing (correlation IDs + Datadog APM), client identity propagation (ApiAgent), and versioning (VersionedApiBundle) out of the box — frontend3 already has these. ([Monolith design — Cross-Cutting Concerns](../design/alternatives/A-monolith/design.md#cross-cutting-concerns)) | Must implement tracing, identity propagation, and versioning explicitly.                                                                              |
 
 
-**With a microservice**: 12go's HTTP API is a stable, documented contract. We already call it today. The microservice removes the 6 layers: .NET framework, SI Host, MediatR pipeline (10+ behaviors → 3 relevant), DynamoDB caching, Kafka events (trip lake/data team events eliminated). Search scales separately: the recommended 2-service topology (Search + Booking & Master Data) lets Search — which generates the vast majority of traffic — be deployed and scaled independently; booking failures do not affect search availability.
+**With a microservice**: 12go's HTTP API is a stable, documented contract. We already call it today. The microservice removes the 6 layers: .NET framework, SI Host, MediatR pipeline (10+ behaviors → 3 relevant), DynamoDB caching, Kafka events (trip lake/data team events eliminated). Search scales separately: the recommended 3-service topology (Search + Booking + Master Data) lets Search — which generates the vast majority of traffic — be deployed and scaled independently; booking failures do not affect search availability.
 
 ### We Evaluated This From 3 Angles
 
