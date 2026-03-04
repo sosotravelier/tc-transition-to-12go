@@ -277,3 +277,7 @@ Decisions made during this project, for context in future sessions.
 | 2026-02-17 | Questions for 12go compiled from all doc open questions | Centralized list prioritized by architecture impact |
 | 2026-02-20 | .NET 8 Microservice Architecture recommended | Maximizes team velocity, minimizes transition risk, allows porting existing SI logic |
 | 2026-02-23 | Sensitive data scrub (Phase 1-2 docs) | Removed personal names and verified gitignore coverage before potential public/internal commit |
+| 2026-02-25 | Architecture decision deferred — POC inside F3 requested | Meeting with Team Lead, RnD, Architect, Oleksandr; agreed to implement Search endpoint in F3 first to evaluate friction before committing |
+| 2026-02-25 | Post-meeting: .NET microservice confirmed still an option | RnD clarified in follow-up call; F3 redesign not this quarter |
+| 2026-02-25 | F3 breakdown planned but no timeline | "Beginning of the beginning of planning"; no target language, no milestones; estimated a couple of quarters |
+| 2026-02-25 | Event/data correlation identified as new requirement | B2B-specific events must be preserved or created for ClickHouse; data team to provide requirements |

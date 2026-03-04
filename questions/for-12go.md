@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-18
+last_updated: 2026-03-02
 ---
 
 ### Answers Received (2026-02-18)
@@ -70,6 +70,39 @@ Our clients authenticate via API key (`x-api-key` header) and are identified by 
 - Distribution rules
 
 Does 12go have a concept of "client" or "partner" with per-client configuration? How would client-specific behavior (markup, contract) work post-transition?
+
+## Priority 1b: F3 Breakdown & Events (Post-Meeting 2026-02-25)
+
+These questions surfaced during the architecture decision meeting. F3 breakdown is planned; event correlation is a new requirement.
+
+### Q21. What is the planned timeline for F3 breakdown?
+
+- When is the F3 restructuring expected to start and complete?
+- What are the first services to be extracted from the monolith?
+- Is there a roadmap or milestone document we can reference?
+
+### Q22. What is the target language for the new microservices from F3?
+
+- Will the extracted services remain in PHP, or move to Go/another language?
+- How does this affect B2B code we might add to F3 today?
+
+### Q23. What B2B-specific events need to be preserved or created for ClickHouse?
+
+- We need to correlate supply-side and client-side events for the data team
+- What events does 12go currently send to ClickHouse for search and booking?
+- What B2B-specific events (e.g., search requested, booking confirmed for B2B client) must we add or preserve?
+- RnD will send a list of requirements; 12go input needed on feasibility
+
+### Q24. Does 12go's internal API have versioning guarantees?
+
+- If we add B2B code inside F3 that calls `SearchService`, `BookingProcessor`, etc., can those classes change without notice?
+- Is there a stable internal API boundary, or do internal service classes change freely?
+- How does `VersionedApiBundle` apply to internal consumers?
+
+### Q25. If B2B code is added to F3 now, what is the plan for it during the F3 breakdown?
+
+- Will B2B controllers/mappers move with the extracted service (e.g., Search) or stay in a separate B2B module?
+- Should we design B2B code to minimize coupling to internal classes?
 
 ## Priority 2: Functional Capabilities
 
@@ -223,6 +256,9 @@ We fetch the booking schema from `GET /checkout/{cartId}?people=1` which returns
 | Q5 (Booking storage) | Determines if we keep DynamoDB/PostgreSQL |
 | Q11 (Station mapping) | Determines if we keep Fuji or build translation layer |
 | Q14 (Monitoring) | Determines observability architecture |
+| Q21 (F3 breakdown timeline) | Affects architecture choice (monolith vs microservice) |
+| Q23 (B2B events for ClickHouse) | New requirement; data team needs correlation |
+| Q25 (B2B code during F3 breakdown) | Affects how we write POC code in F3 |
 
 ---
 
@@ -231,3 +267,4 @@ We fetch the booking schema from `GET /checkout/{cartId}?people=1` which returns
 - **Static data endpoints** — Forgot to ask in meeting
 - **Integration team relevance/details** — TBD
 - **Webhook authentication (12go→us)** — TBD
+- **Q21–Q25 (F3 breakdown, events, internal API)** — Post-meeting 2026-02-25; need 12go follow-up

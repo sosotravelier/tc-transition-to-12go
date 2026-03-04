@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-02-23
+last_updated: 2026-03-02
 ---
 
 # Design B: Separate Microservice(s)
@@ -72,6 +72,19 @@ flowchart TB
 
     SearchSvc & BookingSvc --> DD
 ```
+
+---
+
+## Assumption Risks (Post-Meeting 2026-02-25)
+
+The following assumptions were challenged or corrected during the architecture decision meeting. Design B depends on them; mitigation notes are included.
+
+| Assumption | Status | Mitigation |
+|------------|--------|------------|
+| **12go HTTP API stability** | **Uncertain** | Previously assumed stable. F3 restructuring may change the API surface. Mitigant: 12go has existing B2B API versioning (`VersionedApiBundle`); internal consumers (BFF) also depend on these APIs, so changes would likely be versioned. |
+| **S3 station artifacts** | **Low risk** | May change with F3 restructuring. Artifact format is our own; we control the snapshot job. |
+| **No F3 code ownership needed** | **Challenged** | Even with a microservice, the team will eventually need to work in F3 (e.g., when 12go changes require coordination). The microservice reduces but does not eliminate F3 familiarity requirements. |
+| **12go API and S3 as solid building blocks** | **Uncertain** | Meeting revealed the "one system" vision — no permanent separation between 12go core and B2B. The whole system is being rethought. Design B's value proposition (loose coupling via HTTP) holds only if the HTTP API remains a stable boundary. |
 
 ---
 

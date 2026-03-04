@@ -1,0 +1,495 @@
+Deciding on tc transition architecture and language - Transcript
+00:00:00
+ 
+Soso Tughushi: Hey,
+Bangkok (Main HQ, 4): You see
+Soso Tughushi: good morning. Yes, I see you.
+Bangkok (Main HQ, 4): us? Anyone? Anyone else should be should be here? Yes. No.
+Soso Tughushi: Hey.
+Bangkok (Main HQ, 4): Did you
+Soso Tughushi: Can you repeat the question?
+Bangkok (Main HQ, 4): see anything? I wonder if
+Soso Tughushi: Uh, I will ping him.
+Bangkok (Main HQ, 4): Okay, that's it. If not anyway. Uh maybe it's too early there. Yeah, I don't know.
+Soso Tughushi: Where is it?
+Bangkok (Main HQ, 4): Well, he's uh next to Phil in Poland than Israel. We all started again.
+Soso Tughushi: son of you. I wrote him, but he seems to be all fine.
+Bangkok (Main HQ, 4): You want to start and yeah, let's start. Let's start. Let's have the points that need clarification maybe aside and then we'll finalize
+Soso Tughushi: Okay.
+ 
+ 
+00:02:28
+ 
+Bangkok (Main HQ, 4): it.
+Soso Tughushi: Uh so um today's meeting is about two decisions that two big decisions that we want to make before going into smaller details about exactly how it things will look like. I mean I uh these past two weeks I've been working on imagining or designing uh uh what would happen when we would uh sunset our uh services in TC Dali uh Fuji and so on and how we can make sure that uh when we would do this I mean we want to sunset it and we want to have this functionality available on the cloud of want to go and uh
+Bangkok (Main HQ, 4): Hey,
+Soso Tughushi: hey thanks for joining.
+Oleksandr Monov: Hey,
+Bangkok (Main HQ, 4): son.
+Soso Tughushi: Um yeah I will re reiterate um so uh purpose of
+Oleksandr Monov: thank you.
+Soso Tughushi: this meeting is that uh we want to uh I want to design uh how uh things will look like once we will sunset all the services on uh CC side um and um but we constraint is that we shouldn't break our existing P2B clients so all the end points that we have right now that are being called by client should be as they are.
+ 
+ 
+00:04:03
+ 
+Soso Tughushi: We can we are allowed to change let's say URL or API key. Well, that's also debatable. Uh but the contract should remain the same and it should be a pain painless uh transition for the clients. So past two weeks I've been uh working on that and uh there are uh some big decisions that need to be taken uh and uh there are also small decisions that I think can be uh decided uh when we will start actual work. Um so uh I have prepared this meeting uh brief uh document. Do you see the screen? Yes.
+Bangkok (Main HQ, 4): Yes,
+Soso Tughushi: So uh uh did you guys have a chance to look at it?
+Bangkok (Main HQ, 4): I look on the high level
+Soso Tughushi: Yeah. Okay.
+Bangkok (Main HQ, 4): points.
+Soso Tughushi: So currently what we have right we have our net services. We have big infrastructure on AWS where we have multiple instances of let's say Etna Etna Sihost and so on. We have existing B2B clients um which are calling three services for search uh Denali for booking uh funnel.
+ 
+ 
+00:05:33
+ 
+Soso Tughushi: So uh it means creation of booking uh at first well get get it in check out then creation of booking then uh confirmation uh booking notifications booking details uh PDF and so on. Uh there is also master data or Fuji where from where B2B clients are getting their uh stations I mean our stations and uh POIs and operators. Uh and then we have uh Etna uh service itself which has quite a big module with uh lots of code in it which uses mediator with uh mediator pipeline which then at the end calls another ETNA service which then calls SI framework. SI framework is like a hub for integration. So uh we when we had many well we have right now many integrations like one of them is one to go but we have the only bus stos and so on and um and so when let's say we are performing a booking uh we are calling Denali which then calls SI framework to choose which implementation to load uh for creation of booking and then uh the actual call to the integration is being made.
+ 
+ 
+00:07:02
+ 
+Soso Tughushi: Uh I mean we right now I put in the diagram that we have only one to go but we have many of it and most of this can be simplified drastically. So first of all we are suns setting the trip lake. So trip leg is is essentially a cache of uh trips uh on TC side which uh is filled up by the data team or us. Uh and there is no need for that. There is also need no need for SI framework at all. Uh because we're going to have only one integration and all the new integration uh will happen on uh one to go site. Um there is also no need for which is pricing model. Um so is working on sunsetting it and uh after the changes are done all the price information that we need to return to clients is in the response of want to go right. So uh yeah this is what uh I described that um this mediator pip pipeline would die I mean conceptually uh uh trip there there will be no more trip lake there is no more si library or si host itself uh also we use kafka extensively to fill out uh trip lake but in addition we use kafka for booking notifications and some other stuff and uh all of this also is no longer
+ 
+ 
+00:08:37
+ 
+Soso Tughushi: necessary and as I said price calculation is not uh needed. Uh cool.
+Bangkok (Main HQ, 4): Just just one thing regarding
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): theification events. Keeping only declined events on Ethna side or the NI side is not enough because the we lose the ability to correlate between the the things that happen on the supply integration side and the client facing side. So an extra work will be needed in order to do the correlation and make sure that the events that currently being used by the assigned depression of want to go has the proper I don't know identifier. So we can correlate the event because only sending the client events to the data team. This this information we lack important information which is the supplier side information. currently we have it because our side send these events once we will deprecate the SIO we will need one to go system to have something so we can do the correlation and to put the data in the same source bigquery currently
+ 
+ 
+00:09:51
+ 
+Soso Tughushi: I was under impression that we wouldn't need to uh I don't know contact
+Bangkok (Main HQ, 4): it's
+Soso Tughushi: data team at all. I mean uh I I thought uh that we would just deprecate all of the Kafka events. Uh you're saying what?
+Bangkok (Main HQ, 4): I'm I'm saying that yes once we will remove the SI host the events will be created
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): naturally but I'm saying at the end it's one system so at the end we need the
+Soso Tughushi: Yeah. Yeah.
+Bangkok (Main HQ, 4): the option and the visibility for the data is to have both events the supply side event and the client side event to So we will be able to correlate both of them under the same source. Just a minute. So it means what also means that once we move all like the the logic into want to go we need also to to send those events regardless because it will not be there if we not implement that. And I'm not talking about the SI there once.
+ 
+ 
+00:10:56
+ 
+Bangkok (Main HQ, 4): I'm talking about all the search request or maybe the booking things if we need to do that. Do we need to do that? Yes. I think it's a question for the long but how how today this is done on on one to go like today. Do they know that X search was done? say of course like I think it's a good question like to maybe s I guess you mostly using like click house for all the for all the events but every every request that gets into want to go system is being like reported uh to click like every search request every booking of course like
+Soso Tughushi: Well,
+Oleksandr Monov: Everything collect.
+Soso Tughushi: point is that let's say in the uh sorry s you were saying
+Oleksandr Monov: Yeah. Everything is in the end collected in click
+Soso Tughushi: something
+Oleksandr Monov: house through data subdomain through Kafka.
+Soso Tughushi: so
+Oleksandr Monov: But in the end we have it in in click house.
+ 
+ 
+00:11:56
+ 
+Bangkok (Main HQ, 4): So maybe to do like an overview of the events that we have today that are important to see if they have like any
+Soso Tughushi: pl
+Bangkok (Main HQ, 4): par event in one to go then take a decision and do we need to again the question is also if we need to have some dedicated uh what will be replacing the current events that uh I don't know who's using uh it
+Soso Tughushi: Okay.
+Bangkok (Main HQ, 4): right now. Uh for example, give an example. Uh there is like funnels that show how many searches like in the end we should have all of this in one
+Soso Tughushi: Peace.
+Bangkok (Main HQ, 4): to go. Yeah. Yeah, of course. That's what I'm saying. I'm saying do we need to to preserve this functionality but on in a different totally different way as we have in one to go. So I think we should have the requirements from the data side. We can define our name or whatever like to set up what is the requirements and then go and say like
+ 
+ 
+00:12:43
+ 
+Oleksandr Monov: But
+Soso Tughushi: Listen.
+Bangkok (Main HQ, 4): yeah son
+Oleksandr Monov: uh again many events like uh we sent many events not from the uh back end but from BFF I mean from the next or something like that. So we want to understand what specific events we want to collect for B2B clients and we should check how we send this uh events. If we send it via uh BFF now we should move it from BFF to to back
+Bangkok (Main HQ, 4): Yeah,
+Oleksandr Monov: end.
+Bangkok (Main HQ, 4): I think it's a good point. I think we need to do I I wrote it for a point. So, so I will send you the list.
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): It's a good point like we need to clarify like to understand exactly the details of what needs to be kept and what can we get from one to go and what maybe we need to add to one to go systems as well. What is a client facing notification? What's the finish saying like can you give examples for example book
+ 
+ 
+00:13:48
+ 
+Soso Tughushi: What?
+Bangkok (Main HQ, 4): um perform a booking that is in a pending status so we need to update book but that's like booking life cycle events no yes so what is like client
+Soso Tughushi: Do you
+Bangkok (Main HQ, 4): facing I s like so only client facing notifications or all search booking life cycle events are redundant
+Soso Tughushi: I mean by client I mean B2B client. So we have uh web clients have web hooks and when there is a change with uh booking let's say booking got cancelled then we send them HTTP uh requests.
+Bangkok (Main HQ, 4): Oh, it's mostly the book notification. Yes. And also probably we have four kind of uh events right now.
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): Only one will be relevant uh after this migration because we will not have any more uh client uh supplier and uh client owner and supplier owner related. So there they are also going to be uh transet can want to go have notification system they have but they send it to us but maybe we can like
+ 
+ 
+00:14:58
+ 
+Oleksandr Monov: Yeah. Yeah.
+Bangkok (Main HQ, 4): uh they also switch it. Uh yes this is some but the the problem is that uh it's also I think the ideas and the it's not the ideas it's like the format of the data is different. Okay.
+Soso Tughushi: Yeah,
+Bangkok (Main HQ, 4): So basically transformation a transformer from one to go to the different to the language of connect correct.
+Soso Tughushi: correct. Yes.
+Bangkok (Main HQ, 4): Okay.
+Soso Tughushi: So, um why I wanted to say that uh in the target design we're going to
+Bangkok (Main HQ, 4): Question is like in Kafka,
+Soso Tughushi: be reli we
+Bangkok (Main HQ, 4): but like if it's like for
+Soso Tughushi: don't we don't
+Bangkok (Main HQ, 4): like consistency and like the data queue and stuff like that. Uh yeah, we like asynchronously we put everything if something is there down to go like this. put it on Kafka and then process it. That's it's something that is more uh we identify it, we try to find it in the system and if we find it then we put it uh uh on a cafka for other service to consume and then it's yeah it's like it's nothing in there.
+ 
+ 
+00:16:12
+ 
+Bangkok (Main HQ, 4): Yeah. Yeah. Okay. Sorry. Go ahead.
+Soso Tughushi: I wanted to say that uh like in the target design we're going to still be using one to go's F3 module. Uh so either in the monolith or micros service we will still uh be using uh one to go services. So all the events that is produced from this module and collected uh uh by click house or something it will still be preserved. So we need to define what are the actual B2B client specific events that uh needs to be preserved.
+Bangkok (Main HQ, 4): So, so just one thing in very very high level if this is a
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): short-term uh solution then this is fine but you need to to keep in mind that at the end we are building one system so there's no want to go core or F3 or something like that and there's a layer of our services on top of it it's one system so we will replace this one to go core with our system and we will differentiate between the core services and what's specific to the B2B side of want to go which is specific to B2 to B2C sorry okay so if we if this is a long-term solution then we
+ 
+ 
+00:17:33
+ 
+Bangkok (Main HQ, 4): need need to think about as one one service one system and to see how we differentiate between the core services that we need to implement or take from current F3 and the ones that need to be kept for the B2C which is the responsibility of want to go.
+Soso Tughushi: I understand. Yes.
+Bangkok (Main HQ, 4): I I want to try to answer on the name of suo. So yeah, the idea is to try to think about not for a short term, something that we do as the first step and and looking taking into consideration like things that we want to do in the future and not do like uh okay let's go inside and then go outside like uh in one step to have something that can uh help us to progress in in in the future. And of course all those small details we'll need to to have once we are um uh designing the specific uh API because I think each API has some different characteristic that we need to take care of it's okay instead what I'm saying that currently we have the F3 with the PHP and code the first tree and all the logic we will probably I don't know but we probably take a new service in another language and start writing this stuff up from scratch.
+ 
+ 
+00:19:04
+ 
+Bangkok (Main HQ, 4): That's that's what we want to speak about. So let's pick okay I feel agree like on
+Soso Tughushi: Okay. Uh about F3 itself,
+Bangkok (Main HQ, 4): that
+Soso Tughushi: I mean I I I understand that there is big picture and it's going to be one system but uh we need some building blocks for now to do this transition to sunset. Let's say we have current goal right right to sunset this services and move everything to want to go cloud right and um I am not aware I mean I didn't really think about how to let's say disassemble F3 uh because it's some fresh service for me uh and how it would look like after this transition uh but uh but yeah I mean I accounted that there would be some changes just with the core right and uh let's say in the target design if we're going to have some services search and I mean right now they are mimicking Ethna and uh Denali and Fuji maybe those two can be combined but point is that uh they going to be calling the core service of one to go today it it could be shape of this core could be the the HTTP A API that we are already calling from uh our net services, right?
+ 
+ 
+00:20:32
+ 
+Soso Tughushi: Or if we go with uh uh adding this new B2B module into the uh F3 uh repository or F3 code then it could be just holder or B2B controllers which going to have our contracts which going to call already the internal uh services of again FF3 uh that the code that is already there and point is that uh let's say if we have if we going to redesign uh the want to go core uh the something that provides booking then we can uh you know like look at this line how the dependency on the uh HTTP and if it's going to change it's going to be the breaking change for us but I think uh let's say this would be search for B2B uh booking for B2B We uh and that's it. May make sense
+Bangkok (Main HQ, 4): Why like why like not choosing option one uh one like to do it everything in one to
+Soso Tughushi: or
+Bangkok (Main HQ, 4): go like if if you go with option one like to go go ahead a bit like in the end like on the option one says basically let's take one to go uh code base let's take F3 for example and for each end point just like do the required adoptions in the required
+ 
+ 
+00:22:00
+ 
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): place to to support like the transformation that we talked about right which is mostly correctly it's mostly
+Soso Tughushi: Corrective.
+Bangkok (Main HQ, 4): like changing the data uh keeping like the ID and mapping aside for a second and we need to talk about it as well it's mostly like transforming one JSON to another for basically this is most of it right yeah but it's also the other the other option is the same it's just instead of calling uh the actual function it's just calling the API that already exist but like in option one like we're keeping like the the code as close as possible to the original like we just like we have the search service then it knows like to to serve like the B2B clients and also like the B2C clients
+Soso Tughushi: Correct. I mean it has its advantages uh like pros and cons right?
+Bangkok (Main HQ, 4): right
+Soso Tughushi: Uh I mean if we add it into F3 then there is no latency there is no HTTP uh hop right.
+Bangkok (Main HQ, 4): Yeah.
+ 
+ 
+00:22:59
+ 
+Soso Tughushi: uh or uh well we also get coupled with the existing uh code right which uh means that I don't know if something breaks there uh uh we going to also adapt to the changes but also on the other side if there is a new feature we don't need to have two uh deployments I mean if there is a new property in one to go site at first we need to uh deploy in the micros service arch check texture the uh F3 new version and then adjust uh it here where we can if it's together then we can deploy one thing together right yeah and another
+Bangkok (Main HQ, 4): Yeah.
+Soso Tughushi: is let's say language choice right so if we do it inside the F3 then we are stuck with PHP where with microser we have some flexibility too.
+Bangkok (Main HQ, 4): So I figured out in the PHP just sorry to interrupt you.
+Soso Tughushi: Okay.
+Bangkok (Main HQ, 4): We are already thinking about like and we will have a plan like about how we want to break F3. Okay, it's something that like is being will be done and I'm not sure like to couple you know PHP now and like what you're doing because we do want to go out into microservices in in F3 as well just don't want to as you said before also you said it like we don't want to decouple this project with F3 broken down into microservices right?
+ 
+ 
+00:24:24
+ 
+Bangkok (Main HQ, 4): Yeah. So if we are going to break F3 eventually. So it's m much more makes sense at least to me to have like another layer that it will be easy to you know once you break it to to adjust it to that layer also later both of them together. It's like I think it's always you know the equivalent
+Soso Tughushi: Yeah, correct.
+Bangkok (Main HQ, 4): um but then you need to do like another set but
+Soso Tughushi: Yeah. Um
+Bangkok (Main HQ, 4): want to go already has like if I remember correctly I have like the version API for B2B right that is like a a bit
+Oleksandr Monov: Uh here we have API versioning.
+Bangkok (Main HQ, 4): more like you have a like a way to to like kind of uh block API version for B2B while the B2C is keeping up later and then update the B2B only afterwards right it's only like there is kind of a mechanism already support like B2B
+Oleksandr Monov: Yeah.
+Bangkok (Main HQ, 4): versioning and then like uh it only later on uh which is like one of the cons that we talked about
+ 
+ 
+00:25:31
+ 
+Soso Tughushi: this new V2B API which is in V2 over I mean the locked uh version in F3 uh they probably have different contracts than what uh TC has right
+Bangkok (Main HQ, 4): Yeah,
+Soso Tughushi: now.
+Oleksandr Monov: Yeah,
+Bangkok (Main HQ, 4): you're you're correct. But we can adopt the same approach like for the TC API.
+Oleksandr Monov: definitely.
+Bangkok (Main HQ, 4): And by the way, I think in one point in time we need to take a decision if we like we're talking like B2B connect B2B API to be also want to go B2B API cuz in we want to have like only one that I don't think we need to move. What do you mean by a B2B API? There is only one client right now that in one to go and we need to move it to our Yeah, exactly. So it's anyway not we will be the only one that consume it probably. uh but again it's also something that I spoke with so that we can do this first approach of having this layer using the current API and if we see that we need to change something or improve something that you can change it here and then point it out.
+ 
+ 
+00:26:38
+ 
+Bangkok (Main HQ, 4): So it's also something that you can do gradually uh uh later on if this is something that uh but anyway just like to get to the of the of the options like option one says we have a micros service it's basically service or services microservices that most of the things they're doing they're transforming one JSON into another that's mostly the doing probably yeah it's just like a transformer it will be the same it would be have the um capabilities or role as it was sit inside of but let's break it down to what it actually does. What it does, it gets one JSON and transform it into another JSON if I understand correctly to to the to the yes to the one to go API uh correct that we currently know exactly how to do it because we are doing that all all uh um yeah but it's talking about new APIs and new new microservices. Yeah, but we but but this is something that we already doing uh today. It's um of course we'll write it from scratch.
+ 
+ 
+00:27:47
+ 
+Bangkok (Main HQ, 4): Yes. Because uh we need to do here and there some adaptations. It's not and we want to have something that very very very slim. Mhm. Uh
+Soso Tughushi: Yeah,
+Bangkok (Main HQ, 4): yeah.
+Soso Tughushi: I mean this is essentially an adapter layer or anti-corruption layer to make sure that we don't break the existing clients, right? And yes, uh then we might still need to introduce some state in certain uh scenarios like for example when we have web hook, we need to uh have uh correspondence of client ID with their web hook urls. Right now we have it already in uh Denali booking service. Basically when want to go sends us uh the update on certain booking we need to figure out to which client it belongs to uh based on the booking ID uh and uh and we might need to do some to have some more complexity inside of those services but I am trying to avoid them like let's say design it in a way that we wouldn't have any state uh and it would be transparent uh pipe
+ 
+ 
+00:29:05
+ 
+Bangkok (Main HQ, 4): Yeah, any as you said probably it will not be 100% um like transforming we might need some some uh layer of of something again I I'm not sure maybe on the schema maybe I'm not sure um and and anyway we'll need to do that either if we are in a new micros service Oh, we are in uh the um the the fruit.
+Soso Tughushi: So uh yeah so both of the approaches have pros and cons right and um I mean I myself try to evaluate which one is better let's say to have separate service which going to be again the thin proxy between layers right and I again I'm not aware of uh the plans of disassembling the F3 into smaller pieces and you know if if this is the case maybe it changes the things but I came myself with evaluation criteras uh uh let's say how extensible it is or how it fits to our current uh resources I mean uh how let's say uh we have certain developers right which already net and u if we they're going to write uh PHP code they're going to be way slower than something that they're more familiar with.
+ 
+ 
+00:30:46
+ 
+Bangkok (Main HQ, 4): But also I have one one question about it like but in the end if you want to add any
+Soso Tughushi: I mean I
+Bangkok (Main HQ, 4): feature for search you will need also to change the F3 like uh you will not be able to avoid it like you you will not be able to start and and develop like search features or correct so in the end anyway you will need to update F3 and then update the
+Soso Tughushi: What?
+Bangkok (Main HQ, 4): transformer. Yes. Because it's not like this layer that the responsibility is just like to transform the payload but it doesn't have any business logic around search. So for example if we add that all for booking by the way also booking. Correct. Right. If we add new functionality that we need we need to go all the way uh inside and then like anyway from from my from my perspective you'll need to update both F3 and the transformer. Correct.
+ 
+ 
+00:31:32
+ 
+Bangkok (Main HQ, 4): So anyway,
+Soso Tughushi: depends on the change, right?
+Bangkok (Main HQ, 4): but it's like two microservices that you have that you need to do a change in few of them and sometimes it's very easier to do like gradually. Let's do the inner change and then do the outer change. So it's also something that uh I agree with you. It doesn't if we need to go inside it doesn't make us not calling that. I can I can tell you just like what I feel and again should definitely like the discussion and hear everyone's thoughts but I'm just kind of relating to what they said earlier like we need to to to get into one to go system it's kind of I think a walk around of getting into one to go system that's what I think so that's my perspective at least what do you think well I think if I think if it's a shortterm solution that le to sunset trip lake and to sunset and other stuff I'm okay with it to do externally internally whatever you feel comfortable but at the end I think we should do the changes from the inside out.
+ 
+ 
+00:32:38
+ 
+Bangkok (Main HQ, 4): So we take F3 to break it to several parts with SA of course and then take over the the the parts that should be the core system and then talk about how we are migrating from the existing existing code for example saying like let's take the reserve part and let's put put it in a new micros service right but this is like something that is very big right and once you have no choice I Okay. If the if the F3 has it's not the scope of this uh of that and I don't know because that's what I asked at the beginning of the the session. If we are talking about the long-term solution but then the shortterm solution how we take what we have connect and just I am responsible for the B2B. I am not responsible for the booking for the search. It's it's a it's not something that I Currently I I have to do that. What does it mean? What does it mean?
+ 
+ 
+00:33:41
+ 
+Bangkok (Main HQ, 4): That those changes are are part of the traveler core changes that needs to be done and it's not part of uh what uh is the scope of my work definitely for like YouTube planning and for the strategic planning we do think about breaking the free into microservices. That's correct. I think it will take some time and the question is like what like when we say like long run what do we mean? Yeah. If it would be in a year from now should I don't think we better plan to to go out of F3 but I'm not sure like you know the timeline. So like this solution can also like you know if if you wait for F3 maybe then the solution will leave also for one year or two years or something like that. Maybe it's okay but like that's I think the to be like on the reality side of things I think it take to break down a field to take couple of cues not like one and and this microservices approach I think that will ease us to do this change because you can move it outside and then uh just change the way that you call to the new model and that's it.
+ 
+ 
+00:34:47
+ 
+Bangkok (Main HQ, 4): Yeah, I'm not sure this is a strong enough argument, but I'm just afraid that anyway we're going to be coupled with F3 no matter what. Okay. And then like we coupled with F3 plus we have another system to it all the time. So it could have another dependency when we we deploy if we were to do to a new system. Okay. Would you put the micros micros service for this purpose just to do the anti-corruption layer to transform one JSON to another? By the way,
+Soso Tughushi: Well,
+Bangkok (Main HQ, 4): I'm not against the
+Soso Tughushi: we had with this purpose KOA though we have we had KOA as an
+Bangkok (Main HQ, 4): Sorry.
+Soso Tughushi: anti-corruption layer which was a separate micros service.
+Bangkok (Main HQ, 4): Yes,
+Soso Tughushi: This is
+Bangkok (Main HQ, 4): we did.
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): Yes. But I ask you for this thing for the search for example just to to map the API external API to want to go API.
+ 
+ 
+00:35:38
+ 
+Bangkok (Main HQ, 4): Would you put a different micros service for that? If it's the same system, it's going to be the same API. There's no need for one to go API and TC APIs can be one API but but it's a not a new system that's that's the problem we we have some but in the end from what I see it's like you're trying to to put a micros to not write in PHP to write in a language that the the engineers are familiar with that's like know most of the I I I I think I think that the correct way to do is to decide what is the best language that we want to use because I assume that you want to choose one language that all the new microservices will be selected and we will use that from the get go but but anyway this micros service is like life cycle is going to be like one or something like that I'm just again I'm just like I don't mind doing that no but but I'm just thinking that in the end in my opinion it will not give you easier life because anyway any you will need to to develop you will need either like the team to get into a free and develop it or to have correlation with Saskin to develop it and then
+ 
+ 
+00:36:46
+ 
+Bangkok (Main HQ, 4): anyway like you're going to have like two failures of of things and if you're saying that like F3 today has the option to have a B2B API that is like not always up to date with B2C then maybe then you can just like utilize this approach and then you develop the future in F3 when the B2C is like we've seen that B2C works then you can adapt it to the B2B clients. No, again like I'm not I'm not saying that there's one one I I I I'm sure that using the the F3 has like some built-in things that we can we can use. Okay. Probably um I I spoke with it with so yesterday. I don't know if we have tracing uh things that things that we need to to have it. So anyway, I I I don't know. So you want to also have you you also saying that like if you moving now to F3, you're using some capabilities that you have today on TC platform such as tracing, such as login, such as I don't know what we have in in F3.
+ 
+ 
+00:37:53
+ 
+Bangkok (Main HQ, 4): This is maybe something that I will need to I mean this is some of the we need to to to do to understand like maybe what capabilities we're losing while we moving to F3 and then we can discuss whether we want to implement in F3 or I ask the other way around. I don't know if there is something in F3 that currently is like we are getting out of the box to like S3 want to go has a lot of monitoring capabilities that's not familiar with them. Yeah. So it mean that it's something that I need to wire also for that part as well. Why do you need to wire it if it's already built in in um because I want to to make sure that my part is also being uh monitored but as any other part of F3. Yeah I'm talking if I'm outside of the F3 in the the or in the micros service because I I want to to monitor it as well.
+ 
+ 
+00:38:47
+ 
+Bangkok (Main HQ, 4): So you want you need to add monitoring abilities to the microser option. Again I'm not familiar exactly how it is done but same as we do like for each HTTP we actually doing something in the header or something like we have like uh uh infrastructure for that. So yeah that that's something that probably would be a pro for uh using the S3. But again I I understand that like we we I did talk with some we will talk about breaking F3. I think that we cannot I think that we it's the right thing to do. We also have like a lot of power in the distribution team the service team in order to do so like we enlarging the team for that purpose. I'm just don't know if you can say what is the timing for that uh being done. I I
+Soso Tughushi: Is there a real uh tangible plan uh for breaking down the F3? I mean, how far away are we in the planning?
+ 
+ 
+00:39:42
+ 
+Soso Tughushi: Do we know like what's maybe the target language
+Bangkok (Main HQ, 4): No, we just like in the beginning beginning of the beginning of the planning like it's the beginning of the planning and then
+Soso Tughushi: or
+Bangkok (Main HQ, 4): we want we want to do it like the right way. We want to have a a plan a project management uh um in place before starting the project to see that we have clear start what are the milestones uh so I guess it will take some time again it will it will be
+Soso Tughushi: I mean, yeah.
+Bangkok (Main HQ, 4): done
+Soso Tughushi: Okay. Uh may
+Bangkok (Main HQ, 4): I just told you no I just told you what are my concerns uh but I feel like that you need to be comfortable of the solution that you're going to uh one thing that we didn't talk about maybe it's like a different scope is about like uh the breaking changes or the ideas or all that. Yeah. Yeah. But I didn't want to get into that before we because SO started to present and go to so many directions and I want to narrow down the problem.
+ 
+ 
+00:40:40
+ 
+Bangkok (Main HQ, 4): Okay. So we can start drill down to the actual details. Mhm. I I feel it's like what we are missing is to to do kind of a a test or a check. Yeah, that's what one API to API a PC that will implement one API put it inside of one to go system. Exactly. It works. That's what I think. I feel that like we need to see how complex the the beast is like you know how how hard it is or how not you know what are the downsides when trying to take for example I would take take one of the complex uh APIs no that's I would take one of the simple but then you don't really see the the problems yeah you will see you will see uh you will see I'm sure that I guess in the search will have most of the problems no if if I will do the the P I would do the get it in It's of course it will be a bit if the solution works then you're okay with that but I want to do that on the micros service on the micro but no no no you need a good reason why not to get
+ 
+ 
+00:41:46
+ 
+Bangkok (Main HQ, 4): into give me a good reason why not to go to the because then you still the carers from F3 and from want to go systems no but I'm living inside like I have a dedicated service inside want to go that uh has this translation layer and whenever we have in the future something that is uh more modular and we can adjust to it but again will anyway need to update both the systems all the time. Okay, I I understand that but but this will be in half a year from from now. No, from day one you need to update both of the systems. Yeah, you can only only when I will finish. Basically what we are doing in this I think in this board is kind of like kind of continuing the operation mode that we have today that we have DC we have one to go no I have two different services I have B2B API layer and I have TC uh core system not one to go TC core system that I'm connecting to it this is how I see it okay but you know I if if you think and no that's that's just my I try to again maybe you can decide to do the PC on both sides to do the new micros service to do and then we can discuss.
+ 
+ 
+00:43:06
+ 
+Bangkok (Main HQ, 4): I just I
+Soso Tughushi: But what would be the criteria success criteria of this P?
+Bangkok (Main HQ, 4): just
+Soso Tughushi: I mean we would be able to do it in both ways anyway. I mean there is no question whether or not we can do it I mean we can do it in the F3 uh the get itinerary and we can do it in uh as a separate microser because there is no
+Bangkok (Main HQ, 4): If if doing the Gary in takes you like I don't know like one day you see like
+Soso Tughushi: Well, if I mean then what if F3 gets demolished and then thrown away, right? Or what if I want to scale scale uh certain parts, let's say search independently, then then booking
+Bangkok (Main HQ, 4): but if if F3 is loaded Then also you'll need like to it's like they're coupled anyway any request that goes to search to your micros service will then go to F3. So if F3 is overloaded it you will anyway need to have more machines on F3.
+ 
+ 
+00:44:07
+ 
+Bangkok (Main HQ, 4): Like in you have one to one relation between your service and F3. For every request goes to your service it will also get to F3. Your service doesn't do anything. It's not a button for it's like just a microser that gets response and forward it to another microser. So anyway, that's what I'm saying. Anyway, the cuffing between your microservices and F3 is so strong that that you mostly achieve a transformative in the language that you're familiar with and you you more confident maybe in this micros service but it it kind of hides the real problem of like the insecurity in F3 in my opinion.
+Soso Tughushi: Yeah, I mean about scaling. Okay, I agree that if traffic changes, we need for scale F3 anyway. uh uh but let's say there is let's say a strategic decision of I don't know writing everything from day one to use go right then if there is a if if there is such decision made then uh like you need to rewrite the module in DF3 where if this decision is already known
+ 
+ 
+00:45:12
+ 
+Bangkok (Main HQ, 4): Yeah,
+Soso Tughushi: uh uh we can just write this new micros service on the go already I mean to be more aligned with uh let's say company
+Bangkok (Main HQ, 4): but you don't really know how F3 looking want to go.
+Soso Tughushi: strategic
+Bangkok (Main HQ, 4): Like I think that if you would know like I feel that maybe the way that F3 will be structured will be anyway different than what you are now structuring like uh
+Soso Tughushi: well yeah I mean so point is that you're going to have let's say B2B uh module as a separate service or separate micros service which has its own benefits I in command you are you cannot convince me that monolith in all the cases is better than micros service if you have separate team that owns this B2B then it's easier for them
+Bangkok (Main HQ, 4): That's
+Soso Tughushi: to own uh micros service themselves rather than uh I don't know uh the team that owns F3
+Bangkok (Main HQ, 4): No,
+Soso Tughushi: fully I mean I know I understand that at the end we're going to be the same but then I don't think uh it's going to
+ 
+ 
+00:46:24
+ 
+Bangkok (Main HQ, 4): I I I totally agree with you about microservices and about breaking domains when the domain has the capability to to deliver by its own. But in the end, anyway, anything that you will require, you will need to write in F3 and also in the B2B transformer. So I'm just like I'm just asking what do we what do we gain from this decoupling which is not really
+Soso Tughushi: I mean yeah I mean let's say F3 right now has
+Bangkok (Main HQ, 4): decoupling.
+Soso Tughushi: current clients right except for B2B module or uh TC it it is called by probably BFF so if you are demolishing uh F3 you need to communicate the changes to BFF right so it's a breaking change and you need to uh you need to let's say update BFF anyway. So this is the part point of making change and this it if uh it would be a separate micros service we would treat changes in F3 the same way as you are right now because you already have callers of the API.
+ 
+ 
+00:47:36
+ 
+Bangkok (Main HQ, 4): I but again like I feel that we already have a way in F3 to do like a kind of a versioning.
+Soso Tughushi: So
+Bangkok (Main HQ, 4): Anyway, I feel like we discussed and we we agree like we we
+Soso Tughushi: yeah, I mean I mean we would do the versioning anyway.
+Bangkok (Main HQ, 4): have
+Soso Tughushi: let's say uh you have uh let's say uh separate B2B module microser which calls F3 and you have BFF and you need to do versioning anyway where when you are releasing a new feature and then communicate it to both of the teams who who are managing uh uh B2B uh and the BFF and they got they can do it in their own time. So you still uh need to think about uh who you going to break.
+Bangkok (Main HQ, 4): No, you definitely but maybe it can be done also,
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): you know, on the same uh PR change sometimes like I agree with
+Soso Tughushi: Uh
+Bangkok (Main HQ, 4): you also like on some aspects it gives you the benefit of having the coupling of the two things uh Uh, I think I think that's
+ 
+ 
+00:48:39
+ 
+Soso Tughushi: I feel like Santa was quiet for a long time.
+Bangkok (Main HQ, 4): like
+Soso Tughushi: Maybe you have something to contribute.
+Oleksandr Monov: Well, uh I have a bit different vision at all. Uh microservices is a good approach but again microservices is a good approach when it needed you know uh to have many many microservices and to not earn money uh for support these microservices it's not a good approach. So everything I can say from the want to go perspective we like develop our system step by step. Uh we see that we need some changes we do it. If we see we don't need uh changes we don't do it. uh from the perspective of how to make it better to migrate uh PC to to want to go without you using if I understand correctly triple etc. Yeah, this is the main question how to do it. It depends on our future decision. If we really want uh and I believe we don't want we need to like uh reimplement let's say or I don't know break down F3 to something else.
+ 
+ 
+00:50:02
+ 
+Oleksandr Monov: Uh uh so it depends what we want. If you want to do it faster uh and do not spend a lot of money a lot of time the easiest way is like create the additional versioning on of three for the short period of time. It's quite easy. It will take I don't know two two weeks uh to create another API version for for example for search or something like that. And then we can move forward. We can think how to how we want like to break down the F3. Uh what will be the parts of F3? Of course uh uh everyone of you are right is right. uh we should like have some kind of basic search and then we should separate B2B and B TOC because number of different features uh too big uh to to have the only one API but again we should have the one like core search service it's my opinion
+Soso Tughushi: Yeah, take a sign out.
+Oleksandr Monov: we we can like uh left be some kind of cover yeah wrapper on uh on the F3, but we like lose uh performance.
+ 
+ 
+00:51:29
+ 
+Oleksandr Monov: I mean latency
+Bangkok (Main HQ, 4): It's not just like just
+Soso Tughushi: Yeah.
+Oleksandr Monov: uh there there is no like silver bullet you know we we
+Bangkok (Main HQ, 4): let's
+Oleksandr Monov: should each approach has some pros pros and cons
+Bangkok (Main HQ, 4): Yeah.
+Oleksandr Monov: and uh what's the main like uh aim should we like econom money and time if this is the main name then yeah the easiest way the fastest way is uh to implement additional version of API on F3. If we are talking about something more flexible then yeah vapier is something that we can reuse in the future.
+Soso Tughushi: Yeah, good thing uh as you said uh about let's say what's our KPI, right? if we want to deliver it fast versus uh strategically if we want to uh break it down already or I don't know do the first step in let's say new uh system design of I want to go it influences the decision Right.
+Bangkok (Main HQ, 4): Yeah, I'm not sure it's only like I'm not sure it's only about strategic.
+ 
+ 
+00:52:47
+ 
+Soso Tughushi: Bye.
+Bangkok (Main HQ, 4): I'm not sure that like the micros service solution is a strategic goto to be honest in this case like the strategic uh go to is to break down as we as we all agree that's a strategic way to go which means is also been taken taken care of we are talking about it we just want to have a
+Soso Tughushi: Yeah, but point is that if F3 breakdown happens let's say tomorrow then uh
+Bangkok (Main HQ, 4): before
+Soso Tughushi: it doesn't make sense to add something new to F3 module right if
+Bangkok (Main HQ, 4): But it's not but also like the we are treating it as like something that is that it's
+Soso Tughushi: we
+Bangkok (Main HQ, 4): a transformer of request and response. That's what it does. It's not something that is that huge. Let's let's differentiate between the state service just a second. So we have two different things two different use cases. one is the search and the get itinerary which is stateless just a transformation of of data structure and the the big the the big logic and anything is inside F3.
+ 
+ 
+00:53:52
+ 
+Bangkok (Main HQ, 4): So we should wait that the the changes there or or separation of F3 there is is more important than just add another layer of API and there is the status the stateful service which you talked about like the web hooks support and things like that and this is something which normally maybe should be in a different service because you need the state over there and you need to make it grow and you need the additional functionality there but the state is inside the the F3 anyway like the booking the persistency everything that I take is taking from there yes but you need to to to map the language you need I don't know things like you need a client ID you need the whatever I don't know whatever details you need something if I understand correctly you have currently functionality in TC which doesn't exist in one to go system currently it's not just mapping request response it's schema I'm almost sure that it's 90 something% that it is and and the rest of it it's we need to understand if it is uh something that we we need to to preserve or and if if we need to preserve how how to okay so it's better if if you don't have anything special I'm not saying that I don't have but we have some things
+ 
+ 
+00:55:16
+ 
+Bangkok (Main HQ, 4): that we need to understand for example do we need to um to encrypt the the IDs from now on probably not right ID booking ID all those do we need to I'm not sure why not I mean this is the why I I think I think we need to do like a follow up about these things yeah but I I know we are missing I think that like we we understand the concept I think we had a good problem of this discussion I would suggest a follow discussion of understanding what do we do with the ideas ID what do we do with the encryption I get into the features that we have today in TC and to if you're losing them or what you're doing them if you condition to to want to go. Yeah. But and then we need in one part we need to tackle it the all of these problems. I know but I it's easier for me to do that if we are doing that on micros service.
+ 
+ 
+00:56:06
+ 
+Bangkok (Main HQ, 4): Why? Why? Because because it's it's a different thing. It's it's like the the these things is it's so complex and I have so many things that I cannot do like with all the options and and honestly about the design review. Yes. If you want another view you want like I want that. So so okay now let's take this. Okay we are going with let's go let's go let's let's say it like doing the this uh code the transformers in F3 is one day simple. Okay, let's say the transformation in F3 is simple. Okay, you still wouldn't choose it. I I don't think that it's it's really matter. I think it's because I think it's the same from my perspective. It's it's it's the same. What will take you what the decision to I want to try to do deep dive with at least something that I I'm putting out of the question.
+ 
+ 
+00:57:07
+ 
+Bangkok (Main HQ, 4): Okay. So there there is like also bring to me like a list of things and I think that those two things are the first one that we need to to try to to remove and and to to move the fog out of. So in my opinion if we see that like writing the transformer in F3 is simple pretty simple and we see that like you know doing the ID manipulation or whatever in F3 is doable. I would go to single system instead of like multiple systems and again we will continue with improving three I'm just like I feel that we just need to understand maybe what is the ence of microservices benefits and to see if they decoupling just it have decoupling okay no it's also okay another it's it's a decoupling like things that you have like it's the it's like the and the now why you have two different thing It's uh because someone is is but self-contained. It's like a domain self contained. The B2B is like an API gateway.
+ 
+ 
+00:58:09
+ 
+Bangkok (Main HQ, 4): It's like a you know okay let's take a decision and go from from there. I don't want to keep this. You want me to who want to decide? You want you to decide? If you want us to decide, we'll decide. If you want to take the decision, uh take the decision. Okay. Let's let's talk about it. uh after I don't know I only need 5 minutes to take a decision I would suggest to do like a
+Oleksandr Monov: Yeah.
+Bangkok (Main HQ, 4): more research that's my at least to understand what it means like to do that the manipulation like it's a high level like a bit missing of the other context okay
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): that's what I
+Soso Tughushi: My point of this discussion let's say from me and Shaw's perspective was that there are lots of decisions that needs to be made, right? I mean this is the decision map I created.
+ 
+ 
+00:59:01
+ 
+Soso Tughushi: uh let's say if we go with B2B uh uh monolith then those are the decisions uh but then there are also smaller decisions and I thought like making this at least two nodes resolve uh what's going to be micros service will we write it in separate microser versus in F3 uh would unlock us to make more decisions let's say um but you're saying that uh the this decision is not that easy to make and the arguments that I that we made is not enough to justify
+Bangkok (Main HQ, 4): Oh,
+Soso Tughushi: let's say micros service and
+Bangkok (Main HQ, 4): it's not it's not it's not enough.
+Soso Tughushi: uh
+Bangkok (Main HQ, 4): It's an important decision. Sorry. Go ahead. Yeah. Thank you, Sana.
+Soso Tughushi: thank you Yeah,
+Bangkok (Main HQ, 4): Thank you. Thank you. Bye.
+Soso Tughushi: I I myself try to make uh the decision obvious somehow like I had let's say criteras uh uh evolution criterias like trying to come up uh with uh something like okay this implement how much is the implement implementation effort by us to make uh it on separate micros service and versus how much would it take us to do it in monolith uh then when I got the result to be
+ 
+ 
+01:00:40
+ 
+Soso Tughushi: microser withnet I was like okay this doesn't really align with the company so I tried to create a new set of uh evolution criterias where let's say infrastructure fit would have bigger coefficient uh to uh arrive still with with uh let's say to somehow justify the monolith at least to have an option where I don't know criterias these criterias would tell me that better to go with monolith and even like this I couldn't make it uh happen somehow
+Bangkok (Main HQ, 4): like no matter what criteria took in which way the micros service always
+Soso Tughushi: yeah I mean I I yeah but it's according according to me and according
+Bangkok (Main HQ, 4): wins.
+Soso Tughushi: to uh the Oppus Opus 4.6.
+Bangkok (Main HQ, 4): Got it. Okay. So, sorry because we ran out of time for the meeting and I want to do it like very thoroughly and not you know just decide like in one
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): minute. Give me time to think about it. give us all of us time to think about it.
+ 
+ 
+01:01:45
+ 
+Bangkok (Main HQ, 4): Okay?
+Soso Tughushi: See
+Bangkok (Main HQ, 4): And we'll try to think back as soon as possible. I do agree you've done an amazing research.
+Soso Tughushi: you.
+Bangkok (Main HQ, 4): Don't get me wrong, like everything you've done looks great. It's just something that we need to to to think from all angles. It's not like a simple decision. Some, you know, some some decisions that need to be thoroughly thought about.
+Soso Tughushi: Yeah. Yeah.
+Bangkok (Main HQ, 4): I want to also go over you. I want to also go in with the details on all the things you're doing,
+Soso Tughushi: I
+Bangkok (Main HQ, 4): not only on the summary. I want to also review like all the breakdown that you've done.
+Soso Tughushi: Yeah.
+Bangkok (Main HQ, 4): Okay.
+Soso Tughushi: Sure. Sure.
+Bangkok (Main HQ, 4): Anyway,
+Soso Tughushi: Sure.
+Bangkok (Main HQ, 4): we will take this in together. I don't want to be like to saying like we're doing like that. I don't think that's the right approach. I think that we need together to find what is the right solution. And I want you to be satisfied and to agree with you know what we are
+Soso Tughushi: Yeah,
+Bangkok (Main HQ, 4): deciding.
+Soso Tughushi: I'm not uh let's put aside my uh let's say emotions. I want to make let's say mathematically correct decision and not uh yeah
+Bangkok (Main HQ, 4): No.
+Soso Tughushi: uh and I don't mind I know having another go on uh going uh deeper as long as you give me enough crucial credits.
+ 
+ 
+Transcription ended after 01:03:16

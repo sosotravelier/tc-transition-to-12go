@@ -25,4 +25,6 @@ Three iterations of the evaluation framework, each refining criteria weights and
 |----------|-------------|
 | [decision-map.md](decision-map.md) | Key decisions and rationale |
 | [migration-strategy.md](migration-strategy.md) | Phased migration plan |
+| [poc-plan.md](poc-plan.md) | Search POC in F3 — scope, success criteria, evaluation framework |
+| [f3-demolition-compatibility.md](f3-demolition-compatibility.md) | Supplementary criterion: how each option survives F3 breakdown |
 | [alternatives/](alternatives/) | Option A (Monolith) and Option B (Microservice) designs |

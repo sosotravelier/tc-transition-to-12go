@@ -12,6 +12,17 @@ We are in a big transition. As part of it, we want to **demolish all of our serv
 
 See `prompt-log.md` for the full initial prompt and session history.
 
+## Meeting Outcomes (2026-02-25)
+
+A meeting with Team Lead, RnD, Architect, and Oleksandr (12go veteran) surfaced the following:
+
+- **F3 breakdown is planned but has no timeline** — "Beginning of the beginning of planning." No target language, no milestones. Estimated "a couple of quarters, not one." F3 redesign is not this quarter.
+- **"One system" vision** — Management emphasized there is no permanent separation between 12go core and B2B. The long-term goal is one cohesive system, not a layer on top of F3.
+- **Event/data correlation requirement** — Sunsetting SI Host would lose the ability to correlate supply-side and client-side events. B2B-specific events must be preserved or created for ClickHouse/data team. Requirements to be defined.
+- **F3 capabilities discovered** — F3 already has `VersionedApiBundle` (API versioning), `ApiAgent` (partner identity), and Datadog APM tracing. These reduce implementation effort for monolith option.
+- **POC-first approach agreed** — Implement the **Search** endpoint inside F3 to evaluate friction. (Team lead proposed GetItinerary; Soso proposed Search; settled on Search first.)
+- **Post-meeting clarification**: RnD confirmed .NET microservice is still an option. Architecture decision deferred, not rejected.
+
 ## What We're Building
 
 A replacement for the B2B API layer that currently sits between external clients and 12go's travel platform. The current system is 4 .NET repositories (~340 projects total) that essentially proxy HTTP calls to 12go. The new system must preserve the client-facing API contract while dramatically simplifying the architecture.
@@ -140,6 +151,8 @@ See `current-state/cross-cutting/authentication.md` for full analysis.
 
 ## Key Constraints
 - All development expertise is in .NET
+- **12go HTTP API stability**: Previously assumed stable. Now **uncertain** — F3 restructuring may change the API surface. Design should account for this risk.
+- **F3 will be broken into microservices eventually**, but no plan exists yet (no timeline, no target language). Code written inside F3 today may require a second migration when F3 is demolished.
 - **Technology choice**: The team does not prefer PHP; business sees PHP as less risky (alignment with 12go's stack). Both perspectives are inputs to consider, not a source of truth. If the team will work with PHP, the solution must be designed so that all parties feel comfortable: AI-accelerated development and patterns that do not require deep PHP expertise from team members.
 - Go is being considered by 12go but nothing is decided
 - Developer experience is a priority -- team focus and stability are prioritized during major system changes

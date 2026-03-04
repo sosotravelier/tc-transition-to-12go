@@ -1,11 +1,17 @@
 ---
 status: draft
-last_updated: 2026-02-24
+last_updated: 2026-03-02
 ---
 
 # Decision Map: 12go Transition
 
 This document captures every major fork encountered during the design process, the options considered at each fork, and where applicable the current recommendation. It is meant as a navigational aid — all detail lives in the linked documents.
+
+---
+
+## Meeting Outcome (2026-02-25)
+
+**D1 is deferred** pending a POC. The group agreed to implement the **Search** endpoint inside F3 first to evaluate friction, then revisit the architecture decision. Post-meeting: RnD confirmed the .NET microservice option is still viable; F3 redesign is not this quarter. See [presentation/meeting-record.md](../presentation/meeting-record.md).
 
 ---
 
@@ -25,7 +31,11 @@ When multiple symbols appear on an option, that option is preferred by each corr
 
 ```mermaid
 flowchart LR
-    D1["D1: Where does the B2B API layer live?"]
+    D0["D0: POC-first validation\n(deferred)"]
+    D0 -->|"Implement Search in F3"| POC["POC: Search endpoint\ninside frontend3"]
+    POC -->|"Evaluate friction"| D1
+
+    D1["D1: Where does the B2B API layer live?\n(deferred pending POC)"]
     D1 -->|Option A| A["A: Inside 12go monolith\n(frontend3 / PHP/Symfony)"]
     D1 -->|★◆● Option B| B["B: Separate microservice(s)\n(language TBD)"]
 
@@ -155,6 +165,7 @@ flowchart LR
 
 | # | Decision | Options | v1 ★ | v2 ◆ | v3 ● | Reference |
 |---|---|---|---|---|---|---|
+| D0 | POC-first validation | Search in F3 → revisit D1 | **deferred** | — | — | [poc-plan](poc-plan.md), [meeting-record](../presentation/meeting-record.md) |
 | D1 | Where does B2B API layer live? | A: Monolith / B: Microservice | ★ B | ◆ B | ● B | [A-monolith](alternatives/A-monolith/design.md), [B-microservice](alternatives/B-microservice/design.md) |
 | DA1 | Monolith data access | In-process / HTTP self-call / Direct DB | (if A) | (if A) | (if A) | [A-monolith](alternatives/A-monolith/design.md) |
 | DB1 | Service topology | 1 / **2** / 3+ | ★ 2 | ◆ 2 | ● 2 | [B-microservice](alternatives/B-microservice/design.md) |
