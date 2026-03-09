@@ -11,7 +11,7 @@ This document captures every major fork encountered during the design process, t
 
 ## Meeting Outcome (2026-02-25)
 
-**D1 is deferred** pending a POC. The group agreed to implement the **Search** endpoint inside F3 first to evaluate friction, then revisit the architecture decision. Post-meeting: RnD confirmed the .NET microservice option is still viable; F3 redesign is not this quarter. See [presentation/meeting-record.md](../presentation/meeting-record.md).
+**D1 is deferred** pending a POC. The group agreed to implement the **Search** endpoint inside F3 first to evaluate friction, then revisit the architecture decision. Post-meeting: RnD confirmed the .NET microservice option is still viable; F3 redesign is not this quarter. See [presentation/meeting-record.md](../presentation/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md).
 
 ---
 
@@ -165,7 +165,7 @@ flowchart LR
 
 | # | Decision | Options | v1 ★ | v2 ◆ | v3 ● | Reference |
 |---|---|---|---|---|---|---|
-| D0 | POC-first validation | Search in F3 → revisit D1 | **deferred** | — | — | [poc-plan](poc-plan.md), [meeting-record](../presentation/meeting-record.md) |
+| D0 | POC-first validation | Search in F3 → revisit D1 | **deferred** | — | — | [poc-plan](poc-plan.md), [meeting-record](../presentation/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md) |
 | D1 | Where does B2B API layer live? | A: Monolith / B: Microservice | ★ B | ◆ B | ● B | [A-monolith](alternatives/A-monolith/design.md), [B-microservice](alternatives/B-microservice/design.md) |
 | DA1 | Monolith data access | In-process / HTTP self-call / Direct DB | (if A) | (if A) | (if A) | [A-monolith](alternatives/A-monolith/design.md) |
 | DB1 | Service topology | 1 / **2** / 3+ | ★ 2 | ◆ 2 | ● 2 | [B-microservice](alternatives/B-microservice/design.md) |

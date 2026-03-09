@@ -74,6 +74,6 @@ When revisiting D1 after the Search POC, include **F3 Demolition Compatibility**
 
 ## References
 
-- [Meeting record](../presentation/meeting-record.md)
+- [Meeting record](../presentation/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md)
 - [System context meeting outcomes](../prompts/context/system-context.md#meeting-outcomes-2026-02-25)
 - [B-microservice assumption risks](alternatives/B-microservice/design.md#assumption-risks-post-meeting-2026-02-25)

@@ -9,7 +9,7 @@ last_updated: 2026-03-02
 
 Implement the **Search** endpoint inside frontend3 (F3) to evaluate the friction of writing B2B API code in the PHP/Symfony monolith. The POC outcome will inform the architecture decision (D1: monolith vs microservice) before committing to a full implementation path.
 
-**Context**: Team lead proposed GetItinerary; Soso proposed Search; the group settled on Search first. See [presentation/meeting-record.md](../presentation/meeting-record.md).
+**Context**: Team lead proposed GetItinerary; Soso proposed Search; the group settled on Search first. See [presentation/meeting-record.md](../presentation/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md).
 
 ---
 
@@ -90,4 +90,5 @@ Capture qualitative feedback during implementation:
 - [Search endpoint contract](../current-state/endpoints/search.md)
 - [Monolith Search flow](alternatives/A-monolith/design.md#search-flow)
 - [12go API surface](../current-state/integration/12go-api-surface.md)
-- [Meeting record](../presentation/meeting-record.md)
+- [Meeting record](../presentation/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md)
+- [Runbook: Running F3 locally](../runbooks/run-f3-locally.md)

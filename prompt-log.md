@@ -153,3 +153,67 @@ Design evaluation docs were reorganized into versioned folders:
 - **v3**: Further refined, 15 criteria, emphasis on long-term platform alignment (design/v3/)
 
 See [design/README.md](design/README.md) for the full index.
+
+## Session 3: AI-Driven Design Methodology Retrospective (Mar 9, 2026)
+
+This session captured a retrospective on the full methodology used to drive the transition design with AI. The goal was to document the approach for an internal team presentation.
+
+### The 3-Phase Approach
+
+The design process followed three phases built on top of each other like a pyramid, with a prerequisite workspace setup:
+
+**Prerequisite: Workspace Preparation**
+
+Created a multi-repo Cursor workspace containing etna, denali, supply-integration, fuji, and this transition-design folder. Rationale: current repositories are poorly documented. Knowledge lives in individual developers' heads instead of being accessible. Work is communicated verbally. Having all repos in one workspace lets AI agents cross-reference code across the entire system.
+
+**Phase 1: Current-State Documentation**
+
+Wrote a detailed prompt describing the situation: transition goal, services involved, restrictions (preserve client contracts), available people, expected load, domain knowledge, and pointers to important code locations (necessary because 50+ csprojs make undirected AI exploration wasteful). AI (Claude Opus 4.6) read the actual source code and produced documentation of the current state -- endpoints, contracts, user flows, sequence diagrams (mermaid).
+
+Sub-agent strategy: spawned parallel agents for independent analyses -- one for Denali, one for Etna, one for Etna SI Host, one for Fuji. The orchestrator consolidated their outputs.
+
+Verification approach: manually verified a few documents for correctness and trusted that if those were accurate, the rest would be too.
+
+Outputs: 25 markdown files, 7,386 lines across `current-state/` (13 endpoint docs, 4 cross-cutting, 3 integration analysis), plus context documents (`prompts/context/system-context.md`, `prompts/context/codebase-analysis.md`).
+
+**Phase 2: Design Proposals**
+
+Told AI to propose multiple transition designs. Created separate agent roles (`prompts/design-agents/`) -- one per language/architecture variant (.NET, Go, PHP, TypeScript). Each agent independently produced a detailed design. The designs converged on similar structures, so they were grouped into a decision tree: first question is monolith vs microservice, then language, then framework.
+
+Outputs: `design/alternatives/` (A-monolith + B-microservice with 4 language variants), `design/decision-map.md`.
+
+**Phase 3: Evaluation**
+
+Created evaluation criteria with weighted scoring (14 criteria across high/medium/low weights). Spawned independent analyzer agents (`prompts/analyzer-agents/`) with different perspectives: Team/Velocity, Architecture/Performance, Operations/Infra, Risk/Migration. Each scored every design variant. An orchestrator consolidated scores into a comparison matrix.
+
+Ran 3 rounds with different weight profiles:
+- v1: execution-focused weights -- .NET won
+- v2: balanced weights -- .NET won
+- v3: strategic weights (deliberately favoring PHP) -- Go won, but PHP still came second
+
+Outputs: `design/v1/`, `design/v2/`, `design/v3/` each with evaluation criteria, 4 analysis reports, comparison matrix, and recommendation.
+
+### Error Propagation Across Phases
+
+Each phase builds on the previous one, introducing some error margin. Key observations:
+
+- **Tolerable errors**: Missing a couple of csprojs out of 58, omitting a DTO field -- these don't affect system-level design decisions. Same tolerance a human architect applies.
+- **Amplified errors**: Assuming 12go is an unmodifiable black box -- this incorrect assumption propagated through all Phase 2 designs and was only corrected during the presentation meeting. Not knowing about data team event requirements also changed evaluation priorities.
+- Phase 3 (evaluation) is most sensitive to Phase 1 (current-state) errors because inaccuracies compound through Phase 2.
+
+### Presentation and Feedback Loop
+
+Created a meeting brief (`presentation/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-brief.md`) to present the two key decisions (monolith vs microservice, which language). Meeting revealed new information: F3 breakdown is planned (no timeline), data team needs events for ClickHouse, .NET microservice is still viable. This fed back into documentation -- meeting record, updated decision map, and updated system context.
+
+### Side Effects
+
+The process produced valuable byproducts now used for ongoing work:
+- Current-state documentation that previously didn't exist
+- System context document usable by any new team member or AI agent
+- Decision map covering 15+ design decisions
+- Prompt templates reusable for future design work
+- All documentation now supports the F3 POC implementation of the Search endpoint
+
+### Prompt Log Convention Note
+
+The rule to update prompt logs on each session was not consistently enforced. Some intermediate sessions lack entries.

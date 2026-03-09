@@ -1,7 +1,7 @@
 ---
-status: complete
+
+## status: complete
 last_updated: 2026-03-02
----
 
 # Meeting Record: B2B Transition Architecture Decision
 
@@ -20,12 +20,14 @@ last_updated: 2026-03-02
 
 ## Action Items
 
-| Owner | Action |
-|-------|--------|
-| Soso | Implement **Search** endpoint inside F3 as POC to evaluate friction and complexity |
-| Team Lead / RnD | Review Soso's detailed breakdown and all evaluation revisions |
-| RnD | Send list of event requirements from data side (what must be preserved for ClickHouse) |
-| All | Revisit architecture decision after POC and research review |
+
+| Owner           | Action                                                                                 |
+| --------------- | -------------------------------------------------------------------------------------- |
+| Soso            | Implement **Search** endpoint inside F3 as POC to evaluate friction and complexity     |
+| Team Lead / RnD | Review Soso's detailed breakdown and all evaluation revisions                          |
+| RnD             | Send list of event requirements from data side (what must be preserved for ClickHouse) |
+| All             | Revisit architecture decision after POC and research review                            |
+
 
 **POC scope**: Search was chosen (Soso proposed Search; Team Lead proposed GetItinerary; settled on Search first).
 
@@ -85,3 +87,4 @@ last_updated: 2026-03-02
 - [Meeting Brief](meeting-brief.md)
 - [Transcript](transcript.txt)
 - [Meeting Notes](meeting-notes.txt)
+

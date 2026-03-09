@@ -71,7 +71,7 @@ flowchart LR
 
 ### Target Architectures
 
-**Option A: Monolith** ([full design](../design/alternatives/A-monolith/design.md))
+**Option A: Monolith** ([full design](../../design/alternatives/A-monolith/design.md))
 
 ```mermaid
 flowchart TB
@@ -145,14 +145,14 @@ flowchart TB
 | **Failure isolation**        | A bug in our B2B code can affect the entire monolith                                                                                                                         | Our service fails independently -- 12go core is unaffected                                                                                            |
 | **Adapting to 12go changes** | Implement cross-cutting changes in one place — deploy with monolith                                                                                                          | Must release monolith first, then modify microservice(s) to reflect the changes — two-step process                                                    |
 | **Webhook transformation**   | B2B clients expect different notification shape than 12go provides. Subscribe to internal event in-process, new service lives in same process, call client webhook directly. | Monolith would call our microservice via HTTP; we transform to client shape and deliver — extra network hop and service boundary                      |
-| **Cross-cutting / Ops**     | Automatic tracing (correlation IDs + Datadog APM), client identity propagation (ApiAgent), and versioning (VersionedApiBundle) out of the box — frontend3 already has these. ([Monolith design — Cross-Cutting Concerns](../design/alternatives/A-monolith/design.md#cross-cutting-concerns)) | Must implement tracing, identity propagation, and versioning explicitly.                                                                              |
+| **Cross-cutting / Ops**     | Automatic tracing (correlation IDs + Datadog APM), client identity propagation (ApiAgent), and versioning (VersionedApiBundle) out of the box — frontend3 already has these. ([Monolith design — Cross-Cutting Concerns](../../design/alternatives/A-monolith/design.md#cross-cutting-concerns)) | Must implement tracing, identity propagation, and versioning explicitly.                                                                              |
 
 
 **With a microservice**: 12go's HTTP API is a stable, documented contract. We already call it today. The microservice removes the 6 layers: .NET framework, SI Host, MediatR pipeline (10+ behaviors → 3 relevant), DynamoDB caching, Kafka events (trip lake/data team events eliminated). Search scales separately: the recommended 3-service topology (Search + Booking + Master Data) lets Search — which generates the vast majority of traffic — be deployed and scaled independently; booking failures do not affect search availability.
 
 ### We Evaluated This From 3 Angles
 
-We scored options under three weighting frameworks (execution-focused, balanced, strategic). All three reached the same conclusion on this decision. ([Evaluation criteria](../design/README.md#versioned-evaluations-v1-v2-v3))
+We scored options under three weighting frameworks (execution-focused, balanced, strategic). All three reached the same conclusion on this decision. ([Evaluation criteria](../../design/README.md#versioned-evaluations-v1-v2-v3))
 
 
 | Analysis               | Monolith (A)? | Microservice(s) (B)? |
