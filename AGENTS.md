@@ -138,31 +138,33 @@ last_updated: YYYY-MM-DD
 ## Transition Considerations
 ```
 
-### Design Document Template (Phase 2-3)
+### Design Document Template (Phase 2)
+
+Each file in `design/alternatives/[agent-name]/` must include YAML frontmatter and a `## Security` section (required by all agents -- addresses Key Finding #10: webhook notifications have zero authentication):
 
 ```markdown
 ---
 status: draft
 last_updated: YYYY-MM-DD
-depends_on_questions: [Q1, Q5, Q11]  # from questions/for-12go.md
+agent: [agent name, e.g. pragmatic-minimalist]
 ---
 
-# [Design Topic]
+# [Design Name]
 
-## Problem Statement
-## Options
-### Option A: [Name]
-- Description
-- Pros
-- Cons
-- Estimated effort
-### Option B: [Name]
-- ...
-## Recommendation
+## [Agent-specific framing question]
+## Proposed Design
 ## Architecture Diagram
-## Migration Steps
-## Risks
+## Language and Framework
+## Data Strategy
+## Security
+## Migration Path
+## Unconventional Idea (optional)
+## What This Design Optimizes For (and what it sacrifices)
 ```
+
+**Each agent prompt specifies its own output format** -- the above is a summary baseline only. See `prompts/design-agents/[agent].md` for the complete section list for each agent.
+
+**Exception**: The Clean Slate Designer (`prompts/design-agents/clean-slate-designer.md`) must NOT use Denali/Etna/Fuji source code as design input. It reads only the client-facing API contract and 12go API surface.
 
 ## Prompt Log Convention
 
@@ -229,29 +231,97 @@ When referencing another doc, use relative links:
 - **Output**: `questions/for-12go.md`
 - **Must**: Read every doc's "Open Questions" section, synthesize, prioritize
 
-### Phase 2 Roles (Design - Complete)
+### Phase 2 Roles (Design)
 
-#### Solution Architect
-- **Purpose**: Propose architecture options for the transition
-- **Input**: Read `current-state/overview.md`, `questions/for-12go.md`, and answers from 12go meeting
-- **Output**: `design/v1/recommendation.md`, `design/decision-map.md`, `design/v1/comparison-matrix.md`
-- **Key decisions addressed**:
-  - Integration method (HTTP proxy)
-  - Programming language (.NET 8 Minimal API with AOT)
-  - Stateless approach (no local DynamoDB/PostgreSQL for bookings)
-  - Station ID mapping via S3 snapshot artifacts
-- **Must**: Reference specific current-state docs for each decision.
+Phase 2 uses 5 **perspective-based** design agents. Each starts from fundamentally different first principles. The language/framework choice falls out of the worldview, not the other way around. Prompts are at `prompts/design-agents/`.
 
-#### Migration Planner
-- **Purpose**: Define the step-by-step migration plan with ordering and dependencies
-- **Input**: Read `design/v1/recommendation.md` and all endpoint docs
-- **Output**: `design/migration-strategy.md` with phased migration steps
+#### Pragmatic Minimalist
+- **Prompt**: `prompts/design-agents/pragmatic-minimalist.md`
+- **Perspective**: Legacy migration consultant skeptical of rewrites. Evaluates whether the existing .NET services can be simplified in-place (strangler fig) rather than replaced.
+- **Activates**: Strangler fig pattern, second-system effect, boring technology, incremental migration
+- **Output**: `design/alternatives/pragmatic-minimalist/design.md`
 
-### Phase 3 Roles (Implementation - Ready)
+#### Platform Engineer
+- **Prompt**: `prompts/design-agents/platform-engineer.md`
+- **Perspective**: DevOps engineer who has managed 12go's EC2/Docker/PHP stack. Starts from "who operates this at 3am" and works backward to a design.
+- **Activates**: Docker operational patterns, PHP-FPM, Datadog APM native integrations, runtime footprint
+- **Output**: `design/alternatives/platform-engineer/design.md`
+
+#### Data Flow Architect
+- **Prompt**: `prompts/design-agents/data-flow-architect.md`
+- **Perspective**: Data/event architect who sees every service as a node in a data flow graph. Addresses the Feb 25 finding: sunsetting SI Host loses event correlation for ClickHouse.
+- **Activates**: Kafka producer patterns, ClickHouse ingestion, event-driven design, correlation ID strategy
+- **Output**: `design/alternatives/data-flow-architect/design.md`
+
+#### Team-First Developer
+- **Prompt**: `prompts/design-agents/team-first-developer.md`
+- **Perspective**: Developer experience advocate who starts from the humans (and AI tools) building and maintaining the system.
+- **Activates**: AI code generation quality by language, inner loop development speed, team morale and retention, onboarding cost
+- **Output**: `design/alternatives/team-first-developer/design.md`
+
+#### Disposable Architecture Designer
+- **Prompt**: `prompts/design-agents/disposable-architecture.md`
+- **Perspective**: Architect designing explicitly for replaceability. Given F3 will be decomposed (no timeline), optimizes for maximum value now and minimum cost to throw away later.
+- **Activates**: Anti-corruption layer, hexagonal architecture, ports and adapters, contract testing, feature flags
+- **Output**: `design/alternatives/disposable-architecture/design.md`
+
+#### Clean Slate Designer
+- **Prompt**: `prompts/design-agents/clean-slate-designer.md`
+- **Perspective**: Contract-first architect who ignores the existing implementation entirely. Starts only from the client-facing API contract and the 12go API surface, designs the simplest possible proxy with zero legacy anchoring.
+- **Activates**: API gateway patterns, BFF design, OpenAPI-first tooling, language fitness for HTTP proxy workloads, irreducible complexity analysis
+- **Output**: `design/alternatives/clean-slate-designer/design.md`
+- **Run order**: Wave 1b alongside Disposable Architecture (Cursor supports up to 4 parallel; run this as agent 5 or 6 sequentially if wave is full)
+
+#### Design Synthesizer (Orchestrator)
+- **Purpose**: After all 5 design agents complete, consolidate proposals into an updated decision map
+- **Input**: All 5 design docs + `design/decision-map.md`
+- **Output**: Updated `design/decision-map.md` with new options and recommendations; summary of design convergences and divergences
+
+### Phase 3 Roles (Evaluation)
+
+Phase 3 uses 4 analyzer agents. Each reads all 5 design proposals and scores or analyzes them from a distinct angle. Prompts are at `prompts/analyzer-agents/`. Scoring rubric is at `design/v4/evaluation-criteria.md`.
+
+#### Red Team
+- **Prompt**: `prompts/analyzer-agents/red-team.md`
+- **Does NOT score** -- produces structured failure mode analysis per design
+- **Purpose**: Catch hidden assumptions and fatal flaws before the final recommendation. The "12go is a black box" assumption that distorted v1 is exactly the kind of error this agent finds.
+- **Output**: `design/v4/analysis/red-team.md`
+
+#### Execution Realist
+- **Prompt**: `prompts/analyzer-agents/execution-realist.md`
+- **Scores**: Implementation Effort (x3), Development Velocity (x3), Team Competency Match (x3), Migration Risk (x2)
+- **Purpose**: Anchor evaluation in "can these 3-4 people actually build this in the available time?"
+- **Output**: `design/v4/analysis/execution-realist.md`
+
+#### AI Friendliness
+- **Prompt**: `prompts/analyzer-agents/ai-friendliness.md`
+- **Scores**: AI-Friendliness (x3), Testing Ease (x2), Elegance (x1, partial -- AI navigability lens only; Technical Merit scores Elegance independently)
+- **Purpose**: Evaluate each design on how well it works with Cursor/Claude for initial build, maintenance, debugging, and test generation
+- **Output**: `design/v4/analysis/ai-friendliness.md`
+
+#### Technical Merit
+- **Prompt**: `prompts/analyzer-agents/technical-merit.md`
+- **Scores**: Search Performance (x3), Simplicity (x2), Infrastructure Fit (x2), Elegance (x1, authoritative), Monitoring/Observability (x1), Disposability (x1)
+- **Purpose**: Pure technical evaluation -- architecture quality, latency overhead, resilience, observability, and adapter boundary cleanliness for future replaceability
+- **Output**: `design/v4/analysis/technical-merit.md`
+
+#### Comparison Matrix Synthesizer (Orchestrator)
+- **Purpose**: Consolidate scores from all 3 scoring agents, apply the Red Team findings as a filter, and produce the final weighted comparison matrix and recommendation
+- **Input**: All 4 analysis docs + `design/v4/evaluation-criteria.md`
+- **Note on C10**: Use Technical Merit's Elegance score as the authoritative C10 value. AI Friendliness's C10 sub-score is supplementary context only.
+- **Output**: `design/v4/comparison-matrix.md`, `design/v4/recommendation.md`
+
+### Phase 4 Roles (POC and Implementation)
+
+#### POC Implementation Agent
+- **Purpose**: Implement the Search endpoint inside F3 (frontend3 PHP/Symfony) as a POC to evaluate friction
+- **Input**: Read `design/decision-map.md` (D0 decision), `current-state/endpoints/search.md`, `current-state/integration/12go-api-surface.md`, `runbooks/run-f3-locally.md`
+- **Output**: Code changes in the `frontend3` repository, POC friction report
+- **Must**: Document friction points encountered -- these feed back into the design decision
 
 #### Implementation Agent
-- **Purpose**: Implement the migration for a specific endpoint/service
-- **Input**: Read `design/endpoints/{endpoint}.md` for the detailed design
+- **Purpose**: Implement the migration for a specific endpoint/service after architecture decision is finalized
+- **Input**: Read `design/v4/recommendation.md` and the relevant endpoint doc in `current-state/endpoints/`
 - **Output**: Code changes in the relevant repository
 - **Must**: Follow the design doc, preserve API contracts, add tests, update monitoring
 
@@ -281,3 +351,6 @@ Decisions made during this project, for context in future sessions.
 | 2026-02-25 | Post-meeting: .NET microservice confirmed still an option | RnD clarified in follow-up call; F3 redesign not this quarter |
 | 2026-02-25 | F3 breakdown planned but no timeline | "Beginning of the beginning of planning"; no target language, no milestones; estimated a couple of quarters |
 | 2026-02-25 | Event/data correlation identified as new requirement | B2B-specific events must be preserved or created for ClickHouse; data team to provide requirements |
+| 2026-03-09 | v1 language-based design agents archived; replaced with perspective-based agents | Language axis produced convergent designs; perspective axis (minimalist/infra/data/DX/disposable) activates more diverse LLM knowledge regions |
+| 2026-03-09 | v1 concern-based analyzer agents archived; replaced with Red Team + Execution Realist + AI Friendliness + Technical Merit | Strategic Alignment removed (unknowable), Client Impact made a hard constraint, AI Friendliness elevated to first-class criterion |
+| 2026-03-09 | Evaluation criteria updated to v4 | AI-Friendliness elevated to High weight (x3), Disposability added, Future Extensibility removed, Testing Ease elevated to Medium weight |

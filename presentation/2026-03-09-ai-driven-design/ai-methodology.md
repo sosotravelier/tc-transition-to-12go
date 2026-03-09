@@ -78,7 +78,7 @@ flowchart TD
     end
 
     prereq --> p1
-    p1 -->|"24 docs, 7K+ lines"| p2
+    p1 -->|"25 docs, 7K+ lines"| p2
     p2 -->|"5 designs, decision map"| p3
     p3 -->|"3 rounds, comparison matrix"| R["Scored recommendation"]
 ```
@@ -172,15 +172,16 @@ flowchart LR
 
 **Verification**: Manually spot-checked a few generated documents against actual source code. If those were accurate, the rest was trusted.
 
-**Output**: `current-state/` -- 24 files
+**Output**: 25 markdown files, 7,386 lines
 
 
-| Category             | Count | Examples                                                  |
-| -------------------- | ----- | --------------------------------------------------------- |
-| Endpoint docs        | 13    | search, get-itinerary, create-booking, confirm, seat-lock |
-| Cross-cutting        | 4     | authentication, monitoring, data-storage, messaging       |
-| Integration analysis | 3     | 12go API surface, service layer, caching strategy         |
-| Context docs         | 2     | system-context.md, codebase-analysis.md                   |
+| Category                    | Count | Examples                                                  |
+| --------------------------- | ----- | --------------------------------------------------------- |
+| Endpoint docs                | 13    | search, get-itinerary, create-booking, confirm, seat-lock |
+| Cross-cutting               | 4     | authentication, monitoring, data-storage, messaging       |
+| Integration analysis        | 3     | 12go API surface, service layer, caching strategy         |
+| Context docs                | 2     | system-context.md, codebase-analysis.md                   |
+| Overview + coordination     | 3     | current-state/overview.md, questions/for-12go.md, README  |
 
 
 ### This Step Should Not Have Been Necessary
@@ -209,11 +210,13 @@ Each design agent received the same input -- current-state docs, system context,
 | Go Architect         | Go systems engineer focused on simplicity, performance, and minimal dependencies  |
 | TypeScript Architect | Full-stack architect focused on developer experience and AI-augmented development |
 
+*(v1 agents, language-organized. See below for the updated v4 perspective-based agents.)*
+
 
 ```mermaid
 flowchart LR
     subgraph input2["Input: current-state docs + system context"]
-        CS2["24 docs from Phase 1"]
+        CS2["25 docs from Phase 1"]
     end
 
     subgraph map2["MAP: 4 design agents"]
@@ -241,6 +244,8 @@ flowchart LR
 
 
 **Key insight**: The 4 agents converged on similar structures. The .NET agent proposed a microservice; the PHP agent proposed a monolith. But the core proxy pattern was the same across all. This convergence validated the approach -- and made it natural to group them into a decision tree instead of treating them as 4 separate proposals.
+
+**What this revealed about the "room full of specialists" metaphor**: Organizing agents by *language* is organizing them by the technology shelf -- the same specialists, just asked to answer in different dialects. They all reached for the same proxy architecture because they were all asked the same underlying question. The real diversity comes from asking different *questions* -- from activating different regions of the model's knowledge. This is why, in the updated v4 agent set, agents are organized by *perspective* instead: a migration skeptic, an infrastructure engineer, a data architect, a developer experience advocate, a replaceability designer, and a clean-slate architect. Each starts from a different first question, which activates a different cluster of patterns and trade-offs. The language choice then falls out of the worldview rather than being baked in.
 
 **Decision Map structure**:
 
@@ -373,6 +378,8 @@ flowchart TD
     PRES --> NEW["New context surfaces"]
     NEW --> UPD["Update docs / system context"]
     UPD --> NEXT["Next decision / POC"]
+    UPD -->|"done: context updated"| P1
+    NEXT -.->|"future: re-run designs"| P2
 ```
 
 **What the meeting revealed**:
@@ -382,7 +389,7 @@ flowchart TD
 - .NET microservice was not ruled out -- decision deferred, not rejected
 - 12go is not a black box -- the assumption that shaped all designs was wrong
 
-**Where the loop stands now**: System context and current-state docs were updated after the meeting. Phase 2 designs have not been re-generated yet -- that would happen once the POC is complete and the architecture decision is revisited.
+**Where the loop stands now**: System context and current-state docs were updated after the meeting. The v1 design and analyzer agents have been replaced with a v4 set organized by perspective rather than language (see insight above). Phase 2 has not been re-run yet -- that would happen once the POC is complete and the architecture decision is revisited. When it does, the new agents will produce more diverse proposals: a migration skeptic who evaluates whether a rewrite is even necessary, an infrastructure engineer who starts from "who operates this at 3am," a data architect who audits what events would be lost, a DX advocate who starts from the team's lived experience, a replaceability designer who treats F3's decomposition as a given, and a clean-slate architect who ignores the existing implementation entirely.
 
 **Result**: Decision deferred. POC requested: implement Search endpoint inside F3 to evaluate friction. The full documentation produced by this process is being used to implement that POC.
 
@@ -399,7 +406,7 @@ Before this process, a developer asking "how does the booking flow work?" had to
 
 Both are valid. The sidecar approach has the advantage that documentation lives close to the code and can be versioned with it. The trade-off is that it requires a team agreement to actually use it.
 
-- **24 current-state docs** (13 endpoints, 4 cross-cutting, 3 integration analyses) -- now used directly for F3 POC implementation
+- **25 docs** (13 endpoints, 4 cross-cutting, 3 integration analyses, 2 context docs, 3 coordination) -- now used directly for F3 POC implementation
 - **System context document** -- onboarding material for new developers and AI agents, capturing domain knowledge that previously lived only in people's heads
 - **Decision map** -- 15+ decisions with options and trade-offs, ready for any future re-evaluation
 - **Reusable prompt templates** -- design agents, analyzer agents, evaluation criteria -- can be applied to any future design task
