@@ -190,17 +190,15 @@ flowchart LR
 
 In a healthy environment, Phase 1 wouldn't exist as a one-time catch-up effort. Documentation of what a system does -- its contracts, flows, and trade-offs -- should accumulate continuously as the system is built. Product, QA, architects, and developers all contribute. Not just for humans to read, but so that AI agents can use it as a reliable starting point instead of having to reverse-engineer knowledge from source code.
 
-This documentation effort was done here from scratch because it didn't exist. Months earlier, similar AI-first documentation was built for the `supply-integration` repository -- and because that repo already had it, AI could digest its code far more easily during this transition work. The contrast is telling: when documentation exists, AI just uses it. When it doesn't, you spend a full phase creating it before any real work can begin.
+This documentation effort was done here from scratch because the documentation was not discoverable. Not "it didn't exist" in the literal sense -- there may be pages scattered across Notion or Confluence -- but if nobody can find them, and they are not actively enforced and maintained, they are as good as non-existent in practice. Months earlier, similar AI-first documentation was built for the `supply-integration` repository -- and because that repo already had it, AI could digest its code far more easily during this transition work. The contrast is telling: when documentation exists *and is discoverable*, AI just uses it. When it doesn't, you spend a full phase creating it before any real work can begin.
 
-**The cost of undocumented systems is rising.** When knowledge lives in developers' heads and decisions happen verbally, not only does onboarding new people take longer -- AI-assisted development is also degraded. An AI agent working from code alone will miss context that a well-maintained doc would have made explicit in seconds. The Phase 1 work is technical debt, accumulated from not writing down what you know as you build.
+**The cost of undiscoverable systems is rising.** When knowledge lives in developers' heads and decisions happen verbally, not only does onboarding new people take longer -- AI-assisted development is also degraded. An AI agent working from code alone will miss context that a well-maintained doc would have made explicit in seconds. The Phase 1 work is technical debt, accumulated from not writing down what you know as you build -- or from writing it down somewhere nobody looks.
 
 ---
 
 ## Phase 2: Propose Designs
 
-**Goal**: Generate multiple architecture proposals independently, then group them into a decision tree.
-
-**Divide and conquer.** Instead of asking one agent "design the whole transition," the problem was broken into a tree of smaller decisions. First: monolith or microservice? If microservice: which language? If that language: which framework? Each sub-problem can be evaluated independently, and the decision map captures all of them.
+**Goal**: Generate multiple architecture proposals independently.
 
 Each design agent received the same input -- current-state docs, system context, constraints (preserve 13 endpoints, <10K LOC, no DynamoDB) -- but a different persona:
 
@@ -245,11 +243,9 @@ flowchart LR
 
 
 
-**Key insight**: The 4 agents converged on similar structures. The .NET agent proposed a microservice; the PHP agent proposed a monolith. But the core proxy pattern was the same across all. This convergence validated the approach -- and made it natural to group them into a decision tree instead of treating them as 4 separate proposals.
+**Key insight**: The 4 agents converged on similar structures. The .NET agent proposed a microservice; the PHP agent proposed a monolith. But the core proxy pattern was the same across all. This convergence made it natural to group the proposals into a decision tree after the fact -- not as a pre-planned structure, but as a way to make sense of what the agents produced.
 
-**What this revealed about the "room full of specialists" metaphor**: Organizing agents by *language* is organizing them by the technology shelf -- the same specialists, just asked to answer in different dialects. They all reached for the same proxy architecture because they were all asked the same underlying question. The real diversity comes from asking different *questions* -- from activating different regions of the model's knowledge. This is why, in the updated v4 agent set, agents are organized by *perspective* instead: a migration skeptic, an infrastructure engineer, a data architect, a developer experience advocate, a replaceability designer, and a clean-slate architect. Each starts from a different first question, which activates a different cluster of patterns and trade-offs. The language choice then falls out of the worldview rather than being baked in.
-
-**Decision Map structure**:
+**Decision tree (constructed after convergence)**. The agents weren't asked to answer a tree of sub-decisions. They were each asked "design the whole transition." But because their outputs overlapped so heavily, the differences could be organized as branching points: monolith or microservice? If microservice: which language? If that language: which framework?
 
 ```mermaid
 flowchart LR
@@ -262,6 +258,8 @@ flowchart LR
     D2 --> L4["TypeScript"]
     D2 --> D3["Which framework?"]
 ```
+
+**What this revealed about the "room full of specialists" metaphor**: Organizing agents by *language* is organizing them by the technology shelf -- the same specialists, just asked to answer in different dialects. They all reached for the same proxy architecture because they were all asked the same underlying question. The real diversity comes from asking different *questions* -- from activating different regions of the model's knowledge. This is why, in the updated v4 agent set, agents are organized by *perspective* instead: a migration skeptic, an infrastructure engineer, a data architect, a developer experience advocate, a replaceability designer, and a clean-slate architect. Each starts from a different first question, which activates a different cluster of patterns and trade-offs. The language choice then falls out of the worldview rather than being baked in.
 
 
 
@@ -401,7 +399,7 @@ flowchart TD
 
 The primary goal was a scored recommendation. The process also produced artifacts that are independently valuable.
 
-Before this process, a developer asking "how does the booking flow work?" had to read source code across 3 repositories. Now there is a document with a sequence diagram. But this only helps if the documentation is discoverable. A repo that only the author knows about is not much better than no docs. Two options:
+Before this process, a developer asking "how does the booking flow work?" had to read source code across 3 repositories. Now there is a document with a sequence diagram. **But this only helps if the documentation is discoverable.** A repo that only the author knows about is not much better than no docs. Two options:
 
 - **Push to where people already look** -- publish key docs to Confluence or Notion so they surface in existing searches
 - **Adopt the sidecar repo as a convention** -- agree as a team that `transition-design` is the authoritative knowledge base for this module, and that developers working on it open it alongside the source repos (the way it's set up in this workspace)
@@ -409,6 +407,7 @@ Before this process, a developer asking "how does the booking flow work?" had to
 Both are valid. The sidecar approach has the advantage that documentation lives close to the code and can be versioned with it. The trade-off is that it requires a team agreement to actually use it.
 
 - **25 docs** (13 endpoints, 4 cross-cutting, 3 integration analyses, 2 context docs, 3 coordination) -- now used directly for F3 POC implementation
+- **Technical spec generation** -- the current-state docs made it possible to generate a technical specification for [ST-2432](https://one2go.atlassian.net/browse/ST-2432) (B2B search POC) without much effort; the structured documentation fed directly into the spec
 - **System context document** -- onboarding material for new developers and AI agents, capturing domain knowledge that previously lived only in people's heads
 - **Decision map** -- 15+ decisions with options and trade-offs, ready for any future re-evaluation
 - **Reusable prompt templates** -- design agents, analyzer agents, evaluation criteria -- can be applied to any future design task
