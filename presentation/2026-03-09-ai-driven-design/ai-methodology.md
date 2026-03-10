@@ -88,12 +88,12 @@ flowchart TD
 
 
 
-| Phase                | Input                      | Agents                           | Output                                                           |
-| -------------------- | -------------------------- | -------------------------------- | ---------------------------------------------------------------- |
-| **Prerequisite**     | Raw repos                  | --                               | Workspace, `AGENTS.md`, context prompts                          |
-| **1. Current-State** | Big prompt + code pointers | 4+ documenter agents             | 25 markdown files (13 endpoints, 4 cross-cutting, 3 integration) |
-| **2. Design**        | Current-state docs         | 4 design agents (1 per language) | Monolith design + 4 microservice variants, decision map          |
-| **3. Evaluation**    | Design docs + criteria     | 4 analyzer agents x 3 rounds     | 12 analysis reports, 3 comparison matrices, recommendation       |
+| Phase                | Input                      | Agents                               | Output                                                           |
+| -------------------- | -------------------------- | ------------------------------------ | ---------------------------------------------------------------- |
+| **Prerequisite**     | Raw repos                  | --                                   | Workspace, `AGENTS.md`, context prompts                          |
+| **1. Current-State** | Big prompt + code pointers | 4+ documenter agents                 | 25 markdown files (13 endpoints, 4 cross-cutting, 3 integration) |
+| **2. Design**        | Current-state docs         | 4 design agents (v1: 1 per language) | Monolith design + 4 microservice variants, decision map          |
+| **3. Evaluation**    | Design docs + criteria     | 4 analyzer agents (v1) x 3 rounds    | 12 analysis reports, 3 comparison matrices, recommendation       |
 
 
 ---
@@ -177,13 +177,13 @@ flowchart LR
 **Output**: 25 markdown files, 7,386 lines
 
 
-| Category                    | Count | Examples                                                  |
-| --------------------------- | ----- | --------------------------------------------------------- |
-| Endpoint docs                | 13    | search, get-itinerary, create-booking, confirm, seat-lock |
-| Cross-cutting               | 4     | authentication, monitoring, data-storage, messaging       |
-| Integration analysis        | 3     | 12go API surface, service layer, caching strategy         |
-| Context docs                | 2     | system-context.md, codebase-analysis.md                   |
-| Overview + coordination     | 3     | current-state/overview.md, questions/for-12go.md, README  |
+| Category                | Count | Examples                                                  |
+| ----------------------- | ----- | --------------------------------------------------------- |
+| Endpoint docs           | 13    | search, get-itinerary, create-booking, confirm, seat-lock |
+| Cross-cutting           | 4     | authentication, monitoring, data-storage, messaging       |
+| Integration analysis    | 3     | 12go API surface, service layer, caching strategy         |
+| Context docs            | 2     | system-context.md, codebase-analysis.md                   |
+| Overview + coordination | 3     | current-state/overview.md, questions/for-12go.md, README  |
 
 
 ### This Step Should Not Have Been Necessary
@@ -200,7 +200,9 @@ This documentation effort was done here from scratch because the documentation w
 
 **Goal**: Generate multiple architecture proposals independently.
 
-Each design agent received the same input -- current-state docs, system context, constraints (preserve 13 endpoints, <10K LOC, no DynamoDB) -- but a different persona:
+Each design agent received the same input -- current-state docs, system context, constraints (preserve 13 endpoints, <10K LOC, no DynamoDB) -- but a different persona.
+
+**These are the v1 agents that actually ran.** They were organized by language. This was a deliberate choice -- and a *flawed* one, as explained below.
 
 
 | Agent                | Persona                                                                           |
@@ -209,8 +211,6 @@ Each design agent received the same input -- current-state docs, system context,
 | PHP Architect        | Symfony expert focused on monolith-first pragmatism and infrastructure alignment  |
 | Go Architect         | Go systems engineer focused on simplicity, performance, and minimal dependencies  |
 | TypeScript Architect | Full-stack architect focused on developer experience and AI-augmented development |
-
-*(v1 agents, language-organized. See below for the updated v4 perspective-based agents.)*
 
 
 ```mermaid
@@ -254,14 +254,13 @@ flowchart LR
     D1 -->|Microservice| D2["Which language?"]
     D2 --> L1[".NET"]
     D2 --> L2["Go"]
-    D2 --> L3["PHP"]
+    D2 --> L3["PHP standalone"]
     D2 --> L4["TypeScript"]
-    D2 --> D3["Which framework?"]
 ```
 
-**What this revealed about the "room full of specialists" metaphor**: Organizing agents by *language* is organizing them by the technology shelf -- the same specialists, just asked to answer in different dialects. They all reached for the same proxy architecture because they were all asked the same underlying question. The real diversity comes from asking different *questions* -- from activating different regions of the model's knowledge. This is why, in the updated v4 agent set, agents are organized by *perspective* instead: a migration skeptic, an infrastructure engineer, a data architect, a developer experience advocate, a replaceability designer, and a clean-slate architect. Each starts from a different first question, which activates a different cluster of patterns and trade-offs. The language choice then falls out of the worldview rather than being baked in.
 
 
+**What this revealed about the "room full of specialists" metaphor**: Organizing agents by *language* is organizing them by the technology shelf -- the same specialists, just asked to answer in different dialects. They all reached for the same proxy architecture because they were all asked the same underlying question. The real diversity comes from asking different *questions* -- from activating different regions of the model's knowledge. The language choice should fall out of the worldview rather than being baked in. This insight drove the redesign of the agent set for the next iteration (see below).
 
 ---
 
@@ -276,7 +275,7 @@ flowchart LR
         CRIT["14 weighted criteria"]
     end
 
-    subgraph map3["MAP: 4 analyzer agents"]
+    subgraph map3["MAP: 4 analyzer agents (v1)"]
         TV["Team / Velocity"]
         AP["Architecture / Performance"]
         OI["Operations / Infra"]
@@ -300,7 +299,7 @@ flowchart LR
 
 
 
-**The 3 evaluation rounds**: After the first run, the weights felt wrong -- too execution-focused. Criteria were revised and the full pipeline was re-run. A third version deliberately boosted weights to favor PHP/monolith, stress-testing whether the recommendation was robust.
+**The 3 evaluation rounds (sensitivity analysis)**: A scored recommendation is only useful if it's stable under reasonable changes to the weights. After the first run, the weights felt wrong -- too execution-focused. Criteria were revised and the full pipeline was re-run. A third version deliberately boosted weights to favor PHP/monolith, stress-testing whether the recommendation was robust. If the winner had flipped under v3 weights, the recommendation would have been "it depends on what you value" rather than a clear pick.
 
 ```mermaid
 flowchart TD
@@ -351,13 +350,13 @@ flowchart TD
 
 
 
-| Error Type    | Example                                   | Impact                                                                                                          |
-| ------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Absorbed**  | Reported 56 csprojs, actually 58          | Zero impact on architecture decisions                                                                           |
-| **Absorbed**  | Missing one field in booking DTO doc      | Design pattern is the same either way                                                                           |
-| **Absorbed**  | Incomplete description of caching layers  | Design eliminates all caches anyway                                                                             |
-| **AMPLIFIED** | Assumed 12go is an unmodifiable black box | All designs treated F3 as external-only. Meeting revealed F3 can be modified -- changed the entire option space |
-| **AMPLIFIED** | Event requirements were unknown           | Sunsetting .NET services would drop events the data team may still depend on -- not surfaced until the meeting  |
+| Error Type    | Example                                   | Impact                                                                                                                                                                                                                           |
+| ------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Absorbed**  | Reported 56 csprojs, actually 58          | Zero impact on architecture decisions                                                                                                                                                                                            |
+| **Absorbed**  | Missing one field in booking DTO doc      | Design pattern is the same either way                                                                                                                                                                                            |
+| **Absorbed**  | Incomplete description of caching layers  | Design eliminates all caches anyway                                                                                                                                                                                              |
+| **AMPLIFIED** | Assumed 12go is an unmodifiable black box | All designs treated F3 as external-only. Meeting revealed F3 can be modified -- changed the entire option space                                                                                                                  |
+| **AMPLIFIED** | Event requirements were unknown           | Sunsetting .NET services would drop events the data team may still depend on -- not surfaced until the meeting                                                                                                                   |
 | **Caught**    | Arithmetic errors in comparison matrix    | AI summed weighted scores incorrectly in Phase 3. Required manual intervention to verify and correct the totals. Score rankings were right, but the exact numbers were off -- a reminder that numerical reasoning is a weak spot |
 
 
@@ -382,6 +381,8 @@ flowchart TD
     NEXT -.->|"future: re-run designs"| P2
 ```
 
+
+
 **What the meeting revealed**:
 
 - F3 breakdown is planned (no timeline) -- code written inside F3 today may require a second migration
@@ -389,15 +390,71 @@ flowchart TD
 - .NET microservice was not ruled out -- decision deferred, not rejected
 - 12go is not a black box -- the assumption that shaped all designs was wrong
 
-**Where the loop stands now**: System context and current-state docs were updated after the meeting. The v1 design and analyzer agents have been replaced with a v4 set organized by perspective rather than language (see insight above). Phase 2 has not been re-run yet -- that would happen once the POC is complete and the architecture decision is revisited. When it does, the new agents will produce more diverse proposals: a migration skeptic who evaluates whether a rewrite is even necessary, an infrastructure engineer who starts from "who operates this at 3am," a data architect who audits what events would be lost, a DX advocate who starts from the team's lived experience, a replaceability designer who treats F3's decomposition as a given, and a clean-slate architect who ignores the existing implementation entirely.
+**Where the loop stands now**: System context and current-state docs were updated after the meeting. Phase 2 has not been re-run yet -- that would happen once the POC is complete and the architecture decision is revisited.
 
 **Result**: Decision deferred. POC requested: implement Search endpoint inside F3 to evaluate friction. The full documentation produced by this process is being used to implement that POC.
+
+---
+
+## Next Iteration: Perspective-Based Agents
+
+The v1 language-based agents (Phase 2) and concern-based analyzers (Phase 3) taught us what works and what doesn't. The v4 agents are designed to address the convergence problem and the gaps surfaced by the meeting. They have not run yet -- they are queued for when the POC completes and the architecture decision is revisited.
+
+### v4 Design Agents
+
+The key change: agents are organized by *perspective*, not by language. Each starts from a different first question, which activates a different cluster of patterns in the model. The language/framework choice falls out of the worldview rather than being baked in.
+
+
+| Agent                   | Perspective                                                     | First Question                                                          |
+| ----------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Pragmatic Minimalist    | Migration skeptic who has watched rewrites fail                 | "Does solving this actually require a rewrite?"                         |
+| Platform Engineer       | DevOps engineer who operates 12go's infrastructure              | "Who debugs this at 3am when the on-call only knows PHP?"               |
+| Data Flow Architect     | Event/data architect who sees services as nodes in a data graph | "When we sunset .NET services, what events disappear?"                  |
+| Team-First Developer    | DX advocate who starts from the humans building the system      | "Will this team still want to work here in 6 months?"                   |
+| Disposable Architecture | Architect designing explicitly for replaceability               | "When F3 is decomposed, how painless is replacing what we built?"       |
+| Clean Slate Designer    | Contract-first architect with zero legacy anchoring             | "If I were building this from two API specs today, what would I build?" |
+
+
+Why this should produce better results:
+
+- **The Pragmatic Minimalist** directly addresses the meeting feedback: maybe a full rewrite isn't necessary. The v1 agents all assumed a rewrite was the answer.
+- **The Data Flow Architect** addresses the event correlation gap that wasn't surfaced until the meeting. No v1 agent audited what events would be lost.
+- **The Platform Engineer** grounds the design in operational reality -- something the v1 language-based agents largely ignored.
+- **The Clean Slate Designer** is deliberately isolated from the existing implementation, providing a "what if we started fresh?" baseline that the other agents can be compared against.
+
+### v4 Analyzer Agents
+
+The v1 analyzers were organized by concern (Team/Velocity, Architecture/Performance, Operations/Infra, Risk/Migration). The v4 set adds a Red Team agent and rebalances scoring around what we learned matters most.
+
+
+| Agent             | Role                                                          | Scores?                                                           |
+| ----------------- | ------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Red Team          | Finds hidden assumptions and fatal flaws in each design       | No -- produces failure mode analysis                              |
+| Execution Realist | "Can these 3-4 people actually build this?"                   | Yes -- effort, velocity, competency match, migration risk         |
+| AI Friendliness   | Evaluates how well each design works with Cursor/Claude       | Yes -- AI code generation quality, testing, navigability          |
+| Technical Merit   | Pure architecture quality, latency, resilience, observability | Yes -- performance, simplicity, infrastructure fit, disposability |
+
+
+The Red Team agent is the most important addition. The "12go is a black box" assumption that distorted the v1 designs is exactly the kind of error a Red Team would catch: a structural assumption treated as fact that no one challenged.
+
+AI Friendliness is elevated to a first-class criterion. Given the team's heavy use of AI coding tools, how well a codebase works with Cursor/Claude is a real productivity factor, not a novelty.
 
 ---
 
 ## Side Effects: What We Got For Free
 
 The primary goal was a scored recommendation. The process also produced artifacts that are independently valuable.
+
+### Artifacts
+
+- **25 docs** (13 endpoints, 4 cross-cutting, 3 integration analyses, 2 context docs, 3 coordination) -- now used directly for F3 POC implementation
+- **Technical spec generation** -- the current-state docs made it possible to generate a technical specification for [ST-2432](https://one2go.atlassian.net/browse/ST-2432) (B2B search POC) without much effort; the structured documentation fed directly into the spec
+- **System context document** -- onboarding material for new developers and AI agents, capturing domain knowledge that previously lived only in people's heads
+- **Decision map** -- 15+ decisions with options and trade-offs, ready for any future re-evaluation
+- **Reusable prompt templates** -- design agents, analyzer agents, evaluation criteria -- can be applied to any future design task
+- **Meeting-ready presentation** -- diagrams and scored comparison tables, ready to present without additional preparation
+
+### The Discoverability Problem
 
 Before this process, a developer asking "how does the booking flow work?" had to read source code across 3 repositories. Now there is a document with a sequence diagram. **But this only helps if the documentation is discoverable.** A repo that only the author knows about is not much better than no docs. Two options:
 
@@ -406,12 +463,13 @@ Before this process, a developer asking "how does the booking flow work?" had to
 
 Both are valid. The sidecar approach has the advantage that documentation lives close to the code and can be versioned with it. The trade-off is that it requires a team agreement to actually use it.
 
-- **25 docs** (13 endpoints, 4 cross-cutting, 3 integration analyses, 2 context docs, 3 coordination) -- now used directly for F3 POC implementation
-- **Technical spec generation** -- the current-state docs made it possible to generate a technical specification for [ST-2432](https://one2go.atlassian.net/browse/ST-2432) (B2B search POC) without much effort; the structured documentation fed directly into the spec
-- **System context document** -- onboarding material for new developers and AI agents, capturing domain knowledge that previously lived only in people's heads
-- **Decision map** -- 15+ decisions with options and trade-offs, ready for any future re-evaluation
-- **Reusable prompt templates** -- design agents, analyzer agents, evaluation criteria -- can be applied to any future design task
-- **Meeting-ready presentation** -- diagrams and scored comparison tables, ready to present without additional preparation
+---
+
+## What I'd Do Differently
+
+1. **Validate structural assumptions with stakeholders before Phase 2, not after Phase 3.** The "12go is a black box" assumption distorted every design and every evaluation score. A 30-minute conversation before launching the design agents would have caught this. The lesson: AI can explore a codebase, but it cannot know what the organization has decided unless you tell it.
+2. **Use perspective-based agents from the start.** Organizing by language felt like the obvious axis, but it produced the same proxy architecture in four dialects. The v4 perspective-based agents were designed in response to this -- the cost was one wasted iteration.
+3. **Verify AI arithmetic.** The comparison matrix scores were wrong. The rankings were correct, but the exact totals were off because LLMs are unreliable at multi-step arithmetic. In the next iteration, I would either export scores to a spreadsheet for calculation or have the AI generate the formula and a human verify the output.
 
 ---
 
@@ -422,5 +480,4 @@ This presentation shows one approach to one task. It does not hand you a ready-m
 - **Each developer is responsible for adapting these patterns to their own daily work.** The map-reduce pattern, the phased approach, the prompt templates -- these are tools. Whether and how you use them is up to you.
 - **We still need to decide where documentation and rules live.** Right now, context docs sit in `transition-design/`, agent rules sit in `supply-integration/rules/`, and nothing is in Confluence. We need a team decision on where shared knowledge should accumulate so that both humans and AI can find it.
 - **AI can bridge our existing tools.** I use MCP (Model Context Protocol) integrations with Jira, Confluence, and Notion -- meaning the AI agent can read from and write to those systems directly. For example, it can create Jira tickets from a design doc, publish documentation to Confluence, or query Notion for context. This is not set up for the team yet, but it's available.
-
 
