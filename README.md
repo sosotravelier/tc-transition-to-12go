@@ -4,6 +4,13 @@
 
 Design documentation for migrating from the current multi-service architecture (Denali, Etna, Fuji, Supply-Integration) to 12go as the core system while preserving all client-facing API contracts.
 
+## Project Tracking
+
+Live execution progress, sprint status, and gaps are tracked in Notion:
+**[Transfer TC functionality into 12Go's system](https://www.notion.so/bookaway/Transfer-TC-functionality-into-12Go-s-system-3053459fb0c681938b4dd6591341e42d)**
+
+---
+
 ## Timeline
 
 | Day | Milestone | Status |

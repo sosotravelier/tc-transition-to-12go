@@ -9,6 +9,8 @@
 3. Read [current-state/overview.md](current-state/overview.md) for architecture diagrams and endpoint-to-12go mapping
 4. Read the specific docs relevant to your task (linked below)
 
+**Live project tracking** (sprint status, gaps, next steps): [Notion page](https://www.notion.so/bookaway/Transfer-TC-functionality-into-12Go-s-system-3053459fb0c681938b4dd6591341e42d)
+
 ## Project Context
 
 We are transitioning from a multi-service .NET architecture to using 12go (PHP/Symfony) as the core system. Existing clients depend on our API contracts which are vastly different from 12go's APIs. We must maintain backward compatibility.
