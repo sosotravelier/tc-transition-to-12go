@@ -5,7 +5,7 @@ last_updated: 2026-03-10
 
 # Migration Issue: Recheck Mechanism
 
-The 12go platform does not serve fully live supplier availability from its search API. Instead, many trips in `trip_pool` carry stale or unvalidated availability data. When a search is performed, 12go returns an array of recheck URLs alongside the trip results. These URLs must be called — asynchronously, after the search response has been delivered — to trigger per-integration live supplier checks that write fresh availability back into `trip_pool`. If these URLs are not called, any trip whose price is not yet confirmed carries `priceIsValid = false` (rendered as `"approximate": true` to API consumers) and will continue to do so on every subsequent search. The current .NET system handles this through `OneTwoGoRecheckManager`, which fires HTTP GET requests to each recheck URL inside unobserved `Task.Run` tasks. The migration to a PHP/Symfony host inside F3 (frontend3) eliminates this mechanism entirely: the POC B2B Search controller (`B2bApi/Controller/SearchController.php`) calls `searchWithRecheckUrls()` and reads back the resulting recheck URL list, but it does not call any of those URLs and has no background task mechanism to do so. Without the fire-and-forget calls, suppliers are never consulted, `trip_pool` is never refreshed, and the search result set will perpetually include trips with unconfirmed availability.
+The 12go platform does not serve fully live supplier availability from its search API. Instead, many trips in `trip_pool` carry stale or unvalidated availability data. When a search is performed, 12go returns an array of recheck URLs alongside the trip results. These URLs must be called — asynchronously, after the search response has been delivered — to trigger per-integration live supplier checks that write fresh availability back into `trip_pool`. If these URLs are not called, any trip whose price is not yet confirmed carries `priceIsValid = false` (rendered as `"approximate": true` to API consumers) and will continue to do so on every subsequent search. The current .NET system handles this through `OneTwoGoRecheckManager`, which fires HTTP GET requests to each recheck URL inside unobserved `Task.Run` tasks. The current work-in-progress PoC B2B Search controller (`B2bApi/Controller/SearchController.php`) calls `searchWithRecheckUrls()` and reads back the resulting recheck URL list, but does not yet call any of those URLs. This is a known limitation of the throwaway PoC code, not a gap in the migration design — recheck invocation must be implemented before the B2B Search endpoint can be considered production-ready.
 
 ---
 
@@ -101,6 +101,8 @@ There is no error handling in `OneTwoGoRecheckManager.DoRechecksIfNeeded()`. Fai
 
 ## Impact of missing rechecks
 
+> The scenarios below describe what **would** happen if rechecks are not implemented in the final migration — they are documented to inform the design, not to characterize the current PoC (which is known to be incomplete).
+
 ### trip_pool stays stale
 
 When recheck URLs are not called, `IntegrationProxy::getTripsList()` is never invoked for the trips in question. The `trip_pool` rows for those trips retain their existing price and seat data, with `priceIsValid = false`. On subsequent searches against the same route and date, the same trips appear with `"approximate": true`.
@@ -120,6 +122,8 @@ In addition to trips already in `trip_pool`, the F3 search pipeline can emit "sc
 ---
 
 ## POC limitation note
+
+> **Important context:** The B2B Search controller at `/Users/sosotughushi/RiderProjects/12go/docker-local-env/frontend3/src/B2bApi/Controller/SearchController.php` is a **work-in-progress proof of concept** — temporary, exploratory code that is known to be incomplete. The gaps described below (missing recheck invocation, infinite 206 loops, stale trip_pool) reflect the current state of this throwaway PoC, **not** a design flaw in the migration approach. No architectural conclusions should be drawn from its implementation.
 
 The POC plan (`/Users/sosotughushi/RiderProjects/transition-design/design/poc-plan.md`) identifies the recheck flow as an explicit open question. Under section "What to Observe", item 7 reads:
 

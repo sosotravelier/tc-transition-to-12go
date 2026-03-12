@@ -63,11 +63,7 @@ The `Connect.Infra.Observability` package is not in these local repos; its inter
 
 Signals are exported via OTLP to `otel-collector-service`. The downstream backend(s) receiving these signals (Grafana, Coralogix, or another) are not visible in any config file in these repos — they are presumably configured outside the application code (at the collector or infrastructure level). This must be clarified with the team member who owns the monitoring infrastructure.
 
-Additionally, NLog is used as the local logging framework. NLog config files are present in:
-- [api/Denali.Booking.Api/nlog.config](https://github.com/boost-platform/denali/blob/main/api/Denali.Booking.Api/nlog.config)
-- [booking-service/host/BookingService.Api/nlog.config](https://github.com/boost-platform/denali/blob/main/booking-service/host/BookingService.Api/nlog.config)
-
-Both output JSON to file and console, routing all `Trace`-level and above application logs while suppressing noisy Microsoft framework logs.
+NLog config files are present in denali ([api/Denali.Booking.Api/nlog.config](https://github.com/boost-platform/denali/blob/main/api/Denali.Booking.Api/nlog.config), [booking-service/host/BookingService.Api/nlog.config](https://github.com/boost-platform/denali/blob/main/booking-service/host/BookingService.Api/nlog.config)), but NLog is **not actively initialized** in denali's startup code — these appear to be leftover references. NLog is actively used only in a subset of **etna** services (Lambda functions and background jobs such as the mapper lambdas and DataSynchronizer). All other .NET services use .NET's default logging (`Microsoft.Extensions.Logging`) with log export handled by the `Connect.Infra.Observability` SDK via OTLP.
 
 Kafka producers in denali use `WithContextPropagation()` and `WithObservability()` (via the Connect SDK):
 - [api/Denali.Booking.Api/StartupHelperExtensions.cs](https://github.com/boost-platform/denali/blob/main/api/Denali.Booking.Api/StartupHelperExtensions.cs) lines 92–93
@@ -302,8 +298,8 @@ DogStatsD tags are added globally per-request via `DataDogStatsD::addTag()`. The
 
 ### .NET services
 
-- **Framework:** NLog via `NLog.Extensions.Logging`, shipping structured JSON to file and console.
-- **NLog config:** `/denali/api/Denali.Booking.Api/nlog.config`, `/denali/booking-service/host/BookingService.Api/nlog.config` — identical config, JSON layout with `time`, `level`, `method`, `message` attributes; `includeAllProperties=true` (captures structured log scopes).
+- **Framework:** .NET's default logging (`Microsoft.Extensions.Logging`), with OTLP export configured by the `Connect.Infra.Observability` SDK. NLog is **not** the default — it is only actively used in a subset of etna services (Lambda functions and background jobs). Denali and supply-integration have NLog package references but do not initialize it in their startup code.
+- **NLog config (denali, inactive):** `/denali/api/Denali.Booking.Api/nlog.config`, `/denali/booking-service/host/BookingService.Api/nlog.config` — JSON layout with `time`, `level`, `method`, `message` attributes; `includeAllProperties=true`. These config files exist but NLog is not wired up at startup.
 - **Structured log source generators:** Every service has `[LoggerMessage]`-attributed static partial methods generating compile-time log calls. Examples:
   - `HttpResponseLoggerMiddlewareLoggingExtensions.LogResponseContent` — [booking-service/host/BookingService.Api/Middlewares/HttpResponseLoggerMiddleware.cs](https://github.com/boost-platform/denali/blob/main/booking-service/host/BookingService.Api/Middlewares/HttpResponseLoggerMiddleware.cs) line 42
   - `BookingIdMiddlewareLoggingExtensions.LogBookingIdAdded` — [shared/Denali.Common/Utils/BookingIdMiddleware.cs](https://github.com/boost-platform/denali/blob/main/shared/Denali.Common/Utils/BookingIdMiddleware.cs) line 37
@@ -357,7 +353,7 @@ This is a collaboration requirement. It cannot be resolved from code alone.
 1. What is the backend receiving OTLP signals from `otel-collector-service`? (Grafana Cloud, Coralogix, Datadog, or another tool?)
 2. Which dashboards and alerts currently depend on the `connect.*` Meter names and trace tags (`BookingId`, `IntegrationId`, `connect.client.id`, `connect.integration.id`, `contract_code`)?
 3. Are there SLO/SLA alert thresholds built on booking funnel metrics (reservation success rate, confirmation timeout rate, ticket creation failure rate)?
-4. What log-based queries or alerts depend on NLog's structured property output from the .NET services?
+4. What log-based queries or alerts depend on the structured log output from the .NET services?
 5. How is the `x-request-id` header used downstream for trace correlation between services?
 
 **From the 12go team (engineering/ops):**
