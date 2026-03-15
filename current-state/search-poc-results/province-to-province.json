@@ -1,0 +1,758 @@
+{
+    "vehicles": [
+        {
+            "id": "16779-Train",
+            "name": "train",
+            "seat_classes": [
+                {
+                    "id": "12",
+                    "name": "2nd Class Sleeper AC"
+                },
+                {
+                    "id": "14",
+                    "name": "2nd Class AC seats only"
+                },
+                {
+                    "id": "15",
+                    "name": "2nd Class Fan seats only"
+                },
+                {
+                    "id": "16",
+                    "name": "Class 3 Fan"
+                }
+            ]
+        },
+        {
+            "id": "6985-Bus",
+            "name": "bus",
+            "seat_classes": [
+                {
+                    "id": "2057",
+                    "name": "Standard"
+                }
+            ]
+        },
+        {
+            "id": "231-Bus",
+            "name": "bus",
+            "seat_classes": [
+                {
+                    "id": "4",
+                    "name": "VIP"
+                },
+                {
+                    "id": "6",
+                    "name": "Express"
+                }
+            ]
+        },
+        {
+            "id": "32030-Bus",
+            "name": "bus",
+            "seat_classes": [
+                {
+                    "id": "7",
+                    "name": "Express"
+                },
+                {
+                    "id": "3129",
+                    "name": "Super VIP"
+                },
+                {
+                    "id": "5741",
+                    "name": "Super VIP Bus"
+                }
+            ]
+        },
+        {
+            "id": "3125-Bus",
+            "name": "bus",
+            "seat_classes": [
+                {
+                    "id": "409",
+                    "name": "VIP 20"
+                },
+                {
+                    "id": "2485",
+                    "name": "Express 44"
+                },
+                {
+                    "id": "1721",
+                    "name": "VIP 33"
+                }
+            ]
+        },
+        {
+            "id": "33644-Bus",
+            "name": "bus",
+            "seat_classes": [
+                {
+                    "id": "3",
+                    "name": "VIP 24"
+                }
+            ]
+        }
+    ],
+    "segments": [
+        {
+            "id": "16779-3-4-2026-03-20 18:57-2026-03-21 07:15-12",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-03-20 18:57:00",
+            "arrival_time": "2026-03-21 07:15:00",
+            "travel_duration": "PT738M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "12",
+            "transportation_types": [
+                "Train"
+            ]
+        },
+        {
+            "id": "16779-3-4-2026-03-20 09:13-2026-03-20 19:30-14",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-03-20 09:13:00",
+            "arrival_time": "2026-03-20 19:30:00",
+            "travel_duration": "PT617M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "14",
+            "transportation_types": [
+                "Train"
+            ]
+        },
+        {
+            "id": "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-15",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-03-20 14:34:00",
+            "arrival_time": "2026-03-21 04:05:00",
+            "travel_duration": "PT811M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "15",
+            "transportation_types": [
+                "Train"
+            ]
+        },
+        {
+            "id": "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-16",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-03-20 14:34:00",
+            "arrival_time": "2026-03-21 04:05:00",
+            "travel_duration": "PT811M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "16",
+            "transportation_types": [
+                "Train"
+            ]
+        },
+        {
+            "id": "6985-4055-5133-2026-03-20 07:25-2026-03-20 19:18-2057",
+            "from_station": "4055",
+            "to_station": "5133",
+            "departure_time": "2026-03-20 07:25:00",
+            "arrival_time": "2026-03-20 19:18:00",
+            "travel_duration": "PT713M",
+            "vehicle_id": "6985-Bus",
+            "operating_carrier_id": "6985",
+            "seat_class_id": "2057",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "231-4055-11553-2026-03-20 18:30-2026-03-21 06:45-4",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 18:30:00",
+            "arrival_time": "2026-03-21 06:45:00",
+            "travel_duration": "PT735M",
+            "vehicle_id": "231-Bus",
+            "operating_carrier_id": "231",
+            "seat_class_id": "4",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "231-4055-11553-2026-03-20 17:00-2026-03-21 05:15-6",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 17:00:00",
+            "arrival_time": "2026-03-21 05:15:00",
+            "travel_duration": "PT735M",
+            "vehicle_id": "231-Bus",
+            "operating_carrier_id": "231",
+            "seat_class_id": "6",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "32030-4055-11553-2026-03-20 07:00-2026-03-20 18:00-7",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 07:00:00",
+            "arrival_time": "2026-03-20 18:00:00",
+            "travel_duration": "PT660M",
+            "vehicle_id": "32030-Bus",
+            "operating_carrier_id": "32030",
+            "seat_class_id": "7",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "32030-4055-11553-2026-03-20 19:30-2026-03-21 05:15-3129",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 19:30:00",
+            "arrival_time": "2026-03-21 05:15:00",
+            "travel_duration": "PT585M",
+            "vehicle_id": "32030-Bus",
+            "operating_carrier_id": "32030",
+            "seat_class_id": "3129",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "32030-4055-11553-2026-03-20 19:45-2026-03-21 06:05-5741",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 19:45:00",
+            "arrival_time": "2026-03-21 06:05:00",
+            "travel_duration": "PT620M",
+            "vehicle_id": "32030-Bus",
+            "operating_carrier_id": "32030",
+            "seat_class_id": "5741",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "3125-4055-11553-2026-03-20 21:19-2026-03-21 07:49-409",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 21:19:00",
+            "arrival_time": "2026-03-21 07:49:00",
+            "travel_duration": "PT630M",
+            "vehicle_id": "3125-Bus",
+            "operating_carrier_id": "3125",
+            "seat_class_id": "409",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "3125-4055-11553-2026-03-20 20:10-2026-03-21 06:40-2485",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 20:10:00",
+            "arrival_time": "2026-03-21 06:40:00",
+            "travel_duration": "PT630M",
+            "vehicle_id": "3125-Bus",
+            "operating_carrier_id": "3125",
+            "seat_class_id": "2485",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "3125-4055-11553-2026-03-20 07:00-2026-03-20 17:30-1721",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 07:00:00",
+            "arrival_time": "2026-03-20 17:30:00",
+            "travel_duration": "PT630M",
+            "vehicle_id": "3125-Bus",
+            "operating_carrier_id": "3125",
+            "seat_class_id": "1721",
+            "transportation_types": [
+                "Bus"
+            ]
+        },
+        {
+            "id": "33644-4055-11553-2026-03-20 20:00-2026-03-21 07:00-3",
+            "from_station": "4055",
+            "to_station": "11553",
+            "departure_time": "2026-03-20 20:00:00",
+            "arrival_time": "2026-03-21 07:00:00",
+            "travel_duration": "PT660M",
+            "vehicle_id": "33644-Bus",
+            "operating_carrier_id": "33644",
+            "seat_class_id": "3",
+            "transportation_types": [
+                "Bus"
+            ]
+        }
+    ],
+    "itineraries": [
+        {
+            "id": "TH000300044mDt00c01hdkRw:2026-03-20 18:57:00",
+            "departure_segments": [
+                "16779-3-4-2026-03-20 18:57-2026-03-21 07:15-12"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 42,
+            "pricing": {
+                "net_price": {
+                    "amount": "791.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "891.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "100.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH000300044mDt00e02CsiAv:2026-03-20 09:13:00",
+            "departure_segments": [
+                "16779-3-4-2026-03-20 09:13-2026-03-20 19:30-14"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 30,
+            "pricing": {
+                "net_price": {
+                    "amount": "541.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "621.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "80.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH000300044mDt00f0IrgTo0:2026-03-20 14:34:00",
+            "departure_segments": [
+                "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-15"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 55,
+            "pricing": {
+                "net_price": {
+                    "amount": "271.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "321.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "50.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH000300044mDt00g0IrgTo0:2026-03-20 14:34:00",
+            "departure_segments": [
+                "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-16"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 80,
+            "pricing": {
+                "net_price": {
+                    "amount": "171.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "201.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "30.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "ShowOnScreen"
+        },
+        {
+            "id": "TH013p01kN1OFb0xb03SPY6d:2026-03-20 07:25:00",
+            "departure_segments": [
+                "6985-4055-5133-2026-03-20 07:25-2026-03-20 19:18-2057"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "633.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "696.30",
+                    "currency": "THB",
+                    "price_type": "Exact"
+                },
+                "taxes_and_fees": {
+                    "amount": "63.30",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l03Jb00403SPY6d:2026-03-20 18:30:00",
+            "departure_segments": [
+                "231-4055-11553-2026-03-20 18:30-2026-03-21 06:45-4"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "559.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "629.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "ShowOnScreen"
+        },
+        {
+            "id": "TH013p030l03Jb00603SPY6d:2026-03-20 17:00:00",
+            "departure_segments": [
+                "231-4055-11553-2026-03-20 17:00-2026-03-21 05:15-6"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "645.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "715.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "ShowOnScreen"
+        },
+        {
+            "id": "TH013p030l0Adb00703SPY6d:2026-03-20 07:00:00",
+            "departure_segments": [
+                "32030-4055-11553-2026-03-20 07:00-2026-03-20 18:00-7"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "497.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "567.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l0Adb0Ot03SPY6d:2026-03-20 19:30:00",
+            "departure_segments": [
+                "32030-4055-11553-2026-03-20 19:30-2026-03-21 05:15-3129"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "504.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "574.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l0Adb1uB03SPY6d:2026-03-20 19:45:00",
+            "departure_segments": [
+                "32030-4055-11553-2026-03-20 19:45-2026-03-21 06:05-5741"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "576.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "646.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l0Opb06B03SPY6d:2026-03-20 21:19:00",
+            "departure_segments": [
+                "3125-4055-11553-2026-03-20 21:19-2026-03-21 07:49-409"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "521.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "591.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Pending",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l0Opb0E503SPY6d:2026-03-20 20:10:00",
+            "departure_segments": [
+                "3125-4055-11553-2026-03-20 20:10-2026-03-21 06:40-2485"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "628.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "698.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Pending",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l0Opb0rL03SPY6d:2026-03-20 07:00:00",
+            "departure_segments": [
+                "3125-4055-11553-2026-03-20 07:00-2026-03-20 17:30-1721"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "525.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "595.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Pending",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH013p030l0sib00303SPY6d:2026-03-20 20:00:00",
+            "departure_segments": [
+                "33644-4055-11553-2026-03-20 20:00-2026-03-21 07:00-3"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 25,
+            "pricing": {
+                "net_price": {
+                    "amount": "493.00",
+                    "currency": "THB"
+                },
+                "gross_price": {
+                    "amount": "563.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "taxes_and_fees": {
+                    "amount": "70.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "ShowOnScreen"
+        }
+    ]
+}
