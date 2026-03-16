@@ -368,9 +368,9 @@ This is a collaboration requirement. It cannot be resolved from code alone.
 
 ---
 
-## No Dashboard or Alert Config Found
+## Dashboard and Alert Configuration Location
 
-No Grafana dashboard JSON, Prometheus alert rules, Datadog monitor definitions, or Coralogix alert configurations were found in any of the four repositories. Monitoring configuration for the .NET services is evidently maintained outside of these codebases (in a separate infrastructure or ops repository, or directly in the monitoring tool). This is an additional gap: the full scope of what dashboards and alerts exist is not known from code inspection alone.
+No Grafana dashboard JSON, Prometheus alert rules, or Coralogix alert configurations were found in any of the four application repositories. This is expected — dashboards are managed directly in **Grafana**, and alert configurations are stored in **AWS AppConfig**, not in the application codebases. This is not a gap in observability coverage; the configurations simply live outside the application repositories.
 
 ---
 
@@ -383,3 +383,37 @@ All local file path references in this document (which used a shortened `/denali
 - `supply-integration`: SI host metrics, `SiHealthCheckService.cs`, Coralogix logger configuration, `Program.cs` (multiple integration hosts)
 
 All referenced files were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:42:00 – 00:46:20)
+
+### 12go Uses Datadog (Confirmed)
+
+Shauly confirmed that 12go uses **Datadog** for monitoring. This aligns with the DogStatsD and Datadog APM references found in the 12go codebase.
+
+### Monitoring Knowledge Gap
+
+Shauly also tried to get answers from Sana about 12go's monitoring capabilities this week but **couldn't get a good answer**. He acknowledged "I didn't get a good answer for that" regarding how they use traces and metrics.
+
+### Recent 500 Error Incident
+
+A recent 500 error incident highlighted the monitoring gap. The team could not easily diagnose the issue without calling someone on the 12go side. Shauly: "I don't want us to call somebody else to understand what happens."
+
+### Datadog Traces and Metrics Visible
+
+12go does have traces and metrics visible in Datadog (Shauly showed the UI with search, booking list traces). However, it's unclear what they actively monitor or alert on.
+
+### Filter by Business Dimensions
+
+Shauly tried to filter by booking ID in 12go's Datadog traces but wasn't sure how. This suggests that filtering by business dimensions (booking_id, client_id, etc.) may not be straightforward in their current setup.
+
+### Needed vs. Garbage
+
+Shauly acknowledged that not all current TC metrics/traces are needed: "maybe we create a lot of garbage." The action is to determine which TC metrics/traces are actually needed and ensure they exist in the new system.
+
+### Action
+
+Deeper dive into 12go's Datadog setup needed to understand their current capabilities and gaps.
