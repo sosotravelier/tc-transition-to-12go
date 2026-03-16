@@ -2,7 +2,7 @@
 
 ## Summary
 
-The etna search API exposes a gRPC endpoint (`EtnaSearchGrpcService`) that serves search results to the Google Metasearch integration. This is a dedicated gRPC transport layer built on top of the same search pipeline used by the REST API. During the transition to 12go, this integration must be accounted for — either by preserving the gRPC interface or by migrating Google Metasearch to use 12go's search capabilities directly.
+The etna search API exposes a gRPC endpoint (`EtnaSearchGrpcService`) that serves search results to the Google Metasearch integration. This is a dedicated gRPC transport layer built on top of the same search pipeline used by the REST API. During the transition to 12go, the gRPC interface must be preserved with the same contract — Google Metasearch requires gRPC with these proto definitions and cannot migrate to a different protocol or API.
 
 ---
 
@@ -49,12 +49,9 @@ The gRPC service delegates to `IEtnaSearchProcessorService.Process()`, which run
 
 ## Migration Concerns
 
-### 1. Google Metasearch Must Continue to Receive Search Results
+### 1. gRPC Interface Must Be Preserved
 
-Google Metasearch is an active integration. During and after migration, it must continue to receive search results in a compatible format. Options:
-- **Keep the gRPC interface** and point it at 12go's search backend
-- **Migrate Google Metasearch** to call 12go's search API directly (if 12go supports a compatible protocol)
-- **Maintain a translation layer** that converts between the current proto contract and 12go's response format
+Google Metasearch requires the gRPC interface with the existing proto contract. The migration strategy is to point the gRPC endpoint at 12go's search backend while maintaining the same request/response schemas. No protocol migration or API redesign is acceptable.
 
 ### 2. Proto Contract Compatibility
 
@@ -91,7 +88,6 @@ The search processor implements configurable timeout-based retry for "potential 
 
 ## Open Questions
 
-1. Does 12go have an existing search API that Google Metasearch could consume directly?
-2. Is gRPC a requirement for Google's integration, or can it be replaced with REST?
-3. What is the expected search response latency SLA for Google Metasearch?
-4. Should this gRPC endpoint be maintained as a thin translation layer during the transition period?
+1. Does 12go's search API produce the same response structure (vehicles, segments, itineraries with pricing/policies), or does a translation layer need to be built?
+2. What is the expected search response latency SLA for Google Metasearch, and how does 12go's search latency compare?
+3. Should the gRPC endpoint initially remain on etna, or should it be moved to run alongside 12go's infrastructure?
