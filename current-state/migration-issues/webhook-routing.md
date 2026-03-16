@@ -194,3 +194,81 @@ All local absolute file paths in this document have been replaced with GitHub `b
 - `supply-integration`: `OneTwoGoWebhookHandler.cs` and related integration-specific webhook handler files
 
 All referenced files were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:55:26 – 01:10:16)
+
+### 12go's Webhook Subscriber Table
+
+Shauly showed 12go's webhook configuration. Each subscriber entry has:
+- **URL**: The webhook callback URL
+- **User ID**: 12go's client ID (their internal client/agent concept)
+- **API key**: Used when sending notifications
+
+This table already provides the booking → client association that the current TC system has to derive through database lookups.
+
+### 12go Already Knows Booking → Client
+
+A key insight: **12go already knows which booking belongs to which client**. When a booking change is detected, 12go knows the associated client/agent and can route the notification accordingly.
+
+### Proposed Approach: URL-Based Routing
+
+Instead of maintaining a booking-to-client lookup database on TC's side, the webhook URL in 12go's table could be modified to:
+1. Point directly to the client's actual webhook URL, or
+2. Point to a TC intermediary with **client_id as a query parameter** in the URL (e.g., `?client_id=bookaway`)
+
+This eliminates the need for a booking-to-client database lookup entirely.
+
+### Format Transformation Still Required
+
+Even with URL-based routing, **format transformation is still needed**:
+- 12go sends notifications in its format (with `bid`)
+- Clients expect TC format (with `booking_id`)
+- For **old bookings**: translate back to the encrypted TC booking ID format
+- For **new bookings**: use the 12go booking ID directly (as per the decision to use 12go IDs going forward)
+
+### Redundant Processing Eliminated
+
+With the no-persistence design decision, much of the current webhook processing becomes redundant:
+- No need to look up booking in PostgreSQL `BookingEntities` table
+- No need to call `GetBookingDetails` to update local database
+- No need to publish `ReservationChanged` Kafka event for DB update
+- Just transform the notification format and forward to the client
+
+### Booking ID Mapping for Notifications
+
+For the transition period, the static booking ID mapping table (discussed in the Booking ID Transition topic) is also needed here: when 12go sends a notification for an old booking, the system must look up the old TC booking ID to include in the notification sent to the client.
+
+### 12go Codebase Exploration (2026-03-12)
+
+Exploration of the 12go/frontend3 PHP codebase revealed the following about the webhook system:
+
+**Webhook event system (internal)**:
+- `BookingStatusTrigger` fires `BookingWebhookEvent` on booking status changes (CREATED→PAID, PAID→CONFIRMED, etc.)
+- `BookingHttpEventListener` receives the event and delegates to `SystemMessageHandler`
+- `HttpTransport` sends HTTP POST to URL pattern: `{baseUrl}/{language}/secure/event/{eventName}`
+- This is an **internal event dispatch** system, not external B2B client notification
+
+**Webhook payload** (from OpenAPI schema):
+```
+{ bid: int, type: "booking_updated"|"booking_confirmed"|"booking_canceled",
+  stamp: int, new_data: WebhookBooking, previous_data: WebhookBooking }
+```
+Where `WebhookBooking` includes: `bid`, `tracker`, `status`, `from_id`, `to_id`, `dep_date_time`, `seats`, `price`
+
+**No webhook subscriber URL table found in codebase**: The table Shauly showed during the meeting (with URL, user ID, API key per subscriber) is likely:
+1. In a different part of 12go's system (admin panel, separate service)
+2. Stored in `usr_meta` table (key-value metadata per user) — plausible but not confirmed in code
+3. Managed externally
+
+**B2B client model in 12go**:
+- Users table: `usr` (fields: `usr_id` int, `email`, `phone`, `role_id`, `usr_name`, `acct_fxcode`, `lang_id`)
+- API keys table: `apikey` (fields: `usr_id`, `role_id`, `apikey`, `active`, `hash_salt`, `fxcode`)
+- B2B clients are users with role `partner` or `partner_light`
+- `ApiAgent` service: initialized by API key or user ID, exposes `getId()`, `getKey()`, `getRole()`, `getName()`
+- Metadata: `usr_meta` table (key-value per user) — potential location for webhook URLs
+
+**B2B API route**: `/b2b/v1/{clientId}/itineraries` — note: uses `clientId` as a URL path parameter, similar to TC's pattern.

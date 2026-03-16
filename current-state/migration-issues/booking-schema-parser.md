@@ -308,3 +308,21 @@ All local absolute file paths in this document have been replaced with GitHub `b
 - `supply-integration`: `OneTwoGoSchemaService.cs`, `OneTwoGoCheckoutService.cs` (SI side), `BookingSchemaCache.cs`, and related test fixture files
 
 All referenced files were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamp 00:34:08)
+
+### Minimal Concern
+
+The booking schema parser was briefly discussed but is not a major migration concern. The existing functionality is established and works. Shauly confirmed that the parser already detects DeOniBus bookings and performs the necessary transformations.
+
+### Post-Migration Simplification
+
+Once migration is complete and only 12go format remains, the schema parser logic will simplify — no need for DeOniBus-specific detection and transformation branches.
+
+### No-Persistence Impact
+
+With the design decision to eliminate local persistence (discussed later in the meeting ~01:11:38), the booking schema caching strategy (DynamoDB `PreBookingCache` in denali, in-memory hybrid cache in SI) may need to be reconsidered. If 12go can provide checkout data on demand, some of this caching infrastructure may become unnecessary.

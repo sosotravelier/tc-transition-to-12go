@@ -151,3 +151,23 @@ All local absolute file paths in this document have been replaced with GitHub `b
 - `etna`: `EtnaSearchProcessorService.cs`, `ItinerariesController.cs`, `ConfigurationExtension.cs` (named HTTP client setup)
 
 References to `frontend3` (12go PHP codebase) were already in their existing inline format referencing the local path and were not changed, as `frontend3` does not map to any of the four `boost-platform` GitHub repositories. No references were left unconverted for the boost-platform repos.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:46:20 – 00:48:13)
+
+### Confirmed Known Gap (Beyond PoC)
+
+Shauly confirmed the recheck mechanism is a known gap not just in the PoC but in the **current TC system** as well. The existing fire-and-forget recheck implementation is inadequate: "I think that it's not good enough."
+
+### Trip Pool Issues
+
+Recent problems with trip pool behavior and how it gets populated. **Levan** has been investigating these issues. The internals of how the trip pool works are not well understood by the TC team.
+
+### Ownership and Resolution
+
+- Hope that **Sana** will provide a good solution on the 12go side
+- Unknown who will implement the fix
+- Shauly: "this is a gap that we currently also have right now in TC"

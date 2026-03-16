@@ -240,3 +240,25 @@ All local absolute file paths in this document have been replaced with GitHub `b
 | `/Users/sosotughushi/RiderProjects/denali/booking-service/persistency/BookingService.Persistency/model/PreBookingCacheModel.cs` | [denali/blob/main/booking-service/persistency/BookingService.Persistency/model/PreBookingCacheModel.cs](https://github.com/boost-platform/denali/blob/main/booking-service/persistency/BookingService.Persistency/model/PreBookingCacheModel.cs) |
 
 All 15 distinct local file references (17 occurrences) were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamp 00:48:13)
+
+### Active Development on 12go Side (Confirmed)
+
+Seat lock is being **actively developed on the 12go side**. This answers Open Question G7 from the original document — 12go will ship native seat lock support.
+
+### TC-Side Integration Plan
+
+**David** will implement the TC-side integration to the new 12go seat lock endpoint as part of the **DeOniBus migration** in the coming weeks.
+
+### Simple Outcome
+
+Once 12go's seat lock endpoint is available, it will be treated like any other API — just call the new endpoint. The current fake seat lock path (local validation + DynamoDB storage) will be replaced by a real supplier-side lock. No complex migration logic needed for this feature.
+
+### 12go Codebase Verification (2026-03-12)
+
+Exploration of the 12go/frontend3 PHP codebase found **no seat lock API endpoint or feature** yet. Searched patterns: `seat_lock`, `seatlock`, `lock_seat`, `lockSeat` — all returned zero matches. Only seat-related files are DTOs for seat map display (`SeatMap.php`, `SeatLineLayout.php`, `SeatMapLayout.php`). This confirms the feature is still in development and not yet deployed.

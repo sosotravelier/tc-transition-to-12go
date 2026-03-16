@@ -687,3 +687,34 @@ All local absolute file paths in this document have been replaced with GitHub `b
 | `/Users/sosotughushi/RiderProjects/denali/Denali.BookingIdType/Types/BookingId.cs` (in code block) | Replaced with `// https://github.com/boost-platform/denali/blob/main/Denali.BookingIdType/Types/BookingId.cs` |
 
 All 24 local references were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:34:08 – 00:40:01)
+
+### Data Team Is Active and Large
+
+Contrary to initial impression, the data team is large and still active. They handle data consolidation from **all subsidiaries**, not just TC. Several people are still working there.
+
+### T-Rex Project
+
+Shauly mentioned the **T-Rex project** — a data consolidation initiative that aggregates data from all subsidiaries. It may already ingest 12go data directly. If so, some TC events might be redundant since the data team already has a pipeline from 12go.
+
+### Performance Dashboard (B2B)
+
+Shauly showed a B2B performance dashboard that displays per-client metrics:
+- Number of searches
+- Number of itineraries
+- Checkouts
+- Conversion percentages
+- Historical graphs
+
+This dashboard is populated from **search/checkout events** (likely `SearchRequested`, `CheckoutRequested` and similar events from etna/denali). Shauly believes this dashboard **should be preserved**.
+
+### Action Items
+
+1. Check if 12go's existing events already cover some of the TC event requirements
+2. Identify which TC events need to be preserved
+3. Call with data team to clarify (to be done later)

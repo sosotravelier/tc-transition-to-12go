@@ -1,0 +1,836 @@
+Mar 12, 2026
+Soso / Shauly 1 on 1 - Transcript
+00:00:00
+ 
+Soso Tughushi: just added transcript if you don't mind.
+Shauly Sahar: No
+Soso Tughushi: Okay. So, David's middleware makes sure that uh uh client ID corresponds to the
+Shauly Sahar: problem.
+Soso Tughushi: API key and it do we have some table which uh David's middleware looks at or is it
+Shauly Sahar: Um, so yeah.
+Soso Tughushi: something
+Shauly Sahar: So he has like some SDK that he loads it to the memory from a database if I'm not mistake and he's uh saving the API key to the
+Soso Tughushi: Mhm.
+Shauly Sahar: client uh authentication when it's created. So this is how he know this uh pair of uh of clients.
+Soso Tughushi: Okay. Makes sense. Um and distribution,
+Shauly Sahar: I I don't know how
+Soso Tughushi: right? uh distribution project.
+Shauly Sahar: what no it's
+Soso Tughushi: It is in this SDK is in the distribution pro project.
+Shauly Sahar: in um there is client identity project something I think I uh
+Soso Tughushi: Okay, makes sense.
+Shauly Sahar: I assume that we will keep the client I will assume that we'll keep the client ID and the API key Right.
+ 
+ 
+00:01:22
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: Um I I am not sure that we will uh need to preserve the same. Okay. The problem is that then the API key the from the client we translate it to the one key based on the contract
+Soso Tughushi: want to go.
+Shauly Sahar: rights. Um and and this is probably something that we we would like to avoid of having this
+Soso Tughushi: Correct.
+Shauly Sahar: duplication, right? We don't need that.
+Soso Tughushi: Mhm.
+Shauly Sahar: I think that we may need to ask Aikhai if it's reasonable to tell clients once we move to the new API to use the different API key and then we'll use the one that want to go help.
+Soso Tughushi: Mhm.
+Shauly Sahar: Right?
+Soso Tughushi: Mhm. Yeah. Yeah. Yeah.
+Shauly Sahar: That's the easy That's the easy solution.
+Soso Tughushi: Mhm. Uh
+Shauly Sahar: If not, if not, okay,
+Soso Tughushi: yeah.
+Shauly Sahar: what we can also do is that we can copy the API key that we have currently on um TC and
+Soso Tughushi: Mhm.
+ 
+ 
+00:02:41
+ 
+Shauly Sahar: maybe replace the API key in inside want to go.
+Soso Tughushi: Understood.
+Shauly Sahar: Uh let me show something again. I I don't have permission for that I think and I don't know if it's possible. Um Let me understand how I can see it now. Second Okay. You see this is like where theoretically I can deactivate the API key and then I'm not sure that we can put like a key inside of it but I'm sure that's if if this is the same format that we have and I think that it's the same it's look like the same format right so maybe we can somehow replace
+Soso Tughushi: Mhm.
+Shauly Sahar: it uh behind the the scene like in the data database or wherever it's stored or if it's something that we need to do like um um
+Soso Tughushi: Yeah, an option. Yeah, we had also the case where we would was it in one to
+Shauly Sahar: yeah
+Soso Tughushi: go where we would have multiple uh API keys defined on the same contract.
+ 
+ 
+00:05:12
+ 
+Soso Tughushi: uh in SI like we would look at client ID instead of contract code to get the API key of one to go I think
+Shauly Sahar: Um,
+Soso Tughushi: yes it doesn't Bless
+Shauly Sahar: we have we have several a we have several
+Soso Tughushi: you.
+Shauly Sahar: for example TC automation and maybe TC pro for example use the same API key of of want to So,
+Soso Tughushi: Mhm.
+Shauly Sahar: but in that case we just it's easy. There is no real client that use other like shared
+Soso Tughushi: Mhm.
+Shauly Sahar: um shared um API key only us only our API our uh accounts
+Soso Tughushi: One second. Okay. Um,
+Shauly Sahar: Okay.
+Soso Tughushi: let's move.
+Shauly Sahar: Again,
+Soso Tughushi: So,
+Shauly Sahar: we need to to understand if we need to preserve this uh validation of um client and API uh key.
+Soso Tughushi: Mhm. Yeah, understood about it. It was like one of the questions. Uh and you answered that. Uh there's a complete mapping for client ID and they and yeah.
+Shauly Sahar: Um, that's a good question.
+ 
+ 
+00:06:53
+ 
+Shauly Sahar: How do also we we use we save the clients? I think I think that today as part of like a B2B client to the system um they need our client ID because we are sending them a a notification on
+Soso Tughushi: Mhm.
+Shauly Sahar: a client on a booking created right so they need
+Soso Tughushi: Mhm.
+Shauly Sahar: this ID somewhere so Today they have a table that store this ID.
+Soso Tughushi: They you mean want to go?
+Shauly Sahar: Yes. But let's now think about
+Soso Tughushi: It was not like this. I mean when we receive booting booking notification,
+Shauly Sahar: Yeah.
+Soso Tughushi: we store on ourself to which uh client this booting ID corresponds
+Shauly Sahar: Yes. But there is there is um there is notification that we
+Soso Tughushi: to.
+Shauly Sahar: send to uh to want to go as their client or owner and supplier owners. They for example if we are doing right now a booking in in the anibus of one of the latam clients they we we need to notify them that this booking happened.
+ 
+ 
+00:08:12
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: Okay. Um again I might be getting back to um Orians. So this is Orians is a client that um is a LATAM client and all the bookings that currently they they do they do that on on our side like on TC TC to to the okay and the way and and you see everything no I don't know how it's a fairy scanner. Anyway, the the booking Yeah, it's it's I don't understand it. The booking ID is is sent the the information is being sent to the to want to go. Okay. So they need to know who is the client because we are sending them um uh for example Brazil Turismo you see but there the the name of that it's a different one so that that's why how they connect it um but if now let's assume that we did all the transition everything is there now we have a new client we create that client how we provide IDM is the the cl the the client ID, right? It it it's it's not it's not something that we create here.
+ 
+ 
+00:10:08
+ 
+Shauly Sahar: Maybe we need to create a client ID for that.
+Soso Tughushi: Mhm. Okay. So the another topic would be how do we create a
+Shauly Sahar: Not how we create a client.
+Soso Tughushi: client?
+Shauly Sahar: It's something that is known. But for your um um can
+Soso Tughushi: correspond the new clients
+Shauly Sahar: you client ID?
+Soso Tughushi: together.
+Shauly Sahar: How how we get this client ID like in a new system? What what should we put
+Soso Tughushi: Mhm.
+Shauly Sahar: there?
+Soso Tughushi: Currently, how are client IDs generated on our site? like Patty says that we have a new client ID and then this let's say comport uh who creates this comport ID
+Shauly Sahar: Okay.
+Soso Tughushi: is the same maybe that want to go users or not
+Shauly Sahar: So it's no it's two different ones but we we in David's service the CL client
+Soso Tughushi: maybe
+Shauly Sahar: service we create the client ID and and then we get the comport which is lower letters up until a few things but on their side it can be the agent name can be there is no client there is no real client ID the Okay, there is a client which is for example Brazil Turismo that's on our side it's Brazil with lower B and underscore between them and they have this this client ID.
+ 
+ 
+00:11:45
+ 
+Soso Tughushi: Brazil turismo and system fee uh ID. Okay, it's just a sequence
+Shauly Sahar: Yes. And we
+Soso Tughushi: number.
+Shauly Sahar: have this is our ID.
+Soso Tughushi: Okay.
+Shauly Sahar: But eventually we need probably we'll need to add for the client creation on one to go side this ID so we can we can get it right.
+Soso Tughushi: Yeah. Okay. Understood. Um so then next topic booking ID transition. So we have these booking ids which are encrypted and they are populated. Sometimes we do uh also with uh KV encoder uh but also we are we have a feature based on feature flag that uh we are shortening sometimes the ids but it
+Shauly Sahar: Correct.
+Soso Tughushi: was for specific uh integrations.
+Shauly Sahar: Uh it's for specific clients. We moved like few of them but we can move all of them if we if we want but it will be from now on for those clients.
+Soso Tughushi: Mhm. Do we have in want to go? Okay. So um when we will so one to go let's say let's say we have flex bus and we have a client for the flex bus and now flick pass integration move to one to go and let's say that they are using URL shortener or or short ids uh um we need to keep let's say correspondence of what is one post ID uh
+ 
+ 
+00:14:02
+ 
+Soso Tughushi: versus this short uh short uh ID that we generated which is random.
+Shauly Sahar: Um,
+Soso Tughushi: So part is that
+Shauly Sahar: I know I know what what you I want to show you the database table.
+Soso Tughushi: sure.
+Shauly Sahar: Probably it will take an hour now until it will connect. Post guys, guys. I don't see it. Oh, it's here. I used the the other one. It's much more uh faster, but I hate this uh is um how you call it? Um interface Okay. So, let's uh how can I filter here? told you I'm not still um very familiar with how to do that. Um, okay. Got it. So I can filter here by book away. Amazing. Okay. So in general we have this ID. This is our ID. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: And we have the integr which integration is it?
+Soso Tughushi: Mhm.
+Shauly Sahar: And here we have uh the book away the want to go
+ 
+ 
+00:19:09
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: ID.
+Soso Tughushi: Yes.
+Shauly Sahar: Theoretically if we take only one to go. Okay. Maybe we can create a t a static table that will populate it one time that will trans like do a translation on the post booking uh that it will check if it exist here and try to to find this
+Soso Tughushi: Mhm.
+Shauly Sahar: mapping.
+Soso Tughushi: Yeah. But if we only have been want to go uh uh non-random ids. So if all the plane ids were generated from the one to go ID and we could extract this information from the plane ID maybe we don't need this table. This is what I was saying. So could we extract this one to go ID from the plane
+Shauly Sahar: again.
+Soso Tughushi: ID like we
+Shauly Sahar: And no,
+Soso Tughushi: have
+Shauly Sahar: I I think no. Although yeah, you you see here like uh Yes.
+Soso Tughushi: the
+Shauly Sahar: But it's an old one. Yes. So you see we have like 255 here
+Soso Tughushi: Yeah.
+ 
+ 
+00:20:31
+ 
+Soso Tughushi: And on the
+Shauly Sahar: and it's 255 here. But uh from at some point of where is the creation time created it? Okay. this sec right here. So this is today. Yes. So you see this is this one and inside of it we have um
+Soso Tughushi: We'll look at one to go ID and let's try to find if we have that one in the plane ID.
+Shauly Sahar: Let me send it to you for a second. And
+Soso Tughushi: Yeah, I see we have it inside or
+Shauly Sahar: I'm a little bit surprised.
+Soso Tughushi: no.
+Shauly Sahar: really surprised.
+Soso Tughushi: Maybe it's not enabled for uh this
+Shauly Sahar: No, we don't have this uh feature flag at all.
+Soso Tughushi: client.
+Shauly Sahar: Hey
+Soso Tughushi: It's sorted by
+Shauly Sahar: there. It's okay if I uh created
+Soso Tughushi: type.
+Shauly Sahar: it.
+Soso Tughushi: Okay.
+Shauly Sahar: How can I want to have like
+Soso Tughushi: from small to big. Maybe other
+Shauly Sahar: something to see before Vlad started?
+ 
+ 
+00:23:25
+ 
+Shauly Sahar: Maybe created it. Get Yes, like this. And let's put 01 01 But it's still Yeah, I need know the other way around. You see? It's a different
+Soso Tughushi: I cannot see.
+Shauly Sahar: Yeah. You see it's it's one long ID.
+Soso Tughushi: Okay. Uh 2016 like
+Shauly Sahar: It's like in November.
+Soso Tughushi: Okay. There. Okay. So,
+Shauly Sahar: So it's we'll we'll need probably to if if we want to
+Soso Tughushi: wait.
+Shauly Sahar: maybe destroy it like the the current one we probably need to have static table that have a mapping uh of uh this ID to one to go ID.
+Soso Tughushi: Yeah.
+Shauly Sahar: But let's let's think about it. Okay, so we probably need it only for the post booking operations, right?
+Soso Tughushi: Mhm.
+Shauly Sahar: which is cancel, which is um get tickets and get
+Soso Tughushi: Get ticket URL booking details
+Shauly Sahar: booking details and make maybe booking
+Soso Tughushi: here and notific.
+Shauly Sahar: notification like to get a notification for that.
+ 
+ 
+00:25:39
+ 
+Soso Tughushi: Yeah. Okay. I think we are done with this topic.
+Shauly Sahar: What?
+Soso Tughushi: Uh oh, we are done with this topic. Booking ID transition. I
+Shauly Sahar: Um,
+Soso Tughushi: mean
+Shauly Sahar: but let's let's think about Okay. Um, it's it's an option. Yeah.
+Soso Tughushi: Yeah.
+Shauly Sahar: Uh but for uh we cannot move the Anibus inventory and flexbox inventory, right?
+Soso Tughushi: We cannot move. Want to go in because
+Shauly Sahar: So you understand what I'm I'm saying because Okay.
+Soso Tughushi: why?
+Shauly Sahar: Now let me Let me show you in uh integration ID but maybe it's not an issue. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: So in the anibus the ID that we have is the anibus ID.
+Soso Tughushi: Mhm.
+Shauly Sahar: So let's assume that we'll get we will get this ID get booking details what what should we do if we are
+Soso Tughushi: Yeah, because there is no correspondence of the only bus ID with one to go
+Shauly Sahar: in correct
+Soso Tughushi: ID.
+ 
+ 
+00:27:19
+ 
+Shauly Sahar: yes but I think that maybe if we'll do departure time
+Soso Tughushi: So you want to correlate those events based on the
+Shauly Sahar: No,
+Soso Tughushi: attributes.
+Shauly Sahar: but you can see that currently the the last departure time is November 9th, like the the f the farthest like and and we don't have
+Soso Tughushi: Mhm.
+Shauly Sahar: much like there are very few
+Soso Tughushi: So we want we need to keep our existing services up until uh this date may
+Shauly Sahar: this date maybe flex bus for example flex bus I
+Soso Tughushi: comes.
+Shauly Sahar: believe that also we are stopping that so it's so this goes to October but probably there will not be later than that because we just shut down flex bus integration today.
+Soso Tughushi: Mhm. Ah okay.
+Shauly Sahar: So it it will not Yeah.
+Soso Tughushi: Yeah.
+Shauly Sahar: So in in two months it still will be this this
+Soso Tughushi: Mhm.
+Shauly Sahar: one.
+Soso Tughushi: Understood. Yeah. It there will be no new bookings.
+Shauly Sahar: Correct. And at some point also for the Anibus there will be no new
+ 
+ 
+00:28:38
+ 
+Soso Tughushi: So
+Shauly Sahar: bookings.
+Soso Tughushi: okay. Um
+Shauly Sahar: So we we need to to maybe have a a remark about
+Soso Tughushi: else need to figure out uh what
+Shauly Sahar: that.
+Soso Tughushi: was okay. So flex inventory they are used currently by multiple clients by
+Shauly Sahar: Uh it was used by get by bus, book away and want to go.
+Soso Tughushi: get by bus. Okay. And flex bus.
+Shauly Sahar: No flicks inventory.
+Soso Tughushi: Yeah. Yeah. Yeah.
+Shauly Sahar: Yeah.
+Soso Tughushi: Um uh how about uh the only bus?
+Shauly Sahar: Yeah.
+Soso Tughushi: The only bus was used
+Shauly Sahar: a lot of clients it's book away you see
+Soso Tughushi: by
+Shauly Sahar: bef sakura orans comport but most of them as you see currently there are only two four five bookings
+Soso Tughushi: Mhm.
+Shauly Sahar: that are after after May it's it's not much it's something
+Soso Tughushi: Mhm.
+Shauly Sahar: that we can live with uh and and Maybe again at some point we'll
+Soso Tughushi: Yeah,
+Shauly Sahar: stop the anibus and this will not
+ 
+ 
+00:30:04
+ 
+Soso Tughushi: let's say let's say we told uh our uh clients that were using the onib bus inventory that we have a new
+Shauly Sahar: grow.
+Soso Tughushi: URL or new system they should use that or they keep I mean how can we migrate those clients to want
+Shauly Sahar: Okay.
+Soso Tughushi: to Oh, if we need to have both of the
+Shauly Sahar: Okay.
+Soso Tughushi: systems.
+Shauly Sahar: So currently what Davidid is doing is doing the transition of the the Danibus client into one to go.
+Soso Tughushi: Mhm.
+Shauly Sahar: So at some point in a few weeks, I don't know how many weeks all the inventory of the Anibus will be
+Soso Tughushi: Mhm.
+Shauly Sahar: consumed by the want to go integration.
+Soso Tughushi: Okay.
+Shauly Sahar: So same as we have in flex bus here,
+Soso Tughushi: Mhm.
+Shauly Sahar: there will be no new bookings at at some point.
+Soso Tughushi: Okay. But we there will be still book get booking details.
+Shauly Sahar: Correct. But again we we need to to again to to sync let's let's think that we stop uh like right now we stop having one to go at the Anibus direct.
+ 
+ 
+00:31:18
+ 
+Shauly Sahar: Okay. And we move them. So it means that from now on there will not be a new bookings with the Anibus.
+Soso Tughushi: Correct.
+Shauly Sahar: So we have like again here six bookings that after after June. Okay. So we'll need either to think about what to do with these six bookings.
+Soso Tughushi: Mhm.
+Shauly Sahar: Do we keep the system up and running for them or this is something that we kind of uh checking uh how um to to handle it uh manually. Maybe we'll um maybe if we No, we we don't we don't have uh booking on on that. So, you know, maybe we'll just keep it for that uh that period but but it's very small
+Soso Tughushi: Yeah.
+Shauly Sahar: friction of of that. I wouldn't break my head for that.
+Soso Tughushi: Mhm.
+Shauly Sahar: Um so um we should we should take care of it but um it's a smaller problem.
+Soso Tughushi: Mind what you are saying like
+Shauly Sahar: Maybe manual maybe we'll just keep it as like up and running just for those uh uh 10 15 bookings.
+ 
+ 
+00:32:40
+ 
+Soso Tughushi: What if we just uh when we are about to sunset uh it, we just get the booking details and store it on our site
+Shauly Sahar: on the one to go.
+Soso Tughushi: and Yeah.
+Shauly Sahar: That's another option. Yeah,
+Soso Tughushi: Uh yeah. Okay. Yeah.
+Shauly Sahar: maybe we create it manually on on um Yeah,
+Soso Tughushi: still.
+Shauly Sahar: maybe we can create that manually to to fake it so we can
+Soso Tughushi: Yeah.
+Shauly Sahar: get it from there.
+Soso Tughushi: Yeah. Just to get the snapshot basically of booking details.
+Shauly Sahar: Yes,
+Soso Tughushi: That was on the day when we decided to shut it
+Shauly Sahar: correct.
+Soso Tughushi: down.
+Shauly Sahar: And anyway, it will be very few of those.
+Soso Tughushi: Okay. Uh
+Shauly Sahar: I to to my my um my gut feeling tell
+Soso Tughushi: noted
+Shauly Sahar: me that um up until will the last client will migrate there will no be a new clients there and you like data that we need to support because you have like 40 clients they will need to do some changes each one of them it will take time some of them cooperate immediately some of will take the time.
+ 
+ 
+00:34:08
+ 
+Shauly Sahar: So, uh
+Soso Tughushi: Yeah.
+Shauly Sahar: yeah.
+Soso Tughushi: Okay. Um booking schema parser. I know there is not. So we have uh uh this one to go booking schema and we added even a feature to detect if it's the only bus and if so then to do this uh transformation measures in their format right yeah uh not much here to discuss actually let's talk about data
+Shauly Sahar: Okay.
+Soso Tughushi: uh during previous meeting um uh AL said that well that's I mean I I I was under a pressure under an impression that when TC got this new direction the data team became absolute and uh I think few people left there and there is there was nobody
+Shauly Sahar: No, no, the data team is a big team and they don't handle
+Soso Tughushi: there.
+Shauly Sahar: only only the stuff that's um related to us. they they consolidate everything from all the the companies, right?
+Soso Tughushi: Mhm.
+Shauly Sahar: So, it's still it's still something uh that there are people there. Um some
+Soso Tughushi: the event that we were sending uh them already uh like itinerary fetched for
+ 
+ 
+00:35:50
+ 
+Shauly Sahar: of Yes.
+Soso Tughushi: example this was used not only for triple prediction right it was used for other purposes too I mean like this is what I want to
+Shauly Sahar: Yeah,
+Soso Tughushi: know what events that we want to preserve
+Shauly Sahar: I want to show. Yeah, again it's it's something that we need to discover. It's it's not a simple like I don't have uh that but I I for example using two dashboards. Okay, this is like um the B2B uh dashboard. You saw that.
+Soso Tughushi: there. Mhm.
+Shauly Sahar: Um I am not sure which events are being part of uh this one.
+Soso Tughushi: Okay,
+Shauly Sahar: I think
+Soso Tughushi: we would need to just uh have a call with that team or uh and identify uh what are the teams from TC that they need so that we would be able to know exactly which events we need to keep.
+Shauly Sahar: I think that we need maybe to do that also with Aikhai first. Maybe he's also familiar. Another thing that we I I I was exposed lately but I I know that um there is something that is being used for that.
+ 
+ 
+00:37:23
+ 
+Shauly Sahar: This is something that we used with um Leavan but it was used also before. Um here you can see you see my screen. Yeah.
+Soso Tughushi: Yes.
+Shauly Sahar: In general, you can see here the performance of the clients. Okay. Uh how many searches they have,
+Soso Tughushi: Mhm.
+Shauly Sahar: how many um itineraries, checkouts, percentage and also they have here like um some historical graph that uh you can you can see that
+Soso Tughushi: This is this data is populated only from TC or does want to go also send them this data?
+Shauly Sahar: I almost sure that this one are from the search requested uh checkout that you are in the sai I think sent or is it in the nali I'm not sure yeah from
+Soso Tughushi: Mhm.
+Shauly Sahar: from those events this is for sure something that uh but I don't
+Soso Tughushi: Understood.
+Shauly Sahar: know if this is something that I I want to say that I don't know if it's something that we want to preserve, but I think that we probably should
+Soso Tughushi: Okay. Okay.
+ 
+ 
+00:38:47
+ 
+Shauly Sahar: I I what I would do maybe is collect the relevant events that we are sending and to see if it's relevant or not or and then also to see if we have something uh in one to go that we can correlate if it's sent at some point. I I assume that booking created or something like that is being sent. So why send it twice? You
+Soso Tughushi: Mhm. Yeah.
+Shauly Sahar: understand?
+Soso Tughushi: Yeah. But it's probably in different format. And if data need team needs to digest, we still need to transform their uh booking event uh into the format that data team wants or basically in our format which work them publishing
+Shauly Sahar: Yeah, but I
+Soso Tughushi: it ourselves but u I don't know if they also want to have a visibility over non B2B events then maybe want to go on this to start to publish this event themsel elves from the core.
+Shauly Sahar: I I think that the data team has there again I'm I'm not familiar with that also I heard about T-Rex T-Rex project you
+ 
+ 
+00:40:01
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: you heard about it I think that this is what they consolidate the data
+Soso Tughushi: No.
+Shauly Sahar: from all the subsidiaries so they know already how to to to get this information. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: I don't know if they ask for some specific format and the subsidiaries did that or the other way around. If somebody is already doing that, I believe that it's something that is already already there, but it's something that we need to discuss.
+Soso Tughushi: Understood. Okay.
+Shauly Sahar: And again, this is only what I am familiar with this um dashboards. Maybe there are others that I'm not familiar with.
+Soso Tughushi: Mhm. Okay. Next, uh monitoring and observability. So I indexed uh everything that relates to that topic like logs, metrics uh like I wrote down basically what are the metric names that we have right now, what are the texts that we put from the code and I mean I know that want to go has its own capabilities for monitoring and metrics and maybe if we have ability to get let's say things based on booking ID uh or like tracing right I mean we we have this uh correlation ID based on which we are finding logs um as Sana showed me there is I mean he doesn't use lots of capabilities of this monitoring so there should be
+ 
+ 
+00:42:00
+ 
+Soso Tughushi: some people who are defining their own graphana metrics and monitorings
+Shauly Sahar: Uh, they use data dog.
+Soso Tughushi: That I don't
+Shauly Sahar: Yeah,
+Soso Tughushi: care.
+Shauly Sahar: I didn't get into that as well. I also asked Sana this week because I was curious. You remember the things that we had last week with the 500 error?
+Soso Tughushi: Yeah.
+Shauly Sahar: This is something that we should supposed to to to get some I don't want us to call somebody else to to understand what
+Soso Tughushi: Yeah,
+Shauly Sahar: happens but I I I I don't I didn't get a a
+Soso Tughushi: of course.
+Shauly Sahar: good answer for that and I I see that they have traces here and they have metrics but I
+Soso Tughushi: Mhm.
+Shauly Sahar: don't know what they are doing with that. So, it's something that we probably will need to deeper dive on on on
+Soso Tughushi: Yeah. Uhhuh. Yeah. Exactly.
+Shauly Sahar: it.
+Soso Tughushi: So we need to know from existing traces, existing metrics for example that we have what are uh what will be which one will we need
+ 
+ 
+00:43:08
+ 
+Shauly Sahar: Correct. Not everything that uh we we need right now. Yeah. what what we maybe we create a lot of garbage.
+Soso Tughushi: exactly?
+Shauly Sahar: Uh but yeah, but you see they have here like get search and and stuff like that. You see?
+Soso Tughushi: Mhm.
+Shauly Sahar: So it's probably the the
+Soso Tughushi: P booking list and when you click one of them what
+Shauly Sahar: same uh let's
+Soso Tughushi: happens?
+Shauly Sahar: see this is traces. Yes.
+Soso Tughushi: Okay.
+Shauly Sahar: It it Yeah, they don't put metrics maybe because it uh can we filter somewhere? I'm trying to find some booking ID.
+Soso Tughushi: Mhm.
+Shauly Sahar: How do I do here? Like uh create a Amalo. Okay. I don't know if we'll find something here. Let's find a new. Anyway, we need to uh learn about uh this one and see what's what's they're using and and
+Soso Tughushi: Mhm.
+Shauly Sahar: how.
+Soso Tughushi: Okay. Uh well there is also rechecker mechanism that we know I think quite well to still decide what to do with
+ 
+ 
+00:46:20
+ 
+Shauly Sahar: Um yeah,
+Soso Tughushi: it.
+Shauly Sahar: I think this is something that's Yeah, I I I don't know on on which on on who is the one that's going to to implement that. Um and and what is uh the court one, but I think that this is uh this is a gap this is a gap that we currently also have right now in in TC.
+Soso Tughushi: Mhm. Mhm.
+Shauly Sahar: We are doing the reex but I think that it's it's not good enough.
+Soso Tughushi: Yeah.
+Shauly Sahar: Um yeah I I I uh I agree. I think that there is also something that are um more um insights about how the trip pool works and how it's populated. I I we had some issues in the last few days that Leavan was uh looking for and um I'm not sure how it works.
+Soso Tughushi: Okay. So, it's an open question and non
+Shauly Sahar: a known gap that uh I hope that
+Soso Tughushi: gap.
+Shauly Sahar: sana will give some good uh um solution for that.
+Soso Tughushi: um sit lock it is being developed on the want to go site
+ 
+ 
+00:48:13
+ 
+Shauly Sahar: Correct.
+Soso Tughushi: and uh once it will be developed we're going to just start uh using new endpoint right on their side.
+Shauly Sahar: on on one to go. Yeah. So, this is something that probably David will do on TC or somebody in the next few
+Soso Tughushi: Yeah.
+Shauly Sahar: weeks as part of the the Danibus migration, but we need to to have it uh to have it there as well. It's like any other API.
+Soso Tughushi: Mhm.
+Shauly Sahar: Yeah,
+Soso Tughushi: Okay. Do we have more time?
+Shauly Sahar: I have uh as much time as uh you want and you have power for
+Soso Tughushi: Okay. Uh station ID mapping.
+Shauly Sahar: it.
+Soso Tughushi: So we the station operator write P U P U P U P U P U P U P U P U P U P UI mappings. Uh I know that this is a issue and we have there two ways either to give the clients all the new ids or do it on our site justice
+Shauly Sahar: just for the the existing IDs,
+ 
+ 
+00:49:18
+ 
+Soso Tughushi: translate.
+Shauly Sahar: right?
+Soso Tughushi: Yeah.
+Shauly Sahar: Um I learned yesterday that there is another thing that called the seat classes, right? Um this is also something that we need to
+Soso Tughushi: Mhm.
+Shauly Sahar: understand what what needs to be done here. There is no in in TC there is no mapping for that at least but what I
+Soso Tughushi: Mhm.
+Shauly Sahar: understand um from the issue that we have in the Anibus for now but it's it
+Soso Tughushi: Uh so what don't so right now whatever sit class want to go or the only bus returns we just forward it right we don't map or we don't get the mappings for it or how do
+Shauly Sahar: I don't know how it's working in one to go but for example in the anibus
+Soso Tughushi: Yeah.
+Shauly Sahar: we are taking whatever we have there okay in one to
+Soso Tughushi: Yeah.
+Shauly Sahar: go there is Um I think that there is some enrichment because it's I'm not sure where we are taking that from. I I am almost sure that maybe um Lean as a as a stored.
+ 
+ 
+00:50:59
+ 
+Shauly Sahar: Okay, we in the SI you are using some SDK uh to get this uh seat classes I think
+Soso Tughushi: Yes.
+Shauly Sahar: right
+Soso Tughushi: Do
+Shauly Sahar: it's not not here look on on the sites in on the SI host I think that it's when you're creating the statement or something like that. Maybe you are creating that you have
+Soso Tughushi: Okay.
+Shauly Sahar: operator mapping, right? You have station mapping.
+Soso Tughushi: I have this mappers here operator station itinerary. So itinary to connect it. Oh,
+Shauly Sahar: Yeah, you have class ID. You see above it.
+Soso Tughushi: see
+Shauly Sahar: No, no, in in the in the files on the left. Class ID.
+Soso Tughushi: so class a class ID mapper. So class ID and seat class converter uh seat class converter is some IC
+Shauly Sahar: maybe. Yeah.
+Soso Tughushi: class uh master data mapping SDK
+Shauly Sahar: Yes, correct. Uh this is something that I think Leor wrap it for
+Soso Tughushi: cave.
+Shauly Sahar: us.
+Soso Tughushi: Okay.
+ 
+ 
+00:53:15
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: So this is one thing.
+Soso Tughushi: And
+Shauly Sahar: Okay. I think that also leavan creating some vehicles
+Soso Tughushi: Yeah.
+Shauly Sahar: object the same as you probably did right
+Soso Tughushi: Mhm.
+Shauly Sahar: now and I think that
+Soso Tughushi: Yeah.
+Shauly Sahar: maybe I'm not sure it's the the data is there or not but eventually it's a it's just an ID we don't provide anything uh uh beside that um I want to maybe show you also So the bug that Davidid or the difference that Davidid found
+Soso Tughushi: Mhm.
+Shauly Sahar: um J. Um,
+Soso Tughushi: We need to add here class ID and vehicle
+Shauly Sahar: uh, Um, no. Vehicle ID is like a concatenation of the operator and the vehicle
+Soso Tughushi: ID.
+Shauly Sahar: type. I Yes. Okay. You see this is like uh this is the difference like in in one to go it's come like with ID5 and the name of it is express and here it's
+Soso Tughushi: Can you
+Shauly Sahar: like sleeper.
+Soso Tughushi: highlight it with the mouse?
+ 
+ 
+00:55:26
+ 
+Shauly Sahar: Um so this is like you see sleeper
+Soso Tughushi: Okay.
+Shauly Sahar: here and five
+Soso Tughushi: Yeah,
+Shauly Sahar: here.
+Soso Tughushi: that's okay.
+Shauly Sahar: It's just IDs. We don't we don't provide them we don't provide them as um you don't have it in the master data clients don't have an API for that. It's probably something that AAL and the Tuna team will need to handle to standardize it. Okay. But anyway,
+Soso Tughushi: Mhm.
+Shauly Sahar: it's currently ids that we are
+Soso Tughushi: Okay.
+Shauly Sahar: returning.
+Soso Tughushi: Okay. And the last item in my list is web growing. I mean this point is that uh we have different format for client web hoop notifications and also when want to go sends us uh the notification uh it doesn't have a client ID so we need to figure out to which client this given booking ID belongs to and as we brainstormed recently let's say when we uh registering this web hooks. Uh these web hook URLs were defined based on what? Based on operator ids or something um in the table or in one to go system.
+ 
+ 
+00:57:07
+ 
+Shauly Sahar: where where
+Soso Tughushi: Uh, you showed me once you were,
+Shauly Sahar: yeah um let
+Soso Tughushi: but I think
+Shauly Sahar: me let me try to find it.
+Soso Tughushi: um,
+Shauly Sahar: I think that I have it. But uh Oh, I have it. You see my screen?
+Soso Tughushi: yes. Yes.
+Shauly Sahar: So, we have a URL.
+Soso Tughushi: Yeah.
+Shauly Sahar: We have um this is the client ID. The one that the what user ID?
+Soso Tughushi: User ID. You mean user ID?
+Shauly Sahar: Yes. This is a one to go client ID. Yes.
+Soso Tughushi: Mhm. Okay.
+Shauly Sahar: And and then they have an API key to send it to us.
+Soso Tughushi: So let's say if we in in the web hook URL if we add one to go slash or question mark client id equals to uh the only bus not the onib bus gbb or uh GBP uh so this table basically would serve as a mapping I mean
+Shauly Sahar: Okay.
+Soso Tughushi: we point is that I want to avoid uh associating ing or having a database of booking ID correspondence to the client.
+ 
+ 
+00:58:37
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: So we could theoretically put here uh just uh question question mark and uh client ID in the string that we expect.
+Shauly Sahar: Okay. Why we Okay. Go. Go. Go. Continue. Should I look on on what you have? Uh,
+Soso Tughushi: I mean um No, no, no. I mean I'm looking at your screen.
+Shauly Sahar: okay.
+Soso Tughushi: uh point is that let's say we are we want to uh so the clients will have different URLs than than this right I mean want to go let's say sends us right now uh the client notification and uh we have all the booking ids and based on the booking ID we find out who is the client and then what is the uh web hook URL they have? Yeah.
+Shauly Sahar: Correct.
+Soso Tughushi: And there we are transforming it uh the notification structure and send
+Shauly Sahar: We are Yeah,
+Soso Tughushi: them.
+Shauly Sahar: we we are getting the booking notification. We find the booking ID in the database based on
+ 
+ 
+00:59:59
+ 
+Soso Tughushi: Correct.
+Shauly Sahar: the integration booking ID and the integration and then we try
+Soso Tughushi: Mhm.
+Shauly Sahar: to perform get booking details uh to see if something was changed updating the
+Soso Tughushi: Yes.
+Shauly Sahar: database. Okay. And if we were able to update it,
+Soso Tughushi: Mhm.
+Shauly Sahar: we are doing several things that I think that we don't need to do because it's redundant,
+Soso Tughushi: Yeah.
+Shauly Sahar: right?
+Soso Tughushi: Because we don't need to have a database on our
+Shauly Sahar: Because the database is already
+Soso Tughushi: Yeah.
+Shauly Sahar: updated
+Soso Tughushi: We just to the client we just send that something has updated in your booking and this is the booking
+Shauly Sahar: and correct.
+Soso Tughushi: ID right so what we will need to do in let's say new
+Shauly Sahar: Yes.
+Soso Tughushi: system is when we receive the ID maybe
+Shauly Sahar: The question is the question how we are receiving this ID.
+Soso Tughushi: slightly yeah
+Shauly Sahar: Okay.
+Soso Tughushi: also so when we
+Shauly Sahar: Okay.
+Soso Tughushi: receive in any way either with web hook or I don't know maybe in process if we are in manual right uh we we need to know who is to who this uh booking ID belongs to right so there is a so if we receive it with a
+ 
+ 
+01:01:19
+ 
+Shauly Sahar: Correct.
+Soso Tughushi: http then we can let's say put this client ID in the URL which uh they sending this uh web hook URL to right.
+Shauly Sahar: Okay.
+Soso Tughushi: Uh and then we just transform slightly the body maybe instead of bit we send booking ID and we need to find out what is the uh actual URL of the client. Yeah. Okay.
+Shauly Sahar: Correct.
+Soso Tughushi: There is not much else to it, right? I mean either we need to have a let's say a database of client ID corresponding as correspondence to uh web hook URLs that they have or uh we could even somehow put it in the want to go site and even not have this
+Shauly Sahar: to put it in one to go side. And and what
+Soso Tughushi: I mean to work around this also like we we said that we need to have let's say correspondence of client ID and web hook URL or maybe there is even a way to put it in the want to go this URL I mean if we're going to receive this notification in process maybe we can just put actual uh web hook URLs of the clients instead of our
+ 
+ 
+01:03:08
+ 
+Shauly Sahar: Got it. I Okay,
+Soso Tughushi: URL.
+Shauly Sahar: I think that this is something that we need to Anyway, this is going to to probably um live in a different different part of the system, right? Because it's okay, I I'm throwing something. Okay. Let's let's assume that we don't have the old uh system anymore. We were able to migrate everything. Okay. And where are we?
+Soso Tughushi: Yeah.
+Shauly Sahar: Okay. So theoretically if I will change the URL here to the one that
+Soso Tughushi: Mhm.
+Shauly Sahar: um exist in uh in TC, right? So the theoretically that knows that this is like this uh rel to this uh CL this booking relates to this client ID, right?
+Soso Tughushi: correct.
+Shauly Sahar: So somebody already know how to connect them. The only problem is that it will send to to that uh to
+Soso Tughushi: Yes.
+Shauly Sahar: that client ID only in the format of um of one to of one to go and not in our format.
+Soso Tughushi: Correct.
+ 
+ 
+01:04:39
+ 
+Soso Tughushi: Yes.
+Shauly Sahar: And what we will need to do is either send the booking ID as is let's assume it's a new booking ID. So they they are famili with that and we won.
+Soso Tughushi: Mhm.
+Shauly Sahar: And if it's like an old booking ID for example, then we need to translate this booking ID to the one that the client uh familiar. So I I think that everything's probably done for you behind the hood,
+Soso Tughushi: Mhm.
+Shauly Sahar: but we just need to send the booking in our format in in the place like we're having this one. Yeah,
+Soso Tughushi: Mhm.
+Shauly Sahar: you you
+Soso Tughushi: sentence
+Shauly Sahar: understand
+Soso Tughushi: now.
+Shauly Sahar: again I I'm not familiar uh with how it works on on one to go but I assume that something detects that there is a change
+Soso Tughushi: Yeah.
+Shauly Sahar: okay and they already know to which client ID it's belong right and they have
+Soso Tughushi: Correct.
+Shauly Sahar: like the the full booking ID that uh they have right there, right? And they are going to send it to here.
+ 
+ 
+01:05:48
+ 
+Soso Tughushi: Yes.
+Shauly Sahar: Okay. If we'll change this ID a URL to the one that for the original client
+Soso Tughushi: Yes.
+Shauly Sahar: and put the token which is like what they are doing with the token they are sending it to that with K is equal to to that one. Okay.
+Soso Tughushi: This part I don't understand
+Shauly Sahar: Okay, give me one second. I will try to find
+Soso Tughushi: it.
+Shauly Sahar: integration. No, it's not in the integration. It's okay. I need to show you different uh Okay. As far as I remember, they are putting the I don't know where they are putting this API key in in the notification. Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: And but they know to correlate the specific booking ID with the one that we we have there, right?
+Soso Tughushi: Yeah.
+Shauly Sahar: And they are sending this huge uh thing. So we can just take this ID see if it's our if
+Soso Tughushi: Yes.
+Shauly Sahar: if we it's like an old ID or is it like and it's also a question that we need to decide what will be the ID that we are going to use for the booking and just create instead of this one create our uh our uh format TC format which has only ID and this
+ 
+ 
+01:07:55
+ 
+Soso Tughushi: only ID and this one I mean we we are decided that we're going to use a
+Shauly Sahar: Okay. Uh,
+Soso Tughushi: booking ids of want to go right in the new system.
+Shauly Sahar: yes. Yeah. So, so theoretically, let's go to Kafka. So many things are opening here. Um, preservation This is how our body looks like,
+Soso Tughushi: Correct.
+Shauly Sahar: right?
+Soso Tughushi: So, booking ID instead of
+Shauly Sahar: Correct.
+Soso Tughushi: beat
+Shauly Sahar: So I want that we'll send this in format.
+Soso Tughushi: shape.
+Shauly Sahar: If it is an old booking we'll send encrypted one.
+Soso Tughushi: Ah,
+Shauly Sahar: If it will be a new booking,
+Soso Tughushi: correct.
+Shauly Sahar: we'll put the one in in
+Soso Tughushi: Yeah. So we agreed that we would need to have this mapping let's say of old and new booking
+Shauly Sahar: it.
+Soso Tughushi: ids and we need to figure out which one which booking is it is it old or is it new. So we would look at the table of this mapping if we find this booking ID that want to go send us in the uh static data or this mapping table then we read this data otherwise we send whatever we have.
+ 
+ 
+01:10:16
+ 
+Shauly Sahar: correct and then it's it's again I think that it will be isolated I I don't know how the system uh this part
+Soso Tughushi: Yeah.
+Shauly Sahar: works and how it is easy to add this um transformation before sending that and how we identify that this is like uh our um but this is probably something
+Soso Tughushi: Yeah.
+Shauly Sahar: that uh we we will uh need to to
+Soso Tughushi: Okay, cool. Um,
+Shauly Sahar: do
+Soso Tughushi: yeah. Uh, let's, uh, so these were all the migration issues that I have identified. Uh, for now, I have a sense that I missed something like from these big topics. Um,
+Shauly Sahar: I I think that what we need two things that one of them we we discuss and one of them I think it's important to to decide is should we encrypt the booking ID itinary ID tok booking token Okay.
+Soso Tughushi: Yeah. Yeah. Yeah.
+Shauly Sahar: And
+Soso Tughushi: Okay. Yeah. But it's booking ID and
+Shauly Sahar: itinerary id is in the search that we return.
+ 
+ 
+01:11:38
+ 
+Soso Tughushi: booking.
+Shauly Sahar: Um yes. And uh the fact that we just not going to use um persistency on the booking side. So we're going to use it uh um later on. For example,
+Soso Tughushi: Yeah.
+Shauly Sahar: there is like as we speak there is a request to provide the cancellation policy in the get booking details. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: So in TC currently um we we store it in the database the cancellation policy but if we didn't store
+Soso Tughushi: Yeah.
+Shauly Sahar: it so we should uh store it uh in the database but what will happen I I also assume that this is something that is stored somewhere and we can get it also after the fact for the for
+Soso Tughushi: Remember
+Shauly Sahar: the if we'll be inside of one to go, right? I I don't see any reason for saving the the database to to have like another layer of that. We just need to use whatever
+Soso Tughushi: uh this cancellation policy is still returned during the get booking details currently. No.
+ 
+ 
+01:12:59
+ 
+Shauly Sahar: I have no on TC. No,
+Soso Tughushi: Yeah.
+Shauly Sahar: we don't we don't return it. We return it only on the search and the get itinerary.
+Soso Tughushi: Okay. on the get it inary uh we have this information and this information is take taken from want to go actually uh when we do this get it inary I mean we have this business defaults right but for want to go we don't use it and the want to go's response with get it includes this information
+Shauly Sahar: Correct.
+Soso Tughushi: um
+Shauly Sahar: It's just an example. So, so I I think that we we will need to make sure that I think that it's a um a design decision that will not keep anything and everything that we'll need to get we'll need to get from the existing one that's supposed to to have it somehow we need to get it.
+Soso Tughushi: Yeah. Yeah.
+Shauly Sahar: We we can get it. Uh
+Soso Tughushi: Yeah. Yeah. Yeah. Yeah.
+Shauly Sahar: right.
+ 
+ 
+01:14:01
+ 
+Soso Tughushi: We can it's it's possible to get it for sure. Either from want to go database or well if necessary. I mean I don't
+Shauly Sahar: If if it's missing that's we can we can edit right because the the data
+Soso Tughushi: correct.
+Shauly Sahar: is is there
+Soso Tughushi: Yeah.
+Shauly Sahar: somewhere.
+Soso Tughushi: Yeah, correct. Yeah, but like what was your point? Um I mean you highlighted let's say difficulty of um
+Shauly Sahar: Not it's just it's just a decision that will not will not have this another
+Soso Tughushi: of
+Shauly Sahar: database layer right and
+Soso Tughushi: Yeah.
+Shauly Sahar: um it's it's no hope but it might required either maybe additional API call behind the scene to get or additional steps to get the this information. That's that's what I'm
+Soso Tughushi: Understood. Understood.
+Shauly Sahar: saying.
+Soso Tughushi: Yeah. Okay.
+Shauly Sahar: Okay. Uh I still think that we we have a still more to discuss but I think that uh No,
+Soso Tughushi: Not today.
+Shauly Sahar: of course of course not today.
+ 
+ 
+01:15:22
+ 
+Shauly Sahar: Yes. I I'm just I'm just saying um I I on that part we I would add the the this uh gaps that we spoke about. Um,
+Soso Tughushi: Mhm.
+Shauly Sahar: I think that now we need to maybe try to get one uh like how the flow for that specific API goes according to to that, right?
+Soso Tughushi: According to
+Shauly Sahar: Okay.
+Soso Tughushi: what?
+Shauly Sahar: you you like a few points to that we need to take uh like that that there are issue or something that but now okay now I'm going to do search will have this client ID booking ID encrypted not encrypted see that we are okay on on that see if we have additional issues that we didn't think about them like know when when and
+Soso Tughushi: Yeah.
+Shauly Sahar: in addition to that after after that we need to see what does it mean to migrate a client. Okay. So, we know that he will need to change maybe the the the client. No, the client ID. No, the API key maybe.
+Soso Tughushi: API key.
+Shauly Sahar: But maybe we have an option not to he has to do the
+Soso Tughushi: Yeah.
+Shauly Sahar: mapping.
+Soso Tughushi: Mhm.
+Shauly Sahar: Maybe he needs to use different URLs.
+Soso Tughushi: Yeah.
+Shauly Sahar: uh that's that's also a point that we need to uh understand how how we are doing that. Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: So that that's that's an not important but this is like the first thing that uh we'll face right.
+Soso Tughushi: Yeah. True.
+Shauly Sahar: Okay. Um,
+Soso Tughushi: Correct.
+Shauly Sahar: so maybe we'll uh touch base again on somewhere next week,
+Soso Tughushi: Yes. Yes. Monday. Tuesday.
+Shauly Sahar: Monday. Yeah. Okay,
+Soso Tughushi: Cool. Thanks.
+Shauly Sahar: cool.
+Soso Tughushi: And yeah, I think it was very useful. Let's see also how good the Gemini uh will transcribe this stuff. I don't know if I
+Shauly Sahar: Okay.
+Soso Tughushi: might. Sure.
+ 
+ 
+Transcription ended after 01:17:57
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.

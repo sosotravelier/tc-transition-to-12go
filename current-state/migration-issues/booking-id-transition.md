@@ -163,3 +163,52 @@ All local absolute file paths in this document have been replaced with GitHub `b
 - `denali`: EF Core migrations directory (`BookingService.Persistency/Migrations/`)
 
 All referenced files were confirmed to exist in the local repository clone at `/Users/sosotughushi/RiderProjects/denali` before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:11:45 – 00:34:08)
+
+### Short IDs Are Per-Client
+
+The `GenerateShortBookingIdPerClient` feature flag is evaluated **per client**, not per integration. Shauly confirmed that "we moved like few of them but we can move all of them if we want but it will be from now on for those clients." This means the short ID format could be adopted for all clients going forward.
+
+**Code verification**: The flag is evaluated via `featureManager.IsEnabledAsync(nameof(FeatureFlags.GenerateShortBookingIdPerClient))` in two places:
+- `OneTwoGoBookingReservationAdapter.cs` (line 44) — the legacy OneTwoGo booking adapter
+- `BookingSiHost.cs` (line 401) — the supply-integration-host path
+
+This is a standard .NET `IFeatureManager` flag — likely configured through Azure App Configuration or similar, allowing per-client targeting rules.
+
+### Static Mapping Table Confirmed
+
+Shauly and Soso agreed that a **static one-time mapping table** (old booking ID → 12go `bid`) is needed, specifically for **post-booking operations only**: cancel, get tickets, get booking details, and booking notifications. This table would be populated once during migration.
+
+### Database Inspection Results
+
+Shauly walked through the `BookingEntities` database table:
+- Old KLV-format IDs **do** contain the 12go `bid` embedded (confirmed visually)
+- Short IDs do **NOT** contain the 12go `bid` — they are fully opaque
+- The short ID feature flag was not enabled for all clients
+
+### FlixBus and DeOniBus Integration Sunset
+
+- **FlixBus**: Being shut down as of 2026-03-12. No new bookings; last departure dates around October. Was used by: GetByBus, BookAway, 12go
+- **DeOniBus**: David is actively migrating DeOniBus clients to 12go. In a few weeks, no new DeOniBus bookings. Was used by: BookAway, BEF, Sakura, Orians, Comport
+- **Key insight**: FlixBus/DeOniBus IDs don't correspond to 12go IDs, but since these integrations are being shut down, the problem resolves naturally
+
+### Legacy Booking Handling
+
+Very few legacy bookings remain (e.g., ~6 DeOniBus bookings with departure dates after June). Options discussed:
+1. Keep the legacy system running briefly for those specific bookings
+2. **Snapshot approach**: Before shutdown, fetch booking details and store/create them manually in 12go
+
+Shauly's gut feeling: by the time the last client migrates, legacy bookings will have expired naturally. "I wouldn't break my head for that."
+
+### Encryption Decision (Open Question)
+
+Shauly raised the question (~01:10:16): **Should booking ID, itinerary ID, and booking token be encrypted** in the new system? This remains an open decision.
+
+### No-Persistence Design Decision
+
+A design decision was reached (~01:11:38): **eliminate the local DB layer for booking details** in the new system. Rely entirely on 12go as the source of truth. Implication: data like cancellation policies (currently stored in TC's DB) will need to be fetched via additional API calls to 12go. Example: cancellation policy is returned on search/get itinerary but NOT on get booking details currently.

@@ -316,7 +316,7 @@ After migrating to 12go as the backend, inbound requests will still arrive with 
 
 **Approach A — Transparent key mapping (our side does the translation):** A component in our stack (API Gateway, a middleware layer, or a new translation service) maps each incoming `(client_id, x-api-key)` pair to the corresponding 12go API key, then forwards calls to 12go using that mapped key. Clients do not change their credentials. This requires maintaining a complete and consistent mapping from our client identities to 12go API keys, which does not currently exist as a single artifact.
 
-**Approach B — Clients adopt 12go keys directly:** Clients are asked to replace their current `x-api-key` with a 12go API key and drop the `client_id` path segment (or accept it as an ignored parameter). This avoids the need for a mapping table but requires coordination with every API consumer and a deprecation window for the old credential format.
+**Approach B — Clients adopt 12go keys directly:** Clients are asked to replace their current `x-api-key` with a 12go API key and drop the `client_id` path segment (or accept it as an ignored parameter). This avoids the need for a mapping table but requires coordination with every API consumer and a deprecation window for the old credential format. **Note:** Even under Approach B, `client_id` may still need to be retained (or an equivalent introduced) for tracing and observability — it currently populates the distributed context via `IConnectContextAccessor`, and removing it would break context propagation used for logging, metrics, and per-client feature flags.
 
 The choice between these approaches has not been made.
 
@@ -326,19 +326,17 @@ The choice between these approaches has not been made.
 
 1. **Does a complete mapping from our `client_id` values to 12go API keys already exist somewhere?** The three separate config stores (AppConfig for booking-service, AppConfig for etna, Postgres for supply-integration) each have partial mappings. Are they consistent? Are there clients that have entries in one store but not another?
 
-2. **How many distinct client IDs are active?** The number of clients that would need either a mapped entry or a key migration is unknown from the codebase alone.
+2. **How many distinct client IDs are active?** ~20–30 active client IDs.
 
 3. **What does the `ClientIdentityMiddleware` (from `connect.platform.client_identity_middleware` NuGet) actually validate?** It is referenced in booking-service and etna, but its source is not in these repositories. Does it validate the `x-api-key` header, the `client_id`, or both? Does it call an external service? This matters for whether the middleware can or must be removed during migration.
 
-4. **What does the API Gateway enforce today?** The comments in all service auth handlers say "this is implemented in API GW." What exact rules does the gateway apply — IP allowlisting, API key validation, rate limiting? This determines what must be re-implemented or preserved during transition.
+4. **Why do clients pass their own `client_id`? Could a client pass someone else's `client_id`?** The API Gateway validates that the client is authorized, but the `client_id` is a URL path segment provided by the client itself. There is no visible enforcement that a given `x-api-key` corresponds to the `client_id` in the URL — a client could potentially pass a different `client_id`. Additionally: **how does etna search determine the contract code for a given `clientId`?** The lookup uses `<CLIENT_ID_UPPERCASED>-<GUID>` as a key into `ConnectorConfiguration`, but the mechanism that ensures the correct mapping is not evident from the codebase.
 
-5. **Can 12go issue API keys that correspond 1:1 with our existing client IDs?** If so, is there a programmatic API for key provisioning, or would it require manual creation of accounts in 12go's system for each of our clients?
+5. **Can 12go issue API keys that correspond 1:1 with our existing client IDs?** No — 12go is an independent system with its own user/account model. There is no programmatic API for key provisioning tied to our client identities.
 
-6. **Is per-client 12go key differentiation required post-migration?** Currently, `booking-service` and `etna` use separate 12go API keys per client (`BookingApi:12GoApiKey:<clientId>` and the etna `ConnectorConfiguration` respectively). Under 12go, a single API key identifies a single 12go user account. Would each of our clients need a distinct 12go account, or can multiple clients share one key?
+6. **Are the per-client 12go API key values consistent across booking-service and etna?** The values stored under `BookingApi:12GoApiKey:<clientId>` (booking-service, AppConfig) and `Connector:OneTwoGo:Clients:<CLIENT_ID>-<GUID>:ApiKey` (etna, AppConfig) are the same 12go API keys, even though they are written in different configuration locations and formats.
 
-7. **What happens to observability?** Today, `client_id` is used for per-client metrics (feature flags, metric tags, credit line resolution). If the `client_id` parameter is eliminated or made optional, the ability to track per-client behaviour in metrics, logs, and billing would be lost unless replaced with an equivalent identifier extracted from 12go's auth response.
-
-8. **`booker` service uses a single shared 12go API key.** Is this intentional (all requests through the `booker` path share one 12go account), or is it a known gap that was never addressed?
+7. **Observability / tracing:** Covered above — `client_id` is needed for distributed context propagation (`IConnectContextAccessor`), per-client feature flags, and metrics. This must be preserved regardless of which authentication approach is chosen.
 
 ---
 
@@ -351,3 +349,89 @@ All local file path references in this document have been replaced with GitHub `
 - `supply-integration`: SI framework auth handler, `OneTwoGoApiConfiguration.cs`, `BookerApiConfiguration.cs`
 
 All referenced files were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:00:00 – 00:06:53)
+
+### David's Client Identity Middleware
+
+David's middleware uses the **`connect.platform-services.client-identity`** project — a full .NET service with middleware SDK, persistence layer, and Kafka consumers.
+
+**Repository**: `connect.platform-services.client-identity` (explored 2026-03-12)
+
+#### Database Schema (PostgreSQL, EF Core)
+
+Two tables:
+
+**`ClientEntities`** — the client record:
+- `Id` (string, PK, max 50 chars) — the client_id (e.g., "bookaway", "comport")
+- `IsSubsidiary` (bool)
+- `OwnerId` (string, FK → self) — parent client for subsidiaries
+- `Enabled` (bool)
+- `CreatedAt`, `UpdatedAt`
+- Self-referencing FK: a client can own other clients
+
+**`ClientIdentityEntities`** — the API key record (one-to-many from Client):
+- `Id` (long, PK, auto)
+- `ClientId` (string, FK → ClientEntities.Id, indexed, cascade delete)
+- `ApiKey` (string) — **stored as a hash**, not plaintext
+- `IterationCount`, `Salt`, `Algorithm`, `HashSize` — PBKDF2 hashing parameters
+- `ExpiresAt` — API keys have an expiration date
+- `CreatedAt`, `UpdatedAt`
+
+#### How API Keys Are Created
+
+1. **Via Kafka**: `ClientCreatedMessageHandler` subscribes to `ClientCreated` topic (from `Carmel.Distribution.Client.Messages`). Creates a `ClientEntity` with the `Id` from the message.
+2. **Via HTTP**: `POST /api/client/create-client-manually` — manual creation endpoint
+3. **API Key generation**: `ApiKeyService` calls **AWS API Gateway** `CreateApiKey` API → generates a key with `GenerateDistinctId = true`, attaches to a usage plan. Key name: `{clientId}_{nameSuffix}`
+4. **API Key storage**: `UpsertApiKey` hashes the key with PBKDF2 and stores the hash in `ClientIdentityEntities`
+
+#### How the Middleware Works (Authentication Flow)
+
+1. **`ClientIdentityLifecycleService`** (IHostedLifecycleService): On startup, calls `LoadAllClientIdentitiesAsync()` which fetches ALL client identities via HTTP (`GET /client_identities`) and loads them into an **in-memory cache** (`IMemoryCache`, priority: NeverRemove). Background refresh runs periodically.
+2. **`ClientIdentityMiddleware`**: For each request:
+   - Extracts `client_id` from URL route values
+   - Extracts `x-api-key` from header (`Constants.ApiKeyHeaderName`)
+   - Calls `ClientApiKeyAuthenticator.Authenticate(clientId, apiKey)`
+3. **`ClientApiKeyAuthenticator`**: Two-layer cache lookup:
+   - First checks `ClientSecretCache` (plaintext key cache, populated after first successful hash verification)
+   - Then checks `ClientIdentityCacheService` (hash-based cache loaded from DB)
+   - Verifies API key by hashing with PBKDF2 and comparing to stored hash
+   - Checks `IsValid` (not expired AND enabled)
+   - Returns 401 on failure
+
+#### Key Implications for Migration
+
+- **API keys are hashed** — cannot be extracted from the database in plaintext for copying to 12go
+- **API keys are AWS API Gateway keys** — tied to usage plans; migration must account for API Gateway infrastructure
+- **One client can have multiple API key records** (one-to-many relationship) — matches Shauly's note about shared keys
+- **Client creation is event-driven** via Kafka from `Carmel.Distribution.Client.Messages` — the "distribution" project Shauly mentioned
+
+### Shauly's Preferred Approach
+
+Shauly's preferred approach is **Approach B** — clients switch to 12go API keys directly when moving to the new API. He called this "the easy solution."
+
+### Alternative: Key Replacement in 12go
+
+If clients cannot change keys, an alternative is to **copy the existing TC API keys and replace them inside 12go's database** directly. Shauly observed in 12go's admin UI that the API key format appears compatible (same format), and there is a UI to deactivate/manage keys. This would need to be done at the database level or through 12go's admin tools.
+
+### Shared API Keys (Internal Only)
+
+TC automation and TC pro share the same 12go API key. However, these are **only internal accounts** — no real external clients share API keys. This simplifies the migration since each external client has a unique key.
+
+### Client ID in 12go
+
+12go has a table storing **user IDs** (their client concept) with associated URLs and API keys. They need client IDs to route booking notifications to supplier owners. For example, LATAM clients like Orians map to "Brazil Turismo" in 12go's system. The association between 12go's user/agent concept and TC's client_id is currently manual.
+
+### Client ID Generation Gap
+
+- **TC side**: Client IDs are generated by David's "client service" producing "comport" IDs (lowercase letters)
+- **12go side**: Uses agent names and sequence numbers — no equivalent of TC's client_id concept
+- **Decision needed**: 12go's client creation process will need to include TC's client ID so the two systems can be correlated
+
+### New Question
+
+> **Q**: How will new clients be created in the post-migration system? The client_id must be generated and shared between 12go and whatever replaces TC's client identity service.

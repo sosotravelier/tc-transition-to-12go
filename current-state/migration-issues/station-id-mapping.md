@@ -318,3 +318,58 @@ All local absolute file paths in this document have been replaced with GitHub `b
 - `supply-integration`: `OneTwoGoStationMapper.cs`, station ID translation in the 12go integration, `TcTourStationMapper.cs`
 
 All referenced files were confirmed to exist in the local repository clones before conversion. No references were left unconverted.
+
+---
+
+## Meeting Insights (2026-03-12)
+
+Source: Soso / Shauly 1-on-1 (timestamps 00:48:13 – 00:55:26)
+
+### NEW: Seat Classes (Class ID) — Additional Mapping Dimension
+
+Seat classes are an additional ID mapping dimension **not previously documented** in this file. Key findings:
+
+- **SI uses a master data mapping SDK** (wrapped by **Lidor**) for seat class conversion
+- **Class ID mapper** and **seat class converter** exist in the SI host
+- **Discrepancy found by David**: 12go returns class ID "5" with name "express" while DeOniBus returns "sleeper" for the same route. These are different ID spaces that need reconciliation
+- **No client-facing API**: Clients don't have a master data API for seat classes — they are just returned as IDs in search/booking responses
+
+**Code verification (etna/supplier-integration)**:
+
+The `ClassIdMapper` lives in [`etna/supplier-integration/Etna.Search.SupplierIntegration/Mappers/ClassId/ClassIdMapperApi.cs`](https://github.com/boost-platform/etna/blob/main/supplier-integration/Etna.Search.SupplierIntegration/Mappers/ClassId/ClassIdMapperApi.cs):
+- Uses `ISeatClassConverter` from `MasterData.Mapping.Sdk` (the external SDK wrapped by Lidor)
+- `MapFromSupplier(classId, integrationId, operatorId)` → resolves integration ID → checks if mappings exist → calls `seatClassConverter.ConvertFromIntegrationDomain()`
+- Falls back to raw `classId` if no mapping exists (`MappingNotFoundException`)
+- Wrapped with `MeasuredClassIdMapper` for metrics (tracks `MissingMapping` counter)
+
+In the **standalone SI** (`supply-integration/integrations/onetwogo`), the `OneTwoGoSegmentMapper` passes 12go's class as `ClassId = opt.Class.ToString()` — raw integer, no mapping applied. The mapping only happens in **etna's supplier-integration host** via the `ClassIdMapper`.
+
+DI chain: `ConfigureServices.AddClassIdMapper()` → `MeasuredClassIdMapper` → `ClassIdMapper(ISeatClassConverter, IIntegrationIdResolver)`
+
+**Master Data Mapping SDK** (`ISeatClassConverter`) lives in **Fuji** repo:
+- Interface: [`fuji/Fuji.Si.Sdk/ISeatClassConverter.cs`](https://github.com/boost-platform/fuji/blob/main/Fuji.Si.Sdk/ISeatClassConverter.cs)
+- Implementation: [`fuji/Fuji.Si.Sdk/SeatClassConverter.cs`](https://github.com/boost-platform/fuji/blob/main/Fuji.Si.Sdk/SeatClassConverter.cs)
+- `ConvertFromIntegrationDomain(integrationId, operatorId, classId)` → calls `/MapClasses?integrationId={id}&operatorId={id}` endpoint
+- Returns `remoteId` → `classId` mapping dictionary
+- Caches in `IMemoryCache` with key `SeatClassConverter:{integrationId}:{operatorId}`
+- Data model: `SeatClassMapping(remoteId, operatorId, classId, classSourceId, sourceId)`
+
+**Seat class persistence** (Etna DynamoDB):
+- Entity: `Etna.Mapper.Domain/Entities/SeatClassV2.cs` — PK/SK structure
+- Fields: `Name`, `Amenities`, `Images`, `OperatorId`
+
+### NEW: Vehicle ID — Concatenated Identifier
+
+Vehicle ID is constructed from **operator + vehicle type**. **Levan** is creating vehicle objects in a similar pattern to the existing station/operator mappers.
+
+**Code verification**: In 12go's API response, `SegmentItem` (from `SupplyIntegration.OneTwoGo.Common/Api/Models/SegmentItem.cs`) has:
+- `operator` (int) — operator ID
+- `class` (int) — seat class ID
+- `vehclasses` (string[]) — vehicle class strings: "bus", "avia", "train", "ferry", "van", "charter"
+
+Known vehicle class IDs (from [`fuji/inventory_provider/OneTwoGoDbWrapper/src/OneTwoGoDbWrapper.Contracts/KnownVehicleClassId.cs`](https://github.com/boost-platform/fuji/blob/main/inventory_provider/OneTwoGoDbWrapper/src/OneTwoGoDbWrapper.Contracts/KnownVehicleClassId.cs)):
+`Bus`, `Train`, `Ferry`, `Van`, `Avia`, `Charter`
+
+### Standardization Ownership
+
+The standardization of seat class IDs and vehicle IDs may need to be handled by **Eyal and Datuna**. This is separate from the station/operator/POI mapping work but follows the same pattern of needing ID reconciliation between systems.
