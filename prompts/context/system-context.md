@@ -153,7 +153,7 @@ See `current-state/cross-cutting/authentication.md` for full analysis.
 - All development expertise is in .NET
 - **12go HTTP API stability**: Previously assumed stable. Now **uncertain** — F3 restructuring may change the API surface. Design should account for this risk.
 - **F3 will be broken into microservices eventually**, but no plan exists yet (no timeline, no target language). Code written inside F3 today may require a second migration when F3 is demolished.
-- **Technology choice**: The team does not prefer PHP; business sees PHP as less risky (alignment with 12go's stack). Both perspectives are inputs to consider, not a source of truth. If the team will work with PHP, the solution must be designed so that all parties feel comfortable: AI-accelerated development and patterns that do not require deep PHP expertise from team members.
+- **Technology choice**: The team's production experience is entirely in .NET. 12go's stack is PHP 8.3/Symfony 6.4. Business sees alignment with 12go's stack as reducing long-term operational risk. If the chosen language differs from the team's existing expertise, the solution must account for ramp-up cost and ensure maintainability (e.g., AI-augmented development, simple patterns, 12go veteran support).
 - Go is being considered by 12go but nothing is decided
 - Developer experience is a priority -- team focus and stability are prioritized during major system changes
 - AI-augmented development is heavily used (Cursor, Claude)

@@ -230,10 +230,12 @@ Even with valid pricing data, `netPrice` and `sysfee` are only populated when th
 
 ## Controller Changes (vs branch)
 
-Two changes were needed to the `SearchController.php` on the branch:
+Initially tested with two changes to `SearchController.php`:
 
 1. **Return type:** `JsonResponse` → `Response` — needed to use custom `json_encode` flags
 2. **JSON encoding:** `json_encode($data, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE)` — safety for any binary UDF data that leaks through the parsing pipeline
+
+These changes were reverted (stashed) and the endpoint works correctly without them — the standard `JsonResponse` handles the data fine. The stashed changes remain available if needed.
 
 ## Test Results
 
@@ -241,10 +243,10 @@ All 4 search types return HTTP 200 with correct B2B contract shape:
 
 | Search Type | Params | Vehicles | Segments | Itineraries |
 |---|---|---|---|---|
-| Province → Province | `departure_poi=1&arrival_poi=44` | 6 | 14 | 14 |
-| Station → Province | `departures[]=3&arrival_poi=44` | 1 | 4 | 4 |
-| Province → Station | `departure_poi=1&arrivals[]=4` | 1 | 4 | 4 |
-| Station → Station | `departures[]=3&arrivals[]=4` | 1 | 4 | 4 |
+| Province → Province | `departure_poi=1&arrival_poi=44` | 1 | 24 | 24 |
+| Province → Station | `departure_poi=1&arrivals[]=4&arrivals[]=5133&arrivals[]=11553` | 1 | 24 | 24 |
+| Station → Province | `departures[]=3&departures[]=4055&arrival_poi=44` | 1 | 13 | 13 |
+| Station → Station | `departures[]=3&departures[]=4055&arrivals[]=4&arrivals[]=5133&arrivals[]=11553` | 1 | 13 | 13 |
 
 Response JSON files are in this directory alongside this document.
 
@@ -263,6 +265,46 @@ Response JSON files are in this directory alongside this document.
 | `station` | 268,844 | DB dump |
 | `operator` | 43,290 | `seller-operatos.sql.gz` dump |
 | Views | 202 | `4-views.sql` |
+
+## API Key & Access Configuration
+
+- **API key user:** `usr_id = 3935374` (comment: "Kiwi.com", role: `partner_light`)
+- **Host/port:** `https://frontend3.12go.local:8443` (HTTP on port 80 redirects to HTTPS; port 8443 maps to container port 443)
+- **Parameter name:** `departure_date` (not `date`)
+
+### Required `data_sec` changes for this user
+
+The user originally had `whole → D` (deny-all default) plus `operator_id → 12274 → R`. This blocks all operators except 12274, which has no trips on the test route. Two changes are needed:
+
+```sql
+-- 1. Remove the deny-all default (blocks all operators not explicitly allowed)
+DELETE FROM data_sec WHERE usr_id = 3935374 AND object = 'whole';
+
+-- 2. Enable netprice/sysfee passthrough (required by B2B mapper validation)
+INSERT INTO data_sec_role (role_id, object, object_id, access)
+VALUES ('agent', 'operation', 'api_pass_netprice_sysfee', 'RW');
+```
+
+Without step 1, only operator 12274 is visible and no trips are returned for Bangkok→Chiang Mai (operator 16779).
+
+### Required pricing data
+
+The `pricing_rule` and `agent_fee_rule` tables are empty in the local DB dump. The `price_5_6_pool` UDF needs at least one rule in each to compute prices; without them, all pricing fields are null and `SearchMapper::isOptionValid()` filters out every option.
+
+```sql
+-- Minimal pricing rule (catch-all, 10% topup)
+INSERT INTO pricing_rule (object_type, object_id, rule_type, topup_value, topup_fxcode, valid_from, valid_to, is_active, is_final, priority)
+VALUES ('global', 0, 'percent', 10, 'THB', '2010-01-01', '2099-01-01', 1, 1, 0);
+
+-- Minimal agent fee rule (5% fee)
+INSERT INTO agent_fee_rule (valid_from, valid_to, active, mode, operators, agents, rule_param1, rule_param2, priority)
+VALUES ('2010-01-01', '2099-01-01', 1, 'percent', '', '', 5, 0, 1);
+
+-- Reload the UDF after inserting rules
+SELECT price_5_6_load();
+```
+
+After reload, `price_5_6_load()` should report "2 pricing rules loaded" and "2 agent fee rules loaded" (includes the internal reset entries).
 
 ## Key Takeaways
 

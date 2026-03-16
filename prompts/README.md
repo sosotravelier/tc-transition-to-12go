@@ -9,28 +9,30 @@ prompts/
 ├── context/                    # Shared context blocks (inject into all agents)
 │   ├── system-context.md       # Current state, team, scale, constraints
 │   └── codebase-analysis.md    # What exists, what to keep/discard
-├── design-agents/              # Language-specific exploration (Wave 2)
-│   ├── php-symfony.md          # Monolith + Microservice PHP path
-│   ├── dotnet.md               # Microservice .NET path
-│   ├── golang.md               # Microservice Go path
-│   └── typescript.md           # Microservice TS path (includes "Why Not Python")
-├── analyzer-agents/            # Scoring and analysis (Wave 3)
-│   ├── team-velocity.md        # DX + AI + Competency
-│   ├── architecture-performance.md # Arch + Scale + Performance
-│   ├── operations-infra.md     # DevOps + Monitoring + Infra
-│   └── risk-migration.md       # Risk + Migration + Maintainability
-├── synthesis/                  # Recommendation and matrix (Wave 4)
+├── design-agents/              # Perspective-based design proposals (Phase 2)
+│   ├── pragmatic-minimalist.md # Strangler fig, simplify in-place
+│   ├── platform-engineer.md    # Infrastructure-first, operational burden
+│   ├── data-flow-architect.md  # Event/data flow, Kafka, ClickHouse
+│   ├── team-first-developer.md # Developer experience, AI tooling, team dynamics
+│   ├── disposable-architecture.md # Designed for replaceability
+│   └── clean-slate-designer.md # Contract-first, zero legacy anchoring
+├── analyzer-agents/            # Scoring and analysis (Phase 3)
+│   ├── red-team.md             # Failure mode analysis (does not score)
+│   ├── execution-realist.md    # Effort, velocity, team match, migration risk
+│   ├── ai-friendliness.md      # AI tooling, test generation, code navigability
+│   └── technical-merit.md      # Performance, simplicity, infra fit, elegance
+├── synthesis/                  # Recommendation and matrix (Phase 3 synthesis)
 │   ├── comparison-prompt.md
 │   └── recommendation-prompt.md
-└── archive/                    # Obsolete prompts from previous versions
-    ├── hybrid-bff-design.md
-    ├── migration-strategy.md
-    └── reviewer-agents/        # Old 6-persona structure
+└── archive/                    # Superseded prompts (v1 language-specific + old personas)
+    ├── v1/                     # v1: one agent per language (replaced by perspective-based)
+    └── reviewer-agents/        # Pre-v4 6-persona reviewer structure
 ```
 
 ## How to Use
 
-1. **Wave 1 (Complete)**: Produce high-level monolith and microservice designs.
-2. **Wave 2**: Run design agents in parallel to concretize language choices.
-3. **Wave 3**: Run analyzer agents in parallel to score all options.
-4. **Wave 4**: Run synthesis agents to produce final comparison and recommendation.
+1. **Phase 1 (Complete)**: Document current state — see `current-state/`.
+2. **Phase 2**: Run 6 design agents in parallel. Each reads its prompt + context files.
+3. **Phase 3**: Run 4 analyzer agents in parallel on all 6 designs. Then synthesize.
+
+See `runbooks/regenerate-phase2.md` for the full step-by-step process.

@@ -1,16 +1,18 @@
 ---
 status: updated
-last_updated: 2026-02-23
+last_updated: 2026-03-16
 ---
 
 # Current System Architecture Overview
+
+This is an index. Each section provides minimal context and links to the detailed documents. **Read the linked files for full analysis.**
 
 ## Scope
 
 - **In scope**: All B2B client-facing endpoints (static data, search, booking funnel, post-booking)
 - **Out of scope**: Distribution service, Ushba (pricing module -- being sunset separately), station mapping ID migration, client onboarding process
 
-## Services Summary
+## Services
 
 | Service | Language | Purpose | Repository |
 |---------|----------|---------|------------|
@@ -79,348 +81,83 @@ flowchart TD
     Frontend3 -->|"Webhooks"| DenaliNotifications
 ```
 
-## Client Journey (End-to-End Flow)
+## Endpoints
 
-This is the complete flow a client follows from first contact to ticket retrieval:
+Each endpoint is documented with HTTP contract, internal flow, 12go equivalent, and open questions. **Read individual files for full details.**
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Fuji
-    participant EtnaSearch as Etna Search
-    participant EtnaSI as Etna SI Host
-    participant Denali as Denali Booking
-    participant PostBooking as Denali Post-Booking
-    participant SI as SI Framework
-    participant TwelveGo as 12go API
+| Endpoint | File | 12go Call(s) |
+|----------|------|--------------|
+| Search | [search.md](endpoints/search.md) | `GET /search/{from}p/{to}p/{date}` |
+| GetItinerary | [get-itinerary.md](endpoints/get-itinerary.md) | 3 calls: trip, cart, checkout |
+| CreateBooking | [create-booking.md](endpoints/create-booking.md) | `POST /reserve` + status fetch |
+| ConfirmBooking | [confirm-booking.md](endpoints/confirm-booking.md) | `POST /confirm` + status fetch |
+| SeatLock | [seat-lock.md](endpoints/seat-lock.md) | None (local only; 12go developing native support) |
+| GetBookingDetails | [get-booking-details.md](endpoints/get-booking-details.md) | Reads from local DB (lazy 12go fetch for tickets) |
+| GetTicket | [get-ticket.md](endpoints/get-ticket.md) | `GET /booking/{id}` |
+| CancelBooking | [cancel-booking.md](endpoints/cancel-booking.md) | Refund options + refund |
+| Notifications | [notifications.md](endpoints/notifications.md) | Webhook from 12go |
+| Stations | [stations.md](endpoints/stations.md) | MariaDB sync → S3 snapshot |
+| Operators | [operators.md](endpoints/operators.md) | MariaDB sync |
+| POIs | [pois.md](endpoints/pois.md) | — |
+| Incomplete Results | [incomplete-results.md](endpoints/incomplete-results.md) | — |
+| gRPC Search | [grpc-search-integration.md](endpoints/grpc-search-integration.md) | Google Metasearch integration |
 
-    Note over Client,Fuji: Phase 1: Setup
-    Client->>Fuji: GET /v1/{client_id}/stations
-    Fuji-->>Client: Pre-signed S3 URL (station snapshot JSON)
-    Client->>Fuji: GET /v1/{client_id}/operators
-    Fuji-->>Client: Operator list
+## Cross-Cutting Concerns
 
-    Note over Client,TwelveGo: Phase 2: Search
-    Client->>EtnaSearch: GET /v1/{client_id}/itineraries?departures=X&arrivals=Y&date=Z
-    EtnaSearch->>EtnaSI: POST /itineraries (integrationId, routes, date, pax)
-    EtnaSI->>SI: ISearchSupplier.Search()
-    SI->>TwelveGo: GET /search/{from}p/{to}p/{date}
-    TwelveGo-->>SI: Trips + operators + stations
-    SI-->>EtnaSI: Itineraries (mapped)
-    EtnaSI-->>EtnaSearch: Itineraries
-    EtnaSearch-->>Client: SearchResponse (itineraries with IDs)
+| Concern | File |
+|---------|------|
+| Authentication | [authentication.md](cross-cutting/authentication.md) |
+| Data Storage | [data-storage.md](cross-cutting/data-storage.md) |
+| Messaging & Events | [messaging.md](cross-cutting/messaging.md) |
+| Monitoring | [monitoring.md](cross-cutting/monitoring.md) |
+| API Contract Conventions | [api-contract-conventions.md](cross-cutting/api-contract-conventions.md) |
+| Transition Complexity | [transition-complexity.md](cross-cutting/transition-complexity.md) |
 
-    Note over Client,TwelveGo: Phase 3: Checkout (GetItinerary)
-    Client->>Denali: GET /{client_id}/itineraries/{itinerary_id}
-    Denali->>EtnaSI: GET /itinerary/{itineraryId}
-    EtnaSI->>SI: ISearchSupplier.GetItinerary()
-    SI->>TwelveGo: GET /trip/{tripId}/{date}
-    SI->>TwelveGo: POST /cart/{tripId}/{date} (AddToCart)
-    TwelveGo-->>SI: cartId
-    SI->>TwelveGo: GET /checkout/{cartId} (GetBookingSchema)
-    TwelveGo-->>SI: Booking form fields
-    SI-->>Denali: Itinerary + Schema + cartId
-    Denali-->>Client: PreBookingSchema + BookingToken
+## Integration Layer
 
-    Note over Client,TwelveGo: Phase 3b: Seat Lock (optional)
-    Client->>Denali: POST /{client_id}/bookings/lock_seats
-    Denali->>SI: IBookingFunnel.LockSeats()
-    SI-->>Denali: Locked seats
-    Denali-->>Client: Updated booking with locked seats
+| Topic | File |
+|-------|------|
+| 12go API Surface | [12go-api-surface.md](integration/12go-api-surface.md) |
+| 12go Service Layer | [12go-service-layer.md](integration/12go-service-layer.md) |
+| SI Framework | [si-framework.md](integration/si-framework.md) |
+| Caching Strategy | [caching-strategy.md](integration/caching-strategy.md) |
 
-    Note over Client,TwelveGo: Phase 4: Create Booking
-    Client->>Denali: POST /{client_id}/bookings (BookingToken + passenger data)
-    Denali->>SI: IBookingFunnel.Reserve()
-    SI->>TwelveGo: POST /reserve/{bookingId}
-    TwelveGo-->>SI: Reservation result
-    SI-->>Denali: Reservation
-    Denali-->>Client: Booking (with bookingId)
+## Migration Issues
 
-    Note over Client,TwelveGo: Phase 5: Confirm
-    Client->>Denali: POST /{client_id}/bookings/{booking_id}/confirm
-    Denali->>SI: IBookingFunnel.Book()
-    SI->>TwelveGo: POST /confirm/{bookingId}
-    TwelveGo-->>SI: Confirmation result
-    SI-->>Denali: Confirmed reservation
-    Denali-->>Client: Confirmed booking
+Specific transition challenges analyzed end-to-end. **Each file covers current behavior, 12go equivalent, gap analysis, and recommended approach.**
 
-    Note over Client,TwelveGo: Phase 6: Post-Booking
-    Client->>PostBooking: GET /{client_id}/bookings/{booking_id}
-    PostBooking-->>Client: Booking details (from PostgreSQL)
+| Issue | File |
+|-------|------|
+| Station ID Mapping | [station-id-mapping.md](migration-issues/station-id-mapping.md) |
+| Booking Schema Parser | [booking-schema-parser.md](migration-issues/booking-schema-parser.md) |
+| Booking ID Transition | [booking-id-transition.md](migration-issues/booking-id-transition.md) |
+| API Key Transition | [api-key-transition.md](migration-issues/api-key-transition.md) |
+| Seat Lock | [seat-lock.md](migration-issues/seat-lock.md) |
+| Webhook Routing | [webhook-routing.md](migration-issues/webhook-routing.md) |
+| Recheck Mechanism | [recheck-mechanism.md](migration-issues/recheck-mechanism.md) |
+| Data Team Events | [data-team-events.md](migration-issues/data-team-events.md) |
+| Client Migration Process | [client-migration-process.md](migration-issues/client-migration-process.md) |
+| Monitoring & Observability | [monitoring-observability.md](migration-issues/monitoring-observability.md) |
 
-    Client->>PostBooking: GET /{client_id}/bookings/{booking_id}/ticket
-    PostBooking->>SI: GetTicket (if needed)
-    SI->>TwelveGo: GET /booking/{bookingId}
-    TwelveGo-->>SI: Ticket URL
-    PostBooking-->>Client: Ticket (PDF or URL)
-```
+## Search POC Results
 
-## Search Flow Detail
+F3 search endpoint POC (ST-2432, branch `ST-2432-b2b-search-poc`). All 4 search types return HTTP 200 with correct B2B contract shape. **Read the setup issues doc for friction data.**
 
-Etna Search has a complex MediatR pipeline that will be mostly eliminated. Today:
+| Document | File |
+|----------|------|
+| Setup friction & local env issues | [local-env-setup-issues.md](search-poc-results/local-env-setup-issues.md) |
+| Province → Province | [request](search-poc-results/province-to-province/request.sh) / [response](search-poc-results/province-to-province/response.json) |
+| Station → Province | [request](search-poc-results/station-to-province/request.sh) / [response](search-poc-results/station-to-province/response.json) |
+| Province → Station | [request](search-poc-results/province-to-station/request.sh) / [response](search-poc-results/province-to-station/response.json) |
+| Station → Station | [request](search-poc-results/station-to-station/request.sh) / [response](search-poc-results/station-to-station/response.json) |
 
-```mermaid
-flowchart TD
-    Request["Client Search Request"]
-    Controller["ItinerariesController"]
-    Processor["EtnaSearchProcessorService"]
-    Engine["SearchEngine (MediatR)"]
+## 12go Platform
 
-    subgraph Pipeline ["MediatR Pipeline (most can go away)"]
-        B1["SearchEventsBehavior"]
-        B2["DistributionRulesBehavior"]
-        B3["SourceAvailabilityBehavior"]
-        B4["MarkupBehavior"]
-        B5["ExecutionPlanBuilderBehavior"]
-        B6["CacheDirectSupportBehaviour"]
-        B7["ManualProductBehavior"]
-        B8["ContractResolutionBehavior"]
-        B9["OperatorHealthBehaviour"]
-        B10["RoutesDiscoveryBehavior"]
-    end
+- **Stack**: PHP 8.3 / Symfony 6.4, MariaDB, Redis, Kafka, ClickHouse, Datadog
+- **Infrastructure**: Fully managed by DevOps (scaling, deployment, config via release requests)
+- **Environments**: Local (Docker) → Staging → PreProd (real external connections) → Prod
+- **Dev URL**: `https://integration-dev.travelier.com/v1/{client_id}/`
 
-    subgraph Execution ["Execution"]
-        IndexSearch["IndexSearchBehaviour\n(cache/trip lake)"]
-        DirectAdapter["DirectAdapter\n(direct supplier call)"]
-    end
+## Team & Constraints
 
-    SIHost["Etna SI Host"]
-    SILib["SI Library"]
-    TwelveGoAPI["12go API"]
-
-    Request --> Controller --> Processor --> Engine --> Pipeline
-    Pipeline --> Execution
-    IndexSearch -.->|"GOES AWAY"| IndexSearch
-    DirectAdapter --> SIHost --> SILib --> TwelveGoAPI
-```
-
-**What survives**: Only the direct call path (DirectAdapter -> 12go). Everything else (trip lake, index cache, operator health, distribution rules, experiments, manual products) is framework overhead for multi-supplier support.
-
-**What might need to stay**: MarkupBehavior (price markup for clients), RoutesDiscovery (station-to-route mapping).
-
-## Booking Flow Detail
-
-```mermaid
-flowchart TD
-    subgraph DenaliBooking ["Denali booking-service"]
-        BC["BookingController"]
-        SFA["SiFacade"]
-        BSH["BookingSiHost"]
-        ICS["ItineraryCacheService\n(DynamoDB)"]
-        PCS["PreBookingCacheService\n(DynamoDB)"]
-        BCS["BookingCacheService\n(DynamoDB)"]
-        PS["PriceService / MarkupService"]
-        CL["CreditLine Check"]
-        KP["Kafka Publisher"]
-    end
-
-    subgraph SILayer ["SI Framework"]
-        ISP["ISiServiceProvider"]
-        BF["IBookingFunnel"]
-        BS["IBookingSchema"]
-        SS["ISearchSupplier"]
-    end
-
-    TwelveGoAPI["12go API"]
-
-    BC --> SFA
-    SFA --> BSH
-    SFA --> ICS
-    SFA --> PCS
-    SFA --> BCS
-    SFA --> PS
-    SFA --> CL
-    SFA --> KP
-    BSH --> ISP --> BF
-    BSH --> ISP --> BS
-    BSH --> ISP --> SS
-    BF --> TwelveGoAPI
-    BS --> TwelveGoAPI
-    SS --> TwelveGoAPI
-```
-
-**Key orchestration in SiFacade**:
-1. Resolves integrationId and contractCode
-2. Manages DynamoDB caching at each step
-3. Applies pricing/markup
-4. Checks credit line balance
-5. Publishes Kafka events
-6. Handles encryption of IDs (Caesar cipher for itinerary IDs, booking tokens)
-
-**What can go away**: DynamoDB caching (12go stores bookings), SI framework abstraction (only one integration). Credit line and markup may need to stay.
-
-## Client Endpoint to 12go API Mapping
-
-### Mapping Table
-
-| Our Client Endpoint | 12go API Call(s) | Notes |
-|---|---|---|
-| **Search** `GET /v1/{client_id}/itineraries` | `GET /search/{from}p/{to}p/{date}` | Single 12go call |
-| **GetItinerary** `GET /{client_id}/itineraries/{id}` | `GET /trip/{tripId}/{datetime}` | 3 calls total |
-| | `POST /cart/{tripId}/{datetime}` | Creates cart |
-| | `GET /checkout/{cartId}` | Gets booking schema |
-| **SeatLock** `POST /{client_id}/bookings/lock_seats` | _(none yet)_ | Local validation only; 12go is developing native seat lock |
-| **CreateBooking** `POST /{client_id}/bookings` | `POST /reserve/{bookingId}` | + status fetch |
-| | `GET /booking/{bookingId}` | Gets price/status |
-| **ConfirmBooking** `POST /{client_id}/bookings/{id}/confirm` | `POST /confirm/{bookingId}` | + status fetch |
-| | `GET /booking/{bookingId}` | Gets final status |
-| **GetBookingDetails** `GET /{client_id}/bookings/{id}` | _(none, usually)_ | Reads from local DB |
-| | `GET /booking/{bookingId}` | Only for lazy ticket fetch |
-| **GetTicket** `GET /{client_id}/bookings/{id}/ticket` | `GET /booking/{bookingId}` | Gets ticket URL |
-| **CancelBooking** `POST /{client_id}/bookings/{id}/cancel` | `GET /booking/{bookingId}/refund-options` | 2 calls |
-| | `POST /booking/{bookingId}/refund` | Executes refund |
-| **GetStations** `GET /v1/{client_id}/stations` | MariaDB `station_v` table | Exported via periodic sync and returned as pre-signed S3 snapshot URL |
-| **GetOperators** `GET /v1/{client_id}/operators` | MariaDB `operator_v` table | Via OneTwoGoDbWrapper (periodic sync) |
-
-### Visual: Booking Funnel to 12go
-
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Us as Our Services
-    participant TGo as 12go API
-
-    rect rgb(40, 40, 60)
-    Note over Client,TGo: Search Phase
-    Client->>Us: Search itineraries
-    Us->>TGo: GET /search/{from}p/{to}p/{date}
-    TGo-->>Us: trips, operators, stations
-    Us-->>Client: itineraries with IDs
-    end
-
-    rect rgb(40, 60, 40)
-    Note over Client,TGo: Checkout Phase
-    Client->>Us: GetItinerary(id)
-    Us->>TGo: GET /trip/{tripId}/{datetime}
-    Us->>TGo: POST /cart/{tripId}/{datetime}
-    Us->>TGo: GET /checkout/{cartId}
-    TGo-->>Us: trip + cart + schema
-    Us-->>Client: PreBookingSchema + BookingToken
-    end
-
-    rect rgb(60, 40, 40)
-    Note over Client,TGo: Booking Phase
-    Client->>Us: SeatLock (optional)
-    Note right of Us: No 12go call (local only)
-    Us-->>Client: validated seats
-
-    Client->>Us: CreateBooking
-    Us->>TGo: POST /reserve/{bookingId}
-    Us->>TGo: GET /booking/{bookingId}
-    TGo-->>Us: reservation + price
-    Us-->>Client: booking with ID
-
-    Client->>Us: ConfirmBooking
-    Us->>TGo: POST /confirm/{bookingId}
-    Us->>TGo: GET /booking/{bookingId}
-    TGo-->>Us: confirmed + ticket info
-    Us-->>Client: confirmed booking
-    end
-
-    rect rgb(40, 50, 60)
-    Note over Client,TGo: Post-Booking Phase
-    Client->>Us: GetBookingDetails
-    Note right of Us: Reads from local DB
-    Us-->>Client: booking details
-
-    Client->>Us: GetTicket
-    Us->>TGo: GET /booking/{bookingId}
-    TGo-->>Us: ticket URL
-    Us-->>Client: ticket PDF/URL
-
-    Client->>Us: CancelBooking
-    Us->>TGo: GET /booking/{bookingId}/refund-options
-    Us->>TGo: POST /booking/{bookingId}/refund
-    TGo-->>Us: refund result
-    Us-->>Client: cancellation details
-    end
-```
-
-**Key observations:**
-- **GetItinerary** is the most 12go-intensive -- it calls 3 endpoints (trip details, add to cart, checkout/schema)
-- **SeatLock** makes no 12go call yet (12go is developing native seat lock; we currently validate locally)
-- **GetBookingDetails** reads from our local DB, not 12go (except lazy ticket URL fetch)
-- **CreateBooking** and **ConfirmBooking** both call `/booking/{id}` after their main call to get updated status/price
-- **Stations/Operators** don't use the REST API -- they read from 12go's MariaDB via OneTwoGoDbWrapper periodic sync
-- **Stations endpoint response is artifact-based** -- clients receive an S3 URL to a generated JSON snapshot, not a direct inline station array from a live DB query
-
-## Data Storage Map
-
-| Store | Service | Purpose | Can It Go? |
-|-------|---------|---------|------------|
-| DynamoDB - ItineraryCache | Denali booking-service | Cache itinerary between search and booking | Yes - can re-fetch from 12go |
-| DynamoDB - PreBookingCache | Denali booking-service | Cache booking schema + locked seats | Yes - can re-fetch from 12go |
-| DynamoDB - BookingCache | Denali booking-service | Store active bookings | Yes - 12go stores bookings |
-| PostgreSQL - BookingEntities | Denali post-booking-service | Store confirmed bookings | Yes - proxy to 12go |
-| HybridCache | Supply-Integration | Cache trip data (price, operator) between search and checkout | Likely yes - re-fetch from 12go |
-| MemoryCache | Etna Search | Cache index search results, station mappings | Yes - no index search needed |
-| MariaDB | Fuji (via OneTwoGoDbWrapper) | Station/operator master data from 12go | Keep - still need station mapping |
-| MariaDB | 12go (frontend3) | Core data store (MySQL-compatible) | Keep - this is the source of truth |
-| Redis | 12go (frontend3) | Caching layer | Keep - 12go internal |
-| ClickHouse | 12go (frontend3) | Analytics | Keep - 12go internal |
-
-## Communication Map
-
-| From | To | Protocol | Purpose |
-|------|----|----------|---------|
-| Client | Etna Search | HTTP REST | Search itineraries |
-| Client | Denali booking-service | HTTP REST | Booking funnel |
-| Client | Denali post-booking-service | HTTP REST | Post-booking operations |
-| Client | Fuji Exposure API | HTTP REST | Stations, operators |
-| Etna Search | Etna SI Host | HTTP REST | Proxy search to SI |
-| Denali | Etna SI Host | HTTP REST | Get itinerary details |
-| Denali | SI Framework | In-process | Booking operations |
-| SI Framework | 12go (frontend3) | HTTP REST | All supplier operations |
-| Fuji | 12go (OneTwoGoDbWrapper) | HTTP REST + MySQL | Daily station export/sync used to build S3 snapshots |
-| 12go | Denali notification-service | HTTP Webhook | Booking status changes |
-| Denali services | Kafka | Async messaging | Internal events |
-
-## 12go Platform Details
-
-### Tech Stack
-
-| Component | Technology | Notes |
-|-----------|-----------|-------|
-| Application | PHP 8.3 / Symfony 6.4 | Monolith application |
-| Database | MariaDB | MySQL-compatible; primary data store |
-| Cache | Redis | Application caching |
-| Messaging | Kafka | Business events only (not infrastructure/ops events) |
-| Analytics | ClickHouse | Analytics data store |
-| Logs/Metrics | Datadog | Standard logging; comprehensive metrics available (varies by team) |
-| Search backing | MariaDB | Search queries go to DB; rechecks go to actual integrations (up to 1 minute latency) |
-
-### Infrastructure
-
-Infrastructure is fully managed by DevOps -- we don't need to concern ourselves with what's under the hood (scaling, deployment topology, etc.). DevOps also handles configurations; config changes go through release requests.
-
-### Environments
-
-| Environment | Purpose | Notes |
-|-------------|---------|-------|
-| Local | Development | Docker-based |
-| Staging | Testing | Separate IDs from production |
-| PreProd | Canary | Real connections to external services |
-| Prod | Production | Live traffic |
-
-Dev environment URL: `https://integration-dev.travelier.com/v1/{client_id}/`
-
-### Documentation & Traceability
-
-- Documentation via Jira/Atlassian
-- Code traceability: git blame -> Jira tickets
-- Integrations handled by a separate team on 12go side
-
-## Team Composition
-
-| Role | Count | Expertise |
-|------|-------|-----------|
-| .NET Developers | 3-4 | 2 senior (12yr experience), 1-2 mid/junior |
-| Team Lead | 1 | Deep system knowledge across all services |
-| DevOps | 2 | Transitioning to 12go infrastructure but supporting us |
-| 12go Veterans | available | PHP experts available for advice/clarification |
-
-**Key constraints:**
-- All development expertise is in .NET
-- Go is being considered as a future language on 12go's side, but nothing is decided
-- Developer experience and maintainability are priorities given team transitions
-- PHP is feasible if necessary (likely with AI assistance), but not the team's preference
+See [system-context.md](../prompts/context/system-context.md) — Team Composition and Key Constraints sections.
