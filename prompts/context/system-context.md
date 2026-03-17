@@ -53,6 +53,24 @@ Team Lead sync on transition planning, timeline, and resourcing:
 - **F3 local development is painful** — Search POC revealed setup difficulties. Microservice would be more straightforward to develop against, but still needs 12go running locally for integration testing.
 - **Performance testing likely needed** — Open question whether to test the new system or wait for refactored one.
 
+## Development Workflow Constraints
+
+These are not arguments in a debate — they are facts about how development will work during the transition period. Any proposed architecture must account for them.
+
+**F3 feature development runs in parallel with the B2B transition.**
+New capabilities need to be added to F3 during the transition — cancellation policies are a confirmed example, and more are expected. This means whoever is building the B2B layer will also be making changes to F3 at the same time. A standalone B2B service does not eliminate F3 local dev work; it adds a second codebase to maintain simultaneously.
+
+**F3 must run locally regardless of B2B architecture choice.**
+Integration testing and new F3 feature development both require a working F3 local environment. The question is not "F3 locally vs. not" — it is "F3 locally only, or F3 locally plus a second service locally."
+
+**The "one system" vision is a hard organizational constraint.**
+Management explicitly stated there is no permanent separation between 12go core and B2B. The long-term goal is one cohesive system. Designs that create a separate microservice are working against this direction and will require a second migration when F3 is refactored. Designs that embed within F3 align with it.
+
+**Co-location reduces refactoring risk when F3 is decomposed.**
+When F3 is eventually refactored, having B2B code co-located means the team can see all the invariants in one place. A separate service — especially in a different language — is an external dependency that must be analyzed, reverse-engineered, and migrated separately. Team Lead explicitly identified this as a reason to prefer the monolith.
+
+---
+
 ## What We're Building
 
 A replacement for the B2B API layer that currently sits between external clients and 12go's travel platform. The current system is 4 .NET repositories (~340 projects total) that essentially proxy HTTP calls to 12go. The new system must preserve the client-facing API contract while dramatically simplifying the architecture.

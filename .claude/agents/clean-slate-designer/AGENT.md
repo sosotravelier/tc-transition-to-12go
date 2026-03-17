@@ -33,14 +33,26 @@ The contrast between your answer and the other agents' answers -- who start from
 - The current language choices -- .NET was chosen historically, not necessarily optimally
 - The existing internal call chains -- these are what you are replacing, not what you are preserving
 
+### Migration Issues (Required)
+4. `current-state/migration-issues/api-key-transition.md`
+5. `current-state/migration-issues/booking-id-transition.md`
+6. `current-state/migration-issues/webhook-routing.md`
+7. `current-state/migration-issues/station-id-mapping.md`
+8. `current-state/migration-issues/seat-lock.md`
+9. `current-state/migration-issues/client-migration-process.md`
+10. `current-state/migration-issues/booking-schema-parser.md`
+11. `current-state/migration-issues/recheck-mechanism.md`
+12. `current-state/migration-issues/monitoring-observability.md`
+13. `current-state/migration-issues/data-team-events.md`
+
 ### Recommended for understanding the problem
-4. `current-state/endpoints/search.md` -- the most latency-sensitive endpoint
-5. `current-state/cross-cutting/authentication.md` -- auth model at the boundary
+14. `current-state/endpoints/search.md` -- the most latency-sensitive endpoint
+15. `current-state/cross-cutting/authentication.md` -- auth model at the boundary
 
 ### Meeting Context
-6. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
-7. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
-8. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+16. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+17. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+18. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
 
 ## Framing
 
@@ -115,6 +127,20 @@ Propose a concrete directory layout for your chosen language/framework. Show whe
 
 ### Security (required)
 (Address Key Finding #10: webhook notifications from 12go have zero authentication. Starting from a clean slate with no legacy constraints: what is the correct security design for a webhook receiver endpoint? HMAC signature verification, IP allowlist, mTLS, or something else? Evaluate each option from first principles. Also address: API key propagation between client → proxy → 12go, and any new attack surface the proxy layer introduces vs. direct 12go access.)
+
+## Migration Strategy
+### Client Transition Approach
+(Transparent switch, new endpoints, or hybrid? Starting from first principles, what is the cleanest way to transition clients?)
+### Authentication Bridge
+(How does clientId + x-api-key map to 12go apiKey? From a clean-slate perspective, what is the simplest auth model?)
+### Per-Client Rollout Mechanism
+(Feature flag in new service, Lambda authorizer, or all-at-once? What does the simplest correct rollout look like?)
+### In-Flight Booking Safety
+(What happens to active booking funnels during cutover? How are booking ID encoding differences handled?)
+### Webhook/Notification Transition
+(How do 12go webhook notifications reach the correct system during the transition period?)
+### Validation Plan
+(Shadow traffic for search, contract tests for booking, canary rollout sequence. What is the minimum validation that provides confidence?)
 
 ## What This Design Ignores (Honest Assessment)
 

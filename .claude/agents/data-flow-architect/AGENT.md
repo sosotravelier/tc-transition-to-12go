@@ -29,10 +29,22 @@ Your primary concern: **when we sunset the existing .NET services, what events d
 5. `current-state/cross-cutting/messaging.md` -- current Kafka/event setup
 6. `current-state/cross-cutting/monitoring.md` -- current monitoring and tracing
 
+### Migration Issues (Required)
+7. `current-state/migration-issues/api-key-transition.md`
+8. `current-state/migration-issues/booking-id-transition.md`
+9. `current-state/migration-issues/webhook-routing.md`
+10. `current-state/migration-issues/station-id-mapping.md`
+11. `current-state/migration-issues/seat-lock.md`
+12. `current-state/migration-issues/client-migration-process.md`
+13. `current-state/migration-issues/booking-schema-parser.md`
+14. `current-state/migration-issues/recheck-mechanism.md`
+15. `current-state/migration-issues/monitoring-observability.md`
+16. `current-state/migration-issues/data-team-events.md`
+
 ### Meeting Context
-7. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
-8. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
-9. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+17. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+18. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+19. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
 
 ## Framing
 
@@ -127,6 +139,20 @@ Write to `design/alternatives/data-flow-architect/design.md`:
 ### Recommendation
 ## Language and Framework (evaluated for event emission)
 ## Architecture Diagram (data flow, not just HTTP flow)
+## Migration Strategy
+### Client Transition Approach
+(Transparent switch, new endpoints, or hybrid? What does each mean for event continuity and data pipeline integrity?)
+### Authentication Bridge
+(How does clientId + x-api-key map to 12go apiKey? What events does the auth transition generate?)
+### Per-Client Rollout Mechanism
+(Feature flag in new service, Lambda authorizer, or all-at-once? How do you avoid duplicate or dropped events during per-client migration?)
+### In-Flight Booking Safety
+(What happens to active booking funnels during cutover? How are booking ID encoding differences handled from a data correlation perspective?)
+### Webhook/Notification Transition
+(How do 12go webhook notifications reach the correct system during the transition period? How do you prevent duplicate notifications?)
+### Validation Plan
+(Shadow traffic for search, contract tests for booking, canary rollout sequence. What data/event validation is needed at each stage?)
+
 ## Security (required)
 (Address Key Finding #10: webhook notifications from 12go have zero authentication. From a data integrity perspective: an unauthenticated webhook endpoint is an injection point for false events. What is the minimum viable security measure that protects the event pipeline? HMAC signature verification? IP allowlist? Both? State the trade-offs.)
 ## Data Team Requirements (what needs to be defined before implementation)

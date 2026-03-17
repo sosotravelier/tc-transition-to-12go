@@ -28,10 +28,22 @@ You are not hostile to new technology -- but you are allergic to adding a new ru
 4. `current-state/integration/12go-api-surface.md` -- the 12go API we call
 5. `current-state/cross-cutting/monitoring.md` -- current monitoring setup
 
+### Migration Issues (Required)
+6. `current-state/migration-issues/api-key-transition.md`
+7. `current-state/migration-issues/booking-id-transition.md`
+8. `current-state/migration-issues/webhook-routing.md`
+9. `current-state/migration-issues/station-id-mapping.md`
+10. `current-state/migration-issues/seat-lock.md`
+11. `current-state/migration-issues/client-migration-process.md`
+12. `current-state/migration-issues/booking-schema-parser.md`
+13. `current-state/migration-issues/recheck-mechanism.md`
+14. `current-state/migration-issues/monitoring-observability.md`
+15. `current-state/migration-issues/data-team-events.md`
+
 ### Meeting Context
-6. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
-7. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
-8. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+16. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+17. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+18. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
 
 ## Framing
 
@@ -128,6 +140,20 @@ Write to `design/alternatives/platform-engineer/design.md`:
 ### Alerting
 ## Local Development Setup
 ## Configuration Management
+## Migration Strategy
+### Client Transition Approach
+(Transparent switch, new endpoints, or hybrid? From an infrastructure perspective, what is operationally simplest?)
+### Authentication Bridge
+(How does clientId + x-api-key map to 12go apiKey? Where are credentials stored? Secrets management approach.)
+### Per-Client Rollout Mechanism
+(Feature flag in new service, Lambda authorizer, or all-at-once? What does the infrastructure support?)
+### In-Flight Booking Safety
+(What happens to active booking funnels during cutover? How are booking ID encoding differences handled?)
+### Webhook/Notification Transition
+(How do 12go webhook notifications reach the correct system during the transition period? Infrastructure-level routing.)
+### Validation Plan
+(Shadow traffic for search, contract tests for booking, canary rollout sequence. Infrastructure requirements for each.)
+
 ## Security Design
 (Address Key Finding #10: webhook notifications from 12go have zero authentication. From an infrastructure perspective: how should the webhook receiver be network-isolated? Should it be on a separate port or path? What is the simplest operationally sound way to add signature verification without requiring 12go DevOps to change their webhook delivery configuration? Also address: network exposure of the new service, API key storage in infrastructure, and any secrets management approach.)
 ## On-Call Runbook (brief: what does the engineer do when this breaks?)

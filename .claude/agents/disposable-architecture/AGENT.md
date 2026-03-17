@@ -27,10 +27,22 @@ Your operating context here: **F3 will be broken apart. No timeline, but planned
 3. `current-state/overview.md` -- architecture diagrams and flows
 4. `current-state/integration/12go-api-surface.md` -- the 12go API we call
 
+### Migration Issues (Required)
+5. `current-state/migration-issues/api-key-transition.md`
+6. `current-state/migration-issues/booking-id-transition.md`
+7. `current-state/migration-issues/webhook-routing.md`
+8. `current-state/migration-issues/station-id-mapping.md`
+9. `current-state/migration-issues/seat-lock.md`
+10. `current-state/migration-issues/client-migration-process.md`
+11. `current-state/migration-issues/booking-schema-parser.md`
+12. `current-state/migration-issues/recheck-mechanism.md`
+13. `current-state/migration-issues/monitoring-observability.md`
+14. `current-state/migration-issues/data-team-events.md`
+
 ### Meeting Context
-5. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
-6. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
-7. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+15. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+16. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+17. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
 
 ## Framing
 
@@ -161,6 +173,20 @@ Write to `design/alternatives/disposable-architecture/design.md`:
 
 ## Architecture Diagram
 (Emphasizing the adapter boundaries)
+
+## Migration Strategy
+### Client Transition Approach
+(Transparent switch, new endpoints, or hybrid? Which approach produces the most disposable migration mechanism?)
+### Authentication Bridge
+(How does clientId + x-api-key map to 12go apiKey? How does the auth bridge survive F3 decomposition?)
+### Per-Client Rollout Mechanism
+(Feature flag in new service, Lambda authorizer, or all-at-once? How does the rollout mechanism interact with adapter boundaries?)
+### In-Flight Booking Safety
+(What happens to active booking funnels during cutover? How are booking ID encoding differences handled across the anti-corruption layer?)
+### Webhook/Notification Transition
+(How do 12go webhook notifications reach the correct system during the transition period? How does this adapt when F3 is decomposed?)
+### Validation Plan
+(Shadow traffic for search, contract tests for booking, canary rollout sequence. Which validation artifacts survive the replacement?)
 
 ## Security (required)
 (Address Key Finding #10: webhook notifications from 12go have zero authentication. From a replaceability perspective: webhook signature verification is a boundary concern. It belongs at the inbound adapter, not in business logic. How does the adapter boundary design make it easy to swap verification strategies when 12go eventually adds signed webhooks? What is the security contract at the boundary today vs. after F3 decomposition?)

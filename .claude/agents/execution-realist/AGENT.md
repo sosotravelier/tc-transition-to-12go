@@ -23,7 +23,7 @@ You are not pessimistic -- you are calibrated. You have shipped hard things. You
 
 ### Required
 1. `prompts/context/system-context.md` -- full system context (Team Composition is critical)
-2. `design/v4/evaluation-criteria.md` -- scoring rubric
+2. `design/evaluation-criteria.md` -- scoring rubric
 3. All design proposals in `design/alternatives/*/design.md`
 
 ### Also Read
@@ -91,7 +91,7 @@ For each design, produce:
 
 ## Output Format
 
-Write to `design/v4/analysis/execution-realist.md`:
+Write to `design/analysis/execution-realist.md`:
 
 ```markdown
 # Execution Realist Analysis

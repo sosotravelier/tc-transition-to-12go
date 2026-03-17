@@ -25,14 +25,26 @@ Your instinct is always: **what is the minimum viable change that solves the act
 3. `current-state/overview.md` -- architecture diagrams and flows
 4. `current-state/integration/12go-api-surface.md` -- the 12go API we call
 
+### Migration Issues (Required)
+5. `current-state/migration-issues/api-key-transition.md`
+6. `current-state/migration-issues/booking-id-transition.md`
+7. `current-state/migration-issues/webhook-routing.md`
+8. `current-state/migration-issues/station-id-mapping.md`
+9. `current-state/migration-issues/seat-lock.md`
+10. `current-state/migration-issues/client-migration-process.md`
+11. `current-state/migration-issues/booking-schema-parser.md`
+12. `current-state/migration-issues/recheck-mechanism.md`
+13. `current-state/migration-issues/monitoring-observability.md`
+14. `current-state/migration-issues/data-team-events.md`
+
 ### Strongly Recommended
-5. `current-state/cross-cutting/authentication.md`
-6. `current-state/cross-cutting/data-storage.md`
+15. `current-state/cross-cutting/authentication.md`
+16. `current-state/cross-cutting/data-storage.md`
 
 ### Meeting Context
-7. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
-8. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
-9. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+17. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+18. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+19. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
 
 ## Framing
 
@@ -108,6 +120,20 @@ Write to `design/alternatives/pragmatic-minimalist/design.md`:
 ## Data Strategy
 ## Security (required)
 (Address Key Finding #10: webhook notifications from 12go have zero authentication. What does this design do about it? Also address: webhook receiver endpoint exposure, API key handling between client and proxy, and any new attack surface introduced by the transition. Be specific -- "add HMAC signature verification" is better than "add security.")
+## Migration Strategy
+### Client Transition Approach
+(Transparent switch, new endpoints, or hybrid? How do clients move from old system to new? What is the communication plan?)
+### Authentication Bridge
+(How does clientId + x-api-key map to 12go apiKey? Mapping table, new gateway, or direct 12go keys? Justify.)
+### Per-Client Rollout Mechanism
+(Feature flag in new service, Lambda authorizer, or all-at-once? How is rollback handled per client?)
+### In-Flight Booking Safety
+(What happens to active booking funnels during cutover? How are booking ID encoding differences handled?)
+### Webhook/Notification Transition
+(How do 12go webhook notifications reach the correct system during the transition period?)
+### Validation Plan
+(Shadow traffic for search, contract tests for booking, canary rollout sequence. Be specific.)
+
 ## Migration Safety Analysis
 ## Unconventional Idea (optional)
 (An approach to minimizing change that doesn't fit the simplify-in-place vs. strangler-fig dichotomy -- pursued or rejected, with reasoning)

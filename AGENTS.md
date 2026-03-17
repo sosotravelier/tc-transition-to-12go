@@ -281,37 +281,37 @@ Phase 2 uses 5 **perspective-based** design agents. Each starts from fundamental
 
 ### Phase 3 Roles (Evaluation)
 
-Phase 3 uses 4 analyzer agents. Each reads all 5 design proposals and scores or analyzes them from a distinct angle. Prompts are at `prompts/analyzer-agents/`. Scoring rubric is at `design/v4/evaluation-criteria.md`.
+Phase 3 uses 4 analyzer agents. Each reads all 5 design proposals and scores or analyzes them from a distinct angle. Prompts are at `prompts/analyzer-agents/`. Scoring rubric is at `design/evaluation-criteria.md`.
 
 #### Red Team
 - **Prompt**: `prompts/analyzer-agents/red-team.md`
 - **Does NOT score** -- produces structured failure mode analysis per design
 - **Purpose**: Catch hidden assumptions and fatal flaws before the final recommendation. The "12go is a black box" assumption that distorted v1 is exactly the kind of error this agent finds.
-- **Output**: `design/v4/analysis/red-team.md`
+- **Output**: `design/analysis/red-team.md`
 
 #### Execution Realist
 - **Prompt**: `prompts/analyzer-agents/execution-realist.md`
 - **Scores**: Implementation Effort (x3), Development Velocity (x3), Team Competency Match (x3), Migration Risk (x2)
 - **Purpose**: Anchor evaluation in "can these 3-4 people actually build this in the available time?"
-- **Output**: `design/v4/analysis/execution-realist.md`
+- **Output**: `design/analysis/execution-realist.md`
 
 #### AI Friendliness
 - **Prompt**: `prompts/analyzer-agents/ai-friendliness.md`
 - **Scores**: AI-Friendliness (x3), Testing Ease (x2), Elegance (x1, partial -- AI navigability lens only; Technical Merit scores Elegance independently)
 - **Purpose**: Evaluate each design on how well it works with Cursor/Claude for initial build, maintenance, debugging, and test generation
-- **Output**: `design/v4/analysis/ai-friendliness.md`
+- **Output**: `design/analysis/ai-friendliness.md`
 
 #### Technical Merit
 - **Prompt**: `prompts/analyzer-agents/technical-merit.md`
 - **Scores**: Search Performance (x3), Simplicity (x2), Infrastructure Fit (x2), Elegance (x1, authoritative), Monitoring/Observability (x1), Disposability (x1)
 - **Purpose**: Pure technical evaluation -- architecture quality, latency overhead, resilience, observability, and adapter boundary cleanliness for future replaceability
-- **Output**: `design/v4/analysis/technical-merit.md`
+- **Output**: `design/analysis/technical-merit.md`
 
 #### Comparison Matrix Synthesizer (Orchestrator)
 - **Purpose**: Consolidate scores from all 3 scoring agents, apply the Red Team findings as a filter, and produce the final weighted comparison matrix and recommendation
-- **Input**: All 4 analysis docs + `design/v4/evaluation-criteria.md`
+- **Input**: All 4 analysis docs + `design/evaluation-criteria.md`
 - **Note on C10**: Use Technical Merit's Elegance score as the authoritative C10 value. AI Friendliness's C10 sub-score is supplementary context only.
-- **Output**: `design/v4/comparison-matrix.md`, `design/v4/recommendation.md`
+- **Output**: `design/comparison-matrix.md`, `design/recommendation.md`
 
 ### Phase 4 Roles (POC and Implementation)
 
@@ -323,7 +323,7 @@ Phase 3 uses 4 analyzer agents. Each reads all 5 design proposals and scores or 
 
 #### Implementation Agent
 - **Purpose**: Implement the migration for a specific endpoint/service after architecture decision is finalized
-- **Input**: Read `design/v4/recommendation.md` and the relevant endpoint doc in `current-state/endpoints/`
+- **Input**: Read `design/recommendation.md` and the relevant endpoint doc in `current-state/endpoints/`
 - **Output**: Code changes in the relevant repository
 - **Must**: Follow the design doc, preserve API contracts, add tests, update monitoring
 

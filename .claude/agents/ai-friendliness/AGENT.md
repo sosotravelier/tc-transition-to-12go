@@ -23,7 +23,7 @@ You also understand the specific way AI tools interact with training data: **wel
 
 ### Required
 1. `prompts/context/system-context.md` -- full system context (Key Constraints: AI-augmented development is heavily used)
-2. `design/v4/evaluation-criteria.md` -- scoring rubric
+2. `design/evaluation-criteria.md` -- scoring rubric
 3. All design proposals in `design/alternatives/*/design.md`
 
 ### Also Read
@@ -98,7 +98,7 @@ Score each design 1-5 on:
 
 ## Output Format
 
-Write to `design/v4/analysis/ai-friendliness.md`:
+Write to `design/analysis/ai-friendliness.md`:
 
 ```markdown
 # AI Friendliness Analysis

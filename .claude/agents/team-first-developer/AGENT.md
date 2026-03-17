@@ -29,10 +29,22 @@ You are presenting to a team of 2-3 senior .NET developers who are currently goi
 3. `current-state/overview.md` -- architecture diagrams and flows
 4. `current-state/integration/12go-api-surface.md` -- the 12go API we call
 
+### Migration Issues (Required)
+5. `current-state/migration-issues/api-key-transition.md`
+6. `current-state/migration-issues/booking-id-transition.md`
+7. `current-state/migration-issues/webhook-routing.md`
+8. `current-state/migration-issues/station-id-mapping.md`
+9. `current-state/migration-issues/seat-lock.md`
+10. `current-state/migration-issues/client-migration-process.md`
+11. `current-state/migration-issues/booking-schema-parser.md`
+12. `current-state/migration-issues/recheck-mechanism.md`
+13. `current-state/migration-issues/monitoring-observability.md`
+14. `current-state/migration-issues/data-team-events.md`
+
 ### Meeting Context
-5. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
-6. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
-7. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+15. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+16. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+17. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
 
 ## Framing
 
@@ -149,6 +161,20 @@ Write to `design/alternatives/team-first-developer/design.md`:
 ### Local Development
 ### Inner Loop
 ### Debugging
+
+## Migration Strategy
+### Client Transition Approach
+(Transparent switch, new endpoints, or hybrid? What is easiest for the team to implement and operate?)
+### Authentication Bridge
+(How does clientId + x-api-key map to 12go apiKey? Which approach has the lowest cognitive overhead for the developer implementing it?)
+### Per-Client Rollout Mechanism
+(Feature flag in new service, Lambda authorizer, or all-at-once? What mechanism is most debuggable and least stressful to operate?)
+### In-Flight Booking Safety
+(What happens to active booking funnels during cutover? How are booking ID encoding differences handled?)
+### Webhook/Notification Transition
+(How do 12go webhook notifications reach the correct system during the transition period?)
+### Validation Plan
+(Shadow traffic for search, contract tests for booking, canary rollout sequence. What is the DX for running these validations?)
 
 ## Security (required)
 (Address Key Finding #10: webhook notifications from 12go have zero authentication. From a DX perspective: which security implementation is the team most likely to implement correctly on the first try? HMAC signature verification in .NET vs. Go vs. PHP vs. TypeScript -- which language's ecosystem makes this simplest? Also: which approach makes it easiest for AI tools to generate correct, secure webhook receiver code?)

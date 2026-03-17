@@ -70,7 +70,7 @@ What is the one wrong assumption in this design that, if discovered 3 months int
 
 ## Output Format
 
-Write to `design/v4/analysis/red-team.md`:
+Write to `design/analysis/red-team.md`:
 
 ```markdown
 # Red Team Analysis

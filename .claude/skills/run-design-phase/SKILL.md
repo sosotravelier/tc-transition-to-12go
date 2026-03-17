@@ -1,36 +1,43 @@
 ---
 name: run-design-phase
 description: Run all 6 Phase 2 design agents in parallel to generate architecture proposals
-disable-model-invocation: true
 ---
 
 # Run Design Phase (Phase 2)
 
 Execute the full Phase 2 design generation pipeline. This launches all 6 design agents in parallel and synthesizes the results.
 
+File structure is defined in `.claude/rules/design-file-structure.md` — all paths below follow that convention.
+
 ## Step 1: Archive and Prepare
 
-Run the archive step from `runbooks/regenerate-phase2.md` Step 2:
+Archive the current working set before regenerating:
 
 ```bash
 cd /Users/sosotughushi/RiderProjects/transition-design
 
-# Archive previous designs
-ARCHIVE_DATE=$(date +%Y-%m-%d)
-mkdir -p design/archive/${ARCHIVE_DATE}
-for agent in pragmatic-minimalist platform-engineer data-flow-architect team-first-developer disposable-architecture clean-slate-designer; do
-  if [ -d "design/alternatives/${agent}" ]; then
-    mv "design/alternatives/${agent}" "design/archive/${ARCHIVE_DATE}/${agent}"
-    echo "Archived: design/alternatives/${agent} -> design/archive/${ARCHIVE_DATE}/${agent}"
-  fi
-done
+# Determine next archive version number
+LAST_VERSION=$(ls -d design/archive/v* 2>/dev/null | sed 's/.*\/v//' | sort -n | tail -1)
+NEXT_VERSION=$((${LAST_VERSION:-0} + 1))
 
-# Archive legacy v1 outputs if present
-for legacy in A-monolith B-microservice; do
-  if [ -d "design/alternatives/${legacy}" ]; then
-    mkdir -p design/archive/v1
-    mv "design/alternatives/${legacy}" "design/archive/v1/${legacy}"
-    echo "Archived legacy: design/alternatives/${legacy} -> design/archive/v1/${legacy}"
+# Archive current alternatives and analysis if they exist
+if [ -d "design/alternatives" ] && [ "$(ls -A design/alternatives 2>/dev/null)" ]; then
+  mkdir -p "design/archive/v${NEXT_VERSION}/alternatives"
+  mv design/alternatives/* "design/archive/v${NEXT_VERSION}/alternatives/"
+  echo "Archived alternatives -> design/archive/v${NEXT_VERSION}/alternatives/"
+fi
+
+if [ -d "design/analysis" ] && [ "$(ls -A design/analysis 2>/dev/null)" ]; then
+  mkdir -p "design/archive/v${NEXT_VERSION}/analysis"
+  mv design/analysis/* "design/archive/v${NEXT_VERSION}/analysis/"
+  echo "Archived analysis -> design/archive/v${NEXT_VERSION}/analysis/"
+fi
+
+for f in evaluation-criteria.md decision-map.md comparison-matrix.md recommendation.md; do
+  if [ -f "design/${f}" ]; then
+    mkdir -p "design/archive/v${NEXT_VERSION}"
+    mv "design/${f}" "design/archive/v${NEXT_VERSION}/${f}"
+    echo "Archived ${f} -> design/archive/v${NEXT_VERSION}/${f}"
   fi
 done
 
@@ -41,7 +48,7 @@ mkdir -p design/alternatives/data-flow-architect
 mkdir -p design/alternatives/team-first-developer
 mkdir -p design/alternatives/disposable-architecture
 mkdir -p design/alternatives/clean-slate-designer
-mkdir -p design/v4/analysis
+mkdir -p design/analysis
 ```
 
 ## Step 2: Pre-Flight Check
@@ -63,7 +70,6 @@ ls current-state/cross-cutting/messaging.md
 ls current-state/cross-cutting/authentication.md
 ls current-state/cross-cutting/data-storage.md
 ls current-state/endpoints/search.md
-ls design/v4/evaluation-criteria.md
 
 # Meeting context (required by all agents)
 ls meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md
@@ -73,7 +79,21 @@ ls meetings/2026-03-17-team-lead-sync/meeting-record.md
 
 If any file is missing, stop and report before proceeding.
 
-## Step 3: Launch All 6 Design Agents in Parallel
+## Step 3: Copy Evaluation Criteria
+
+If `design/evaluation-criteria.md` does not exist after archiving, copy it from the latest archive version so agents can reference it:
+
+```bash
+if [ ! -f "design/evaluation-criteria.md" ]; then
+  LATEST=$(ls -d design/archive/v* 2>/dev/null | sort -V | tail -1)
+  if [ -f "${LATEST}/evaluation-criteria.md" ]; then
+    cp "${LATEST}/evaluation-criteria.md" design/evaluation-criteria.md
+    echo "Copied evaluation-criteria.md from ${LATEST}"
+  fi
+fi
+```
+
+## Step 4: Launch All 6 Design Agents in Parallel
 
 Launch all 6 design agents simultaneously using the Agent tool with `run_in_background: true`. Each agent has its full prompt in `.claude/agents/<name>/AGENT.md`.
 
@@ -91,20 +111,11 @@ Agents to launch:
 5. `disposable-architecture`
 6. `clean-slate-designer`
 
-## Step 4: Synthesize Decision Map
+## Step 5: Synthesize Decision Map
 
-After all 6 design agents complete:
+After all 6 design agents complete, run the synthesize-decision-map skill to generate `design/decision-map.md`.
 
-1. Read all 6 design docs in `design/alternatives/*/design.md`
-2. Read the current `design/decision-map.md`
-3. Update `design/decision-map.md` with:
-   - Convergences: where multiple agents reached the same conclusion
-   - Divergences: where agents disagree (these are the real design decisions)
-   - New decision nodes for options proposed in the new designs
-   - Clean Slate contrast: what the zero-legacy agent proposes vs. legacy-aware agents
-4. Write a convergence/divergence summary at the top of the update section
-
-## Step 5: Quality Checks
+## Step 6: Quality Checks
 
 Verify after all designs complete:
 
@@ -112,4 +123,4 @@ Verify after all designs complete:
 - [ ] Each design addresses all 13 client-facing endpoints
 - [ ] Each design proposes a concrete language and framework (not "TBD")
 - [ ] Clean Slate design does NOT cite Denali/Etna/Fuji structure as a design input
-- [ ] The decision map has been updated with new options
+- [ ] `design/decision-map.md` has been generated

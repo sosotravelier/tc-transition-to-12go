@@ -23,7 +23,7 @@ You do not care about team learning curves or organizational politics. You evalu
 
 ### Required
 1. `prompts/context/system-context.md` -- full system context (Scale Context is important)
-2. `design/v4/evaluation-criteria.md` -- scoring rubric
+2. `design/evaluation-criteria.md` -- scoring rubric
 3. All design proposals in `design/alternatives/*/design.md`
 4. `current-state/integration/12go-api-surface.md` -- what we proxy to
 
@@ -118,7 +118,7 @@ Score each design 1-5 on:
 
 ## Output Format
 
-Write to `design/v4/analysis/technical-merit.md`:
+Write to `design/analysis/technical-merit.md`:
 
 ```markdown
 # Technical Merit Analysis

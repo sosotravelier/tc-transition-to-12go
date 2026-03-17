@@ -32,9 +32,13 @@ Every design document must include a `## Security` section. This addresses Key F
 
 Mermaid diagrams in design documents must use one of:
 - `sequenceDiagram` — for endpoint flows and interaction patterns
-- `flowchart TD` — for architecture overviews
+- `flowchart LR` — for architecture overviews and decision trees
 
-Do not use `flowchart LR` with many nodes (renders poorly). Use tables + sequence diagrams instead.
+### Critical rendering rules
+- **One decision question per mermaid block.** NEVER combine multiple independent decision questions (disconnected subgraphs) into a single diagram — they render as scattered clusters with huge whitespace gaps. Each `{decision?}` node gets its own fenced mermaid block.
+- Do not use `flowchart TD` for decision trees (renders as tall vertical chains, hard to read).
+- Keep labels short (2-3 lines max). Move details into prose or bullet lists below the diagram.
+- Maximum 6-8 nodes per diagram. Split larger trees into multiple diagrams.
 
 Node IDs must be camelCase with no spaces. Wrap labels containing special characters in double quotes. Do not use HTML tags or explicit colors/styling.
 
