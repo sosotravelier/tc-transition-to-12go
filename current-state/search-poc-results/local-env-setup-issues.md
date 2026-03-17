@@ -31,20 +31,6 @@ Steps followed:
 3. Run `12go up`
 4. Run `fill-search-province-station` if search still empty
 
-### 1.2 Bitbucket API token authentication
-
-The `12go.sh` script downloads its Go binary from Bitbucket using `BITBUCKET_USERNAME:BITBUCKET_APP_PASSWORD` basic auth. Two issues:
-
-- **Classic tokens (no scopes) rejected with 401.** Bitbucket replaced App Passwords with API Tokens. The new "API token with scopes" format is required, with at minimum the `read:repository:bitbucket` scope for the Downloads API.
-- **Credentials must be set in `.env`** as `BITBUCKET_USERNAME` (email) and `BITBUCKET_APP_PASSWORD` (the API token).
-
-### 1.3 Local changes blocking git operations
-
-Both `docker-local-env` (file `12go-go-command/utilities/git.go`) and the `migrations` repo (file `2023-10-12-STATS-4494.sql`) had local modifications from previous debugging sessions. Required `git stash` before checkout/pull.
-
-### 1.4 Docker image pulls silently slow
-
-`12go up` appeared stuck at "Starting services..." for 10+ minutes. The spinner suppressed Docker's pull output — it was actually downloading large images (115MB+). Monitoring `docker compose pull` separately confirmed progress.
 
 ### 1.5 `make db` crash at SUPPLY-41 migration
 
