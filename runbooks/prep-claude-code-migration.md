@@ -17,6 +17,22 @@ For each of the 6 design agent prompts in `prompts/design-agents/`, create a cor
 - Contain the full prompt content from the original file (copy it, don't reference it)
 - Keep the original prompts in place — they serve as the canonical reference
 
+**Critical: Remove design-anchoring references.** When copying prompt content into AGENT.md files, remove any references to previous design outputs so agents design from first principles:
+- Remove `design/decision-map.md` from context file lists (currently in pragmatic-minimalist and disposable-architecture)
+- Remove any references to `design/alternatives/` as input (output paths are fine — agents still write there)
+- Remove any references to `design/v1/`, `design/v2/`, `design/v3/`, `design/v4/` as input
+
+**Critical: Add meeting notes as context.** The original prompts don't reference meeting notes, but these contain crucial constraints discovered after the prompts were written. Add the following to the "Context Files to Read" section of **every** design agent AGENT.md, under a new "### Meeting Context" subsection:
+- `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
+- `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
+- `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+These meetings surface constraints that fundamentally change the design space:
+- Mar 12: API key transition options, booking ID transition complexity, gRPC integration requirements
+- Mar 17: Solo developer resourcing (was expecting 4), Q2 deadline, transition design is NOT throwaway, Team Lead argues for monolith, F3 refactoring planned in Q2
+
+Similarly, add the meeting notes to **every** analyzer agent AGENT.md — the analyzers need this context to evaluate designs realistically.
+
 Design agents to convert:
 - `prompts/design-agents/pragmatic-minimalist.md` → `.claude/agents/pragmatic-minimalist/AGENT.md`
 - `prompts/design-agents/platform-engineer.md` → `.claude/agents/platform-engineer/AGENT.md`
@@ -88,7 +104,6 @@ After all files are created, run the pre-flight check from the runbook to verify
 - Do NOT modify any files in `meetings/` — those are historical records
 - Do NOT modify any files in `questions/` — those are compiled from Phase 1
 - Do NOT modify any files in `client-onboarding-docs/` or `scripts/`
-- Do NOT update `prompts/context/system-context.md` — context updates are a separate task
 - Do NOT run the actual Phase 2 agents — this task is prep work only
 - Commit all changes when done with a descriptive message
 
@@ -112,3 +127,4 @@ After all files are created, run the pre-flight check from the runbook to verify
 **Modify:**
 - `CLAUDE.md`
 - `runbooks/regenerate-phase2.md`
+- `prompts/context/system-context.md` is already updated with Mar 12 and Mar 17 meeting outcomes — do NOT modify it
