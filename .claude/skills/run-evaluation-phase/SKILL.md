@@ -32,9 +32,9 @@ For each agent, the instruction is:
 
 Agents to launch:
 1. `red-team` — finds failure modes, does NOT score
-2. `execution-realist` — scores Implementation Effort, Development Velocity, Team Competency Match, Migration Risk
-3. `ai-friendliness` — scores AI-Friendliness, Testing Ease, Elegance (partial)
-4. `technical-merit` — scores Search Performance, Simplicity, Infrastructure Fit, Elegance (authoritative), Monitoring/Observability, Disposability
+2. `execution-realist` — scores C1 Implementation Effort, C2 Solo Developer Fit, C6 Migration Risk, C12 Development Velocity
+3. `ai-friendliness` — scores C3 AI-Friendliness, C7 Testing Ease, C10 Elegance (partial)
+4. `technical-merit` — scores C4 Search Performance, C5 Simplicity, C8 Infrastructure Fit, C9 Disposability, C10 Elegance (authoritative), C11 Monitoring/Observability
 
 ## Step 2: Synthesize Comparison Matrix and Recommendation
 

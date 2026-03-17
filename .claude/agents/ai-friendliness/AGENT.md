@@ -36,7 +36,7 @@ You also understand the specific way AI tools interact with training data: **wel
 
 ## Task
 
-Score each design from an AI-augmented development perspective. This is not about whether AI can generate the language -- it is about whether the specific combination of language + framework + architecture patterns + project structure produces reliable, correct AI-generated code for this specific problem domain (HTTP proxy, data transformation, API client).
+Score each design from an AI-augmented development perspective. **AI is Soso's "team" -- Soso is the sole developer on this transition, and Claude Code with multi-agent workflows is the primary productivity multiplier.** This is not about whether AI can generate the language -- it is about whether the specific combination of language + framework + architecture patterns + project structure produces reliable, correct AI-generated code for this specific problem domain (HTTP proxy, data transformation, API client).
 
 ### What to Evaluate
 
@@ -92,9 +92,9 @@ Then assess how the specific design choices within each proposal affect these ba
 
 Score each design 1-5 on:
 
-**AI-Friendliness (x3)** -- overall AI code generation quality for this specific codebase and task
-**Testing Ease (x2)** -- can AI generate meaningful tests? How easy are tests to write, maintain, and understand?
-**Elegance (x1, partial)** -- from the AI perspective: does the architecture use well-known, clearly-structured patterns that AI tools generate correctly and navigate reliably? Score this only from the lens of AI clarity and navigability; Technical Merit scores the full Elegance criterion independently.
+**C3: AI-Friendliness (x3)** -- overall AI code generation quality for this specific codebase and task; critical because AI is Soso's primary force multiplier as a solo developer
+**C7: Testing Ease (x2)** -- can AI generate meaningful tests? How easy are tests to write, maintain, and understand? A solo developer cannot afford a test suite that becomes a maintenance burden
+**C10: Elegance (x1, partial)** -- from the AI perspective: does the architecture use well-known, clearly-structured patterns that AI tools generate correctly and navigate reliably? Score this only from the lens of AI clarity and navigability; Technical Merit scores the full Elegance criterion independently.
 
 ## Output Format
 
@@ -117,15 +117,15 @@ Write to `design/v4/analysis/ai-friendliness.md`:
 #### What AI Handles Well
 #### Where AI Struggles (and Why)
 #### Design Choices That Help/Hurt AI Effectiveness
-#### AI-Friendliness (x3): [score]/5
-#### Testing Ease (x2): [score]/5
-#### Elegance (x1, partial): [score]/5
+#### C3: AI-Friendliness (x3): [score]/5
+#### C7: Testing Ease (x2): [score]/5
+#### C10: Elegance (x1, partial): [score]/5
 
 ### [Design Name B]
 ... (repeat)
 
 ## Comparative Scoring Matrix
-| Design | AI-Friendly (x3) | Testing (x2) | Elegance/partial (x1) | Weighted Total |
+| Design | C3 AI-Friendly (x3) | C7 Testing (x2) | C10 Elegance/partial (x1) | Weighted Total |
 |---|---|---|---|---|
 | ... | | | | |
 

@@ -45,12 +45,12 @@ For each design proposal, produce a structured red team analysis. **Do NOT score
 **1. Hidden assumptions**
 What does this design assume that is not verified? Examples from prior work:
 - "12go API is stable and won't change" (it will -- F3 is being decomposed)
-- "The team can learn Go in 4 weeks" (maybe, maybe not)
+- "Soso can learn Go in 4 weeks while building solo" (maybe, maybe not -- there is no team to lean on)
 - "DevOps will accept a .NET container" (unknown, needs verification)
 - "Station ID mapping is a solved problem" (it's out of scope but every endpoint depends on it)
 
 **2. Optimistic estimates**
-Where does the timeline assume best-case execution? What does "the first thing that goes wrong" look like for this design?
+Where does the timeline assume best-case execution? What does "the first thing that goes wrong" look like for this design? Remember: this is a **solo developer** (Soso) with AI assistance, not a team of 3-4. Estimates calibrated for a team are automatically optimistic.
 
 **3. Known unknowns made invisible**
 What open questions (from the decision map's unresolved section) does this design brush past? G1-G8 are specifically important:

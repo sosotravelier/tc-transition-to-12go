@@ -91,30 +91,30 @@ Evaluate each design on:
 
 Score each design 1-5 on:
 
-**Search Performance (x3)**
+**C4: Search Performance (x3)**
 - What 5 looks like: < 5ms added latency overhead, correct connection pooling, no blocking operations on hot path
 - What 1 looks like: synchronous serialization, no connection reuse, > 50ms added overhead
 
-**Simplicity (x2)**
-- What 5 looks like: < 5K LOC, single deployment unit, obvious call flow, no unnecessary abstractions
-- What 1 looks like: multiple services, complex orchestration, 10+ layers between request and 12go call
+**C5: Simplicity (x3)** — **elevated from x2 to x3** because a solo developer who cannot hold the entire system in their head will drown
+- What 5 looks like: single service, < 5K LOC, obvious call flow, one person can understand everything without documentation
+- What 1 looks like: multiple services, complex orchestration, 10+ layers; impossible for one person to reason about the whole system
 
-**Infrastructure Fit (x2)**
+**C8: Infrastructure Fit (x2)**
 - What 5 looks like: drops into 12go's Docker/EC2 setup with minimal configuration
 - What 1 looks like: requires new infrastructure components, complex networking setup
 
-**Elegance (x1)**
-- What 5 looks like: architecture patterns match the problem, separation of concerns is natural
-- What 1 looks like: patterns applied for their own sake, mismatch between problem complexity and solution complexity
-
-**Monitoring/Observability (x1)**
-- What 5 looks like: native Datadog APM, full trace propagation, structured logs with correlation ID
-- What 1 looks like: manual log statements, no trace propagation, incomplete metrics
-
-**Disposability (x1)**
+**C9: Disposability (x2)** — **elevated from x1 to x2** because F3 refactoring is confirmed for Q2 planning; double-migration risk is now concrete
 - What 5 looks like: clean adapter boundary isolating the 12go API client from HTTP handlers; inbound contract is formally tested; outbound adapter is easily replaceable when F3 is decomposed
 - What 1 looks like: deep coupling between HTTP layer and 12go-specific logic; no clean seam to replace the outbound adapter; client contract is tested only implicitly
 - Note: The Disposable Architecture design agent proposes the best pattern for this; use its proposals as a reference point when scoring all designs
+
+**C10: Elegance (x1)**
+- What 5 looks like: architecture patterns match the problem, separation of concerns is natural
+- What 1 looks like: patterns applied for their own sake, mismatch between problem complexity and solution complexity
+
+**C11: Monitoring/Observability (x1)**
+- What 5 looks like: native Datadog APM, full trace propagation, structured logs with correlation ID
+- What 1 looks like: manual log statements, no trace propagation, incomplete metrics
 
 ## Output Format
 
@@ -136,18 +136,18 @@ Write to `design/v4/analysis/technical-merit.md`:
 #### Resilience Design
 #### Observability Design
 #### Scores
-- Search Performance (x3): [score]/5
-- Simplicity (x2): [score]/5
-- Infrastructure Fit (x2): [score]/5
-- Elegance (x1): [score]/5
-- Monitoring/Observability (x1): [score]/5
-- Disposability (x1): [score]/5
+- C4: Search Performance (x3): [score]/5
+- C5: Simplicity (x3): [score]/5
+- C8: Infrastructure Fit (x2): [score]/5
+- C9: Disposability (x2): [score]/5
+- C10: Elegance (x1): [score]/5
+- C11: Monitoring/Observability (x1): [score]/5
 
 ### [Design Name B]
 ... (repeat)
 
 ## Comparative Scoring Matrix
-| Design | Performance (x3) | Simplicity (x2) | Infra Fit (x2) | Elegance (x1) | Observability (x1) | Disposability (x1) | Weighted Total |
+| Design | C4 Performance (x3) | C5 Simplicity (x3) | C8 Infra Fit (x2) | C9 Disposability (x2) | C10 Elegance (x1) | C11 Observability (x1) | Weighted Total |
 |---|---|---|---|---|---|---|---|
 | ... | | | | | | | |
 
