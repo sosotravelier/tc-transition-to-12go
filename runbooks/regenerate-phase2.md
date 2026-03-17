@@ -134,106 +134,33 @@ mkdir -p design/v4/analysis
 
 ---
 
-## Step 3: Run Phase 2 — Design Agents (Wave 1)
+## Step 3: Run Phase 2 — Design Agents
 
-Spawn 4 parallel sub-agents (Cursor maximum), then agents 5 and 6 sequentially.
+Use the `/run-design-phase` skill to execute all 6 design agents in parallel.
 
-### Wave 1a (4 agents in parallel)
+This skill handles:
+- Archiving previous designs (Step 2 above)
+- Pre-flight checks (Step 1.5 above)
+- Launching all 6 design agents simultaneously via `.claude/agents/<name>/AGENT.md`
+- Synthesizing the decision map after all agents complete
+- Running quality checks
 
-Each agent reads its own prompt and the context files. Give them these instructions:
-
-**Agent 1: Pragmatic Minimalist**
-```
-Read and follow the agent prompt at: prompts/design-agents/pragmatic-minimalist.md
-
-Your task is fully described there. Start by reading all required context files listed in the prompt, then produce your design.
-```
-
-**Agent 2: Platform Engineer**
-```
-Read and follow the agent prompt at: prompts/design-agents/platform-engineer.md
-
-Your task is fully described there. Start by reading all required context files listed in the prompt, then produce your design.
-```
-
-**Agent 3: Data Flow Architect**
-```
-Read and follow the agent prompt at: prompts/design-agents/data-flow-architect.md
-
-Your task is fully described there. Start by reading all required context files listed in the prompt, then produce your design.
-```
-
-**Agent 4: Team-First Developer**
-```
-Read and follow the agent prompt at: prompts/design-agents/team-first-developer.md
-
-Your task is fully described there. Start by reading all required context files listed in the prompt, then produce your design.
-```
-
-### Wave 1b (2 agents sequentially)
-
-**Agent 5: Disposable Architecture Designer**
-```
-Read and follow the agent prompt at: prompts/design-agents/disposable-architecture.md
-
-Your task is fully described there. Start by reading all required context files listed in the prompt, then produce your design.
-```
-
-**Agent 6: Clean Slate Designer**
-```
-Read and follow the agent prompt at: prompts/design-agents/clean-slate-designer.md
-
-Your task is fully described there. Start by reading all required context files listed in the prompt, then produce your design.
-
-Important: Do NOT read the Denali, Etna, or Fuji source code as design input. Start only from the client-facing API contract and the 12go API surface described in the context files.
-```
-
-### Wave 1 Orchestrator (main agent)
-
-After all 6 design agents complete, as the main agent:
-
-1. Read all 6 design docs in `design/alternatives/*/design.md`
-2. Read the **current** `design/decision-map.md` first -- understand which decisions (D0-DN) already exist
-3. Update `design/decision-map.md`:
-   - For each existing decision node (D0-DN): note whether any new design changes its status (confirmed, challenged, or now resolved)
-   - Add new decision nodes for options proposed in the new designs that are not in the current map
-   - Note convergences (multiple agents reached the same conclusion) and divergences (agents disagree -- these are the real design decisions)
-   - Note what the Clean Slate agent proposes vs. what other agents propose -- this contrast reveals which constraints are inherent vs. inherited
-4. Write a convergence/divergence summary at the top of the decision map update section
+Each agent's full prompt is in `.claude/agents/<name>/AGENT.md`. The canonical prompt sources remain in `prompts/design-agents/` for reference.
 
 ---
 
-## Step 4: Run Phase 3 — Analyzer Agents (Wave 2)
+## Step 4: Run Phase 3 — Analyzer Agents
 
-All 4 analyzer agents run in parallel. Each reads all 6 design docs plus the evaluation criteria.
+Use the `/run-evaluation-phase` skill to execute all 4 analyzer agents in parallel.
 
-**Agent 1: Red Team**
-```
-Read and follow the agent prompt at: prompts/analyzer-agents/red-team.md
+This skill handles:
+- Verifying all 6 design docs exist
+- Launching all 4 analyzer agents simultaneously via `.claude/agents/<name>/AGENT.md`
+- Synthesizing the comparison matrix and recommendation
+- Verifying arithmetic on weighted scores
+- Running quality checks
 
-Your task is fully described there. Read ALL 6 design docs in design/alternatives/*/design.md before producing your analysis.
-```
-
-**Agent 2: Execution Realist**
-```
-Read and follow the agent prompt at: prompts/analyzer-agents/execution-realist.md
-
-Your task is fully described there. Read ALL 6 design docs in design/alternatives/*/design.md before scoring.
-```
-
-**Agent 3: AI Friendliness**
-```
-Read and follow the agent prompt at: prompts/analyzer-agents/ai-friendliness.md
-
-Your task is fully described there. Read ALL 6 design docs in design/alternatives/*/design.md before scoring.
-```
-
-**Agent 4: Technical Merit**
-```
-Read and follow the agent prompt at: prompts/analyzer-agents/technical-merit.md
-
-Your task is fully described there. Read ALL 6 design docs in design/alternatives/*/design.md before scoring.
-```
+Each agent's full prompt is in `.claude/agents/<name>/AGENT.md`. The canonical prompt sources remain in `prompts/analyzer-agents/` for reference.
 
 ---
 
