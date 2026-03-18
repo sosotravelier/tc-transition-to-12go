@@ -29,12 +29,12 @@
     ],
     "segments": [
         {
-            "id": "16779-3-4-2026-03-20 18:57-2026-03-21 07:15-12",
+            "id": "16779-3-4-2026-03-25T18:57-2026-03-26T07:15-12",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 18:57:00",
-            "arrival_time": "2026-03-21 07:15:00",
-            "travel_duration": "PT738M",
+            "departure_time": "2026-03-25T18:57",
+            "arrival_time": "2026-03-26T07:15",
+            "travel_duration": "PT12H18M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -43,12 +43,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 20:23-2026-03-21 08:40-12",
+            "id": "16779-3-4-2026-03-25T20:23-2026-03-26T08:40-12",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:23:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT737M",
+            "departure_time": "2026-03-25T20:23",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H17M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -57,12 +57,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 20:23-2026-03-21 08:40-16",
+            "id": "16779-3-4-2026-03-25T20:23-2026-03-26T08:40-16",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:23:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT737M",
+            "departure_time": "2026-03-25T20:23",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H17M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "16",
@@ -71,12 +71,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-12",
+            "id": "16779-3-4-2026-03-25T14:34-2026-03-26T04:05-12",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 14:34:00",
-            "arrival_time": "2026-03-21 04:05:00",
-            "travel_duration": "PT811M",
+            "departure_time": "2026-03-25T14:34",
+            "arrival_time": "2026-03-26T04:05",
+            "travel_duration": "PT13H31M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -85,12 +85,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 22:50-2026-03-21 12:10-12",
+            "id": "16779-3-4-2026-03-25T22:50-2026-03-26T12:10-12",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 22:50:00",
-            "arrival_time": "2026-03-21 12:10:00",
-            "travel_duration": "PT800M",
+            "departure_time": "2026-03-25T22:50",
+            "arrival_time": "2026-03-26T12:10",
+            "travel_duration": "PT13H20M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -99,12 +99,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 22:50-2026-03-21 12:10-15",
+            "id": "16779-3-4-2026-03-25T22:50-2026-03-26T12:10-15",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 22:50:00",
-            "arrival_time": "2026-03-21 12:10:00",
-            "travel_duration": "PT800M",
+            "departure_time": "2026-03-25T22:50",
+            "arrival_time": "2026-03-26T12:10",
+            "travel_duration": "PT13H20M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "15",
@@ -113,12 +113,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 22:50-2026-03-21 12:10-16",
+            "id": "16779-3-4-2026-03-25T22:50-2026-03-26T12:10-16",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 22:50:00",
-            "arrival_time": "2026-03-21 12:10:00",
-            "travel_duration": "PT800M",
+            "departure_time": "2026-03-25T22:50",
+            "arrival_time": "2026-03-26T12:10",
+            "travel_duration": "PT13H20M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "16",
@@ -127,12 +127,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 09:13-2026-03-20 19:30-14",
+            "id": "16779-3-4-2026-03-25T09:13-2026-03-25T19:30-14",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 09:13:00",
-            "arrival_time": "2026-03-20 19:30:00",
-            "travel_duration": "PT617M",
+            "departure_time": "2026-03-25T09:13",
+            "arrival_time": "2026-03-25T19:30",
+            "travel_duration": "PT10H17M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "14",
@@ -141,12 +141,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 20:22-2026-03-21 08:40-15",
+            "id": "16779-3-4-2026-03-25T20:22-2026-03-26T08:40-15",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:22:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT738M",
+            "departure_time": "2026-03-25T20:22",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H18M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "15",
@@ -155,12 +155,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 20:22-2026-03-21 08:40-5894",
+            "id": "16779-3-4-2026-03-25T20:22-2026-03-26T08:40-5894",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:22:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT738M",
+            "departure_time": "2026-03-25T20:22",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H18M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "5894",
@@ -169,12 +169,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-15",
+            "id": "16779-3-4-2026-03-25T14:34-2026-03-26T04:05-15",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 14:34:00",
-            "arrival_time": "2026-03-21 04:05:00",
-            "travel_duration": "PT811M",
+            "departure_time": "2026-03-25T14:34",
+            "arrival_time": "2026-03-26T04:05",
+            "travel_duration": "PT13H31M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "15",
@@ -183,12 +183,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-16",
+            "id": "16779-3-4-2026-03-25T14:34-2026-03-26T04:05-16",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 14:34:00",
-            "arrival_time": "2026-03-21 04:05:00",
-            "travel_duration": "PT811M",
+            "departure_time": "2026-03-25T14:34",
+            "arrival_time": "2026-03-26T04:05",
+            "travel_duration": "PT13H31M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "16",
@@ -197,12 +197,12 @@
             ]
         },
         {
-            "id": "16779-3-4-2026-03-20 18:57-2026-03-21 07:15-5894",
+            "id": "16779-3-4-2026-03-25T18:57-2026-03-26T07:15-5894",
             "from_station": "3",
             "to_station": "4",
-            "departure_time": "2026-03-20 18:57:00",
-            "arrival_time": "2026-03-21 07:15:00",
-            "travel_duration": "PT738M",
+            "departure_time": "2026-03-25T18:57",
+            "arrival_time": "2026-03-26T07:15",
+            "travel_duration": "PT12H18M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "5894",
@@ -211,12 +211,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 18:40-2026-03-21 07:15-12",
+            "id": "16779-147101-4-2026-03-25T18:40-2026-03-26T07:15-12",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 18:40:00",
-            "arrival_time": "2026-03-21 07:15:00",
-            "travel_duration": "PT755M",
+            "departure_time": "2026-03-25T18:40",
+            "arrival_time": "2026-03-26T07:15",
+            "travel_duration": "PT12H35M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -225,12 +225,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 18:40-2026-03-21 07:15-5894",
+            "id": "16779-147101-4-2026-03-25T18:40-2026-03-26T07:15-5894",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 18:40:00",
-            "arrival_time": "2026-03-21 07:15:00",
-            "travel_duration": "PT755M",
+            "departure_time": "2026-03-25T18:40",
+            "arrival_time": "2026-03-26T07:15",
+            "travel_duration": "PT12H35M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "5894",
@@ -239,12 +239,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 14:15-2026-03-21 04:05-12",
+            "id": "16779-147101-4-2026-03-25T14:15-2026-03-26T04:05-12",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 14:15:00",
-            "arrival_time": "2026-03-21 04:05:00",
-            "travel_duration": "PT830M",
+            "departure_time": "2026-03-25T14:15",
+            "arrival_time": "2026-03-26T04:05",
+            "travel_duration": "PT13H50M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -253,12 +253,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 14:15-2026-03-21 04:05-15",
+            "id": "16779-147101-4-2026-03-25T14:15-2026-03-26T04:05-15",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 14:15:00",
-            "arrival_time": "2026-03-21 04:05:00",
-            "travel_duration": "PT830M",
+            "departure_time": "2026-03-25T14:15",
+            "arrival_time": "2026-03-26T04:05",
+            "travel_duration": "PT13H50M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "15",
@@ -267,12 +267,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 14:15-2026-03-21 04:05-16",
+            "id": "16779-147101-4-2026-03-25T14:15-2026-03-26T04:05-16",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 14:15:00",
-            "arrival_time": "2026-03-21 04:05:00",
-            "travel_duration": "PT830M",
+            "departure_time": "2026-03-25T14:15",
+            "arrival_time": "2026-03-26T04:05",
+            "travel_duration": "PT13H50M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "16",
@@ -281,12 +281,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 22:30-2026-03-21 12:10-12",
+            "id": "16779-147101-4-2026-03-25T22:30-2026-03-26T12:10-12",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 22:30:00",
-            "arrival_time": "2026-03-21 12:10:00",
-            "travel_duration": "PT820M",
+            "departure_time": "2026-03-25T22:30",
+            "arrival_time": "2026-03-26T12:10",
+            "travel_duration": "PT13H40M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "12",
@@ -295,12 +295,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 22:30-2026-03-21 12:10-15",
+            "id": "16779-147101-4-2026-03-25T22:30-2026-03-26T12:10-15",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 22:30:00",
-            "arrival_time": "2026-03-21 12:10:00",
-            "travel_duration": "PT820M",
+            "departure_time": "2026-03-25T22:30",
+            "arrival_time": "2026-03-26T12:10",
+            "travel_duration": "PT13H40M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "15",
@@ -309,12 +309,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 22:30-2026-03-21 12:10-16",
+            "id": "16779-147101-4-2026-03-25T22:30-2026-03-26T12:10-16",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 22:30:00",
-            "arrival_time": "2026-03-21 12:10:00",
-            "travel_duration": "PT820M",
+            "departure_time": "2026-03-25T22:30",
+            "arrival_time": "2026-03-26T12:10",
+            "travel_duration": "PT13H40M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "16",
@@ -323,12 +323,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 20:05-2026-03-21 08:40-15",
+            "id": "16779-147101-4-2026-03-25T20:05-2026-03-26T08:40-15",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:05:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT755M",
+            "departure_time": "2026-03-25T20:05",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H35M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "15",
@@ -337,12 +337,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 20:05-2026-03-21 08:40-16",
+            "id": "16779-147101-4-2026-03-25T20:05-2026-03-26T08:40-16",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:05:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT755M",
+            "departure_time": "2026-03-25T20:05",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H35M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "16",
@@ -351,12 +351,12 @@
             ]
         },
         {
-            "id": "16779-147101-4-2026-03-20 20:05-2026-03-21 08:40-5894",
+            "id": "16779-147101-4-2026-03-25T20:05-2026-03-26T08:40-5894",
             "from_station": "147101",
             "to_station": "4",
-            "departure_time": "2026-03-20 20:05:00",
-            "arrival_time": "2026-03-21 08:40:00",
-            "travel_duration": "PT755M",
+            "departure_time": "2026-03-25T20:05",
+            "arrival_time": "2026-03-26T08:40",
+            "travel_duration": "PT12H35M",
             "vehicle_id": "16779-Train",
             "operating_carrier_id": "16779",
             "seat_class_id": "5894",
@@ -367,9 +367,9 @@
     ],
     "itineraries": [
         {
-            "id": "TH000300044mDt00c01hdkRw:2026-03-20 18:57:00",
+            "id": "TH000300044mDt00c01hdkRw:2026-03-25T18:57",
             "departure_segments": [
-                "16779-3-4-2026-03-20 18:57-2026-03-21 07:15-12"
+                "16779-3-4-2026-03-25T18:57-2026-03-26T07:15-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -380,19 +380,19 @@
                     }
                 }
             ],
-            "number_of_available_seats": 42,
+            "number_of_available_seats": 33,
             "pricing": {
                 "net_price": {
-                    "amount": "791.00",
+                    "amount": "457.00",
                     "currency": "THB"
                 },
                 "gross_price": {
-                    "amount": "891.00",
+                    "amount": "507.00",
                     "currency": "THB",
                     "price_type": "Recommended"
                 },
                 "taxes_and_fees": {
-                    "amount": "100.00",
+                    "amount": "50.00",
                     "currency": "THB"
                 }
             },
@@ -400,9 +400,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00c03BNR3q:",
+            "id": "TH000300044mDt00c03BNR3q:2026-03-25T20:23",
             "departure_segments": [
-                "16779-3-4-2026-03-20 20:23-2026-03-21 08:40-12"
+                "16779-3-4-2026-03-25T20:23-2026-03-26T08:40-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -413,7 +413,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 43,
+            "number_of_available_seats": 34,
             "pricing": {
                 "net_price": {
                     "amount": "409.00",
@@ -433,9 +433,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00g03BNR3q:",
+            "id": "TH000300044mDt00g03BNR3q:2026-03-25T20:23",
             "departure_segments": [
-                "16779-3-4-2026-03-20 20:23-2026-03-21 08:40-16"
+                "16779-3-4-2026-03-25T20:23-2026-03-26T08:40-16"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -446,7 +446,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 31,
+            "number_of_available_seats": 14,
             "pricing": {
                 "net_price": {
                     "amount": "643.00",
@@ -466,9 +466,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00c0IrgTo0:",
+            "id": "TH000300044mDt00c0IrgTo0:2026-03-25T14:34",
             "departure_segments": [
-                "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-12"
+                "16779-3-4-2026-03-25T14:34-2026-03-26T04:05-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -479,7 +479,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 56,
+            "number_of_available_seats": 31,
             "pricing": {
                 "net_price": {
                     "amount": "480.00",
@@ -499,9 +499,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00c0JFdHk0:",
+            "id": "TH000300044mDt00c0JFdHk0:2026-03-25T22:50",
             "departure_segments": [
-                "16779-3-4-2026-03-20 22:50-2026-03-21 12:10-12"
+                "16779-3-4-2026-03-25T22:50-2026-03-26T12:10-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -512,7 +512,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 53,
+            "number_of_available_seats": 14,
             "pricing": {
                 "net_price": {
                     "amount": "790.00",
@@ -532,9 +532,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00f0JFdHk0:",
+            "id": "TH000300044mDt00f0JFdHk0:2026-03-25T22:50",
             "departure_segments": [
-                "16779-3-4-2026-03-20 22:50-2026-03-21 12:10-15"
+                "16779-3-4-2026-03-25T22:50-2026-03-26T12:10-15"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -545,7 +545,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 22,
+            "number_of_available_seats": 39,
             "pricing": {
                 "net_price": {
                     "amount": "250.00",
@@ -565,9 +565,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00g0JFdHk0:",
+            "id": "TH000300044mDt00g0JFdHk0:2026-03-25T22:50",
             "departure_segments": [
-                "16779-3-4-2026-03-20 22:50-2026-03-21 12:10-16"
+                "16779-3-4-2026-03-25T22:50-2026-03-26T12:10-16"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -578,7 +578,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 37,
+            "number_of_available_seats": 16,
             "pricing": {
                 "net_price": {
                     "amount": "372.00",
@@ -598,9 +598,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00e02CsiAv:2026-03-20 09:13:00",
+            "id": "TH000300044mDt00e02CsiAv:2026-03-25T09:13",
             "departure_segments": [
-                "16779-3-4-2026-03-20 09:13-2026-03-20 19:30-14"
+                "16779-3-4-2026-03-25T09:13-2026-03-25T19:30-14"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -611,19 +611,19 @@
                     }
                 }
             ],
-            "number_of_available_seats": 30,
+            "number_of_available_seats": 37,
             "pricing": {
                 "net_price": {
-                    "amount": "541.00",
+                    "amount": "217.00",
                     "currency": "THB"
                 },
                 "gross_price": {
-                    "amount": "621.00",
+                    "amount": "267.00",
                     "currency": "THB",
                     "price_type": "Recommended"
                 },
                 "taxes_and_fees": {
-                    "amount": "80.00",
+                    "amount": "50.00",
                     "currency": "THB"
                 }
             },
@@ -631,9 +631,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00f03BNR3q:",
+            "id": "TH000300044mDt00f03BNR3q:2026-03-25T20:22",
             "departure_segments": [
-                "16779-3-4-2026-03-20 20:22-2026-03-21 08:40-15"
+                "16779-3-4-2026-03-25T20:22-2026-03-26T08:40-15"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -644,7 +644,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 50,
+            "number_of_available_seats": 45,
             "pricing": {
                 "net_price": {
                     "amount": "613.00",
@@ -664,9 +664,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt1x403BNR3q:",
+            "id": "TH000300044mDt1x403BNR3q:2026-03-25T20:22",
             "departure_segments": [
-                "16779-3-4-2026-03-20 20:22-2026-03-21 08:40-5894"
+                "16779-3-4-2026-03-25T20:22-2026-03-26T08:40-5894"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -677,7 +677,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 10,
+            "number_of_available_seats": 57,
             "pricing": {
                 "net_price": {
                     "amount": "599.00",
@@ -697,9 +697,9 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH000300044mDt00f0IrgTo0:2026-03-20 14:34:00",
+            "id": "TH000300044mDt00f0IrgTo0:2026-03-25T14:34",
             "departure_segments": [
-                "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-15"
+                "16779-3-4-2026-03-25T14:34-2026-03-26T04:05-15"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -710,14 +710,14 @@
                     }
                 }
             ],
-            "number_of_available_seats": 55,
+            "number_of_available_seats": 18,
             "pricing": {
                 "net_price": {
-                    "amount": "271.00",
+                    "amount": "700.00",
                     "currency": "THB"
                 },
                 "gross_price": {
-                    "amount": "321.00",
+                    "amount": "750.00",
                     "currency": "THB",
                     "price_type": "Recommended"
                 },
@@ -730,9 +730,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00g0IrgTo0:2026-03-20 14:34:00",
+            "id": "TH000300044mDt00g0IrgTo0:2026-03-25T14:34",
             "departure_segments": [
-                "16779-3-4-2026-03-20 14:34-2026-03-21 04:05-16"
+                "16779-3-4-2026-03-25T14:34-2026-03-26T04:05-16"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -743,19 +743,19 @@
                     }
                 }
             ],
-            "number_of_available_seats": 80,
+            "number_of_available_seats": 49,
             "pricing": {
                 "net_price": {
-                    "amount": "171.00",
+                    "amount": "666.00",
                     "currency": "THB"
                 },
                 "gross_price": {
-                    "amount": "201.00",
+                    "amount": "716.00",
                     "currency": "THB",
                     "price_type": "Recommended"
                 },
                 "taxes_and_fees": {
-                    "amount": "30.00",
+                    "amount": "50.00",
                     "currency": "THB"
                 }
             },
@@ -763,9 +763,9 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH000300044mDt1x401hdkRw:",
+            "id": "TH000300044mDt1x401hdkRw:2026-03-25T18:57",
             "departure_segments": [
-                "16779-3-4-2026-03-20 18:57-2026-03-21 07:15-5894"
+                "16779-3-4-2026-03-25T18:57-2026-03-26T07:15-5894"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -776,7 +776,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 57,
+            "number_of_available_seats": 44,
             "pricing": {
                 "net_price": {
                     "amount": "399.00",
@@ -796,9 +796,9 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0CgB00044mDt00c01hdkRw:",
+            "id": "TH0CgB00044mDt00c01hdkRw:2026-03-25T18:40",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 18:40-2026-03-21 07:15-12"
+                "16779-147101-4-2026-03-25T18:40-2026-03-26T07:15-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -809,7 +809,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 50,
+            "number_of_available_seats": 21,
             "pricing": {
                 "net_price": {
                     "amount": "521.00",
@@ -829,9 +829,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt1x401hdkRw:",
+            "id": "TH0CgB00044mDt1x401hdkRw:2026-03-25T18:40",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 18:40-2026-03-21 07:15-5894"
+                "16779-147101-4-2026-03-25T18:40-2026-03-26T07:15-5894"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -842,7 +842,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 25,
+            "number_of_available_seats": 42,
             "pricing": {
                 "net_price": {
                     "amount": "431.00",
@@ -862,9 +862,9 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0CgB00044mDt00c0IrgTo0:",
+            "id": "TH0CgB00044mDt00c0IrgTo0:2026-03-25T14:15",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 14:15-2026-03-21 04:05-12"
+                "16779-147101-4-2026-03-25T14:15-2026-03-26T04:05-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -875,7 +875,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 46,
+            "number_of_available_seats": 13,
             "pricing": {
                 "net_price": {
                     "amount": "504.00",
@@ -895,9 +895,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00f0IrgTo0:",
+            "id": "TH0CgB00044mDt00f0IrgTo0:2026-03-25T14:15",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 14:15-2026-03-21 04:05-15"
+                "16779-147101-4-2026-03-25T14:15-2026-03-26T04:05-15"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -908,7 +908,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 39,
+            "number_of_available_seats": 44,
             "pricing": {
                 "net_price": {
                     "amount": "300.00",
@@ -928,9 +928,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00g0IrgTo0:",
+            "id": "TH0CgB00044mDt00g0IrgTo0:2026-03-25T14:15",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 14:15-2026-03-21 04:05-16"
+                "16779-147101-4-2026-03-25T14:15-2026-03-26T04:05-16"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -941,7 +941,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 28,
+            "number_of_available_seats": 35,
             "pricing": {
                 "net_price": {
                     "amount": "754.00",
@@ -961,9 +961,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00c0JFdHk0:",
+            "id": "TH0CgB00044mDt00c0JFdHk0:2026-03-25T22:30",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 22:30-2026-03-21 12:10-12"
+                "16779-147101-4-2026-03-25T22:30-2026-03-26T12:10-12"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -974,7 +974,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 11,
+            "number_of_available_seats": 16,
             "pricing": {
                 "net_price": {
                     "amount": "630.00",
@@ -994,9 +994,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00f0JFdHk0:",
+            "id": "TH0CgB00044mDt00f0JFdHk0:2026-03-25T22:30",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 22:30-2026-03-21 12:10-15"
+                "16779-147101-4-2026-03-25T22:30-2026-03-26T12:10-15"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -1007,7 +1007,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 42,
+            "number_of_available_seats": 51,
             "pricing": {
                 "net_price": {
                     "amount": "794.00",
@@ -1027,9 +1027,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00g0JFdHk0:",
+            "id": "TH0CgB00044mDt00g0JFdHk0:2026-03-25T22:30",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 22:30-2026-03-21 12:10-16"
+                "16779-147101-4-2026-03-25T22:30-2026-03-26T12:10-16"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -1040,7 +1040,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 21,
+            "number_of_available_seats": 18,
             "pricing": {
                 "net_price": {
                     "amount": "564.00",
@@ -1060,9 +1060,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00f03BNR3q:",
+            "id": "TH0CgB00044mDt00f03BNR3q:2026-03-25T20:05",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 20:05-2026-03-21 08:40-15"
+                "16779-147101-4-2026-03-25T20:05-2026-03-26T08:40-15"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -1073,7 +1073,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 46,
+            "number_of_available_seats": 39,
             "pricing": {
                 "net_price": {
                     "amount": "717.00",
@@ -1093,9 +1093,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00g03BNR3q:",
+            "id": "TH0CgB00044mDt00g03BNR3q:2026-03-25T20:05",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 20:05-2026-03-21 08:40-16"
+                "16779-147101-4-2026-03-25T20:05-2026-03-26T08:40-16"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -1106,7 +1106,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 37,
+            "number_of_available_seats": 48,
             "pricing": {
                 "net_price": {
                     "amount": "259.00",
@@ -1126,9 +1126,9 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt1x403BNR3q:",
+            "id": "TH0CgB00044mDt1x403BNR3q:2026-03-25T20:05",
             "departure_segments": [
-                "16779-147101-4-2026-03-20 20:05-2026-03-21 08:40-5894"
+                "16779-147101-4-2026-03-25T20:05-2026-03-26T08:40-5894"
             ],
             "connection_guaranteed": true,
             "cancellation_policies": [
@@ -1139,7 +1139,7 @@
                     }
                 }
             ],
-            "number_of_available_seats": 56,
+            "number_of_available_seats": 31,
             "pricing": {
                 "net_price": {
                     "amount": "567.00",
