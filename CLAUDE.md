@@ -15,11 +15,12 @@ These skills handle archiving, pre-flight checks, agent dispatch, and quality ve
 
 ## Project Structure
 
-- **Custom agents** are in `.claude/agents/` — each corresponds to a role defined in `AGENTS.md`
+- **Custom agents** are in `.claude/agents/` — each has a single `AGENT.md` with the full prompt
   - 6 design agents: `pragmatic-minimalist`, `platform-engineer`, `data-flow-architect`, `team-first-developer`, `disposable-architecture`, `clean-slate-designer`
   - 4 analyzer agents: `red-team`, `execution-realist`, `ai-friendliness`, `technical-merit`
+  - 2 meta agents: `agent-scout`, `skill-scout`
+- **Shared context** in `prompts/context/` — `system-context.md` and `codebase-analysis.md` are injected into all agent prompts
 - **Path-specific rules** in `.claude/rules/` enforce document templates (frontmatter, required sections, diagram standards)
-- **Canonical prompts** remain in `prompts/design-agents/` and `prompts/analyzer-agents/` as reference — the AGENT.md files contain the full prompt content
 
 ## Running Multi-Agent Workflows
 
