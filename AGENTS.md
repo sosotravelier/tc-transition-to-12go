@@ -356,3 +356,11 @@ Decisions made during this project, for context in future sessions.
 | 2026-03-09 | v1 language-based design agents archived; replaced with perspective-based agents | Language axis produced convergent designs; perspective axis (minimalist/infra/data/DX/disposable) activates more diverse LLM knowledge regions |
 | 2026-03-09 | v1 concern-based analyzer agents archived; replaced with Red Team + Execution Realist + AI Friendliness + Technical Merit | Strategic Alignment removed (unknowable), Client Impact made a hard constraint, AI Friendliness elevated to first-class criterion |
 | 2026-03-09 | Evaluation criteria updated to v4 | AI-Friendliness elevated to High weight (x3), Disposability added, Future Extensibility removed, Testing Ease elevated to Medium weight |
+| 2026-03-18 | Q2 scope: new client onboarding only, no backward compatibility | New clients use 12go native IDs; existing client migration is Q3+. Design must not require redesign for future migration. |
+| 2026-03-18 | gRPC out of Q2 scope | Different protocol, not needed for new client onboarding; 12go has existing partner/agent entity for gRPC clients |
+| 2026-03-18 | PHP buddy sessions approved (2x/week → 1x/week → as-needed) | Soso needs unblocking support for F3 development; team has no in-house 12go expert |
+| 2026-03-18 | Monitoring: discovery co-owned by Shauly, implementation by Soso | Eliran asked all team leads to inventory monitoring; ~300 alerts need narrowing to 10-20 |
+| 2026-03-18 | Cancellation policy: basic handling for Q2, structured policy in GetItinerary only (not search) | Sana confirmed structured policy in search would "dramatically increase response time" |
+| 2026-03-18 | SeatLock lowest priority — after full booking funnel | 12go deployed seatlock to production Mar 18; it's an add-on, not core booking flow |
+| 2026-03-18 | Incomplete results/recheck: lower priority for Q2 | Clients find it confusing, most don't implement it; AWS timeout override now available |
+| 2026-03-18 | Presentation for Eliran on Mar 25 — endpoints, challenges, F3 learnings | Shauly wants stakeholder alignment before implementation begins |

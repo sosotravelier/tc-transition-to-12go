@@ -1,0 +1,576 @@
+Mar 18, 2026
+Soso / Shauly - Transcript
+00:00:00
+ 
+Shauly Sahar: How are you again in the office?
+Soso Tughushi: Good. Good.
+Shauly Sahar: I will start to think that you are like to come to the office.
+Soso Tughushi: It's It's good here. Quiet. It was also yesterday.
+Shauly Sahar: Yeah.
+Soso Tughushi: I I just had like a good feedback from my brain that I liked it. So also nobody's here. Yeah. Uh so um so about all of that uh what we discussed
+Shauly Sahar: I have few question before that.
+Soso Tughushi: uh
+Shauly Sahar: Uh we dive I saw that you cancelled the meeting with Tom. Everything is okay.
+Soso Tughushi: yeah she said that she fixed it now and I saw that I confirmed that the balance was fine. Um yeah. Yeah. She would reply to me that,
+Shauly Sahar: Fine.
+Soso Tughushi: "Oh, I read I already uh video already did that and or she would send reiterate the screenshot and so on." And it was really
+Shauly Sahar: At least at least eventually it was uh fixed and I I I'm happy on that.
+ 
+ 
+00:01:16
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: I'm sorry that it took so long and uh um to be on on that um like uh you need to wait so so long. So I'm I'm sorry for for that but then I hope that it's the last time that it happens and we'll be smart at the end of the year to make sure that you are taking
+Soso Tughushi: Yeah,
+Shauly Sahar: vacation before that don't worry I
+Soso Tughushi: I will definitely take hold of it.
+Shauly Sahar: will uh make sure that everybody in the team are also doing that uh including myself because I'm I'm tending not to take it and uh yeah uh but at
+Soso Tughushi: Yeah.
+Shauly Sahar: least you got what uh what uh you had and I'm I'm very happy on that.
+Soso Tughushi: Yeah. Good.
+Shauly Sahar: Cool. Uh second thing um
+Soso Tughushi: Yeah.
+Shauly Sahar: I also discuss about like uh what's our capacity for the next quarter and uh like uh if we can um utilize other people. Um, so we didn't put a lot of things on the quarter. Okay.
+ 
+ 
+00:02:43
+ 
+Shauly Sahar: So probably we'll have more people like half of people or something like that. Yeah. That can uh maybe help. I I don't know exactly the friction but it's kind of thing that we can paralyze and also I spoke with that there is Jericho
+Soso Tughushi: Okay. Here
+Shauly Sahar: Jerko that we might like if if we'll need that so we
+Soso Tughushi: come.
+Shauly Sahar: can try to we can try to utilize him as well uh for helping us. Okay,
+Soso Tughushi: Yeah.
+Shauly Sahar: we need to to think about it in advance and make sure that he's uh he can be uh available for us. But uh
+Soso Tughushi: Yeah. Yeah. I agree. Um I mean good.
+Shauly Sahar: yeah,
+Soso Tughushi: But the bad thing is that Jericho is not very acquainted with the want to go internal system. I mean maybe I mean I remember sau when he was presenting they said he said that they also have their own QA which I don't know know the environment and the workflow was saying that when they merge to master at first it is deployed to staging environment and then
+ 
+ 
+00:03:53
+ 
+Shauly Sahar: Yeah.
+Soso Tughushi: QA gives a sign off to go to the next one.
+Shauly Sahar: um I don't know if he needs to be familiar with want to go the API you know like a
+Soso Tughushi: Yeah, maybe he can just look
+Shauly Sahar: blackbox testing I don't expect him to to have the internal but anyway this is
+Soso Tughushi: at.
+Shauly Sahar: something that we can utilize and and we can again we need to to like be prepared in advance but uh Yeah. Okay.
+Soso Tughushi: Yeah, sure.
+Shauly Sahar: Cool. So now it's your
+Soso Tughushi: So I have seven sticky notes. So first of all about confirming the scope.
+Shauly Sahar: stage.
+Soso Tughushi: Uh so we said that we want to achieve in Q3 um uh ability to onboard new Q2 Q2 ability to on board the new uh clients,
+Shauly Sahar: Yes. This is will be our like if we said that it's it's not
+Soso Tughushi: right?
+Shauly Sahar: feasible then we need to say what is is feasible. Okay. Again I don't want you to push to push something that is not realistic.
+ 
+ 
+00:05:12
+ 
+Shauly Sahar: Okay. And I again as you said there are a lot of things in each one of the items uh that might uh that might cause us uh for like uh things will not go smooth as we thought or uh or we will have surprises. Okay. For example something that um ah asked me yesterday what about integration environment? So how can we on board them? Is it something that we are putting them on on production immediately? I don't know. But yeah, let's let's continue with that uh approach.
+Soso Tughushi: Okay,
+Shauly Sahar: Yeah,
+Soso Tughushi: it if about integ if the want to go has integration environment Thank
+Shauly Sahar: theoretically speaking, yes, I was using that like three years ago, but it wasn't like I I prefer to use the production because it's much more stable and has a full capabilities regarding the the one that uh they don't have.
+Soso Tughushi: Okay,
+Shauly Sahar: Okay.
+Soso Tughushi: next question. Uh, so um or or a statement. So I want to have weekly twice a week sessions with one of the people from want to go at the start for two weeks.
+ 
+ 
+00:06:30
+ 
+Soso Tughushi: let's say where I would it would be more systematic sync uh to like if I would have some batch of questions accumulated while working with F3 to be able to discuss them um and so that it's set let's say on Tuesday and Thursday u and they would be ready to like help me during this time to unblock
+Shauly Sahar: Yeah,
+Soso Tughushi: me or something the similar thing we were doing with one of the integration suits
+Shauly Sahar: I I agree. You kind of want a body.
+Soso Tughushi: Yeah.
+Shauly Sahar: I totally agree with you and the yeah we are the only team that doesn't have in-house
+Soso Tughushi: Yeah.
+Shauly Sahar: body.
+Soso Tughushi: Okay. So I was thinking uh let's say for two weeks twice a week meeting with this person then uh after two weeks for one month like once a week um and then on after one month so just on basis of what I would Okay the third question about um I want to leave for now the gRPC out of scope. Uh it's it's biggest for me not be one of the biggest um unknowns.
+ 
+ 
+00:07:59
+ 
+Soso Tughushi: I mean how it's going to look at in PHP. I mean, I I'm sure that it's supported, but I mean, it's Google, it's
+Shauly Sahar: Um yeah, we we can we can like you know plan and and say okay this one,
+Soso Tughushi: um
+Shauly Sahar: this one and this one we need to consider if we want to have them. I I think that it will be something that uh we can agree to to push it for a later phase.
+Soso Tughushi: Mhm. Yeah. Um also if we are aiming let's say in the first uh or in the second quarter uh to onboard new clients new clients I mean it technically this means that we don't really need uh backwards compatibility if we're going to have only new clients or should the scope include solving also these station ID mappings and existing booking
+Shauly Sahar: Um that's a good question.
+Soso Tughushi: report.
+Shauly Sahar: Um the solution should and and this is like something that we should take into consideration how we migrate client. Okay. What does it mean that we know exactly that what we are building will not require us to like redesign or is it going to be double double
+ 
+ 
+00:09:28
+ 
+Soso Tughushi: Redesign.
+Shauly Sahar: breaking us something that we are creating something that we cannot support uh uh the the migrated clients. Okay. Um um for example let's assume that we are going with one to go ids okay so this is a decision that we know in advance that we are going
+Soso Tughushi: Mhm.
+Shauly Sahar: to implement from the get-go the one to go ids and once the client will migrate we will need to tell them okay this is like the list that you have and you need to migrate it. Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: Uh but will not break the API like a new things that they cannot support or something uh like that. Okay. Or we know that this is a gap that we'll have and we need to solve it in some way.
+Soso Tughushi: Yeah.
+Shauly Sahar: But I I I prefer I'm sure that we'll have some uh some and I have in my mind some cases but I I prefer not to have uh like to to increase the the gap of it.
+Soso Tughushi: Okay.
+Shauly Sahar: It's it's answer your question.
+ 
+ 
+00:10:52
+ 
+Soso Tughushi: I mean yes. uh so to summarize uh we need to account for it and as a deliverable we need to let's say work with one to go ids I mean and for there there should be let's say placeholder in case if what if client will refuse to change their ID and say that this is too much guys just you took the responsibility on yourself that you're going to have consistent IDs why do we have to uh change uh its in our database,
+Shauly Sahar: So theoretically if if you put my gun to my head I will say okay the system in want to go
+Soso Tughushi: right?
+Shauly Sahar: doing that h and we'll add a layer on top of what we have that have static migration of ideas that we are familiar with that I don't want to get to that but that can be but
+Soso Tughushi: Yeah. But this static ID adjustment could be in Q3,
+Shauly Sahar: discussion yes correct correct and
+Soso Tughushi: let's say.
+Shauly Sahar: and also I I think that we might agree that this is the case and maybe once we'll start migrating the clients somewhere in Q4 one client say I don't care I don't I don't work with you so either if he's a good client and a client probably will maybe need to do that.
+ 
+ 
+00:12:14
+ 
+Shauly Sahar: If not, maybe we'll tell him goodbye. I don't know. But this is not something that I I need to do uh right now. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: Or part of this scope. What I do need to do in part of this scope is to plan how I'm going to migrate the clients and see that everything is what we build support that. So I don't need to do special things
+Soso Tughushi: Okay. Yeah, good.
+Shauly Sahar: there.
+Soso Tughushi: Um, next, uh, monitoring and metrics. So uh this is something I would like to offload to you to somebody else just to do this investigation what we have I mean I could let's say preserve things that I know for sure that we'll need let's say the some SI host metrics or whatever but this discovery phase I I don't want to do it uh myself alone maybe if we can't we can attack it together and I would allocate time for is but uh it's not something that I would want to take full
+Shauly Sahar: Okay.
+ 
+ 
+00:13:25
+ 
+Shauly Sahar: Um I coincidentally we had a meeting today
+Soso Tughushi: ownership.
+Shauly Sahar: uh that Eran ask all the team leads I think um he he wants to kind of like how we monitoring things because there are like a lot of uh systems that now we are combining everybody's coming outside um our uncle TC uncle is like we we had like 14 people before now um I don't know maybe we are six like we need to tackle everything okay so what he asked from me or anybody of us is like to have a list of what what we have he also said what he wants to have okay so I believe that part of
+Soso Tughushi: Mhm.
+Shauly Sahar: that I want to get into like today we have 300 alerts in production, right? And I want to
+Soso Tughushi: Yeah.
+Shauly Sahar: hopefully to narrow it down to to much less uh things, okay? to have like 10, 15, 20 alerts that are like uh and based on that probably this is the metrics that we will will need to to have for example all the SI related metrics is not is not is not something that we need to migrate this is like something Yuri needs to to provide we we probably on part of that we need to do like to count the API calls the success the failure um per API per client
+ 
+ 
+00:15:19
+ 
+Shauly Sahar: it's I don't believe that it will be something uh very uh uh big but
+Soso Tughushi: Sure.
+Shauly Sahar: it will be probably part of any um any API that will uh call response time right um
+Soso Tughushi: Okay. So, yeah, we have agreement on that. So, it's going to be done. I mean uh it could be I mean I can do do this uh monitoring and met metrics and logging in the uh Q2. Um yeah,
+Shauly Sahar: It should be part of your API implementation but what discover
+Soso Tughushi: but I need to have
+Shauly Sahar: will dis will uh define it together what exactly you need to to have you
+Soso Tughushi: it.
+Shauly Sahar: don't and I want to keep something probably simple I also want to understand how want to go are doing that on their APIs and it's probably should be something very similar for that.
+Soso Tughushi: Yeah,
+Shauly Sahar: Okay.
+Soso Tughushi: good. Kafka events um data
+Shauly Sahar: You don't mean C events, you want uh data events, right?
+Soso Tughushi: events. Yeah.
+ 
+ 
+00:16:32
+ 
+Soso Tughushi: So um like let's say I could do like analysis but
+Shauly Sahar: Yes.
+Soso Tughushi: I need some point of contact who also knows from the other side what is required and what is not from DC to be alive.
+Shauly Sahar: Okay.
+Soso Tughushi: I mean it it I sense that there is confusion about what could be staying versus what could be not. Maybe it will require ALC uh involvement as well as somebody from data team
+Shauly Sahar: Yeah.
+Soso Tughushi: who knows what they receive right now so that I could be able to then like definitely publish the events that they would need in the format they
+Shauly Sahar: Yeah. And I also don't know how we should what
+Soso Tughushi: need.
+Shauly Sahar: should be the way to publish it. Right? It's not that we are going to use the same topics that we currently have,
+Soso Tughushi: Well,
+Shauly Sahar: right?
+Soso Tughushi: we could basically publish directly to the topics that COA publishes, right? I mean
+Shauly Sahar: Yeah. What I mean is like KOA publishing.
+Soso Tughushi: to
+ 
+ 
+00:17:41
+ 
+Shauly Sahar: So it's other cloud. Okay. It's it's something that we need to discover and maybe maybe again I I told
+Soso Tughushi: Yeah.
+Shauly Sahar: you that I I heard about like they they have some unification h of a few um of a system and I know that some of one to go not some but probably most of one to go data is floating somewhere and and and in some way. Um it's it's a topic that we need to research and understand exactly what we need and how. Okay. I I I agree.
+Soso Tughushi: Yeah.
+Shauly Sahar: Uh and also Yeah. Okay.
+Soso Tughushi: Yeah. Uh then next topic notifications. So there is no ambiguity I think in the story. I mean there are still decisions that needs to be made. Uh but this is also I mean I would in good case uh offload it to somebody else from some other developer at when the time will come. So point is that I I could parallelize this somehow and let's say count on on this topic that I'm going to have let's say one of our TC buddies to let's say help me with that or like give it to him and uh he will do
+ 
+ 
+00:19:07
+ 
+Shauly Sahar: Okay. So,
+Soso Tughushi: it.
+Shauly Sahar: so let let's I understand let's like
+Soso Tughushi: Yeah.
+Shauly Sahar: estimate it.
+Soso Tughushi: I mean it's cool.
+Shauly Sahar: We Yeah. Yeah. Let's estimate it if it will be more than one quarter. So either we extend it to more than one quarter or we forced to put another people on over there.
+Soso Tughushi: Yeah,
+Shauly Sahar: That's okay.
+Soso Tughushi: sure.
+Shauly Sahar: It's it's not that okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: also know it's by the end of the
+Soso Tughushi: point was that like I was preparing let's say for this meeting with the assumption that uh like there was a plan for me to work on all of this and I was let's say squeezing the
+Shauly Sahar: okay
+Soso Tughushi: context so that it would fit in one quarter like what I could deliver and uh what help I would require to deliver it. So the web hook thing could could let's say get out of this
+Shauly Sahar: that's that's
+Soso Tughushi: and to make the clients unboardable before the end of quarter then I would require it to some help in in
+ 
+ 
+00:20:08
+ 
+Shauly Sahar: Okay,
+Soso Tughushi: that
+Shauly Sahar: I I totally understand and it's very good and you know maybe one of my boss's bosses will say to us okay I don't mind I want it to be in that quarter and that that's will be the plan okay we want either we put things out of the the scope maybe booking again maybe booking notification until the client will about to
+Soso Tughushi: Yeah.
+Shauly Sahar: on board. We'll uh we'll do that in in in the latest uh stages or maybe we'll offloading to someone else. Anyway, we need to put like some uh estimation on how how much it will take and and we'll decide if we squeeze it or we uh stretch it or doing that in the second phase. Okay. But uh Okay, cool.
+Soso Tughushi: So like what I wanted to let's say let's say I would commit to certain things right so to have uh the master data points in F3 which is a must for client onboarding uh the
+Shauly Sahar: Correct.
+Soso Tughushi: booking fun the search get itinerary basically whole booking funnel including the seat schema layout everything the post booking uh yeah get booking details and
+ 
+ 
+00:21:29
+ 
+Shauly Sahar: booking details. Yes.
+Soso Tughushi: get ticket right and uh the uh booking notifications um and and also during the
+Shauly Sahar: Okay.
+Soso Tughushi: time I would let's They assume all of this stuff that like there is this cuff ambiguity that is resolved also settlement about what kind of metrics uh we would need uh to make sure we are running properly right the gRPC out of scope um or it could if we can we have can upload it to somebody else if
+Shauly Sahar: Yeah.
+Soso Tughushi: we
+Shauly Sahar: I I I learned in the last two days that um it has some more um some more um how you call it um characteristics like um me and Levan created a client for that and then we understand because that there is already uh how do they call it not agent? No agent partner. No, we we have partner that they have a agent or something like other that that that getting that. So there is already an entity in one to go that that know how to handle it.
+Soso Tughushi: Handle the
+ 
+ 
+00:22:55
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: jeepy.
+Shauly Sahar: know the GRPC like uh a like a a client entity that that they they know how to who to associate it.
+Soso Tughushi: No. So to to who the Google will fit right like what kind of user will be Google
+Shauly Sahar: Yeah, something like that.
+Soso Tughushi: one?
+Shauly Sahar: How they they treat it, how they know or count it or something like that. And actually we cannot use another client for that.
+Soso Tughushi: Yeah.
+Shauly Sahar: So it's something that we we learn also Lean understand that there is some fees that we are adding to that that is totally different which is a bit something bit different than uh uh what what we have theoretically speaking um this again when we need to migrate it but uh it might be a responsibility of somebody else in one to go. But yeah, it's it's just something that I I realized uh yesterday evening when uh he started to ask a few questions why we created a new client for that and he was very um how you call it um not stressed but concerned about it uh that it might create uh duplications.
+ 
+ 
+00:24:20
+ 
+Soso Tughushi: I would use puzzled.
+Shauly Sahar: So I I I think what puzzled.
+Soso Tughushi: I would use the word
+Shauly Sahar: Yeah. You know I I I you you remember we had a call me and you like few weeks
+Soso Tughushi: puzzled.
+Shauly Sahar: ago and then I thought okay that's a good time to bring Susso to Israel and you know what happened the day after that?
+Soso Tughushi: The war
+Shauly Sahar: Yeah. Yeah. I think that if if we could do all the things like when we both of us sit in the in the office together, it would be much uh much easier to do that. But uh reality
+Soso Tughushi: Well,
+Shauly Sahar: bites.
+Soso Tughushi: yeah. Um, yeah. Well, I don't know how long this work going to last after my,
+Shauly Sahar: Um yeah.
+Soso Tughushi: let's say, vacation in April, end of the April could come.
+Shauly Sahar: Yeah, let's see. My daughter, she's in the army. She said that she doesn't see how it's going to end soon. Yeah.
+ 
+ 
+00:25:28
+ 
+Shauly Sahar: Um handball team is in
+Soso Tughushi: So, um,
+Shauly Sahar: Gogia in Bicidia this weekend. They're playing two games against uh Gogia national team.
+Soso Tughushi: nice. I would be confused about who I'm going to vote for.
+Shauly Sahar: Um actually I don't I don't know I I'm not remember that I saw Gorgian team play against Israel but I think you qualified for the World Cup or the last European and and we weren't and now we got you in the draw. probably you are a good team but u tomorrow I think the game is live in the TV tomorrow and Saturday or something like that.
+Soso Tughushi: Okay.
+Shauly Sahar: Yeah.
+Soso Tughushi: Interesting. Um okay noted um about the booking ids themselves um we just return like let's say one to go ID right no need for key VL encryption or something
+Shauly Sahar: It's a decision that we need to to uh
+Soso Tughushi: it can be postponed
+Shauly Sahar: yes um theoretically again we need to validate that maybe with Zana uh that this this is enough because this is what we are doing uh when calling their API and I believe everything can be done uh uh with
+ 
+ 
+00:27:14
+ 
+Soso Tughushi: Mhm. Yeah.
+Shauly Sahar: that
+Soso Tughushi: You were asking also about this booking token and well I have this in my specs actually it's easy uh to populate this booking token uh this booking token includes like card ID of want to go which
+Shauly Sahar: card ID. Yeah.
+Soso Tughushi: yeah
+Shauly Sahar: Yeah. The question is if we need to encrypt it or or not.
+Soso Tughushi: yeah
+Shauly Sahar: That's uh the only thing uh um I I can since we'll have the same ID it will be may make uh a bit uh maybe confusing from one side on on the other side yeah it's it's a decision that we need to take uh uh for that at least for the um maybe the booking ID can stay as is but maybe token and the other part uh like itinerary ID can be but I don't know I but we need to to to decide on
+Soso Tughushi: Okay.
+Shauly Sahar: it.
+Soso Tughushi: Uh the um the uh seat lock is upcoming right? I mean Q uh two going to have also seat lock one after year.
+ 
+ 
+00:28:37
+ 
+Shauly Sahar: uh I I think that they deployed today the sitlock in production. So this is something that we need to do for theus. But anyway,
+Soso Tughushi: there.
+Shauly Sahar: from my perspective, I would like in a lower if I need to to rank it, I would put it in in the lower after I finish uh all the booking
+Soso Tughushi: Hello.
+Shauly Sahar: funnel. It's like an add-on that we need to to have there.
+Soso Tughushi: Okay. Uh about incomplete results.
+Shauly Sahar: Yes.
+Soso Tughushi: Uh we have this incomplete result because of the API gateway limitation. I'm not sure what's up with want to go in fry and if they can support requests that are longer than that. Maybe we don't really need it. If we need it then it's going to be a bit complicated to implement itself. It's not impossible but this background processing slightly scares me but maybe with let's say after a few sessions with uh my buddy from want to go I would it would be easy and he would set me
+ 
+ 
+00:30:01
+ 
+Shauly Sahar: Yeah. Okay.
+Soso Tughushi: on
+Shauly Sahar: I I will tell you what's my latest um adventure with that. Um few weeks ago I uh um first it's it's something that clients a bit not clear how to to to do that and I I totally understand them. It's like not something that it's straight from the um from uh how we handle it.
+Soso Tughushi: like it. You mean you mean that client do not like this uh fact
+Shauly Sahar: What? Yes, correct. And it's not very intuitive and they don't understand and
+Soso Tughushi: Good.
+Shauly Sahar: also from the get-go party use the name pending and it's also confused them with the pending status and uh I I see them as almost most of the client doesn't understand that either they don't implement that but yeah what's the problem? So I think that few weeks ago when we just started to have the the team together um we um there was some issue with one of the clients and I wanted to increase the timeout um to to see how we can uh like uh um control it in in some way.
+ 
+ 
+00:31:37
+ 
+Shauly Sahar: And I also don't remember how I realized that maybe TAL told me that AWS now have a parameter that we can override it. Okay. So I think that one of the leador latest things that I asked him to do check that it works and and try to to so it works. Okay. But the problem I realized is like the clients do not wait more than 30 seconds on their side. So they expect to get a response at least some of them after 30 seconds. So if I don't return them a response then their API like the HTTP connection is closed and um it's a bit problematic. So we we did some changes and some clients uh complain about it. Uh so I am I from one hand I really really don't want to have it on the other hand um it's makes sense in in um some product uh uh things that at least you're giving you you don't wait forever uh on that and you're allowing to get the the response. Um again this is something
+ 
+ 
+00:33:05
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: that we need to understand if what's the limitation on one side in one to go and maybe I will rank it like in a lower um priority to to implement uh that
+Soso Tughushi: Understood.
+Shauly Sahar: Okay.
+Soso Tughushi: Um any clarity about the search uh partial uh results doing
+Shauly Sahar: Yeah. Um this is something that we need to
+Soso Tughushi: checks.
+Shauly Sahar: discuss uh how and who is going to uh to do that.
+Soso Tughushi: I remember s was saying that like uh that you can pass to want to go a
+Shauly Sahar: Uh
+Soso Tughushi: flag saying that give me the most latest changes instead. I mean let's say you could choose when you are searching for a trip um do we want incomplete results that would have red check URLs or should they perform the red check themselves and make you wait for longer for up to
+Shauly Sahar: How do you how in the API?
+Soso Tughushi: No.
+Shauly Sahar: But if we are staying inside of F uh uh three, how how do you do
+Soso Tughushi: Yeah.
+Shauly Sahar: that?
+ 
+ 
+00:34:38
+ 
+Soso Tughushi: Yeah. I mean in the F3 itself, right? Uh I mean
+Shauly Sahar: I I'm not familiar with that by the way.
+Soso Tughushi: Yeah. Okay.
+Shauly Sahar: Uh but we need this this is something that we need to discuss.
+Soso Tughushi: This requires
+Shauly Sahar: We also need to discuss like I I spoke about it with Phil like um he suggested something. Um yeah why why we discussed that uh with him um yeah he there was some issue with flex bus uh on their side and he tried to change configuration and then we saw that the the results is not there and then you need to try a few times so what I understand is it's really depend on the integration how much time it's take to to fetch that. We also know that from the SI that some of them are really fast, some of them take take time and um he suggested that we'll try to get the information maybe wait more than the immediate one like another X seconds again I don't know if it's legit to do that and then get what we have and in parallel the request first will um will go.
+ 
+ 
+00:36:06
+ 
+Shauly Sahar: But it's a it's a point that we need to to to
+Soso Tughushi: Yeah. Oh yeah. Yeah. Yeah.
+Shauly Sahar: address
+Soso Tughushi: Good. And um there we we there is also this new scope that we need to add this consolidation policies into the search. It's going to be part or next quarter or what is going to be like new
+Shauly Sahar: Um okay.
+Soso Tughushi: features we wouldn't implement?
+Shauly Sahar: Yeah. So in general for sure there will be duplicate afford to add something right now and we'll we'll need to keep up the pace with something. I don't expect to have many of those. Specifically I I was in a call with Sana half an hour hour ago. He said that this new cancellation policy is something that he you don't want to add to the search because it's will consume a lot of time will increase the response like dramatically. This is something that will probably add to the get itinerary only. uh but we need to take into consideration that we'll add few few new uh enhancements down the the road and whenever we get to that point we'll need to make sure that what whoever is implemented the new API is aware of them and and taking it into
+ 
+ 
+00:37:42
+ 
+Soso Tughushi: currently NTC.
+Shauly Sahar: consideration.
+Soso Tughushi: Uh we have cancellation policy as response of
+Shauly Sahar: Yeah. Yes. But it's very uh how you call it uh in one to
+Soso Tughushi: search.
+Shauly Sahar: go. It's very not accurate and not um it doesn't reflect the the the full complex uh part that we can have.
+Soso Tughushi: Yeah.
+Shauly Sahar: You understand what I mean? So you you can have like a cancellation policy for a trip that up until two weeks before the
+Soso Tughushi: Perfect.
+Shauly Sahar: departure is totally free. Between two weeks and a week we have uh 50% and in the last week it's like 100%. Currently th this this information exists on one to go
+Soso Tughushi: Yeah.
+Shauly Sahar: but it was never um exposed to us in a structured way in in those uh um um in those um format.
+Soso Tughushi: Yeah, I'm
+Shauly Sahar: It was something like very simple text or something like that that you couldn't
+Soso Tughushi: just
+Shauly Sahar: it was it wasn't uh not something that you could put in the API.
+ 
+ 
+00:39:04
+ 
+Soso Tughushi: Yeah, I wonder how Tango or Lean handled it in the response. I mean how the constellation policy right now was populated when we integrated with one to go itself.
+Shauly Sahar: Ah there is like a field that tell you like uh only
+Soso Tughushi: Yeah.
+Shauly Sahar: up like it's called full refund until so if it was null
+Soso Tughushi: Yeah.
+Shauly Sahar: then it was not uh refundable and if it was some time
+Soso Tughushi: Yeah.
+Shauly Sahar: then you will have a full refund until and after that uh no refundable which is again not accurate but it's like it is what it is uh for uh a a very long time and that's
+Soso Tughushi: Yeah.
+Shauly Sahar: why we need to have this announcement to to have more accurate uh thing uh there.
+Soso Tughushi: Mhm.
+Shauly Sahar: Yeah,
+Soso Tughushi: Okay.
+Shauly Sahar: I think that we also need to make sure that our environment for local testing contains everything that we need to have like okay I I don't think that we need to do that but this is like something that needs to uh to be able to do or you need to know what you need to populate in order to be able to do a get itinerary later on the full uh reserve and and stuff like
+ 
+ 
+00:40:33
+ 
+Soso Tughushi: Yeah. Yeah.
+Shauly Sahar: that.
+Soso Tughushi: Also, I wouldn't want our let's say new tables we would add to Mariab. Uh let's say if it's going to have let's say mapping table for static data or if it's I mean depends where it's going to live. But I wouldn't want to put this into this big migration file and maybe I could avoid it uh so that we wouldn't depend this database would have at least different schema that could be created uh separately from the whole uh like because we had uh when I was creating the database locally, it had years of migration scripts that we need to run And maybe I could have let's say separate schema uh for let's say our changes like let's say B2B schema where we would store stuff that we might need
+Shauly Sahar: For sure we need it.
+Soso Tughushi: there.
+Shauly Sahar: I think that's the uh the complex one that we'll have is in the mapping of the schema back back and forth like in the reserve for the different um ids there. Yeah.
+ 
+ 
+00:41:51
+ 
+Soso Tughushi: Yeah,
+Shauly Sahar: Uh ah so maybe we'll have a different table for for that like uh for sure. I I wouldn't Yeah, but
+Soso Tughushi: a different table but also in different uh schema meaning that I wouldn't depend uh
+Shauly Sahar: that's
+Soso Tughushi: on previous migrations uh to be able to create Peace
+Shauly Sahar: um I see what you're saying.
+Soso Tughushi: table.
+Shauly Sahar: Um I I'm not familiar how it's structured and what's our uh like um how they are doing that.
+Soso Tughushi: Okay.
+Shauly Sahar: Um but yeah that that's more on the detailed uh design of of of
+Soso Tughushi: Yeah.
+Shauly Sahar: okay
+Soso Tughushi: Yeah. Um and about performance test uh um I I don't no I don't think I can perform let's say the same quality performance test that I did on search uh when I would measure with multiple a u users how much parallelism we have and so on uh we could left it for next phase But maybe if we're going to have let's say metrics for response times,
+Shauly Sahar: What name?
+Soso Tughushi: we could just catch any degradations in response times.
+ 
+ 
+00:43:13
+ 
+Soso Tughushi: If we I'm going to do something very stupid and I don't know waste your
+Shauly Sahar: Yeah, I I told this yesterday to Elan.
+Soso Tughushi: time.
+Shauly Sahar: Uh we need to we need to take decision based on uh how how it progress and who is going to do what. again also I talked to him about this uh SANA microservices migration that will started to create somewhere in the Q2 um and um yeah
+Soso Tughushi: there.
+Shauly Sahar: so again this is something that we'll need to to decide uh how and uh and when we are doing that okay but but so I think that what we need to do is
+Soso Tughushi: Yeah.
+Shauly Sahar: like creating a plan and say this is Yeah.
+Soso Tughushi: Yeah. I mean I think we are in the process of doing I mean right now we agreed let's say we
+Shauly Sahar: Yeah. Yeah.
+Soso Tughushi: already made decision that it's going to go in F3 and and like I will be basically leading the effort and and that we agree that we're going to have help with monitoring and metrics and other stuff right so yeah I think we can already start with concrete plan let's say which end points to add
+ 
+ 
+00:44:32
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: first what's going to be their quality I would say create zero zero tickets
+Shauly Sahar: Yeah.
+Soso Tughushi: and so
+Shauly Sahar: Yeah. Um but yeah we we can do that like in a high
+Soso Tughushi: on
+Shauly Sahar: level but in parallel what I want to do is like that we still have some more polishes to do on the design right um and also maybe it's time to do another like uh to show what you have in in mind uh for Elan maybe the same
+Soso Tughushi: Sure.
+Shauly Sahar: uh the same phone that we had uh back then. Um
+Soso Tughushi: Yeah, I can do this in the next week to
+Shauly Sahar: yeah, but I I I what I want to get to that is like
+Soso Tughushi: present
+Shauly Sahar: um maybe more about like um what are the the API and how we are going to to like solve it or something like that like you understand what what I
+Soso Tughushi: I mean the what's going to be the end points we need to provide right
+Shauly Sahar: No,
+ 
+ 
+00:45:52
+ 
+Soso Tughushi: or
+Shauly Sahar: but what actually going to do the what we need to tackle in each in each point you have also this uh maybe the list of the items that we want but I I just also want to I believe that we'll not be able to go over all the APIs in your um uh in one one thing but if we want to take one of the approaches yes so to to to to write down what you started to do with what are problems and how we going to tackle it. Uh the list of the things that you have. Um yes and then also starting putting uh like uh the list of the task that we said and uh yeah
+Soso Tughushi: So again uh let's say in this presentation which I would show to Alan like I would focus more on exactly what we need to do uh basically to show which are the what are the end points we would go one by one and say what are the problems for that that we need to solve that I already have done the indexing
+ 
+ 
+00:47:06
+ 
+Shauly Sahar: Yeah,
+Soso Tughushi: of
+Shauly Sahar: beside of the simple uh you know translation from one thing to to other
+Soso Tughushi: yeah
+Shauly Sahar: like uh yeah what are the main like what are the
+Soso Tughushi: sure.
+Shauly Sahar: main challenges in each one of the the APIs like in search we have the ris rejects right what else we have there I don't I don't remember and also
+Soso Tughushi: Yeah.
+Shauly Sahar: like general general uh items that we need to to decide like the ID is uh client ID for example like to to to map it and and that I hope that will cover all the um all the necessary uh design for that. Yeah. Okay.
+Soso Tughushi: Okay. Yeah.
+Shauly Sahar: When do you think that we can uh present that?
+Soso Tughushi: let's say uh next
+Shauly Sahar: Okay.
+Soso Tughushi: Wednesday.
+Shauly Sahar: Um also I want you to emphasize what you learned about working in that uh F3.
+Soso Tughushi: Mhm.
+Shauly Sahar: what was like uh I think that we discussed that yesterday but I want you to emphasize that um the instability of the local environment right that we said communication I think that it's the the body right um that it was
+ 
+ 
+00:48:36
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: easy to write but it's not like wrong that it was a good pipeline uh like uh yeah all the things that we said that
+Soso Tughushi: Yeah.
+Shauly Sahar: on that's like not the object like that that's some of the challenges but this is something that uh yeah okay and in that meeting let's
+Soso Tughushi: Yeah. Okay.
+Shauly Sahar: also invite um Sana and
+Soso Tughushi: Yeah.
+Shauly Sahar: uh and um Okay.
+Soso Tughushi: Sana and Vlad. Yeah. Sure.
+Shauly Sahar: Yeah.
+Soso Tughushi: So the previous audience.
+Shauly Sahar: The Yeah, the previous audience. Yeah.
+Soso Tughushi: Sure. Okay.
+Shauly Sahar: Okay. Um, cool. Anything else? SA
+Soso Tughushi: Uh I did some changes in the get itinerary. Um so yeah in the search in the search and I will maybe ping you tomorrow like I need to just
+Shauly Sahar: in the search.
+Soso Tughushi: verify that I addressed everything. So tomorrow will have another
+Shauly Sahar: Yeah,
+Soso Tughushi: go.
+Shauly Sahar: we need to decide also what we are going to do like
+ 
+ 
+00:49:55
+ 
+Soso Tughushi: Yeah. To merge it and
+Shauly Sahar: um to merge it and what does it mean to merge it? If you'd merge it,
+Soso Tughushi: to
+Shauly Sahar: is it mean that everybody is a like able to to access it? Is it something that we need to protect with feature flag? I I would ask Sana what's the best approach to have it and
+Soso Tughushi: sure.
+Shauly Sahar: also we need to see how we can access it from externally
+Soso Tughushi: Yeah.
+Shauly Sahar: right okay uh cool if you have
+Soso Tughushi: Sure.
+Shauly Sahar: like before the meeting something that is ready and you want me to review so um let
+Soso Tughushi: Yeah.
+Shauly Sahar: me Cool
+Soso Tughushi: Okay. I Yeah. Cool. And then that's it.
+Shauly Sahar: Unless you want something uh else.
+Soso Tughushi: Cool. Uh,
+Shauly Sahar: Um yeah,
+Soso Tughushi: thanks.
+Shauly Sahar: I I not related to that. I spoke with um Davidid uh he told me that the new field in the database is not in production. Is it something that we need to deploy a version there or maybe migrate?
+Soso Tughushi: in the database.
+Shauly Sahar: Uh there is supposed to be a
+Soso Tughushi: Um
+Shauly Sahar: migration that is doing that.
+Soso Tughushi: uh yeah,
+Shauly Sahar: Maybe you didn't.
+Soso Tughushi: maybe we need to deploy uh it is supposed to run.
+Shauly Sahar: Yeah. Okay.
+Soso Tughushi: Yeah. Yeah. Could very
+Shauly Sahar: Yeah.
+Soso Tughushi: likely.
+Shauly Sahar: Okay. But it's not something that Bloxim is tried to do something in in dev.
+Soso Tughushi: Yeah.
+Shauly Sahar: And just to make sure one to go is enabled.
+Soso Tughushi: I enabled one to go but I didn't enable uh there was also the bus I think
+Shauly Sahar: Okay, that's what I wanted to ask you.
+Soso Tughushi: on the bus and Aia I want to
+Shauly Sahar: Who is uh left uh there?
+Soso Tughushi: go
+Shauly Sahar: Okay, Aia, nobody use.
+Soso Tughushi: a
+Shauly Sahar: So you can in in Okay, so we just need to make to to translate the the animus, right?
+ 
+ 
+Transcription ended after 00:52:24
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.
