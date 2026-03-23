@@ -53,6 +53,23 @@ Team Lead sync on transition planning, timeline, and resourcing:
 - **F3 local development is painful** — Search POC revealed setup difficulties. Microservice would be more straightforward to develop against, but still needs 12go running locally for integration testing.
 - **Performance testing likely needed** — Open question whether to test the new system or wait for refactored one.
 
+## Meeting Outcomes (2026-03-18)
+
+Team Lead sync — Q2 scope confirmation and planning:
+
+- **Q2 scope confirmed: new client onboarding only** — No backward compatibility. New clients use 12go native IDs. Existing client migration is Q3+. Design must not require redesign for future migration; static ID mapping layer can be added later if needed.
+- **PHP buddy sessions approved** — 2x/week for first 2 weeks, then 1x/week for a month, then as-needed. No specific person assigned yet.
+- **gRPC confirmed out of Q2 scope** — 12go already has partner/agent entity type for gRPC clients (e.g., Google). More complex than initially thought but is someone else's migration responsibility.
+- **Monitoring co-owned** — Shauly owns discovery (coincides with Eliran's team-wide monitoring inventory), Soso owns implementation (per-API call counts, success/failure, response times per client).
+- **Kafka events need research** — COA publishes from a different cloud. 12go's data unification is in progress. Need pairing session with data team to define requirements.
+- **Notifications potentially offloadable** — Shauly open to offloading webhook implementation or deferring until client onboarding. Not committed.
+- **Cancellation policy: basic for Q2** — Sana confirmed structured policy would slow search dramatically. New structured policy will go into GetItinerary only. Basic `full_refund_until` handling sufficient for Q2.
+- **SeatLock lowest priority** — 12go deployed to production Mar 18. After full booking funnel, not before.
+- **Incomplete results/recheck lower priority** — Clients find "pending" confusing, most don't implement it. AWS timeout override now available (Tal discovered).
+- **Presentation for Eliran on Mar 25** — Endpoints + challenges, F3 learnings, task list. Audience: Sana, Vlad, Eliran, Shauly.
+- **Feature flags needed** — When Search POC is merged, need feature flag to prevent public access. Ask Sana about F3 approach.
+- **Resourcing update** — Light Q2 load means "half of people" may be available. Jerko (another team) available for blackbox QA.
+
 ## Development Workflow Constraints
 
 These are not arguments in a debate — they are facts about how development will work during the transition period. Any proposed architecture must account for them.

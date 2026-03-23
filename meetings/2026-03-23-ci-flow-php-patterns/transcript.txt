@@ -1,0 +1,31 @@
+Part of the meeting transcript is missing. Filling up the gaps:
+
+1. After merging to master, the changes are deployed automatically to Canary.
+The url for canary is canary.12go.com. And I need access to TeamCity.
+
+To be more precise, url will be https://recheck10.canary.12go.com for fronetned. Here's the full url https://recheck10.canary.12go.com/api/v1/search/78p/1p/2026-04-13?with_price=3&seats=2&re[…]direction%3Dforward%26operator_id%3D31235&clientType=web
+
+After I have verified that changes are good on that canary server, I should reach Sana and ask him to deploy (Sana is 12go veteran developer).
+
+There's another type of flow. Instead of targeting master/main with PR, I can target release branch in PR.
+In this case the changes will be deployed on 12go.io. So the url for f3 will be recheck10.12go.io.
+
+There's no need to add anything to aws api gateway with my changes. And yes, I do need tailscale vpn.
+
+2. Sana said that for him such issues never happen. Unless there's real issue. He said that there's 12go //help command to help with 12go commandd.
+
+
+3. It's common to have separate schemas. in 12go/migrations/sql we have multiple schemas. There's common that is running for every other schema.
+But then the have separate schemas for separate modules: default is for catalog data. trip_pool and pass_pool is the one most of the time Sana works with. 
+So it's definitely plausible to have such separation.
+
+4. Background jobs -
+He said there are 2 ways to do them. Either via f2 or f3. f2 he said it's not recommended. Because it involves publishing something to some queue, then reading it in f2 that calls piece of code in f3.
+But approach he recommends is by doing it in a way that is described in the README.md of frontend3.
+He said that it will be executed in the same process, but after the http call is done. This will most likely influence the throughput of the service, 
+due to long running thread (I a'm assuming). 
+
+5. Feature flags - He said that there's no need to introduce a feature flag for this new search endpoint.
+They use GrossBook to manage feature flags/do ab tests. He said that features are enabled per user. However since they were doing b2c before, they had
+granular enough users. But with b2b every big b2b client will share same client. Therefore it will be plausible to enable features for whole client.
+Or to do some other workaround. He said that currently BFF is generating those unique identifiers for clients and they haven't done any feature flags for b2bs.
