@@ -364,3 +364,8 @@ Decisions made during this project, for context in future sessions.
 | 2026-03-18 | SeatLock lowest priority — after full booking funnel | 12go deployed seatlock to production Mar 18; it's an add-on, not core booking flow |
 | 2026-03-18 | Incomplete results/recheck: lower priority for Q2 | Clients find it confusing, most don't implement it; AWS timeout override now available |
 | 2026-03-18 | Presentation for Eliran on Mar 25 — endpoints, challenges, F3 learnings | Shauly wants stakeholder alignment before implementation begins |
+| 2026-03-23 | No AWS API Gateway changes needed for B2B endpoints | Sana confirmed new endpoints don't require gateway configuration |
+| 2026-03-23 | Separate DB schema for B2B module is feasible | 12go already uses multiple schemas per module (common, default, trip_pool, pass_pool); B2B can follow the same pattern |
+| 2026-03-23 | Background jobs: use F3 in-process approach (not F2 queue) | F2 adds unnecessary indirection; F3 README documents the recommended pattern. Runs after HTTP response in same process |
+| 2026-03-23 | No feature flag needed for search endpoint merge | Sana confirmed; GrossBook exists for future feature flag needs but not required for initial B2B search |
+| 2026-03-23 | CI/CD: merge to master → auto-deploy to Canary; Sana deploys to prod | Standard 12go deployment flow; alternative is PR to release branch → deploys to 12go.io |

@@ -70,6 +70,16 @@ Team Lead sync — Q2 scope confirmation and planning:
 - **Feature flags needed** — When Search POC is merged, need feature flag to prevent public access. Ask Sana about F3 approach.
 - **Resourcing update** — Light Q2 load means "half of people" may be available. Jerko (another team) available for blackbox QA.
 
+## Meeting Outcomes (2026-03-23)
+
+Knowledge-transfer session with Sana on CI/CD, local dev, DB schemas, background jobs, and feature flags:
+
+- **CI/CD pipeline clarified** — Merge to master auto-deploys to Canary (`recheck10.canary.12go.com`). After verification, Sana deploys to production. Alternative: PR to release branch deploys to `12go.io`. TeamCity access needed. Tailscale VPN required. No AWS API Gateway changes needed for new endpoints.
+- **Local environment stability confirmed** — Sana says migration issues are uncommon; the 2-day setup pain was a one-time event from the 2024 `SUPPLY-41` cascading failure.
+- **Separate B2B DB schema confirmed feasible** — 12go already uses multiple schemas (`common`, `default`, `trip_pool`, `pass_pool`). A separate B2B schema follows the same established pattern.
+- **Background jobs: F3 in-process approach recommended** — Runs after HTTP response in the same PHP-FPM process (documented in F3 README). F2 queue approach exists but is not recommended. Caveat: long-running tasks may affect worker throughput.
+- **Feature flags not needed for search endpoint** — GrossBook manages feature flags per-user. B2B per-client flags are feasible but not yet implemented. No flag needed for initial search endpoint merge.
+
 ## Development Workflow Constraints
 
 These are not arguments in a debate — they are facts about how development will work during the transition period. Any proposed architecture must account for them.
