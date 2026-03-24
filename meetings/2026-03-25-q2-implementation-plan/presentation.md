@@ -1,6 +1,6 @@
 ---
 status: draft
-last_updated: 2026-03-23
+last_updated: 2026-03-24
 ---
 
 # Q2 Implementation Plan: B2B API in F3
@@ -73,10 +73,10 @@ All three endpoints read from 12go's own database -- no external HTTP calls need
 ### 2.2 Search
 
 
-| Endpoint               | What It Does                                          | 12go Calls                         | Key Challenge                            | Risk Level |
-| ---------------------- | ----------------------------------------------------- | ---------------------------------- | ---------------------------------------- | ---------- |
-| **Search Itineraries** | Finds available trips between two locations on a date | `GET /search/{from}p/{to}p/{date}` | Recheck mechanism not implemented in POC | High   |
-| **Incomplete Results** | Async polling for slow supplier responses             | Background job writes to DB; client polls | Background jobs in PHP are unexplored territory | Medium |
+| Endpoint               | What It Does                                          | 12go Calls                                | Key Challenge                                   | Risk Level |
+| ---------------------- | ----------------------------------------------------- | ----------------------------------------- | ----------------------------------------------- | ---------- |
+| **Search Itineraries** | Finds available trips between two locations on a date | `GET /search/{from}p/{to}p/{date}`        | Recheck mechanism not implemented in POC        | High       |
+| **Incomplete Results** | Async polling for slow supplier responses             | Background job writes to DB; client polls | Background jobs in PHP are unexplored territory | Medium     |
 
 
 > **Challenge: Recheck Mechanism** (Risk: High)
@@ -135,11 +135,11 @@ All three endpoints read from 12go's own database -- no external HTTP calls need
 ### 2.4 Post-Booking (GetBookingDetails, GetTicket, CancelBooking)
 
 
-| Endpoint              | What It Does                                                           | 12go Calls                                                          | Key Challenge                                                 | Risk Level |
-| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------- | ---------- |
-| **GetBookingDetails** | Returns booking status, stations, price, voucher URL                   | `GET /booking/{bid}`                                                | No local persistence -- runtime API call replaces DB read     | Medium     |
-| **GetTicket**         | Returns a URL to the ticket PDF                                        | `GET /booking/{bid}` (same endpoint, extract `ticket_url`)          | Determine if 12go's ticket URL is stable and long-lived       | Medium     |
-| **CancelBooking**     | Two-step cancel: fetch refund options (with hash), then execute refund | `GET /booking/{bid}/refund-options` -> `POST /booking/{bid}/refund` | Two-step atomicity, hash expiration between steps             | High       |
+| Endpoint              | What It Does                                                           | 12go Calls                                                          | Key Challenge                                             | Risk Level |
+| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------- | ---------- |
+| **GetBookingDetails** | Returns booking status, stations, price, voucher URL                   | `GET /booking/{bid}`                                                | No local persistence -- runtime API call replaces DB read | Medium     |
+| **GetTicket**         | Returns a URL to the ticket PDF                                        | `GET /booking/{bid}` (same endpoint, extract `ticket_url`)          | Determine if 12go's ticket URL is stable and long-lived   | Medium     |
+| **CancelBooking**     | Two-step cancel: fetch refund options (with hash), then execute refund | `GET /booking/{bid}/refund-options` -> `POST /booking/{bid}/refund` | Two-step atomicity, hash expiration between steps         | High       |
 
 
 Note: all three endpoints are affected by the Booking ID transition problem described in 2.3 -- for existing clients (post-Q2), old booking IDs must be resolved to 12go `bid` values.
@@ -154,9 +154,11 @@ Note: all three endpoints are affected by the Booking ID transition problem desc
 
 ### 2.5 Notifications
 
+
 | Endpoint          | What It Does                                                    | 12go Calls                      | Key Challenge                                              | Risk Level |
 | ----------------- | --------------------------------------------------------------- | ------------------------------- | ---------------------------------------------------------- | ---------- |
 | **Notifications** | Receives booking status webhooks from 12go, forwards to clients | Inbound webhook (12go calls us) | Multiple possible architectures; requires further analysis | High       |
+
 
 **How it works today:**
 
@@ -182,17 +184,59 @@ The current system also discards everything from the webhook payload except the 
 
 ---
 
-## 3. Timeline and Task Breakdown
+## 3. Timeline and Task Breakdown (~5 min)
 
-*To be presented in a follow-up.*
+### 13 calendar weeks. 11 working weeks. 10 endpoints.
+
+
+| Week  | Dates           | Deliverable                                                                          | Gate                                              |
+| ----- | --------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| 1     | Mar 23-27       | F3 env stable, B2B module scaffold, merge Search POC, decide on recheck approach     | Search merged, recheck decision documented        |
+| 2-3   | Mar 30 - Apr 8  | Master data (Stations, Operators, POIs)                                              | Station list returns correct B2B format           |
+| —     | **Apr 9-19**    | **Vacation**                                                                         | —                                                 |
+| 4-6   | Apr 21 - May 9  | **GetItinerary + booking schema parser + CreateBooking + ConfirmBooking**             | Parser tests pass against C# fixtures; E2E booking on staging |
+| 7-8   | May 12-23       | GetBookingDetails + GetTicket + CancelBooking                                        | Post-booking ops tested                           |
+| 9-10  | May 26 - Jun 6  | Shadow traffic, integration testing, bug fixing                                      | Search responses match current system             |
+| 11-12 | Jun 9-20        | First client onboarding, monitoring, hardening                                       | Client completes full flow                        |
+
+
+### Committed vs. Deferred
+
+
+| Committed (Q2)                             | Deferred / Not in Scope                    |
+| ------------------------------------------ | ------------------------------------------ |
+| 10 endpoints (7 booking + 3 master data)   | Webhook notifications (delegate or defer)  |
+| New clients only, native 12go IDs          | Existing client migration (Q3+)            |
+| Kafka events (if spec arrives by week 6)   | gRPC search integration                    |
+| SeatLock (lowest priority, after funnel)   | Incomplete results / polling endpoint      |
+|                                            | Performance testing                        |
+
+
+### Early Warning Signals
+
+
+| Signal                  | Threshold                          | Action                                          |
+| ----------------------- | ---------------------------------- | ----------------------------------------------- |
+| F3 environment          | > 2 days friction in week 1        | Escalate for hands-on PHP support               |
+| Booking schema parser   | Not code-complete by week 6 (May 9) | Reassess timeline; scope reduction              |
+| GetItinerary overall    | > 5 working days                   | Reassess PHP learning curve                     |
+
+
+**May 9 is the checkpoint.** If the booking funnel (parser + CreateBooking + ConfirmBooking) is done by week 6, we're on track. If not, we adjust before it's too late — not after.
+
+---
 
 ## 4. Dependencies and Help Needed
 
-*To be presented in a follow-up.*
 
-## 5. Decisions Needed from This Meeting
-
-*To be presented in a follow-up.*
+| What                                         | Impact If Not Resolved                                                                    |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| PHP buddy sessions                           | Timeline extends; higher risk of delivering features slower without PHP expertise backing  |
+| QA resource                                  | Timeline extends; bugs caught later, integration testing falls on me alone                |
+| Webhook notifications — offload to someone   | Clients can't receive push updates                                                        |
+| Kafka event spec (which events, what data)   | No visibility into clients onboarded on the new system until spec is delivered             |
+| Incomplete results — scope + technical approach | If needed for Q2, requires background job pattern decision; if deferred, some searches return stale data |
+| Monitoring/metrics discovery                 | We fly blind on what to preserve; production alerts may break silently                    |
 
 ---
 
