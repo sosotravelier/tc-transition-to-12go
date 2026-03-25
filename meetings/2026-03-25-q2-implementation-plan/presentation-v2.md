@@ -7,7 +7,41 @@
 
 ---
 
-## 1. What We Learned from the Search POC
+## 1. Q2 Scope: What We're Committing To
+
+In Q2, we commit to delivering 10 endpoints (7 booking + 3 master data) with the ability to onboard **new clients only** using 12go native IDs. gRPC is not in scope.
+
+
+| Committed (Q2)                           | Deferred / Not in Scope                   | Parallel Discovery                |
+| ---------------------------------------- | ----------------------------------------- | --------------------------------- |
+| 10 endpoints (7 booking + 3 master data) | Webhook notifications (delegate or defer) | Monitoring & metrics unification  |
+| New clients only, native 12go IDs        | Existing client migration (Q3+)           | Kafka event inventory & structure |
+| Incomplete results (async polling)       | gRPC search integration                   |                                   |
+| SeatLock (lowest priority, after funnel) | Performance testing                       |                                   |
+
+
+---
+
+## 2. Parallel Discovery Workstreams
+
+These two topics run **in parallel** with endpoint development. They don't block Q2 delivery, but need resolution before production hardening.
+
+### Monitoring & Metrics
+
+- The current .NET stack uses Coralogix + Grafana + OpenTelemetry. 12go uses Datadog DogStatsD + GELF + MongoDB API logs (to be verified).
+- Required dimensions for B2B: client, operator, action, outcome, bookingId, itineraryId, traceId.
+- **Key gap**: there is no `clientId` correlation across systems today. The .NET middleware propagates `client_id` via `IConnectContextAccessor` into all traces and metrics. 12go has `agent_id` / `agent_name` from the API key, but no equivalent concept.
+- **Output**: a decision on which metrics to preserve and how to implement them in F3's Datadog stack.
+
+### Kafka Events
+
+- We need to determine exactly which events must be preserved and what their structure should look like.
+- This requires involvement from the data team or Eyal -- limited information available right now.
+- Discovery runs in parallel with development.
+
+---
+
+## 3. What We Learned from the Search POC
 
 ### Local Development Environment
 
@@ -34,7 +68,7 @@
 - F3's pipeline includes an automatic AI code reviewer and quality gates that prevent unit test coverage from decreasing.
 - These caught issues in my PR and forced me to refine it -- this is a good safety net.
 - Sana approved the changes.
-- **Not yet merged** -- deployment pipeline is now understood: merge to master → auto-deploy to Canary (`recheck10.canary.12go.com`) → verify → ask Sana to deploy to production. No AWS API Gateway changes needed for new B2B endpoints.
+- **Not yet merged** -- deployment pipeline is now understood: merge to master -> auto-deploy to Canary (`recheck10.canary.12go.com`) -> verify -> ask Sana to deploy to production. No AWS API Gateway changes needed for new B2B endpoints.
 
 ### PHP Buddy Sessions
 
@@ -43,11 +77,11 @@
 
 ---
 
-## 2. Per-Endpoint Challenges and Approach
+## 4. Per-Endpoint Challenges and Approach
 
 > Approaches below are *presumptive* -- they reflect our current understanding and may pivot as implementation reveals new constraints.
 
-### 2.1 Static Data (Stations, Operators, POIs)
+### 4.1 Static Data (Stations, Operators, POIs)
 
 
 | Endpoint      | What It Does                                                      | 12go Calls                          | Key Challenge                                | Difficulty |
@@ -67,7 +101,7 @@ Two completely separate ID namespaces exist: Fuji CMS IDs (8-char alphanumeric l
 
 ---
 
-### 2.2 Search
+### 4.2 Search
 
 
 | Endpoint               | What It Does                                          | 12go Calls                         | Key Challenge                            | Difficulty |
@@ -97,7 +131,7 @@ Search returns a `SearchItineraryId` for each result -- the client passes this b
 
 ---
 
-### 2.3 Booking Funnel (GetItinerary -> CreateBooking -> ConfirmBooking)
+### 4.3 Booking Funnel (GetItinerary -> CreateBooking -> ConfirmBooking)
 
 
 | Endpoint               | What It Does                                                           | 12go Calls                                                             | Key Challenge                                       | Difficulty |
@@ -111,7 +145,7 @@ Search returns a `SearchItineraryId` for each result -- the client passes this b
 
 **Challenge: Itinerary ID Determines Code Path** (Difficulty: Medium)
 
-The itinerary ID received from Search is not just a lookup key -- its format determines which API call sequence GetItinerary follows. IDs starting with a specific internal prefix trigger a different flow (`POST /add-to-cart` with different body -> `GET /cart-details` -> `GET /trip-details`) compared to the standard path. Both paths must be implemented. See the Itinerary ID Format challenge in Search (section 2.2) for the broader format and encryption discussion.
+The itinerary ID received from Search is not just a lookup key -- its format determines which API call sequence GetItinerary follows. IDs starting with a specific internal prefix trigger a different flow (`POST /add-to-cart` with different body -> `GET /cart-details` -> `GET /trip-details`) compared to the standard path. Both paths must be implemented. See the Itinerary ID Format challenge in Search (section 4.2) for the broader format and encryption discussion.
 
 **Challenge: Booking Schema Parser** (Difficulty: High)
 
@@ -131,17 +165,17 @@ The itinerary ID received from Search is not just a lookup key -- its format det
 
 Currently, incomplete results use an async background job that writes results to the database, with the client continuously polling until processing is complete. This applies to CreateBooking and ConfirmBooking when supplier responses are slow. Sana confirmed (Mar 23) that F3 supports in-process background jobs -- code executes after the HTTP response is sent, in the same PHP-FPM worker thread. This avoids RabbitMQ but ties up the worker, so it's suitable for short tasks only.
 
-**Presumptive approach**: Skip this feature for Q2. If needed later, use F3's in-process async pattern (documented in F3 README). For heavy workloads, may need queue-based approach. Revisit if client feedback requires it.
+**Presumptive approach**: Implement using F3's in-process async pattern (documented in F3 README). For heavy workloads, may need queue-based approach.
 
 **Challenge: Cancellation Policy** (Difficulty: Medium)
 
 There is an upcoming task to expose the full structured cancellation policy in a structured way during GetItinerary -- this will be part of Q2. This change needs to happen in two places: the new B2B module AND within TC (the existing system), since both systems need to serve it until all clients are migrated. The current system only has a simple `full_refund_until` field.
 
-**Presumptive approach**: Coordinate with 12go on the structured cancellation policy exposure. Implement it in the new B2B module as part of GetItinerary. For actual refund calculations at cancel time, use 12go's own `refund_amount` from the refund-options API -- no double calculation like Denali does.
+**Presumptive approach**: Coordinate on the structured cancellation policy exposure. Implement it in the new B2B module as part of GetItinerary. For actual refund calculations at cancel time, use 12go's own `refund_amount` from the refund-options API -- no double calculation like Denali does.
 
 ---
 
-### 2.4 Post-Booking (GetBookingDetails, GetTicket, CancelBooking)
+### 4.4 Post-Booking (GetBookingDetails, GetTicket, CancelBooking)
 
 
 | Endpoint              | What It Does                                                           | 12go Calls                                                          | Key Challenge                                              | Difficulty |
@@ -151,11 +185,11 @@ There is an upcoming task to expose the full structured cancellation policy in a
 | **CancelBooking**     | Two-step cancel: fetch refund options (with hash), then execute refund | `GET /booking/{bid}/refund-options` -> `POST /booking/{bid}/refund` | Use 12go's `refund_amount` directly, no double calculation | Medium     |
 
 
-Note: all three endpoints are affected by the Booking ID transition problem described in 2.3 -- for existing clients (post-Q2), old booking IDs must be resolved to 12go `bid` values.
+Note: all three endpoints are affected by the Booking ID transition problem described in 4.3 -- for existing clients (post-Q2), old booking IDs must be resolved to 12go `bid` values.
 
 ---
 
-### 2.5 Notifications
+### 4.5 Notifications
 
 
 | Endpoint          | What It Does                                                    | 12go Calls                      | Key Challenge                                              | Difficulty |
@@ -169,78 +203,123 @@ Note: all three endpoints are affected by the Booking ID transition problem desc
 
 The current system also discards everything from the webhook payload except the `bid` -- it re-fetches the full booking state from the 12go API instead of trusting the webhook data.
 
-**Key problem: booking ID → client association.** When a webhook arrives with just a `bid`, the system must determine which B2B client this booking belongs to. Currently this is done via DB lookup in `BookingEntities` table. In the new no-persistence design, we need an alternative -- either pass `client_id` in the webhook URL, or maintain a lightweight booking→client mapping.
+**Key problem: booking ID -> client association.** When a webhook arrives with just a `bid`, the system must determine which B2B client this booking belongs to. Currently this is done via DB lookup in `BookingEntities` table. In the new no-persistence design, we need an alternative -- either pass `client_id` in the webhook URL, or maintain a lightweight booking->client mapping.
 
 **Challenge: Architecture Decision** (Difficulty: High)
 
 This feature requires more analysis. Three approaches are being considered:
 
-**Approach A — Extend existing webhook subscriber table.** Register new B2B clients in 12go's existing webhook subscriber table. Distinguish B2B clients from regular ones. When a notification arrives, check if it's a B2B booking and transform the payload to TC format before forwarding to the client's registered webhook URL.
+**Approach A -- Extend existing webhook subscriber table.** Register new B2B clients in 12go's existing webhook subscriber table. Distinguish B2B clients from regular ones. When a notification arrives, check if it's a B2B booking and transform the payload to TC format before forwarding to the client's registered webhook URL.
 
-**Approach B — In-process subscription in F3.** Subscribe to the booking event within F3 (via in-memory event bus or whatever mechanism F3 uses internally). Maintain a separate B2B webhook configuration table. Handle transformation and outbound delivery within the F3 process.
+**Approach B -- In-process subscription in F3.** Subscribe to the booking event within F3 (via in-memory event bus or whatever mechanism F3 uses internally). Maintain a separate B2B webhook configuration table. Handle transformation and outbound delivery within the F3 process.
 
-**Approach C — Leverage the existing 12go→TC webhook path.** 12go already sends TC-format notifications via webhook, and we currently do the transformation on our side. Could we reuse or adapt this existing path for B2B clients? This would mean the transformation layer already exists -- we'd just need to route it correctly.
+**Approach C -- Leverage the existing 12go->TC webhook path.** 12go already sends TC-format notifications via webhook, and we currently do the transformation on our side. Could we reuse or adapt this existing path for B2B clients? This would mean the transformation layer already exists -- we'd just need to route it correctly.
 
-Each approach has different implications for: where client webhook URLs are stored, how booking→client association is resolved, whether we need new Kafka consumers, and how much new code is required.
+Each approach has different implications for: where client webhook URLs are stored, how booking->client association is resolved, whether we need new Kafka consumers, and how much new code is required.
 
 **Presumptive approach**: This needs more digestion before committing to an architecture. Potentially offloadable to another developer -- Shauly is open to it depending on estimation. Core post-booking operations (GetBookingDetails, GetTicket, CancelBooking) work without notifications -- clients can poll GetBookingDetails as a fallback.
 
 ---
 
-## 3. Timeline and Task Breakdown
+## 5. Client Identity & Authentication *(new section -- draft)*
 
-### 13 calendar weeks. 11 working weeks. 10 endpoints.
+### The Problem
 
+Currently, clients send their own `client_id` in every URL path (`/v1/{client_id}/bookings`). This is redundant -- we should be able to determine the client's identity from their API key. Requiring clients to self-identify adds no security (if the API key is compromised, the `client_id` is too) and adds friction to the API surface.
 
-| Week  | Dates          | Deliverable                                                                      | Gate                                                          |
-| ----- | -------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| 1     | Mar 23-27      | F3 env stable, B2B module scaffold, merge Search POC, decide on recheck approach | Search merged, recheck decision documented                    |
-| 2-3   | Mar 30 - Apr 8 | Master data (Stations, Operators, POIs)                                          | Station list returns correct B2B format                       |
-| —     | **Apr 9-19**   | **Vacation**                                                                     | —                                                             |
-| 4-6   | Apr 21 - May 9 | **GetItinerary + booking schema parser + CreateBooking + ConfirmBooking**        | Parser tests pass against C# fixtures; E2E booking on staging |
-| 7-8   | May 12-23      | GetBookingDetails + GetTicket + CancelBooking                                    | Post-booking ops tested                                       |
-| 9-10  | May 26 - Jun 6 | Shadow traffic, integration testing, bug fixing                                  | Search responses match current system                         |
-| 11-12 | Jun 9-20       | First client onboarding, monitoring, hardening                                   | Client completes full flow                                    |
+### Proposal: Drop `client_id` from URL, Derive from API Key
 
+**This is not a blocker** -- it's an improvement to the API surface. Either way, we need a client_id-to-API-key correspondence stored in the database, and we resolve the client identity on every request. The only question is whether the client also sends it in the URL.
 
-### Committed vs. Deferred
+When a client authenticates via `x-api-key` header (or `?k=` query param), F3 already resolves this to a `usr_id` via the `apikey` table. We propose:
 
+1. **Remove `client_id` from all B2B endpoint URLs.** Endpoints become `/v1/itineraries`, `/v1/bookings`, etc.
+2. **Derive client identity from the API key.** On authentication, look up the client record associated with this API key.
+3. **Assign a human-readable alias** (e.g., "bookaway") to each client during onboarding. This alias is used in metrics, logs, and tracing -- replacing the current `client_id` path parameter for observability purposes. This is needed because F3's numeric `usr_id` or agent name alone isn't sufficient for meaningful metrics.
 
-| Committed (Q2)                           | Deferred / Not in Scope                   |
-| ---------------------------------------- | ----------------------------------------- |
-| 10 endpoints (7 booking + 3 master data) | Webhook notifications (delegate or defer) |
-| New clients only, native 12go IDs        | Existing client migration (Q3+)           |
-| Kafka events (if spec arrives by week 6) | gRPC search integration                   |
-| SeatLock (lowest priority, after funnel) | Incomplete results / polling endpoint     |
-|                                          | Performance testing                       |
+### Draft: `b2b_clients` Table
+
+> This is a draft -- the final shape depends on decisions around notifications and other features.
+
+Create a `b2b_clients` table in the B2B migration schema (following the same separate-schema pattern proposed for other B2B tables):
 
 
-### Early Warning Signals
+| Field            | Type        | Purpose                                |
+| ---------------- | ----------- | -------------------------------------- |
+| `client_id`      | string (PK) | Human-readable alias, e.g., "bookaway" |
+| `name`           | string      | Full company name                      |
+| `enabled`        | bool        | Active flag                            |
+| `api_key_usr_id` | FK to `usr` | Links to F3's API key / user           |
+| `webhook_url`    | string?     | Notification delivery URL *(may not be needed here -- depends on notification architecture)* |
+| `created_at`     | timestamp   |                                        |
 
 
-| Signal                | Threshold                           | Action                             |
-| --------------------- | ----------------------------------- | ---------------------------------- |
-| F3 environment        | > 2 days friction in week 1         | Escalate for hands-on PHP support  |
-| Booking schema parser | Not code-complete by week 6 (May 9) | Reassess timeline; scope reduction |
-| GetItinerary overall  | > 5 working days                    | Reassess PHP learning curve        |
-
-
-**May 9 is the checkpoint.** If the booking funnel (parser + CreateBooking + ConfirmBooking) is done by week 6, we're on track. If not, we adjust before it's too late — not after.
+**Cross-cutting impact**: This decision affects metrics/logging, Kafka events, notifications (booking->client association), and the URL structure of every endpoint.
 
 ---
 
-## 4. Dependencies and Help Needed
+## 6. Existing Client Migration (Q3+) *(new section -- draft)*
+
+> Assumption: Q2 is complete -- 10 endpoints work for new clients using 12go native IDs. This section covers what it takes to move existing B2B clients onto the new system.
+
+### 6.1 What Changes for Each Client
 
 
-| What                                            | Impact If Not Resolved                                                                                                     |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| PHP buddy sessions                              | Timeline extends; higher risk of delivering features slower without PHP expertise backing                                  |
-| QA resource                                     | Timeline extends; bugs caught later, integration testing falls on me alone                                                 |
-| Webhook notifications — offload to someone      | Clients can't receive push updates                                                                                         |
-| Kafka event spec (which events, what data)      | No visibility into clients onboarded on the new system until spec is delivered                                             |
-| Incomplete results — scope + technical approach | If needed for Q2, requires background job pattern decision; if deferred, slow bookings may time out without async fallback |
-| Monitoring/metrics discovery                    | We fly blind on what to preserve; production alerts may break silently                                                     |
+| Change                       | Client Action                                                   | Our Action                                                   |
+| ---------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------ |
+| **New base URL**             | Update endpoint config                                          | Provide URL + docs                                           |
+| **New API key**              | Adopt 12go API key (Shauly's preferred approach)                | Provision key in 12go                                        |
+| **Station/Operator/POI IDs** | Either re-fetch master data (new IDs) or use mapping we provide | Build mapping table in F3 from Fuji DynamoDB export          |
+| **Existing bookings**        | Nothing -- old system stays up for post-booking ops             | Keep old system running (post-booking only, no new bookings) |
+| **Notifications**            | Confirm webhook URL                                             | Re-register in new system                                    |
 
+
+**Key message**: For most clients, migration = new URL + new API key + re-fetch station list. That's it. Rollout is per-client (not big-bang): internal/test first, then low-volume cooperative clients, then high-volume last.
+
+### 6.2 The Three Hard Problems
+
+**Problem 1: Station/Operator/POI IDs**
+
+Two completely separate ID namespaces: Fuji CMS IDs (8-char like `ILTLVTLV`) vs 12go integer IDs. 12go has zero knowledge of Fuji IDs.
+
+
+|               | Option A: We provide mapping                          | Option B: Clients re-fetch master data  |
+| ------------- | ----------------------------------------------------- | --------------------------------------- |
+| Client effort | Zero -- transparent translation                       | Medium -- update IDs in their system    |
+| Our effort    | Build + cache mapping table from Fuji DynamoDB export | Minimal -- just expose new station list |
+| Risk          | Mapping may have gaps; adds per-request latency       | Some clients may take weeks/months      |
+
+
+**Recommendation (hybrid):** Build the mapping table regardless -- it's a safety net, and the data must be exported from Fuji DynamoDB before .NET decommission anyway. Encourage clients to adopt 12go native IDs on their own timeline. Fast movers switch directly; slow movers use the mapping layer temporarily.
+
+**Problem 2: Existing Bookings (Post-Booking Operations)**
+
+Bookings created before cutover have TC booking IDs (KLV-encoded or short Base62 format) that the new system doesn't understand.
+
+**Solution: Don't migrate them.** Keep the current .NET system running for post-booking operations only (GetBookingDetails, GetTicket, CancelBooking). No new bookings go through it. As existing bookings expire naturally, traffic to the old system drops to zero and it can be decommissioned.
+
+This avoids:
+
+- Building booking ID mapping tables
+- Decoding KLV or looking up Base62 IDs
+- Risk of losing access to old bookings
+
+Mitigating factors: most legacy bookings expire within weeks; FlixBus is shutting down; DeOniBus is migrating to 12go -- non-12go booking IDs sunset on their own.
+
+**Problem 3: API Key Transition**
+
+~20-30 active client IDs. Per-client 12go API keys already exist (scattered across 3 config stores). Two approaches:
+
+- **Option A: Clients do the transition.** Each client gets a new 12go API key provisioned during onboarding and updates their integration to use it. Shauly's preferred approach -- simple, clean, but requires client cooperation.
+- **Option B: Mapping table in F3.** Maintain a table that maps old TC API keys to new 12go API keys. Clients keep using their existing keys; the B2B module translates on every request. No client changes needed, but adds a translation layer we need to maintain.
+
+### 6.3 Data to Export Before .NET Shutdown
+
+.NET decommission is not yet scheduled -- no rush. But before eventually shutting down each piece, we will need to export:
+
+- **Station/Operator/POI ID mappings** from Fuji DynamoDB -- only source of Fuji CMS <-> 12go integer ID relationships
+- **API key inventory** from AppConfig (x2) + Postgres -- to know which 12go key each client uses
+- **Client identity records** from David's `client-identity` Postgres -- to preserve client metadata
 
 ---
 
@@ -253,7 +332,7 @@ Each approach has different implications for: where client webhook URLs are stor
 | **Operators**          | Static Data    | Direct DB read (inside F3)                                             | Multi-transport operator splitting                                                     | Same pattern as stations                                                                           | Low        |
 | **POIs**               | Static Data    | Direct DB read + join                                                  | POI-to-station mapping computation                                                     | Query stations by province; need to verify DB schema for best join strategy                        | Low        |
 | **Search Itineraries** | Search         | `GET /search/{from}p/{to}p/{date}`                                     | Recheck mechanism not implemented; itinerary ID format decision pending                | Implement recheck invocation (sync or fire-and-forget); use 12go native itinerary ID format for Q2 | High       |
-| **Incomplete Results** | Booking Funnel | In-process event bus (F3 background job pattern)                       | Async fallback for slow CreateBooking/ConfirmBooking; scope undecided                  | F3 in-process async (no RabbitMQ); scope decision needed                                           | Medium     |
+| **Incomplete Results** | Booking Funnel | In-process event bus (F3 background job pattern)                       | Async fallback for slow CreateBooking/ConfirmBooking                                   | F3 in-process async (no RabbitMQ)                                                                  | Medium     |
 | **GetItinerary**       | Booking Funnel | `GET /trip-details` -> `POST /add-to-cart` -> `GET /checkout/{cartId}` | Booking schema parser (~1,180 lines); itinerary ID prefix determines API call sequence | Fixture-driven port from C# to PHP; handle both internal and standard itinerary paths              | High       |
 | **CreateBooking**      | Booking Funnel | `POST /reserve/{bookingId}` -> `GET /booking/{BId}`                    | Reserve request assembly (bracket-notation reconstruction)                             | Port using same test fixtures as schema parser                                                     | High       |
 | **ConfirmBooking**     | Booking Funnel | `POST /confirm/{bookingId}` -> `GET /booking/{bookingId}`              | Timeout handling; async 202 fallback uses incomplete results pattern                   | 12go as source of truth; incomplete results if confirm slow                                        | Medium     |

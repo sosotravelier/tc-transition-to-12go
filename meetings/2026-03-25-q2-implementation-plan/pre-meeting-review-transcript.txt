@@ -1,0 +1,586 @@
+
+Mar 25, 2026
+Soso / Shauly 1 on 1 - Transcript
+00:00:00
+ 
+Shauly Sahar: You're recording me. It's creepy, but I'm okay. I know why you you using that uh for later. That's uh I'm
+Soso Tughushi: Yeah. Plus,
+Shauly Sahar: kidding.
+Soso Tughushi: it uh most of the time uh takes incorrect notes. It mixes up names and so
+Shauly Sahar: Okay.
+Soso Tughushi: on.
+Shauly Sahar: Okay. Let's uh Okay. How do you want to to handle it?
+Soso Tughushi: So let's say I did a minified version of what I sent you. Um I would show it to you.
+Shauly Sahar: Okay.
+Soso Tughushi: And so there is this one uh thing I couldn't resolve for now about client ID creation. Um just uh how to approach it or how to present it. So I would need help on that. But the rest I can just go over the points and just no
+Shauly Sahar: the points that I uh told you. Ah okay. Okay.
+Soso Tughushi: everything.
+Shauly Sahar: But okay, let's go with what you have and uh let's uh let's uh see.
+ 
+ 
+00:01:09
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: Yeah. One second. I know it's too big. Let's kill this. Let's kill that. Let's kill this. Let's keep it. So I have like small version for presentation and a big one for uh for us basically.
+Shauly Sahar: Okay.
+Soso Tughushi: So it's like the left one is basically simplified
+Shauly Sahar: Okay.
+Soso Tughushi: that
+Shauly Sahar: It's important because I I think that we have limited time. Nobody no one for sure 100% understand what what you have and too many details in this meeting. It's it's a bit um um problematic, but let's go with the short version. I would like us to at some point go even on the deeper version. That's what I ask you if you have um um more details uh um on uh on the specific APIs beside what you wrote here because I think that you have like the mapping of what's uh fields and and
+Soso Tughushi: Yeah,
+Shauly Sahar: and in the
+Soso Tughushi: I mean uh yeah, I have it.
+ 
+ 
+00:02:51
+ 
+Soso Tughushi: It's in um
+Shauly Sahar: original somewhere hidden there in that. Yeah. Okay. Uh,
+Soso Tughushi: Yeah.
+Shauly Sahar: we'll need to go over it, but let's see what you
+Soso Tughushi: So that it has five five sections of four.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah. four sections. One is just about the P. It's I'm going to quickly go over what uh we had. So, how it went with the search endpoint. Uh just some complaining about uh the environment, but then I also correct myself saying that well after talking with Sana, it's not apparently not a real issue that everybody has. So I I would I don't expect that the environment setup will take u too much effort but
+Shauly Sahar: Okay.
+Soso Tughushi: it well I just already saw signs of instability but it could be attributed to a bad luck or something.
+Shauly Sahar: I Okay. I I still think that you will have something because it's not only for you and also we need to do bookings on that environment. Uh so I I guess it's not something that will disappear but uh it's a good point.
+ 
+ 
+00:04:11
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: Okay.
+Soso Tughushi: And um Ter I also mentioned your counterpoint that even if we would go with other approach we would still uh need to do this setup all the time due to feature development. Um uh yeah and one idea that I had was to let's say have a separate database migration schema. uh I saw and I verified with Sana that this is actually the way they are doing uh uh development too they have separate uh migration files for separate modules so we're going to have our B2B stuff and what will go there is in case if we would need the mapping ID mappings or uh or everything else that we might need which is still not confirmed.
+Shauly Sahar: Okay. It's not related to B2B. It's like related to the specific API like a helper database or something like that, right?
+Soso Tughushi: Yeah.
+Shauly Sahar: Okay.
+Soso Tughushi: Yeah. And due to this instability just I I like the need for having the body uh from on to go site somebody who is PHP on PHP and with whom I would have twice a week sync and so on uh
+ 
+ 
+00:05:33
+ 
+Shauly Sahar: as much as you need. Yeah. If you need more than than more.
+Soso Tughushi: for yeah yeah but just the dedicated resource
+Shauly Sahar: Yeah. Okay.
+Soso Tughushi: basically that would be helping
+Shauly Sahar: Yeah. Yeah. I agree. This is something that we can close in this uh meeting with Zana. He can appoint
+Soso Tughushi: Yeah. Yeah.
+Shauly Sahar: someone.
+Soso Tughushi: So well there are more details but I don't think I will go in there. So there is the end the now the end points themselves. So I put it in a way that I expect the uh clients will be using it as
+Shauly Sahar: Okay.
+Soso Tughushi: well as uh how I think how we should implement it with the order.
+Shauly Sahar: Okay. I I understand the logic.
+Soso Tughushi: Yeah.
+Shauly Sahar: Um
+Soso Tughushi: So, uh there we have the stations, operators and POIs and they can be retrieved directly from DB uh or using some service. But basically one to go database host this information just uh yeah the this by this endpoints I mean I refer something that clients calls us to get initial stations operators and
+ 
+ 
+00:06:43
+ 
+Shauly Sahar: Okay, got it.
+Soso Tughushi: POIs.
+Shauly Sahar: I my comment about that is I am not sure that I will do that at first. Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: But and also I want to challenge um the
+Soso Tughushi: Yeah.
+Shauly Sahar: audience. Okay. The POI endpoint I'm not familiar with it. Okay.
+Soso Tughushi: It's basically key value pair uh that uh we already have the end point
+Shauly Sahar: I
+Soso Tughushi: for it in our site and we are reading it from want to go dump.
+Shauly Sahar: and we are putting it in a in a a three bucket.
+Soso Tughushi: Uh yes.
+Shauly Sahar: Okay.
+Soso Tughushi: Uh yeah,
+Shauly Sahar: It's the same as the Okay.
+Soso Tughushi: for both cases, same assocations. Yes.
+Shauly Sahar: So my challenge for that will be if clients will need to change the ids anyway should we keep should we do a change for that or give them the API as we have in one to go okay it's it's a challenge it's something that we need to uh to to discuss
+ 
+ 
+00:07:57
+ 
+Soso Tughushi: ah like to give them let's say new
+Shauly Sahar: Yeah,
+Soso Tughushi: shape.
+Shauly Sahar: the the API as is maybe I I don't know. Do you know what's the difference uh in in that? Again,
+Soso Tughushi: Well,
+Shauly Sahar: it's it's of
+Soso Tughushi: I assume that it's a structural difference between what we are showing and what they have
+Shauly Sahar: course
+Soso Tughushi: and it I don't know it would be hard to then migrate existing clients to new end points. Well, actually maybe this can be
+Shauly Sahar: It's a question. It's a challenge. I want to ch I I understand that.
+Soso Tughushi: challenged.
+Shauly Sahar: But I want to challenge like a and uh to see if this is like something
+Soso Tughushi: Mhm.
+Shauly Sahar: that is feasible or or not or we are doing that in in that uh uh way. Okay. By the way,
+Soso Tughushi: Yeah,
+Shauly Sahar: where are these endpoints residuh plan to put this end
+Soso Tughushi: you can in B2B module.
+Shauly Sahar: points in F3?
+Soso Tughushi: Yeah,
+ 
+ 
+00:08:58
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: everything will be in S3.
+Shauly Sahar: Even today the stations and the operator everything is in F3 uh the APIs.
+Soso Tughushi: Um I need to double check.
+Shauly Sahar: Okay.
+Soso Tughushi: Uh yeah, maybe this is something that to note. Um okay so the challenges that are about the station ids um how to migrate them to one I mean uh I propose for Q2 not to deal with it at all and in case if we will need it for Q3 we can just add the mapping table either in the code or we could send this to our clients it'll tell them to change the ids on their site
+Shauly Sahar: Okay. Um, another thing that we need to make sure before we start that we know exactly how we are going to do the migration before we start. Not you know if we need to develop something we will not develop it uh before but we need to have a plan. This is like how we are doing that 1 2 3 4 5 okay even just as a draft like a plan that
+ 
+ 
+00:10:14
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: we know that okay this is correlate with what we are
+Soso Tughushi: Mhm.
+Shauly Sahar: doing.
+Soso Tughushi: Okay.
+Shauly Sahar: Okay.
+Soso Tughushi: Moving on to search. So we have the search uh endpoint and uh
+Shauly Sahar: Yeah.
+Soso Tughushi: well there are we have it in more details on the right side. So uh the two difficulties there are uh rich urls on one to go site uh which um I mean there is I found a way how to do the background tasks uh in one to go F3 but I assume that it will be um still a challenge to execute it because we would uh I mean it well Maybe Sana will elaborate on the meeting. Uh but well there are basically this challenge for uh reax and there are two ways to deal with it. Either to wait uh for execution uh somehow from the code or to do it in the background uh like we do like fire and forget tasks uh in the same
+Shauly Sahar: Yeah.
+Soso Tughushi: way we have right now. This is just my uh proposed uh
+ 
+ 
+00:11:53
+ 
+Shauly Sahar: Okay. Uh anyway,
+Soso Tughushi: approach.
+Shauly Sahar: I think that if we are talking about if it's a mandatory or not, probably this is something that we need to have uh as as a m mandate for that for the first phase at least for my my opinion. Okay.
+Soso Tughushi: Mhm. Mhm.
+Shauly Sahar: Okay. Itinary ID. This is what we
+Soso Tughushi: Yeah. We just need to make a decision about the format for itinerary like uh uh do we do this KV encoded uh strings and cipher or uh just concatenated uh string the same way as we are
+Shauly Sahar: Yeah.
+Soso Tughushi: doing.
+Shauly Sahar: Um, side note, I don't want to like there is like Eran asked me to lead in parallel to that some unification API initiative. Okay, it's maybe seems like very bombed thing but the problem that we see is that on one thing we have um problems with um missing features. Okay, so if we have two different API we might miss one feature on one side and have that feature on the other side.
+ 
+ 
+00:13:17
+ 
+Shauly Sahar: So it's like every every all the time we need to keep them up from uh uh to update it and on the other side it's like duplicate uh kind of duplicate work on the other other side it's two different use uses so I I need to to have some research about it. uh uh this is something that I'm going to start but what I saw that they probably will not uni let's assume that we'll unify it probably will need we want to keep the our API but it mean that they have like hundred of APIs right like that maybe they are using it differently right for
+Soso Tughushi: Hello.
+Shauly Sahar: other purposes like their admin or something like that so if we'll keep the same ID or something that very close. It will be easier to like utilize it later if we'll need to like increase that or Yeah, you understand what I'm saying?
+Soso Tughushi: Yeah, basically to have take an ownership over the ID
+Shauly Sahar: No, the if we'll use the same ID convention,
+Soso Tughushi: format.
+Shauly Sahar: it will be easier to to utilize it between the APIs later.
+ 
+ 
+00:14:29
+ 
+Soso Tughushi: No, understood.
+Shauly Sahar: This is that's why I told you that we need to to decide on this um on
+Soso Tughushi: Yeah.
+Shauly Sahar: this format.
+Soso Tughushi: Mhm.
+Shauly Sahar: Yeah.
+Soso Tughushi: Okay. I will not dive deeper into that unification.
+Shauly Sahar: No, no,
+Soso Tughushi: I think uh yeah I mean in g right now I have lots of questions about
+Shauly Sahar: totally not. You you continue with No,
+Soso Tughushi: it which language is going to be and so on but it's not a problem yet.
+Shauly Sahar: it's not related to to language at all. It's like a language of API.
+Soso Tughushi: Yeah. Mhm.
+Shauly Sahar: It means like what what's the format or how can we align everything or what
+Soso Tughushi: Mhm.
+Shauly Sahar: we need to add into our API in order that it will be the same if if
+Soso Tughushi: Mhm.
+Shauly Sahar: at all it is possible. But let's put it at the side.
+Soso Tughushi: Yeah,
+Shauly Sahar: Okay.
+Soso Tughushi: then there is uh a booking funnel right so get itinerary create booking and confirm endpoints as well as seat lock it's also part of it and there is the incomplete results for which can be happen from create booking and confir booking I'm not sure about sitlock
+ 
+ 
+00:15:38
+ 
+Shauly Sahar: um seat lock is new uh but we didn't implement that on TC so I don't see any reason for for that for
+Soso Tughushi: Mhm. So the problems or sub challenges for all of these endpoints is uh first of all the booking schema parsing just it's quite a big uh topic right um uh booking schema parser okay uh clean well booking ID decision uh what's going to be the format of it uh then uh there is also incomplete results. So if something gets too long then how do we handle it and well I explained uh already to Sana on previous I think the the challenge uh but yeah I will just reiterate or how we have right now and presum approach would be that we going to spin up a background task to uh that would write write to database similarly to what we have right now in Dani.
+Shauly Sahar: Yeah, like kind of return an ID that you will need to get it run in parallel way and
+Soso Tughushi: Yeah. And I would write it to database.
+Shauly Sahar: yeah.
+ 
+ 
+00:17:02
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: Okay.
+Soso Tughushi: Then there is uh cancellation policy.
+Shauly Sahar: Uh this is the example that I gave you.
+Soso Tughushi: Um
+Shauly Sahar: It's like only one example but there are like few enhanced features that we might need to do and you just need to keep up with the pace. We'll need to keep up with space for them. That that's it.
+Soso Tughushi: Mhm. Yeah. Um um then there is the post booking section. So the end points get booking details, get ticket URL um and cancellation of booking and all the I mean here uh we just uh need to so with the get booking details we will just read it from want to go database or want to go service. Then there is the ticket URL. Uh so right now want to go also generates its own ticket and question is whether or not we can just return whatever they did or do we need to create it on our own.
+Shauly Sahar: It's it's a good question that I I I it's an open item
+ 
+ 
+00:18:21
+ 
+Soso Tughushi: Um
+Shauly Sahar: that we need to understand what we need to do.
+Soso Tughushi: there is also the cancel booking which just has small challenge about the refund amount. I mean right I assume that it's going to be handled by on to go itself there. I mean right now we are just calculating based on consolation policy ourselves but it's going to be just coming
+Shauly Sahar: Yeah.
+Soso Tughushi: from
+Shauly Sahar: Uh this is exactly also something that Vlad is currently changed with all the revenue change. So he's going to take it from the from the um
+Soso Tughushi: Mhm.
+Shauly Sahar: integration like from one to go. So it's supposed to be the same.
+Soso Tughushi: Mhm. Yeah.
+Shauly Sahar: I I think that the ch the maybe the complex one here is the get ticket just because the we need to understand um I would put it maybe medium and the other ones as um lower. Yeah.
+Soso Tughushi: Right. And then the and then the last endpoint that we have is just notifications and I am just proposing to upload it to let's say another developer this task I mean um just to parallelize the effort on it.
+ 
+ 
+00:20:08
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: Um so how it works today that right now the the booking notification receives via web hook and we are doing this forwarding to the client as well as changing of this structure and uh let's say in all of this story the hardest part would be the uh booking ID and client association. Uh so when if one want to go on the sends booking ID u we can like how do we find to which client it belongs to do we keep uh all the booking ids in the database or how do we handle it and there are let's say three proposed approaches like to uh extend the existing web hook subscription table and based if it's a B2B client and change it in uh send this notification in different format somehow uh or just to subscribe in this new model in process in with to an in-memory bus uh in B2B module and have uh again the table uh where we going to from where we're going to load the web hook URL And we're going to already send it to correct format.
+ 
+ 
+00:21:40
+ 
+Soso Tughushi: Um, and what is third one?
+Shauly Sahar: leverage the existing want to go to TC.
+Soso Tughushi: What's the difference? One second. English. Uh when I check if it's a booking okay so this is what I subscribe to the booking event with yeah I don't know this seems like a b*******
+Shauly Sahar: It's a duplication like leverage
+Soso Tughushi: I think so
+Shauly Sahar: and extend is the same.
+Soso Tughushi: Ah ah no maybe it's uh instead of uh subscribing in process we just receive it again on our web hook URL but it's b*******.
+Shauly Sahar: Yeah, it mean that we keep the old system,
+Soso Tughushi: Yeah.
+Shauly Sahar: right?
+Soso Tughushi: Yeah.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah, I don't know what else to elaborate.
+Shauly Sahar: Okay.
+Soso Tughushi: Yeah. So the most more important thing is about timeline. So uh why I thought of stations and operators first uh because then I have location in the middle and I thought that uh get itinerary and and create booking and confirm booking is somewhat together. So if I would implement get it inary here then I would go invocation I would lose let's say all the context and uh returning I would need to do something but also it's not a big
+ 
+ 
+00:23:40
+ 
+Shauly Sahar: Yeah, I I have a few comments regarding that. Maybe we should do that with Zelan only and Vikai. I don't think that the timeline to discuss but I think that the search you assume that search is done right
+Soso Tughushi: Well, there will be only just uh recheck decision that to be made. So, we
+Shauly Sahar: and we need to test it and see that it's uh it's working uh correct
+Soso Tughushi: would
+Shauly Sahar: right um and do we have like we need to have some metrics
+Soso Tughushi: Yeah.
+Shauly Sahar: on on those,
+Soso Tughushi: Yeah. You know I this is something uh that I uh mentioning about the help I need
+Shauly Sahar: right?
+Soso Tughushi: about the PHP body the QA resource new offload the Kafka event specifications that I mentioned during previous meeting and monitoring and metrics discover like exactly what
+Shauly Sahar: Yeah.
+Soso Tughushi: we need to do.
+Shauly Sahar: Yeah.
+Soso Tughushi: I mean this can
+Shauly Sahar: So this is like additional things that we need to do like maybe if we'll like Yeah. So we need to see where we put it
+ 
+ 
+00:24:51
+ 
+Soso Tughushi: Yeah, I mean it I mean as this gets resolved uh it's going to be either
+Shauly Sahar: right.
+Soso Tughushi: tailored in from the start during the development or after the fact if it's going to be resolved
+Shauly Sahar: Yeah. For example, if you want to add the metrics,
+Soso Tughushi: later.
+Shauly Sahar: you can put it like additional round to do that later on or to to have
+Soso Tughushi: Yeah.
+Shauly Sahar: um Yes. And also I am concerned about the the um client creation. How do we like um how do how it looks? And also the URL. How does it look? It's going to be one to go URL,
+Soso Tughushi: Yeah,
+Shauly Sahar: right?
+Soso Tughushi: it's going to be base is going to be one to go say three address and then the
+Shauly Sahar: Yeah. Yeah. So,
+Soso Tughushi: path going to be similar that we have uh so uh
+Shauly Sahar: slash what?
+Soso Tughushi: without one and whatever I mean it's not important right as well as we
+Shauly Sahar: uh it's it's not it's like maybe it's a small thing but
+ 
+ 
+00:25:53
+ 
+Soso Tughushi: have
+Shauly Sahar: I think this is something like product needs to approve and I think that we'll get some question for them from from there okay it just you know like
+Soso Tughushi: Okay.
+Shauly Sahar: we okay this is like um kind of um a setup that we need to to do and make sure okay maybe if the want to go is not something that's sufficient maybe we need to see how
+Soso Tughushi: Are you
+Shauly Sahar: the domain is being uh changed okay or like maybe it's some DevOps help that we need to to to get you understand
+Soso Tughushi: No.
+Shauly Sahar: the the problem with the domain is like somebody bite bought it
+Soso Tughushi: Um,
+Shauly Sahar: sorry h and it's redirect to somewhere in the world right currently it's redirected to the AWS or something like that
+Soso Tughushi: Yeah.
+Shauly Sahar: okay so the question is um what should the customer look okay and what should it
+Soso Tughushi: I mean, so you about the redirection in the world. I mean you think that uh we're going to have I want to go deploy it in in incorrect region and they're going to have higher latency or
+ 
+ 
+00:27:30
+ 
+Shauly Sahar: No, I I don't I don't know. So it's like we need to understand what's what's our option to to handle uh
+Soso Tughushi: uh
+Shauly Sahar: that uh and this is like something that we need to again I'm not sure I'm almost sure this is not something that you will need to code or something but we need to maintain it and and it will create some uh some different so Okay. And and this is like the full picture that I I mean I is missing for me like the maybe here you can put it like the URL or and this client setup before the search the master data the get itinerary all all those sections.
+Soso Tughushi: Okay. Okay.
+Shauly Sahar: Okay.
+Soso Tughushi: So I would put their section also I would put small uh summary at the start saying that we want to achieve in the Q2 the ability to onboard the new clients onto the system that's important and not care
+Shauly Sahar: Yeah.
+Soso Tughushi: about station mappings. I mean right now I have this committed versus deferred table like so uh web hook notifications either defer or uh delegate to somebody else existing client migration gRPC incomplete
+ 
+ 
+00:29:01
+ 
+Shauly Sahar: Yes.
+Soso Tughushi: results uh endpoint I'm not sure I mean we can maybe not defer it and have it and perform perform test. uh what all we can commit on is these 10 end points, seven bookings, three master data maybe if we're going to do the complete result and eight uh 11 end points new clients only Kafka events when the the
+Shauly Sahar: Yeah.
+Soso Tughushi: specs uh or the investigation will be done and also sit lock which is basically new new functionality
+Shauly Sahar: Yeah. So we also need to commit here for a migration plan for new
+Soso Tughushi: Yeah.
+Shauly Sahar: client.
+Soso Tughushi: And yeah. Okay. So, we need also just to include this migration plan for existing clients right in this
+Shauly Sahar: Yes. How it going to be done?
+Soso Tughushi: presentation.
+Shauly Sahar: What what's are the to do from the client perspective from our perspective? uh to see that this is uh
+Soso Tughushi: Okay.
+Shauly Sahar: okay. Um so so one few more things. So let's go for example for uh your get itinerary spec or something like that.
+ 
+ 
+00:30:37
+ 
+Shauly Sahar: So here for each API you have like um the mapping or the the things that
+Soso Tughushi: object.
+Shauly Sahar: you need to do, right?
+Soso Tughushi: Mhm.
+Shauly Sahar: Okay. Um yeah.
+Soso Tughushi: Want to go equivalent. Let's say
+Shauly Sahar: Yep. Okay. Cool. And
+Soso Tughushi: generation of booking token.
+Shauly Sahar: uh
+Soso Tughushi: how it's composed.
+Shauly Sahar: Okay. Did you Yeah.
+Soso Tughushi: This may be
+Shauly Sahar: Okay. Oh, another thing that What about all the client authentication and stuff like that? How do you like for it's like some general thing that you need to do from the API, right? That you get the API from X API header or something like that I don't X yes so where this is
+Soso Tughushi: Yes.
+Shauly Sahar: mentioned
+Soso Tughushi: Uh it's in so cross cutting authentication current state I mean this is how we have it right now for analysis of all the existing code that authenticates and this is where it's getting from the XAPI key I already added in the uh F3 the ability to
+ 
+ 
+00:32:06
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: read from XA from header DX API key instead of from query string with authentication to not break
+Shauly Sahar: Okay.
+Soso Tughushi: clients.
+Shauly Sahar: Got it. So, it's another option to get it, right?
+Soso Tughushi: Yeah, it's another it can go alongside with the existing
+Shauly Sahar: Okay.
+Soso Tughushi: one.
+Shauly Sahar: And um um we are not validate that the the client has this uh the same um
+Soso Tughushi: We don't validate uh what uh client ID and
+Shauly Sahar: like ID and the API key.
+Soso Tughushi: uh API key correspondence. No, no, we we don't validate it. Uh this could be I don't know. Um what David service is doing
+Shauly Sahar: Yeah, kind of first.
+Soso Tughushi: right
+Shauly Sahar: I don't know how can you know which is the client ID, right? This this is like another thing that we need to to take care. Um how how do we set it uh up? Uh I think this is like also something that we need to to discover and understand what's the best way for doing that.
+ 
+ 
+00:33:45
+ 
+Shauly Sahar: Again, not necessarily something that you will do.
+Soso Tughushi: Yeah.
+Shauly Sahar: Maybe we can offload it to someone else. Uh but uh
+Soso Tughushi: Yeah. I mean I cannot really fit this part in my head.
+Shauly Sahar: yeah,
+Soso Tughushi: I mean uh so there is this Yeah.
+Shauly Sahar: you
+Soso Tughushi: Yeah.
+Shauly Sahar: understand
+Soso Tughushi: I mean I I understand the issue.
+Shauly Sahar: it's not it's not that issue. We are onboarding a client right now. Okay. We are setting everything.
+Soso Tughushi: Yeah.
+Shauly Sahar: But in TC we also have a client ID right in want to go
+Soso Tughushi: Correct.
+Shauly Sahar: we have maybe name and an ID of the
+Soso Tughushi: Yeah.
+Shauly Sahar: client
+Soso Tughushi: Um each client is getting separate uh authentication key I said
+Shauly Sahar: like
+Soso Tughushi: right? Um yeah I mean they they have a unique authentication key so we can uniquely identify uh the clients.
+Shauly Sahar: Yeah. Give me one second. I will try to
+Soso Tughushi: Yeah.
+Shauly Sahar: um I'm looking for uh my uh want to go thing.
+ 
+ 
+00:35:36
+ 
+Shauly Sahar: Um, so once we are creating in the uh the client if
+Soso Tughushi: Mhm.
+Shauly Sahar: we're doing on one to go side we have this this ID okay it's created it's also we're putting name and everything but and here we got also the API key okay
+Soso Tughushi: Yep.
+Shauly Sahar: um but in want to go API they just putting this one they don't put anything else beside that right Okay.
+Soso Tughushi: Mhm. Yeah.
+Shauly Sahar: So in our client ID in your API uh that we are getting probably https one to go whatever.comv1 itinerary uh maybe the client ID itineraries and and so on
+Soso Tughushi: Yeah, but the question is why do we force the clients to search
+Shauly Sahar: Right.
+Soso Tughushi: to send their own client ID? It should be our internal thing, right? And we could use let's say want to go client ID internally to look up
+Shauly Sahar: Um,
+Soso Tughushi: web hook URLs or everything else with it.
+Shauly Sahar: so you said that we can because if somebody compromised this API key then you can do things without But he can also take the client
+ 
+ 
+00:37:10
+ 
+Soso Tughushi: Yeah,
+Shauly Sahar: ID.
+Soso Tughushi: I mean if API is compromised
+Shauly Sahar: Yeah. Anyway, I I know that today for every client that we are creating,
+Soso Tughushi: then
+Shauly Sahar: we are putting in some table a mapping of this ID with with some with some client ID that we have.
+Soso Tughushi: Mhm.
+Shauly Sahar: So it's it's exist there. Okay. So it means that maybe we need to enforce the creation of that in the client side
+Soso Tughushi: Yeah.
+Shauly Sahar: and somehow to understand how you can get it from the API. You
+Soso Tughushi: Uh, no.
+Shauly Sahar: understand?
+Soso Tughushi: Um, why do I need to get it from the API? Which API?
+Shauly Sahar: They they perform search,
+Soso Tughushi: So
+Shauly Sahar: right? They giving you client A and an API key blah blah blah, right?
+Soso Tughushi: yeah.
+Shauly Sahar: How do you know which client is
+Soso Tughushi: Yeah. I mean we would rely on this table to to find
+Shauly Sahar: it?
+Soso Tughushi: out. So okay who who are they?
+ 
+ 
+00:38:13
+ 
+Soso Tughushi: Client sends us the request. They gave me it.
+Shauly Sahar: Correct.
+Soso Tughushi: He gives me client ID and API key.
+Shauly Sahar: Client ID and API key.
+Soso Tughushi: Correct.
+Shauly Sahar: Correct.
+Soso Tughushi: We you said before that we have we should enforce the creation of this client ID and the correspondence of or this correspondence on on our site and the BB model. I mean similar David uses the table similar table that David uses to
+Shauly Sahar: Um
+Soso Tughushi: validate this
+Shauly Sahar: maybe but maybe the name Yeah again we can use whatever they have here but I I assume that let's assume that we have a CL uh the client ID can be also this one, right? But it's it's a bit uh odd. You probably want to have client ID like some string ID like
+Soso Tughushi: Yeah,
+Shauly Sahar: uh
+Soso Tughushi: but why do we really need it as a string? Maybe for matrix or
+Shauly Sahar: yeah when you want to know who is this client ID to have some representation of it uh to to
+ 
+ 
+00:39:15
+ 
+Soso Tughushi: something.
+Shauly Sahar: to understand otherwise it will be number.
+Soso Tughushi: Mhm.
+Shauly Sahar: How do you know that which number is it?
+Soso Tughushi: Well, yeah.
+Shauly Sahar: Right.
+Soso Tughushi: I mean right now when we are creating uh this API key there is no mention of the client's name or who is it
+Shauly Sahar: Yeah.
+Soso Tughushi: for?
+Shauly Sahar: You see that there is the agent name and then we manually attach it to the one that we have in our SI.
+Soso Tughushi: Yeah. Agent name. So let's say agent name is uh appropriate to put as a in the metric
+Shauly Sahar: Yeah.
+Soso Tughushi: or agent. So it's an agent name. Is it a very long name or company want to go agent?
+Shauly Sahar: Yeah,
+Soso Tughushi: Yeah.
+Shauly Sahar: it's like they uh do it via inventory hub.
+Soso Tughushi: Okay.
+Shauly Sahar: Yeah.
+Soso Tughushi: So, alias. So, okay. We need to add somewhere this client ID uh table and that's it, right? I mean correspondence of
+Shauly Sahar: I I'm almost sure that this is being done manually today like we are taking the ID that we got in uh in TC and put it in some table.
+ 
+ 
+00:40:29
+ 
+Shauly Sahar: So there is like matching of this one and the one that we have in uh TC. So when we create this client, we can also maybe create a some unique ID like that that we can give them uh that and then when you you're getting
+Soso Tughushi: Okay. Yeah.
+Shauly Sahar: that again it's it's
+Soso Tughushi: Yeah. But the point is that we don't really need them to clients to send us their own client
+Shauly Sahar: something
+Soso Tughushi: ID. If they send incorrect one, we're going to throw error saying that okay you are why are you lying? You are different person. So why make them identify themselves all the time when they do it already with an API key?
+Shauly Sahar: because this is what we have right now.
+Soso Tughushi: Yeah.
+Shauly Sahar: This is uh and and this is also something that we have two identifiers for for it like like you have the
+Soso Tughushi: two identifiers. No. Why do you mean two?
+Shauly Sahar: client name and the API key that together they
+Soso Tughushi: Yeah.
+ 
+ 
+00:41:30
+ 
+Soso Tughushi: Yeah. Yeah. Um the point is that you could have same API key and two clients. Do we have such case?
+Shauly Sahar: theoretically yes but the API is generated automatically so there is no case that they will be the same I think that we did it maybe manually we put the same API key for alias like book away test book away something like that that they will not need to have the different but it's like kind of a hack.
+Soso Tughushi: Maybe we put it because uh leaders uh middleware looks at client ID uh in the uh request path and extracts the information to put it in the metrics.
+Shauly Sahar: I think the client ID was before Leidor joined the our
+Soso Tughushi: Yeah, I mean I understand that internally we we would use client ID identifier
+Shauly Sahar: Um,
+Soso Tughushi: uh but for public API if we are I mean it doesn't make sense yeah I mean
+Shauly Sahar: This is a this is something that we need to discuss uh also with I think client
+Soso Tughushi: we we can discuss this and we can just propose to kill uh this parameter even from
+ 
+ 
+00:42:50
+ 
+Shauly Sahar: name so we can enrich it on once we get this
+Soso Tughushi: the yeah client uh
+Shauly Sahar: API key we can we can know who is the client right okay um but this is a point
+Soso Tughushi: Correct.
+Shauly Sahar: that I want to that we'll take for that.
+Soso Tughushi: Show. Sure. Yeah.
+Shauly Sahar: Okay.
+Soso Tughushi: Yeah. I will uh do include this in the um think
+Shauly Sahar: Or we can ignore it. Like we can have like both of them and ignore it. Just ignore ignore the the idea. Yeah. But let's see if we'll get uh this approval or we'll be killed.
+Soso Tughushi: Yeah. Okay.
+Shauly Sahar: Cool. Um,
+Soso Tughushi: So to summarize, I need to talk about client ID. I need to rearrange the pieces so that uh let's say in
+Shauly Sahar: yeah.
+Soso Tughushi: intro I would we would say uh that uh the first stage would be uh to without uh migrating existing clients uh Q1 new ones new ones only and I need to also add a section about migration plan that of existing clients how we would uh do it
+ 
+ 
+00:44:21
+ 
+Shauly Sahar: once. Yeah.
+Soso Tughushi: presumably.
+Shauly Sahar: Assuming that this is the system that we are going and what it will require that yeah
+Soso Tughushi: Yeah.
+Shauly Sahar: we need to have it like some kind of in in advance like as soon as
+Soso Tughushi: Mhm.
+Shauly Sahar: possible just to to have like some light on every change that we know that we'll not have a problem after that and I think that the static data we also need to discuss
+Soso Tughushi: Yeah.
+Shauly Sahar: that like what should be the the approach
+Soso Tughushi: static data. Um I mean whether or not to put it in the uh F uh S3
+Shauly Sahar: free or even can we use as is like again it's it's a question I I don't
+Soso Tughushi: S
+Shauly Sahar: know
+Soso Tughushi: and about the timeline I shouldn't include this section uh and we should discuss it only
+Shauly Sahar: I I I want
+Soso Tughushi: with Uranos.
+Shauly Sahar: maybe to to have like like with Alan and Aikhai. Um
+Soso Tughushi: Mhm.
+Shauly Sahar: I I I yeah I don't know.
+ 
+ 
+00:45:33
+ 
+Shauly Sahar: Let's see how it goes. If if we'll not have time, we'll set some followup just a few four of us.
+Soso Tughushi: Then start Sure.
+Shauly Sahar: Okay. Maybe tomorrow or something.
+Soso Tughushi: Okay. Yeah, I will update it uh and I will just send it to you before the meeting.
+Shauly Sahar: Okay.
+Soso Tughushi: Uh uh just to double check if it's fine.
+Shauly Sahar: Okay.
+Soso Tughushi: Sure.
+Shauly Sahar: Um, good work. It's It's starting to at least for me to to to connect from different angles.
+Soso Tughushi: Yeah, it's a lot for sure.
+Shauly Sahar: What? Yeah,
+Soso Tughushi: It's just a
+Shauly Sahar: it's it's a lot.
+Soso Tughushi: lot.
+Shauly Sahar: It's the full it's the full system and we need to kind of manage the this project like to understand what is opened, what is included, what not and to follow up on on things.
+Soso Tughushi: Mhm.
+Shauly Sahar: I'm sure that if we'll do another round uh this will be um something that uh we'll find uh some more touches. I I I will try maybe for the next week to go deeply on the the details themselves like for each API what what you proposed there or at least the ones that you are planning to work on to to kind of give you some uh uh thoughts. Okay, cool.
+ 
+ 
+Transcription ended after 00:47:21
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.
