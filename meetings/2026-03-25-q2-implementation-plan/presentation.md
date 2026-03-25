@@ -22,7 +22,7 @@ last_updated: 2026-03-24
 - Root cause: a single migration failure (`SUPPLY-41` in 2024) silently left the DB partially migrated. The date cache (`.db_last_date`) then caused all future `make db` runs to skip the broken migrations. This accumulated 2 years of cascading damage.
 - **Shauly's counterpoint**: Even if we had chosen a separate microservice, we would still need the F3 local environment for any feature that touches both B2B and core modules (like cancellation policies). The pain of setting it up is front-loaded but unavoidable.
 - The local env is now working and documented -- future setup should be faster with the documented fixes.
-- **Idea for B2B**: I'm considering using a separate DB migration schema for B2B-specific tables, so they don't depend on years of F3 migration history. The tradeoff: we lose the ability to do relational joins with existing F3 data. Alternatively, a different storage type (e.g., Redis for caching/mapping data) might be more appropriate for B2B-specific needs. This needs further research.
+- **Idea for B2B**: I'm considering using a separate DB migration schema for B2B-specific tables, so they don't depend on years of F3 migration history. The tradeoff: we lose the ability to do relational joins with existing F3 data. Alternatively, a different storage type (e.g., Redis for caching/mapping data) might be more appropriate for B2B-specific needs. Sana confirmed (Mar 23) this is feasible -- separate schemas are common practice in F3 (`12go/migrations/sql` already has multiple schemas per module).
 
 ### Code Writing Experience
 
@@ -36,7 +36,7 @@ last_updated: 2026-03-24
 - F3's pipeline includes an automatic AI code reviewer and quality gates that prevent unit test coverage from decreasing.
 - These caught issues in my PR and forced me to refine it -- this is a good safety net.
 - Sana approved the changes.
-- **Not yet merged** -- I still need to understand the full production deployment pipeline (merge -> staging -> QA sign-off -> production).
+- **Not yet merged** -- deployment pipeline is now understood: merge to master → auto-deploy to Canary (`recheck10.canary.12go.com`) → verify → ask Sana to deploy to production. No AWS API Gateway changes needed for new B2B endpoints.
 
 ### PHP Buddy Sessions
 
@@ -87,15 +87,23 @@ All three endpoints read from 12go's own database -- no external HTTP calls need
 
 > **Challenge: Incomplete Results / Background Processing** (Risk: Medium)
 >
-> Currently, incomplete results use an async background job that writes results to the database, with the client continuously polling until processing is complete. I haven't researched background jobs in PHP yet -- this is an unknown area. We may need to write a background worker and publish a RabbitMQ message from the main flow if the API doesn't respond within a timeout. There are a lot of unknowns here.
+> Currently, incomplete results use an async background job that writes results to the database, with the client continuously polling until processing is complete. Sana confirmed (Mar 23) that F3 supports in-process background jobs -- code executes after the HTTP response is sent, in the same PHP-FPM worker thread. This avoids RabbitMQ but ties up the worker, so it's suitable for short tasks only.
 >
-> **Presumptive approach**: Skip this feature for Q2. Research PHP background job patterns (Symfony Messenger + RabbitMQ) as part of ramp-up. Revisit if client feedback requires it.
+> **Presumptive approach**: Skip this feature for Q2. If needed later, use F3's in-process async pattern (documented in F3 README). For heavy workloads, may need queue-based approach. Revisit if client feedback requires it.
 
 > **Challenge: ID Mappings for Search** (Risk: Low for Q2)
 >
 > Search requests and responses carry station IDs, operator IDs, seat class IDs, and vehicle IDs -- all needing translation between Fuji CMS and 12go namespaces. With Q2 scoped to new clients only, all IDs pass through as 12go native integers. The POI-to-province resolution, seat class mapping, and operator ID mapping all simplify to direct pass-through.
 >
 > **Presumptive approach**: No mapping layer for Q2. For future existing-client support, the recommendation calls for APCu (per-worker persistent cache) + MariaDB fallback for the search hot path.
+
+> **Challenge: Itinerary ID Format** (Risk: Medium)
+>
+> Search returns a `SearchItineraryId` for each result -- the client passes this back to GetItinerary to start the booking funnel. This is not a simple integer: it's a composite struct (`ContractCode`, `IntegrationId`, `IntegrationProductId`, `Seats`, `SearchTime`, `TraceId`) serialized using KLV (Key-Length-Value) encoding, then optionally obfuscated with a Caesar cipher (shift 547) and URL-encoded. The current system applies the Caesar cipher by default; only specific clients configured as "plain" skip it and receive the raw KLV string. Additionally, itinerary IDs starting with a specific prefix trigger a completely different API call sequence in the booking funnel.
+>
+> **Open question**: Shauly raised (Mar 12) whether the itinerary ID should carry the same Caesar cipher obfuscation in the new system, alongside the booking token. Decision deferred -- needs validation with Sana.
+>
+> **Presumptive approach**: For Q2 (new clients only), we need to decide: (a) pass through 12go's native trip identifier directly (simplest, but changes the contract shape), or (b) construct our own composite itinerary ID with KLV encoding (preserves the current contract shape for future client migration). Either way, no Caesar cipher for Q2. The internal-prefix branching logic needs to be understood and preserved in the PHP implementation.
 
 ---
 
@@ -109,6 +117,10 @@ All three endpoints read from 12go's own database -- no external HTTP calls need
 | **ConfirmBooking** | Finalizes the reservation with the supplier                            | `POST /confirm/{bookingId}` -> `GET /booking/{bookingId}`              | Timeout handling, no-persistence design             | Medium     |
 | **SeatLock**       | Optional pre-selection of specific seats (no actual lock on 12go side) | `GET /checkout/{cartId}`                                               | Race condition until 12go ships native lock         | Low        |
 
+
+> **Challenge: Itinerary ID Determines Code Path** (Risk: Medium)
+>
+> The itinerary ID received from Search is not just a lookup key -- its format determines which API call sequence GetItinerary follows. IDs starting with a specific internal prefix trigger a different flow (`POST /add-to-cart` with different body -> `GET /cart-details` -> `GET /trip-details`) compared to the standard path. Both paths must be implemented. See the Itinerary ID Format challenge in Search (section 2.2) for the broader format and encryption discussion.
 
 > **Challenge: Booking Schema Parser** (Risk: High)
 >
@@ -245,18 +257,18 @@ The current system also discards everything from the webhook payload except the 
 
 | Endpoint               | Group          | 12go Calls                                                             | Key Challenge                                                          | Proposed Approach                                            | Risk   | Priority                      |
 | ---------------------- | -------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------ | ------ | ----------------------------- |
-| **Search Itineraries** | Search         | `GET /search/{from}p/{to}p/{date}`                                     | Recheck mechanism not implemented                                      | Implement recheck invocation (sync or fire-and-forget)       | High   | Highest                       |
-| **Incomplete Results** | Search         | Background job + client polling                                        | Background jobs in PHP unexplored; RabbitMQ worker may be needed       | Skip for Q2; research PHP background patterns                | Medium | Deferred (Q2)                 |
-| **GetItinerary**       | Booking Funnel | `GET /trip-details` -> `POST /add-to-cart` -> `GET /checkout/{cartId}` | Booking schema parser (~1,180 lines)                                   | Fixture-driven port from C# to PHP                           | High   | Highest                       |
-| **CreateBooking**      | Booking Funnel | `POST /reserve/{bookingId}` -> `GET /booking/{BId}`                    | Reserve request assembly (bracket-notation reconstruction)             | Port using same test fixtures as schema parser               | High   | Highest                       |
-| **ConfirmBooking**     | Booking Funnel | `POST /confirm/{bookingId}` -> `GET /booking/{bookingId}`              | Timeout handling, no local persistence                                 | Single 30s timeout, 12go as source of truth                  | Medium | Highest                       |
-| **SeatLock**           | Booking Funnel | `GET /checkout/{cartId}`                                               | Race condition (no actual lock on 12go side)                           | Validate-and-cache stub; upgrade when 12go ships native lock | Low    | Lowest (after booking funnel) |
-| **GetBookingDetails**  | Post-Booking   | `GET /booking/{bid}`                                                   | Runtime API call replaces local DB read; booking ID resolution         | Call 12go at runtime, map response to TC format              | Medium | High                          |
-| **GetTicket**          | Post-Booking   | `GET /booking/{bid}`                                                   | Ticket URL stability unknown; booking ID resolution                    | Use 12go's `ticket_url` directly if stable; else re-host     | Medium | High                          |
-| **CancelBooking**      | Post-Booking   | `GET /refund-options` -> `POST /refund`                                | Two-step atomicity, hash expiration                                    | Use 12go's refund amount directly, retry with hash re-fetch  | High   | High                          |
-| **Notifications**      | Notifications  | Inbound webhook from 12go                                              | Push topology, no outbound delivery exists, 12go must add HMAC signing | Defer or offload to another developer                        | High   | Potentially offloaded         |
-| **Stations**           | Static Data    | Direct DB read (inside F3)                                             | Response shape transformation                                          | Expose 12go native data in TC format, cache aggressively     | Low    | Medium                        |
-| **Operators**          | Static Data    | Direct DB read (inside F3)                                             | Multi-transport operator splitting                                     | Same pattern as stations                                     | Low    | Medium                        |
-| **POIs**               | Static Data    | Direct DB read + join                                                  | POI-to-station mapping computation                                     | Join on `ProvinceId` FK instead of string matching           | Medium | Medium                        |
+| **Stations**           | Static Data    | Direct DB read (inside F3)                                             | Response shape transformation + S3 export pattern                      | Expose 12go native data in TC format, cache aggressively     | Low    | Weeks 2-3                     |
+| **Operators**          | Static Data    | Direct DB read (inside F3)                                             | Multi-transport operator splitting                                     | Same pattern as stations                                     | Low    | Weeks 2-3                     |
+| **POIs**               | Static Data    | Direct DB read + join                                                  | POI-to-station mapping computation                                     | Join on `ProvinceId` FK instead of string matching           | Medium | Weeks 2-3                     |
+| **Search Itineraries** | Search         | `GET /search/{from}p/{to}p/{date}`                                     | Recheck mechanism not implemented; itinerary ID format decision pending | Implement recheck invocation (sync or fire-and-forget); use 12go native itinerary ID format for Q2 | High   | Week 1 (POC merge)            |
+| **Incomplete Results** | Booking Funnel | In-process event bus (F3 background job pattern)                       | Async fallback for slow CreateBooking/ConfirmBooking; scope undecided  | F3 in-process async (no RabbitMQ); scope decision needed     | Medium | Needs decision                |
+| **GetItinerary**       | Booking Funnel | `GET /trip-details` -> `POST /add-to-cart` -> `GET /checkout/{cartId}` | Booking schema parser (~1,180 lines); itinerary ID prefix determines API call sequence | Fixture-driven port from C# to PHP; handle both internal and standard itinerary paths | High   | Weeks 4-6                     |
+| **CreateBooking**      | Booking Funnel | `POST /reserve/{bookingId}` -> `GET /booking/{BId}`                    | Reserve request assembly (bracket-notation reconstruction)             | Port using same test fixtures as schema parser               | High   | Weeks 4-6                     |
+| **ConfirmBooking**     | Booking Funnel | `POST /confirm/{bookingId}` -> `GET /booking/{bookingId}`              | Timeout handling; async 202 fallback uses incomplete results pattern   | 12go as source of truth; incomplete results if confirm slow  | Medium | Weeks 4-6                     |
+| **SeatLock**           | Booking Funnel | `GET /checkout/{cartId}`                                               | Race condition until native lock is shipped                            | Expected to be developed on 12go side by implementation time | Low    | After booking funnel          |
+| **GetBookingDetails**  | Post-Booking   | `GET /booking/{bid}`                                                   | Runtime API call replaces local DB read; booking ID resolution         | Call 12go at runtime, map response to TC format              | Medium | Weeks 7-8                     |
+| **GetTicket**          | Post-Booking   | `GET /booking/{bid}`                                                   | Ticket URL stability unknown; booking ID resolution                    | Use 12go's `ticket_url` directly if stable; else re-host     | Medium | Weeks 7-8                     |
+| **CancelBooking**      | Post-Booking   | `GET /refund-options` -> `POST /refund`                                | Two-step atomicity, hash expiration                                    | Use 12go's refund amount directly, retry with hash re-fetch  | High   | Weeks 7-8                     |
+| **Notifications**      | Notifications  | Inbound webhook from 12go                                              | Push topology, no outbound delivery exists, 12go must add HMAC signing | Defer or offload to another developer                        | High   | Offload / defer               |
 
 
