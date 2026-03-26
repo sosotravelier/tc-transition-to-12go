@@ -180,9 +180,9 @@ There is an upcoming task to expose the full structured cancellation policy in a
 
 | Endpoint              | What It Does                                                           | 12go Calls                                                          | Key Challenge                                              | Difficulty |
 | --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------- | ---------- |
-| **GetBookingDetails** | Returns booking status, stations, price, voucher URL                   | `GET /booking/{bid}`                                                | No local persistence -- runtime API call replaces DB read  | Medium     |
+| **GetBookingDetails** | Returns booking status, stations, price, voucher URL                   | `GET /booking/{bid}`                                                | No local persistence -- runtime API call replaces DB read  | Low        |
 | **GetTicket**         | Returns a URL to the ticket PDF                                        | `GET /booking/{bid}` (same endpoint, extract `ticket_url`)          | Determine if 12go's ticket URL is stable and long-lived    | Medium     |
-| **CancelBooking**     | Two-step cancel: fetch refund options (with hash), then execute refund | `GET /booking/{bid}/refund-options` -> `POST /booking/{bid}/refund` | Use 12go's `refund_amount` directly, no double calculation | Medium     |
+| **CancelBooking**     | Two-step cancel: fetch refund options (with hash), then execute refund | `GET /booking/{bid}/refund-options` -> `POST /booking/{bid}/refund` | Use 12go's `refund_amount` directly, no double calculation | Low        |
 
 
 Note: all three endpoints are affected by the Booking ID transition problem described in 4.3 -- for existing clients (post-Q2), old booking IDs must be resolved to 12go `bid` values.
@@ -244,14 +244,14 @@ When a client authenticates via `x-api-key` header (or `?k=` query param), F3 al
 Create a `b2b_clients` table in the B2B migration schema (following the same separate-schema pattern proposed for other B2B tables):
 
 
-| Field            | Type        | Purpose                                |
-| ---------------- | ----------- | -------------------------------------- |
-| `client_id`      | string (PK) | Human-readable alias, e.g., "bookaway" |
-| `name`           | string      | Full company name                      |
-| `enabled`        | bool        | Active flag                            |
-| `api_key_usr_id` | FK to `usr` | Links to F3's API key / user           |
+| Field            | Type        | Purpose                                                                                      |
+| ---------------- | ----------- | -------------------------------------------------------------------------------------------- |
+| `client_id`      | string (PK) | Human-readable alias, e.g., "bookaway"                                                       |
+| `name`           | string      | Full company name                                                                            |
+| `enabled`        | bool        | Active flag                                                                                  |
+| `api_key_usr_id` | FK to `usr` | Links to F3's API key / user                                                                 |
 | `webhook_url`    | string?     | Notification delivery URL *(may not be needed here -- depends on notification architecture)* |
-| `created_at`     | timestamp   |                                        |
+| `created_at`     | timestamp   |                                                                                              |
 
 
 **Cross-cutting impact**: This decision affects metrics/logging, Kafka events, notifications (booking->client association), and the URL structure of every endpoint.

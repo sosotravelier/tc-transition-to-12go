@@ -1,0 +1,1347 @@
+Mar 25, 2026
+Updated design for tc->12go transition - Transcript
+00:00:00
+ 
+Shauly Sahar: Hey,
+Eyal Eitan: Okay.
+Shauly Sahar: the
+Eyal Eitan: Okay. Good.
+Shauly Sahar: Yes, benefit. for
+Eyal Eitan: for
+Shauly Sahar: lucky Okay.
+Eyal Eitan: any
+Shauly Sahar: Can
+Oleksandr Monov: Hi guys. So we waiting for the Yeah.
+Shauly Sahar: for for the rest.
+Oleksandr Monov: Okay.
+Eyal Eitan: climbing
+Oleksandr Monov: I will give me one minute.
+Eyal Eitan: room.
+Shauly Sahar: Um,
+Soso Tughushi: Are
+Eyal Eitan: Hi
+Soso Tughushi: you
+Avihai Shabtai: Hello.
+Soso Tughushi: okay?
+Avihai Shabtai: What's up?
+Eyal Eitan: What's up?
+Avihai Shabtai: I miss you, man.
+Eyal Eitan: Yes. Come to
+Avihai Shabtai: I know you're you're b more more than anyone else.
+Eyal Eitan: Yes.
+Avihai Shabtai: I think every day I hear another fall in
+Eyal Eitan: Yes,
+Avihai Shabtai: inva.
+Eyal Eitan: they're looking for
+Avihai Shabtai: Yeah.
+Eyal Eitan: me.
+Shauly Sahar: Um I think that also in the area of the office is very uh noisy.
+Oleksandr Monov: This
+Avihai Shabtai: Yeah,
+Shauly Sahar: Yeah.
+Eyal Eitan: I wouldn't know.
+Oleksandr Monov: is
+Avihai Shabtai: Maybe.
+Eyal Eitan: Hey
+Soso Tughushi: Hello. So,
+Shauly Sahar: Hey,
+ 
+ 
+00:02:27
+ 
+Soso Tughushi: thanks everybody for gathering. Um this is the second iteration for the design or how I see this uh transition of TC functionality into one to go system. So so big decision that was made was about uh putting it all in uh F3. Um I will uh start presenting already. No. Um
+Eyal Eitan: We're talking the API only, right?
+Soso Tughushi: yes.
+Eyal Eitan: Okay.
+Soso Tughushi: Is that it? Ah no entire screen and this one. Do you all see it?
+Eyal Eitan: Yes, I guess so.
+Soso Tughushi: I can zoom
+Eyal Eitan: Oh, this is
+Soso Tughushi: in.
+Eyal Eitan: better.
+Soso Tughushi: So, um about the scope. So like Shi asked me to come up with let's say something that we can we could commit to in Q2 and well uh maybe this will change
+Eliran Friedman: Yeah.
+Soso Tughushi: after this meeting but this is what I was thinking to uh to write migrate all the booking funnel uh to be uh deployed within the F F3.
+Eyal Eitan: All
+Soso Tughushi: So the 10 end points which uh includes three uh seven endpoints related to booking get itinerary create booking confirm booking and uh postbooking uh operations as well as the master data and search.
+ 
+ 
+00:04:29
+ 
+Eyal Eitan: right, sounds
+Soso Tughushi: Yeah.
+Eliran Friedman: So basically it's all all the TC API
+Eyal Eitan: good.
+Soso Tughushi: Uh uh yeah,
+Eliran Friedman: right?
+Soso Tughushi: more or less
+Eliran Friedman: So it's also like why not
+Soso Tughushi: what there is still uh something
+Eliran Friedman: everything?
+Soso Tughushi: that may be left out like gRPC of uh Google. uh right now we have only single client which uses gRPC and uh it will not be in the scope because it's too hard I mean for us to write it in time um we are also thinking to only support after Q uh two uh adding a new client and migration of existing clients will be on Q3 or well after Q2. So basically uh to put on the shelf the uh issue with ID mappings of stations of uh operators of booking ids uh and basically prepare uh just uh the part uh where we would be able to on board the new clients in F3. Um
+Shauly Sahar: And we also discussed that we need to also prepare the plan for the migration.
+ 
+ 
+00:05:53
+ 
+Shauly Sahar: What needs to be done but not the coding if we'll need to do
+Soso Tughushi: yes yes yes
+Shauly Sahar: something.
+Soso Tughushi: exactly. So we have let's say a plan how we see the migration but the execution will be later and plus this plan could change during the execution of
+Eyal Eitan: So, so,
+Soso Tughushi: keto.
+Eyal Eitan: so the plan is for the end of Q2 to have all the TC endpoints on one to go system directly using one to go ids and everything without any mapping of
+Soso Tughushi: Yeah.
+Eyal Eitan: TC.
+Soso Tughushi: Yes.
+Eyal Eitan: This is the plan and this is what we want and this was decided that we would like
+Soso Tughushi: Yeah.
+Avihai Shabtai: That's what but to be served.
+Eyal Eitan: to use one to go ids as as connect ids. This is something agreed upon.
+Soso Tughushi: It's not set in stone. Uh but this is what we are presuming that we want. I mean uh we going to Yeah.
+Eyal Eitan: It's product decision, not a technical
+Soso Tughushi: Okay.
+Eyal Eitan: decision.
+ 
+ 
+00:06:51
+ 
+Eliran Friedman: Do we have any any like rejections or like things to thought about like this decision? Like do we want to maintain different ideas?
+Eyal Eitan: I don't think so. But I I heard that Yosi had some thoughts about having additional layer of mapping for the sake of setting
+Avihai Shabtai: No, no, no. It was it was few months ago. It was like I I I tried to understand from him what he meant and no
+Eyal Eitan: Yes.
+Avihai Shabtai: it was just an idea like he said that in other uh platforms in the market maybe it's done like that to have another layer. No, he didn't have any any reasoning more than that behind
+Eyal Eitan: No, that's fine. just I'm just saying that that trying to understand if the requirements are set and we know what we want productwise before we dig into the details of the technicalities.
+Avihai Shabtai: Yes. Yes.
+Eyal Eitan: Okay.
+Soso Tughushi: There is also some stuff that we'll need to do parallel analysis for. So right now we have lots of metrics in in TC system and uh and also there is also metrics for one to go and the granularity of what we have in TC could be different than what we have in one to go.
+ 
+ 
+00:08:09
+ 
+Soso Tughushi: So basically there is a discovery uh that we need to do uh during this Q2 to settle exactly what we will need versus what
+Eyal Eitan: Yeah.
+Soso Tughushi: what are the metrics that are available already and another topic is Kafka events. So
+Eliran Friedman: about like certain like fields of or features that like are different between TC and want to go.
+Soso Tughushi: uh
+Eliran Friedman: Can you give like an example?
+Soso Tughushi: uh for example we have alarm uh related to when we have uh I don't know um uh when we have high rate of failure when confirming I mean this is something that we have But one to go
+Eliran Friedman: Mhm.
+Soso Tughushi: also could be having such uh such metric on which we would which we would need to configure on their own system. Right now we are using uh displaying everything in graphana and on their side not sure exactly what is there. uh so I don't really know exactly how they're monitoring the system and most of the time most likely there is an overlapping functionality there and this is something we need to do on both ends somebody from our side combining uh the monitoring capabilities on their
+ 
+ 
+00:09:39
+ 
+Eyal Eitan: Yeah, it's not just the observability,
+Soso Tughushi: side.
+Eyal Eitan: the metrics and the alarms. It's it's a data data data events. I mean there's a different stream regarding the data data events where should go and there's a third thing which not all the the functionality of the booking is is encapsulated in F3 as far as I know there are things which are in F2. So if even if we decide that we would like to align with something in F3 we need to consider that some of the information might be different or consumed different differently in F2.
+Soso Tughushi: Yeah, I mean there is some stuff we know that we would need to develop in uh F3 like cancellation policies should be exposed and as well as some other functionalities which uh pro which I mean these features the additional capabilities we need to add to
+Eliran Friedman: So
+Soso Tughushi: F3 uh will happened alongside of uh the execution of this
+Eliran Friedman: that that's what I was asking.
+Soso Tughushi: phase.
+Eliran Friedman: We're talking also about product features if I understand correctly right
+Soso Tughushi: What product?
+ 
+ 
+00:10:44
+ 
+Eliran Friedman: about product features as well like monitoring alerts BI events
+Soso Tughushi: Yeah.
+Eliran Friedman: and product features just like this is more related to the topic
+Shauly Sahar: What do you mean product features?
+Eliran Friedman: we talked about in unified API because if I correctly also just mentioned something like in cancellation policy
+Shauly Sahar: Yeah, I I gave the So okay when I spoke with him about that I told him that few things like we have differences so we'll need to have have them if we are going to to add in the the plan for the the
+Eliran Friedman: Yeah.
+Shauly Sahar: plan for soo is to align to have the same uh functionality as we have in TC right now. Okay.
+Eliran Friedman: Okay.
+Shauly Sahar: So if we are adding new functionality during this period, we need that's also aligned with that. Probably it will be 10 times easier for him to to do that than to do that from the thesis
+Eliran Friedman: Yeah, I agree.
+Shauly Sahar: side.
+Eliran Friedman: Just just to align like the idea that been just this track is about migrating this into F31 to go not about matching the features that we have that that's a different track like just though it will be very focused about like you know compared to what we have
+ 
+ 
+00:11:52
+ 
+Shauly Sahar: Correct.
+Eliran Friedman: today not about adding new features that we don't support or something like that that's just to
+Shauly Sahar: Correct. Correct.
+Eliran Friedman: focus us.
+Soso Tughushi: Yeah.
+Shauly Sahar: Um
+Soso Tughushi: And Kafka events. So as well we know that there is a gap there uh that we need to close to know exactly what are the events we need to publish for data team to consume them. I know that uh currently F3 publishes their own internal events which probably go to data team but again we need to settle on uh what what
+Eliran Friedman: Are those are those events are the same like the group expect them to be like is the same schema of booking for
+Soso Tughushi: is
+Eliran Friedman: example such as like it's like somehow the same as T-Rex or something like that or it's like completely different schemas that we're talking about.
+Soso Tughushi: To be honest, I don't know. I
+Eliran Friedman: I I like I'm just asking if like can we like do something that will also like serve already want to go to
+Eyal Eitan: It's okay.
+ 
+ 
+00:12:53
+ 
+Soso Tughushi: mean,
+Eliran Friedman: moving like to the same events that the group has or it's like something else.
+Shauly Sahar: Uh the the events that we are currently sending is like something that go directly to the data team. Um and all our dashboards is based based on on that.
+Eliran Friedman: But normalize the schema that data has for all brands or it's something specific to TC.
+Shauly Sahar: Um,
+Eliran Friedman: That's my question.
+Shauly Sahar: I think it's uh something specific that I I don't know if they if they normalize that on their side or
+Eyal Eitan: the events the event are TC event but the thought was that all of the group will book through
+Shauly Sahar: not.
+Eyal Eitan: TC so it will be just one stream of data okay so it's not TX is just the the final results of the transaction the events that we describe here are just describing the tunnel funnel It's not just there was a reservation these are the details it was what was the request what was the response for all the funnel search to confirm it's sorry
+Eliran Friedman: So basically it can also apply for one to go like traffic right.
+ 
+ 
+00:14:08
+ 
+Eliran Friedman: It can also apply to one to go traffic like
+Eyal Eitan: what yes yes yes but one to go probably has
+Eliran Friedman: the
+Eyal Eitan: one some sort of events I'm not sure if the same thing they use different tooling for that than the data team of the group use so they don't use bigquery for example. So this is the stream that Yosi is
+Eliran Friedman: Yeah, exactly.
+Eyal Eitan: leading.
+Eliran Friedman: Because maybe it's like worth to also these discussions just to know like where we are heading with one of these and then do it only once for both this and want to go on the direction that you want to
+Eyal Eitan: Mhm.
+Eliran Friedman: be
+Shauly Sahar: The question is we need to take this into account that this is a must or is like something that we need to connect in parallel to at some point.
+Eliran Friedman: again I I don't want to you know like we need to to see what's the effort in understanding where want to go we are heading with their event. But I I know that like again that's talking about BigQuery or Click House or whatever, but because maybe you know I can only send one booking event for want to go and this and maybe it's like you know you're anyway doing this job.
+ 
+ 
+00:15:12
+ 
+Eliran Friedman: So I'm not sure how much different it is to send it like for both this and want to go or only for
+Shauly Sahar: Yeah,
+Eliran Friedman: this.
+Shauly Sahar: maybe it's already being sent. I I don't know.
+Eliran Friedman: Yeah. Also maybe like we can do like this this flow. Maybe we can just like take whatever want to go as. I don't know. Like I think the the BIM tracking the BI sorry data is like a track you need to further investigate and and understand what what you want to do there
+Soso Tughushi: Yeah. Okay. So then uh about the P for
+Eliran Friedman: question.
+Soso Tughushi: search.
+Eliran Friedman: Sorry, so go up a bit.
+Soso Tughushi: Yes.
+Eliran Friedman: What does it mean about like that we are now like still having the RPC and having the
+Soso Tughushi: Yes.
+Eliran Friedman: uh I don't know like besides existing clients will we still have for new clients things that rely on TC's services for example Denali or I don't know all of these things or we can say that for new traffic we don't need all the mapping After all of
+ 
+ 
+00:16:20
+ 
+Soso Tughushi: I mean after Q2 we as I mean during uh I mean after Q2 is done and let's say when we will have the endpoints in F3 we're going to still run uh the old services with for existing clients so
+Eliran Friedman: But
+Soso Tughushi: they're going to be running in parallel
+Eliran Friedman: for new clients, they don't need anything from this tech stack and this is
+Soso Tughushi: they they don't need anything else uh from TC is old services.
+Eliran Friedman: okay.
+Soso Tughushi: Yeah.
+Eliran Friedman: Got it. Thanks.
+Soso Tughushi: Yeah. Yeah. And well also I want to emit uh from here performance testing. I don't think uh my service will add lots of latency to it but uh just this work was done on previously by me on uh TC services and uh it's just something I cannot fit into uh this quarter but I will let's say uh do let's say sanity check after each uh new feature to make sure that we are we don't have very big degradation something like
+Eliran Friedman: Can what?
+Soso Tughushi: this.
+Eliran Friedman: Will we be able to like to to like monitor it?
+ 
+ 
+00:17:37
+ 
+Eliran Friedman: Not not like not to
+Soso Tughushi: Yeah, I mean probably there is a metric for API responses uh in one to go site that we
+Eliran Friedman: tell.
+Soso Tughushi: can see it after the fact after I have developed if the response time went up.
+Eliran Friedman: Okay.
+Soso Tughushi: But again without this part done I cannot really tell.
+Shauly Sahar: Another thing that I have in mind here uh since anyway will uh onboard client new client until we are starting like only when we done and we know that it's take time for clients to to on board. I I I hope that in parallel there will be the break of the search h and maybe the the performance can be done anyway it's it's going to be done there after you break it uh I hope so maybe it can be done in in in that phase with uh the person that break
+Eliran Friedman: Ah, you're right.
+Shauly Sahar: it.
+Eliran Friedman: You're saying it's like even after like they develop, we don't have we will not have traffic until we like open a new
+Shauly Sahar: Yeah.
+ 
+ 
+00:18:43
+ 
+Eliran Friedman: client.
+Shauly Sahar: And even when we open a new client, it's take time until they start to use it uh very um um uh heavily.
+Eliran Friedman: Yeah. Okay. Uh so basically with development we don't know like how much we improve their performance by this reducing the hop and like going on in
+Soso Tughushi: I mean we could maybe maybe we will know it uh if we will find correct metric but right now I don't have expertise to uh tell you for sure that we will know that I mean I assume that uh it's easy metric to see but right now I
+Eliran Friedman: Mhm.
+Soso Tughushi: Sure.
+Eliran Friedman: Okay. We need also like when we talk about the roll out plan, maybe we can also like touch this point.
+Soso Tughushi: Um now next section about search PC that I did in one to go uh in F3. So um I did it fully with AI and u the to develop code it was quite easy for me. Uh I mean it took me two days uh I think to write everything and make sure the tests are running and the uh full requests auto reviewer is uh doing its job and it I mean the test coverage is improved and uh everything works but to verify it locally that the changes are there uh I needed to uh spin up the environment locally and this is where I faced issues.
+ 
+ 
+00:20:27
+ 
+Soso Tughushi: with some failing migrations uh which Sana and Ehore helped me to resolve but it was still a bumpy ride uh um and and I think that uh we I mean uh even if uh let's say we would go with other way of uh doing it in separate micros service we would still need to make sure that this local environment of F3 is stable uh because for the features that we would develop there we would still need to spin it up. Uh so anyway um uh uh after talking with Sana he said that he doesn't face any issues uh on daily basis so it's probably a one-time thing. I mean right now I have documented everything. I did some uh manual fixes like insertion of prices into specific tables or fixing things by hand. Uh but I am assuming that this problem will at some point be resolved uh as I go. Uh but I don't know. I mean it still going to be bumpy. Maybe when I will be developing uh booking uh endpoints there will still be problems there.
+ 
+ 
+00:21:49
+ 
+Soso Tughushi: Therefore I propose or I need a help some from somebody from want to go uh to let's say have a PHP body uh which will help me twice a week at first and then uh depending on the need I would reduce it to once a week basically uh during the week whatever I'll be accumulated just to have a communication that everything is fine or basically would help me hands
+Eliran Friedman: S I think that Valerie can help with that. Like Valer has a good working environment and can help like source if he has troubles. You're on mute.
+Oleksandr Monov: Yeah, sure. We can
+Eyal Eitan: All
+Eliran Friedman: So maybe you can talk with Valer that like that you will know that like if someone needs help with his local environment and like missing some
+Oleksandr Monov: help.
+Eliran Friedman: data or something like that he can reach out to Val and we help him.
+Eyal Eitan: right.
+Oleksandr Monov: we can create maybe SUSA we can add you to our three guild uh thread in Slack and you can put any questions there and again all the people that understand something in F3 are there so it's the fastest way to get the answer or or any type of
+ 
+ 
+00:23:11
+ 
+Soso Tughushi: Yeah, definitely that would be helpful. uh uh but in addition to that I was just thinking to have uh sync calls uh let's say every periodically so that uh I mean during I mean to do it in a written manner it's always more time consuming than when it's scheduled and uh somehow communication goes fluently
+Eliran Friedman: Yeah,
+Soso Tughushi: this
+Oleksandr Monov: Okay.
+Eliran Friedman: I think I think it could be like a great idea if you can like talk to Val and ask him like to that whenever SOA needs help with PHP or with his like local environment, he can also can reach out to Val.
+Oleksandr Monov: Yeah.
+Eliran Friedman: I think it will really help to reduce like you know to unblock source when he needs
+Oleksandr Monov: Okay.
+Eliran Friedman: something.
+Oleksandr Monov: Okay.
+Shauly Sahar: Yeah.
+Oleksandr Monov: But in any case, so I will add you to a three
+Shauly Sahar: Yeah. Add him to that as well. Regardless, it's for free.
+Oleksandr Monov: gift.
+Eliran Friedman: Premium support is like $5 a month.
+Shauly Sahar: Maybe you can use the token of the code
+ 
+ 
+00:24:14
+ 
+Eliran Friedman: Yeah, great.
+Shauly Sahar: there.
+Eliran Friedman: Like it's a great idea also like uh it's a great solution for the for the problem that you face.
+Soso Tughushi: Mhm. Um let's move on the now about each endpoint individually. So I am I sorted it based on how client uses it. So at first they are using uh stations, operators and pi. So they're getting all the station data and um to implement them uh I mean I put difficulty low um there is only one thing there that uh we need to discuss uh is that uh we have endpoints where uh when a person uh well when client uh requestations list we put it in f s3 bucket and then we give them url There is also another alternative just to return the big list as a response of um HTTP call. Um so we need to decide if we need to keep this functionality or if we should uh um just uh return the row list with maybe pagionation um there but the data is already in
+Eyal Eitan: Yeah, I'm not sure.
+ 
+ 
+00:25:36
+ 
+Soso Tughushi: the want to go itself and I know from where it should be taken and what what to do with it.
+Eyal Eitan: I think it's over overlappinging with the catalog.
+Soso Tughushi: You are saying yeah
+Eyal Eitan: So, so stationing operators at least are things that the the catalog will need to to expose to the clients. So maybe this is something we should talk with the L H and he said maybe he will take this the the station and the operators POI is a different thing it's more related to the to the search but yeah at least for the station and operators this is something which I think it's more suitable for the catalog
+Soso Tughushi: Yeah. Then there is a question also for the catalog team or for us. Do we change the contracts? I mean want to go already also has the end points and uh well I assume that we shouldn't break the clients but if they if the data is tail anyway and we going to develop it for only new clients maybe we have flexibility there
+ 
+ 
+00:26:38
+ 
+Eyal Eitan: Yeah. Yeah. It's something we should consider in any point. These are endpoints which are quite easily can be migrated by the clients. It's not in the hot path of search booking etc. So this is something that if we will decide to change the API I think the risks the risk for the client or the know the resistance from the client will be lower than if we decide to change the search API for example.
+Soso Tughushi: Yeah.
+Eyal Eitan: Oh.
+Shauly Sahar: I I I know that but I I want to to take a decision on that if it stays on our table or not and if we are going to change the API or not because we sort of sort of consider to start with that from the from the first uh part and um it's not mandatory to start it from from the first part but uh I think
+Eliran Friedman: What are the pros and cons?
+Shauly Sahar: that we need to take a decision on that first if uh I
+Eyal Eitan: Yes.
+Eliran Friedman: Like uh
+Shauly Sahar: I don't okay first question if it's something that the catalog team going to take or is it something that uh we are going to to handle
+ 
+ 
+00:27:47
+ 
+Eliran Friedman: I think if you're changing the API or doing like different API then you can talk with with about it but I think that
+Shauly Sahar: Okay.
+Eliran Friedman: like the question is why do you want to change it and like what are the pros and cons like today like for example we have one want to go API and we have TC API right TC API is S3 if I'm not mistaken and like
+Shauly Sahar: Yes. It's like you are asking for the station, you get a dump in the S3, you're getting the operator in S3. Uh actually the POI I didn't know that we have such an API but I don't know what it's doing and um yeah and I think that the there is a row API for one to go that return the same but I don't know for sure it's not the same format.
+Eliran Friedman: Mhm.
+Eyal Eitan: Yeah.
+Eliran Friedman: think it's kind of like the unified API
+Eyal Eitan: Okay.
+Eliran Friedman: question or like it's just you
+Shauly Sahar: Um,
+Eyal Eitan: The DC mechanism is is totally different.
+ 
+ 
+00:29:00
+ 
+Eliran Friedman: know
+Eyal Eitan: I mean it's the S3 that we're talking about is just a mechanism to send the results to the client but the source is the it's the data in Fuji and we don't intend to keep Fuji there's no need to keep the mapping so there's no point in having all this system of events and and listeners and S3 not to support this API as far as I as I consider it. So and in if you think about it in a go in a larger spectrum I think this is the the the responsibility of the catalog right so what what's the what's the advantage of having a different team having an API for the catalog
+Eliran Friedman: I know I'm just like thinking like what's the development here? That's what I'm kind of asking. Like what do what do you want to do here? That's the question.
+Shauly Sahar: me theoretically uh to mimic the one to the the TC API behavior that the client uh will have the same
+Eliran Friedman: So for S3
+Shauly Sahar: format.
+Avihai Shabtai: You mean the same format but but different?
+ 
+ 
+00:30:08
+ 
+Shauly Sahar: Yes,
+Eliran Friedman: Hey,
+Shauly Sahar: ID is correct.
+Avihai Shabtai: Uh
+Shauly Sahar: Like instead of THB band, it will be one, two, three and the same as much as we can uh content
+Avihai Shabtai: my two sense here is is for sure doing as much as we can in order not to change something
+Shauly Sahar: there.
+Avihai Shabtai: to on the client side. We already changing the way that they need to map the ideas themselves. But if now there is another way of implementation that they need how to consume the data. Um this is another change but but again it's also related to the effort on our
+Eliran Friedman: We finish this for new customers. It will be right to take it from SP as well.
+Avihai Shabtai: side.
+Eliran Friedman: That's the right way to to
+Eyal Eitan: Just a Second,
+Eliran Friedman: go.
+Eyal Eitan: I'm just saying that the the issue with the S3 is because this data is is megabytes of data. This is why it was done this way and not in another
+Eliran Friedman: Mhm.
+Eyal Eitan: way.
+ 
+ 
+00:30:59
+ 
+Shauly Sahar: It's just a JSON in the three.
+Eyal Eitan: Yes. What what it means that it doesn't matter this is the API.
+Shauly Sahar: Yeah.
+Eyal Eitan: I mean if if we are doing that if the source will be the catalog someone will read the data from the catalog all the data from the catalog data and put it in S3 and send the client a link a temporary link to get the data. So this is the entire API that we have currently today. It's not like we we are not handling the the data in S3. It's just something we put for the client in order to fetch the data when he wants
+Eliran Friedman: And we finished.
+Eyal Eitan: it.
+Eliran Friedman: This is like the right way to go with the clients. Like that's the most convenient way for clients to go.
+Eyal Eitan: This is one one option.
+Soso Tughushi: Yeah.
+Eyal Eitan: I mean the other option will be paging. You can do HTTP streaming. You can do gRPC. This is a very natural way and this is something we decided back then we can open it.
+ 
+ 
+00:31:51
+ 
+Eyal Eitan: I mean if a product will say I would like the same thing for the client okay we will do the same thing but if not we can put it on the table and decide again it's not not a major issue
+Avihai Shabtai: How is it on one to go
+Eyal Eitan: Jason but I don't know who uses it.
+Avihai Shabtai: side?
+Eyal Eitan: I mean this is something maybe Sana knows but they have one to be one B2B client I think.
+Avihai Shabtai: Yeah, we'll be
+Eyal Eitan: Yeah,
+Avihai Shabtai: good.
+Eyal Eitan: maybe he use it but I don't know.
+Eliran Friedman: Okay. So basically what you're saying that you need a job that runs on the database of station operators PIS and throw it into S3 or something like
+Shauly Sahar: No,
+Eliran Friedman: that and then then it has
+Shauly Sahar: it's triggered by HTTP call from the client.
+Eliran Friedman: been uploaded to S3 on demand.
+Shauly Sahar: Yeah, this is uh as far as I
+Eyal Eitan: If it's important, I will describe how it's working currently.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah.
+Eyal Eitan: But it doesn't mean we need to do the same thing.
+ 
+ 
+00:32:48
+ 
+Eyal Eitan: Currently, what we're doing, there's a listener in in Fuji which listens to all the changes in the catalog. What we have in connect catalog,
+Soso Tughushi: Heat.
+Eyal Eitan: we put it on S3. Once there is a request from the client, we copy this data from the S3 bucket and put it on a temporary S3 bucket with credentials for the client and we send them the link with a token. From there you can take the
+Eliran Friedman: Okay.
+Eyal Eitan: data
+Shauly Sahar: This is like this is one to go API that for stations.
+Eliran Friedman: Okay.
+Shauly Sahar: You see, you have uh like an API um that
+Eliran Friedman: Understand after I explain the flow now I understand it. Okay.
+Shauly Sahar: returns
+Eliran Friedman: So we need also have to take into account that we need also to implement this like in in this way or another way but we need to implement it if I understand correct okay and this is like we
+Soso Tughushi: Yeah.
+Eliran Friedman: finish we can handle also this one or it's like the scope is
+ 
+ 
+00:33:53
+ 
+Shauly Sahar: No, this was part of the scope anyway. I just wanted to understand if we are doing that the same like if we are keeping the
+Soso Tughushi: Heat.
+Shauly Sahar: same and if uh we are doing
+Eliran Friedman: I think it's worth discussing like the implementation consider considering that we don't
+Shauly Sahar: that
+Eliran Friedman: have all the Fuji and of the other services. Uh but sounds like we need to do it. You you want like someone from maybe to to work on that?
+Shauly Sahar: I I don't know but uh I'm just uh you know I don't want to to touch somebody
+Eliran Friedman: I agree.
+Shauly Sahar: else uh That
+Eliran Friedman: I agree that like the responsibility or the ownership should be like on teams because it's like something that is very catalog oriented.
+Shauly Sahar: was
+Avihai Shabtai: But
+Eliran Friedman: I totally agree. We can if you want we can talk with and see if they can have like
+Soso Tughushi: Yeah.
+Eliran Friedman: someone.
+Avihai Shabtai: who who is using this API other than B2B clients and OTAAS?
+Eliran Friedman: No, but basically it's like uh we're going to a direction where we saying that you know each domain is the owner of its own APIs.
+ 
+ 
+00:34:59
+ 
+Eliran Friedman: If now also like for example the search trips NPI is migrating into F3 or into search then there's no need like to have ownership between B2B and and search team search team can own like the two APIs. So I feel like it doesn't matter like of who will do it and uh whether like it will be someone from our team or whether it will be S or someone from team.
+Soso Tughushi: Yeah. Yeah. I mean we need to decide that because like if we want to onboard new clients they will this is they will need this end
+Eliran Friedman: Okay.
+Soso Tughushi: point. So if you want to set a goal to be able to onboard new client in Q end of Q2 then they and if uh a team still going to do that then we need to make sure that this work goes into their Q2
+Eliran Friedman: And we take the review to understand what's the right way to do it in one to go like in
+Soso Tughushi: planning.
+Eliran Friedman: a one to go system.
+Soso Tughushi: Yeah,
+ 
+ 
+00:36:02
+ 
+Eliran Friedman: Okay.
+Soso Tughushi: I mean I have this uh design done already like from where to read assuming that we're going to
+Shauly Sahar: What?
+Soso Tughushi: have same contracts as TC. Uh I mean I know from where to read which tables and how to map it to TC contracts. Uh but if yeah I mean if they going to if they have like bigger vision of how it should look like then yeah this work they would need to
+Eliran Friedman: What happens if a station changes or anything like that?
+Soso Tughushi: redo.
+Eliran Friedman: Like the How do we make sure that like the clients have the most up to date? Uh
+Soso Tughushi: It's up to them when they going to I mean some clients query us query this end point once a week some just they queried us once and they don't care if there is a new station I mean it it's totally up
+Eliran Friedman: We didn't have we have complaints about the data stess or like some discrepancies in this data
+Soso Tughushi: to
+Avihai Shabtai: Not that I recall.
+Eliran Friedman: that
+ 
+ 
+00:37:01
+ 
+Soso Tughushi: we had something
+Shauly Sahar: The only the only problem that we have is like ideas from dev and and production
+Avihai Shabtai: Yeah, even production ids are different but uh sometimes but uh no other than that
+Shauly Sahar: that
+Avihai Shabtai: no I think maybe we got no but no it was not related to stasis or some something like that.
+Soso Tughushi: I remember once we had some alarm about station not found because the station was deleted on one to go site but it was like one year ago or something like this.
+Avihai Shabtai: Yeah. No, it's not it's not something that we often hearing about.
+Soso Tughushi: Yeah. Um let's move on to
+Eliran Friedman: Yeah. Okay. I'm writing down myself like to to think about it as
+Soso Tughushi: search.
+Eliran Friedman: well.
+Soso Tughushi: Then there is search. The there is again the dilemma whether it falls in my this falls into my hands or in search team. But well I assume that it's going to be me and in the PC I did the search endpoint but with a big caveat that there is no recheck mechanism there.
+ 
+ 
+00:38:08
+ 
+Soso Tughushi: So what's the problem with recheck? Uh I think Sana explained this. I don't know if you are aware Elan but basically uh when want to go returns data uh this could be a stale data so it could be not up to date and and uh whoever receives this data could should I don't know
+Eliran Friedman: Yeah.
+Soso Tughushi: tell one to go to go and fetch it and update it and um and how we are handling right now TC is that we uh return 206 status. Um and uh then in the background we are launching a thread uh let's say to fetch or to call this recheck endpoints and get the stale data and while 206 is happening clear client keeps querying us for updated results. Um so we could do something similar uh in the implementation. um or there is another so there is I found out from Sana how to do the background tasks uh in F3 but well as he explained to me it's not uh straightforward and it could influence the throughput of the service so I don't know I mean this will require I don't know more in-depth analysis I
+ 
+ 
+00:39:35
+ 
+Oleksandr Monov: we we we can try to use uh not the standard let's say HTTP client that waits for the results of the request. We can like put the request and stop uh listening the result.
+Eyal Eitan: Yeah.
+Oleksandr Monov: And this is will be
+Soso Tughushi: I don't forget
+Eyal Eitan: No, I I think this is not a technical issue.
+Oleksandr Monov: sorry.
+Eyal Eitan: I mean this is something in the behavior of the B2B endpoint that we need to first to understand if you how we would like it to work because I'm not sure that every client which B2B client which calls the API should trigger the a call to the provider. This is not how one want to go works and this is not how TC works and there's a reason for that. I mean the the calls to the providers to the integrations are something we we are optimizing. We have limits there. We have quarters there. We have look to book ratio there. We have several things there. And we need to decide when we want to to go to the integration and get new new data and when we don't want it.
+ 
+ 
+00:40:44
+ 
+Eyal Eitan: It's not something automatic just to solve it mechanically in the in the language. So I think product wise we need to understand what how we want this to behave. We can bring our experience of what we talked about already in connect how to do that. We can see how one want to go does it and we can decide on the path that we would would like to go forward. But let's first decide productwise how we want the API to behave and then we can reason what's the best way to do
+Oleksandr Monov: But
+Eyal Eitan: it.
+Eliran Friedman: But just to understand like what like today if I'm when the client of want to go the other request gets
+Oleksandr Monov: the
+Eliran Friedman: 206 then it does another request to get the data.
+Eyal Eitan: Not all the clients.
+Eliran Friedman: No.
+Eyal Eitan: I mean I think we are TC is the only client that want to go allows to to execute the to the rechecks in the website.
+Eliran Friedman: But what what one to go is doing when it got recheck it does the recheck
+ 
+ 
+00:41:39
+ 
+Eyal Eitan: Yes.
+Eliran Friedman: now.
+Eyal Eitan: But when we talk about B2B clients, they don't do reexe for the client for the B2B client usually.
+Eliran Friedman: Yeah. So, so today like want to go and it has two six it gets a recheck then the client is doing a recheck and what this is doing basically today is kind of mimicking the the client. No.
+Shauly Sahar: Yes, in the first request we are calling the we are calling the want to go API and not waiting for the result assuming the next call which we in the last two three days understand that cl the clients like Buku and F scanner waits very very small amount of time and call it
+Eliran Friedman: But but uh this is services are doing the
+Shauly Sahar: again.
+Eliran Friedman: recheck,
+Eyal Eitan: No, but just a secondary one.
+Eliran Friedman: right?
+Eyal Eitan: This is what this is doing with one to go. This is not the TC API. The TC API doesn't call anyone. The DC API is using triple used to it used to work with trip lake, right?
+ 
+ 
+00:42:42
+ 
+Eyal Eitan: And if something was missing in triple there was an asynchronous process which does the the prefetch on demand what we call it. So it calls another service and says okay I got a request from this client for this search. I didn't have any results or results were missing for some integration and this service took some metadata and decided if to call the integration or not asynchronously. It's not something that the client waited or something or we guarantee the client that we will call the
+Avihai Shabtai: Yeah.
+Eyal Eitan: integration or not.
+Avihai Shabtai: Are
+Eliran Friedman: Now when we all be direct like now we have everything is now direct. This is the behavior today know that like you're calling one time to want to go and then like this is doing the
+Avihai Shabtai: you
+Eliran Friedman: the recheck then if now
+Eyal Eitan: Yes. But okay. So let's take an example.
+Eliran Friedman: currently because we already migrate this part we already took like took trip like
+Eyal Eitan: Okay.
+Eliran Friedman: down and we're using like today everything is like to want to go so today behavior after like 1% roll out on the direct to want to go be the today that's like a B2B partner calls TC.
+ 
+ 
+00:43:50
+ 
+Eliran Friedman: TC is calling one to go. It get to six. It returns the the result to the client. But it also does another code to recheck versus one to go. And then on the next call, the client will get the results.
+Eyal Eitan: Maybe yes, maybe not.
+Eliran Friedman: Why?
+Eyal Eitan: Why?
+Eliran Friedman: Why? Maybe.
+Eyal Eitan: Because currently the logic if when we call one to go with recheck,
+Eliran Friedman: Okay.
+Eyal Eitan: it's one to go logic to decide if to go to the integration or not. Maybe there's a rate limit that has been reached maybe some other I don't know some reason but the system is is used to work like that till now. from now on means that all the connect clients I mean post Q2 right all the B2B clients will use this mechanism and it might abuse the the limits that want to go has with with the with integrations so at some point we will need
+Oleksandr Monov: Okay,
+Eliran Friedman: But they already I agree.
+Eyal Eitan: to Thank
+Oleksandr Monov: you
+ 
+ 
+00:44:42
+ 
+Eliran Friedman: I agree. We need to like to think how to optimize it.
+Eyal Eitan: you.
+Eliran Friedman: But current this is the status now. No, like we're already there. That's what I'm saying. Because we already like 1% on the direct scores. If I'm not if I'm not We completely
+Eyal Eitan: The direct calls are only for manual manual product in the airline.
+Eliran Friedman: move to to the rest.
+Avihai Shabtai: No
+Eyal Eitan: Yes.
+Shauly Sahar: Yes,
+Eliran Friedman: No,
+Avihai Shabtai: way.
+Eliran Friedman: I'm missing something.
+Shauly Sahar: correct. Correct. You are correct. We are calling direct only for one to go even for manual airline everything.
+Eliran Friedman: So for for which like so this is like the the kind of like uh if you're doing like that on one to basically just like we can think about optimization such as we saw with uh with scary uh scary scary face scanners that had issues
+Shauly Sahar: Yeah.
+Eliran Friedman: with they got scary the face scanners showed us that like there's
+Shauly Sahar: Scary. Yeah.
+ 
+ 
+00:45:36
+ 
+Eliran Friedman: some issues with this approach. But basically, let's say that the direct calls to want to go are 1%. We're just like moving the same logic from what we have now into F3 or into like uh want to go. We can talk about optimization but or we can like roll back the 1% direct P
+Oleksandr Monov: You got it.
+Eliran Friedman: but or roll
+Eyal Eitan: What's 1%? What's the 1%? I'm not sure I understand.
+Eliran Friedman: out completely the everything goes directly to one to go. We already have done
+Eyal Eitan: Yes,
+Eliran Friedman: it.
+Eyal Eitan: I know. Okay, it's okay that we've done it. This is okay. But I'm just saying that we might hit a wall and we need to to think before that. It's not I'm not I'm not saying I don't think it's an optimization. It's something we need to consider right now because the system didn't work this way till now and now it start to work like this and in one to go system it will mean that something will be blocked somehow and there are two different mechanism that we are trying to solve it.
+ 
+ 
+00:46:36
+ 
+Eyal Eitan: There is this the syncer which corporates the data and make sure that data is in triple and there is the direct call with the 206 reix right. So the the when clients B2B clients are calling us the the solution is not 100% every time we miss something do a recheck because this will hit a wall and this and this wall might affect the want to go B2B B2C side because if we don't
+Eliran Friedman: Okay.
+Eyal Eitan: have any calls to the integration the customer won't be able to to refresh the data.
+Avihai Shabtai: So you're talking about the balance between the caching or the syncer to the to the recheck mechanism basically right? Yeah.
+Eyal Eitan: Yes.
+Avihai Shabtai: So to optimize it on one to go side to fit better the B2B use
+Eyal Eitan: Yes.
+Avihai Shabtai: case.
+Eyal Eitan: I think that the syninker is a more natural component to handle the B2B clients because we we can control what's how many requests we are doing for this for specific
+Avihai Shabtai: Yeah, I I I agree Shi.
+Eyal Eitan: clients.
+Avihai Shabtai: I think we saw it this week that we need to discuss about it uh to understand how we how we improve it on the want to go side.
+ 
+ 
+00:47:47
+ 
+Avihai Shabtai: um this whole not we didn't take into consideration that sometimes we will be blocked um because of other considerations I want to go side but but uh just because of the behavior of the 206 like we saw that the cache uh does not hold for long uh results and so on.
+Shauly Sahar: Anyway, we need to decide and again it's um something that we need to understand what we need to do until the end of uh the quarter uh to to handle that and if it's stays on our end or
+Avihai Shabtai: Yeah, this is another question.
+Eliran Friedman: Okay.
+Shauly Sahar: not.
+Avihai Shabtai: True.
+Eliran Friedman: So, it seems like that we have a solution like what we have today.
+Avihai Shabtai: No,
+Eliran Friedman: We're saying it's for today,
+Avihai Shabtai: we have a solution for today.
+Eliran Friedman: but we're saying it's not good enough for the for the long run.
+Avihai Shabtai: Yeah, probably.
+Eliran Friedman: Okay.
+Avihai Shabtai: But okay, this is another conversation that we had today. uh but also
+Eliran Friedman: regardless of what we're seeing in like ferry scanner is one example of like that like
+ 
+ 
+00:48:52
+ 
+Avihai Shabtai: for
+Eliran Friedman: what what it causes
+Avihai Shabtai: fer and bookway both we just realized that the the currently even that we have
+Eliran Friedman: but
+Avihai Shabtai: the kind of having a solution the implementation on on bookway and on fer scanner site probably is not far from being optimal and actually using the 206 in the right way and the main problem for My point of view is we don't know currently at least not I I don't want to I don't know how what to say as what is the right way to use it. This is another thing it's not related to what SAS is doing here just because you mentioned it. Yes, we need to come up with the best practice for the clients to utilize the 206 the recheck as it is right now without any improvement even in mind. So currently just again just in a in a sentence you hook away are rechecking after one 100 milliseconds and only once that's it. It's it it's it does nothing basically. Okay. Uh but I want to come up with a with a better approach.
+ 
+ 
+00:50:05
+ 
+Avihai Shabtai: Uh this is something that we started discussing
+Eliran Friedman: Yeah, definitely.
+Avihai Shabtai: today.
+Eliran Friedman: We definitely need to to talk about it. But the book away one big like the the test bone like
+Avihai Shabtai: No,
+Eliran Friedman: uh no I
+Avihai Shabtai: but they can they can have a lot more. That's what I'm saying. They are not utilizing the
+Eliran Friedman: agree I I'm with you like I'm I I totally think that we need to optimize and rethink and use
+Avihai Shabtai: tools.
+Eliran Friedman: the same career and again also fair scanner just showed us that it's not that in areas that like want to go is not searching for will have much more zero results.
+Avihai Shabtai: Yes, that's it.
+Eliran Friedman: Yeah. No no I'm with you on all of that.
+Avihai Shabtai: Yep.
+Eliran Friedman: I'm just saying it's like comparing what we have in one to go today uh to sorry what we had in one to in TC using a trip like versus the direct approach the direct approach one Right.
+Shauly Sahar: It was uh almost same same maybe different
+ 
+ 
+00:50:57
+ 
+Avihai Shabtai: It it didn't it didn't lose.
+Shauly Sahar: number.
+Avihai Shabtai: Let's say it like that. It didn't lose. That's what we wanted to see. It's not losing because the decision was taken already.
+Shauly Sahar: Yeah.
+Avihai Shabtai: We just wanted to make sure that we are not losing anything here. And yeah, the results showed it's it's it's okay for Bering.
+Eliran Friedman: Okay. So, we need to think about what is the right solution here. Uh
+Avihai Shabtai: what is the right solution and and who is doing it.
+Eliran Friedman: um
+Avihai Shabtai: I totally agree with Shaoli like this is the deep uh I don't know it's in the kishka
+Eyal Eitan: Mhm.
+Avihai Shabtai: of the of the search of the approach I mean
+Eliran Friedman: yeah,
+Avihai Shabtai: the whole approach the whole concept
+Eliran Friedman: it's probably call search needs to handle this.
+Avihai Shabtai: yeah I would say as
+Eliran Friedman: Definitely seems like a circle search problem.
+Avihai Shabtai: Mhm. What is the second one?
+Eliran Friedman: Okay.
+Avihai Shabtai: Some.
+Soso Tughushi: Uh just the itinerary ID format right now.
+ 
+ 
+00:51:59
+ 
+Soso Tughushi: uh we are building in this side the itinerary ID with contract code integration ID uh how many seats we have uh what's going to be the departure time and integration product ID so let's say for one to go to get the itinerary ID we only need uh uh integration product ID so basically want to go
+Shauly Sahar: Do
+Soso Tughushi: trip ID and um and also what we are returning is encode coded with TLV and some cipher something. So we want to make sure that uh when the ID that we going to develop
+Avihai Shabtai: All
+Soso Tughushi: uh first of all will be compatible with existing clients. I mean if they're going to if they were receiving some random uh string and now they're going to see a number they won't be like oh what the hell is this?
+Avihai Shabtai: right.
+Soso Tughushi: I mean yeah I mean we just make need to make a decision about the ID format but in either way uh important thing is that with this ID
+Avihai Shabtai: Surely
+Soso Tughushi: we should then be able to perform get it inary
+ 
+ 
+00:53:09
+ 
+Avihai Shabtai: they should be agnostic to it. All the
+Shauly Sahar: Yeah, but uh theoretically yes.
+Avihai Shabtai: class
+Shauly Sahar: Uh we need to make sure that there are no escape characters there. And I think in the itinerary ID we have some um additional metadata like when the search was performed, how many packs
+Avihai Shabtai: who who we use is it somewhere.
+Shauly Sahar: um yes. So for the get it you use the number of packs. I think that for the events like uh we we are publishing that in the in some of the information in the event
+Soso Tughushi: Yeah, we were using the itinerary ideas on transport for of certain data
+Shauly Sahar: um
+Soso Tughushi: to
+Avihai Shabtai: Okay, let's let's take it off now. Okay.
+Soso Tughushi: Yeah. Um then there is the booking funnel. So booking final is consistent of uh get itinerary uh basically check out um create booking confirm booking uh seat lock which is being developed and uh incomplete results endpoint. So there is this incomplete results endpoint which uh is relevant if create booking takes longer than 60 seconds.
+ 
+ 
+00:54:36
+ 
+Soso Tughushi: same as for confirm booking. So if uh create booking took more than 60 seconds, we return that the result is incomplete and we also return the id of this process and then the uh user queries us uh in separate uh endpoint to get to check on the progress if it's finished or not.
+Shauly Sahar: uh first I think it's 15 second maybe for some clients 20 it's something uh that we changed lately but it's like that it do exist uh clients do use it and also have some short time out to wait for our response so I think that in want to go. We don't have um like it's a uh call until you get the results. Um so first we need to understand if we want to preserve this and if so we'll need to to implement uh that
+Soso Tughushi: Yeah, it depends on the integration.
+Shauly Sahar: um
+Soso Tughushi: Some integrations could be returning very quickly the create booking result, but some may take minutes or I don't know how much but longer than that.
+Shauly Sahar: I I saw I saw 90 seconds and something like that specifically those direct Railways
+ 
+ 
+00:56:04
+ 
+Soso Tughushi: Yeah, we could totally change the behavior.
+Shauly Sahar: bots.
+Soso Tughushi: Let's say to say that uh create booking might take long time for let's say new clients and uh you just going to have to wait and you have to increase the time out on your end if you have it lower than I don't know 2 minutes. Uh but uh when we did that actually some client complained uh that they would expect the answer to come sooner because we told them that maximum it's going to take 20 seconds.
+Avihai Shabtai: It might be configuration like we we discussed about it. Uh yeah,
+Shauly Sahar: Yeah, I think that we try to increase it and fair scanner
+Avihai Shabtai: that fell kind of um complaint.
+Shauly Sahar: complaint.
+Avihai Shabtai: So we probably need to to have it uh we have it currently in configuration, right? Like the sec the number Yeah. The waiting
+Shauly Sahar: Yes.
+Soso Tughushi: Yeah. Yeah. Just this incomplete uh results end point is quite actually I would say high difficulty because uh we would need to basically replicate the same mechanisms as we have right now in TC.
+ 
+ 
+00:57:07
+ 
+Soso Tughushi: So a background job that uh waits for the result uh and when it's uh it is arriving then it writes to a database with a success or failure and then the so at first let's say I initiate create booking then it took let's say more than 20 seconds which kicked off background background thread which uh is waiting for it and writes to uh database something and then the incomplete result looks at the record based on the ID that we returned from create booking. So yeah this is uh just uh se semantics of it.
+Shauly Sahar: Yeah, my my question on that we agree that we need to keep it right.
+Soso Tughushi: Yeah. Yeah. I mean because of complaints of clients but maybe it's a question to
+Shauly Sahar: Yeah. Yeah. Yeah.
+Avihai Shabtai: Sorry,
+Shauly Sahar: It was question to product.
+Avihai Shabtai: I I missed your
+Soso Tughushi: product
+Avihai Shabtai: question.
+Shauly Sahar: So it's not something that we can uh skip the the incomplete
+Avihai Shabtai: No,
+Shauly Sahar: results.
+Avihai Shabtai: for I mean again this is a change.
+ 
+ 
+00:58:21
+ 
+Avihai Shabtai: This is something that was implemented on the client side. They expect it unless we come up with a solution that they don't need it uh whatsoever. But not waiting forever is not is not Yeah.
+Shauly Sahar: Yeah, that's the solution.
+Avihai Shabtai: So
+Shauly Sahar: Yeah,
+Avihai Shabtai: no.
+Shauly Sahar: because in TC we had a limitation for that that the connection was cut after a few seconds and that's why this incomplete results were getting into
+Avihai Shabtai: Yeah. But even even if not again if
+Shauly Sahar: um I I
+Avihai Shabtai: if
+Shauly Sahar: understand that um we're almost on the time. I think that we still need a few more minutes.
+Eliran Friedman: Maybe maybe let's schedule a followup.
+Shauly Sahar: Um,
+Eliran Friedman: I think that I don't want to rush it and uh because like it's a very important meeting and at least I learn a
+Shauly Sahar: yeah.
+Eliran Friedman: lot here. So I like it that we have like few things to to discuss here.
+Soso Tughushi: Yeah,
+Eliran Friedman: Maybe
+Soso Tughushi: I mean I have sections left related to all the end rest of the end points then the client identity and client ID uh generation as well as existing client migration after uh we are done implementing.
+ 
+ 
+00:59:30
+ 
+Avihai Shabtai: Easily
+Eliran Friedman: Let's have 30 minutes or one more hour and continue it.
+Avihai Shabtai: one more
+Shauly Sahar: Is it?
+Eliran Friedman: Yeah,
+Avihai Shabtai: hour.
+Soso Tughushi: Okay. Uh any preference about your availability?
+Shauly Sahar: Yeah.
+Soso Tughushi: You you are the busiest. When I saw your calendar, I couldn't find tomorrow.
+Eliran Friedman: tomorrow.
+Avihai Shabtai: Next week. No, no, no. Tomorrow we have Q2 to
+Soso Tughushi: Sure.
+Avihai Shabtai: finalize
+Eliran Friedman: But we also need to finalize the the plan. or Monday or Friday.
+Avihai Shabtai: Monday.
+Eliran Friedman: Maybe Friday. Uh Monday.
+Avihai Shabtai: Enjoy.
+Eyal Eitan: Saturday
+Eliran Friedman: No, Monday. I'm pretty open s Monday.
+Eyal Eitan: night.
+Eliran Friedman: I'm
+Soso Tughushi: One
+Shauly Sahar: Yeah.
+Avihai Shabtai: Enjoy.
+Shauly Sahar: So,
+Soso Tughushi: thing.
+Eliran Friedman: pretty
+Shauly Sahar: so we have a lot of the team meetings. So, just find time and I will adjust the team meeting if
+Soso Tughushi: Okay. Okay.
+Shauly Sahar: needed.
+Eliran Friedman: So, okay.
+Soso Tughushi: Yeah.
+Eliran Friedman: I also wrote down the the things that we need to further think about.
+ 
+ 
+01:00:27
+ 
+Eliran Friedman: Um it was very very far of s thanks for
+Avihai Shabtai: Yeah. Yeah.
+Eliran Friedman: that down the
+Shauly Sahar: And we have much more in down there. Don't worry.
+Eliran Friedman: road a super important project is strategic one like it's also great
+Shauly Sahar: Yeah.
+Avihai Shabtai: looking forward.
+Shauly Sahar: Yeah.
+Avihai Shabtai: Yes.
+Eliran Friedman: things that are coming up and important
+Shauly Sahar: By the way,
+Eliran Friedman: things
+Shauly Sahar: everything was done here with cloud code, right?
+Soso Tughushi: Yep.
+Eliran Friedman: the code because tokens were not
+Eyal Eitan: It was it
+Soso Tughushi: Yeah. I ran out of the Yeah.
+Eyal Eitan: was
+Soso Tughushi: collaboration with CL.
+Avihai Shabtai: Yes. So, thank you.
+Shauly Sahar: guys. So,
+Soso Tughushi: Thanks
+Shauly Sahar: thank
+Soso Tughushi: everybody.
+Shauly Sahar: you
+Avihai Shabtai: Please stay for a second. Thanks. Bye, Sana. No, you can stay if you want.
+Shauly Sahar: Yeah,
+Soso Tughushi: Bye.
+Shauly Sahar: it's a work that we're going to give you with
+Avihai Shabtai: Yeah,
+Shauly Sahar: the No, that's okay.
+ 
+ 
+01:01:27
+ 
+Shauly Sahar: You don't need
+Avihai Shabtai: maybe you can stay as well because we are talking about the 206. I don't know if it's it's not relevant for you right now,
+Shauly Sahar: to.
+Avihai Shabtai: but maybe like some insights.
+Soso Tughushi: I would I don't know.
+Avihai Shabtai: Uh ah okay,
+Soso Tughushi: Go to Jim if don't mind.
+Avihai Shabtai: enjoy.
+Shauly Sahar: That's better.
+Avihai Shabtai: Byebye.
+Shauly Sahar: Bye. Can
+Avihai Shabtai: Sit down.
+Shauly Sahar: Fore
+Avihai Shabtai: direct want to go. Foreign speech. Foreign speech. Foreign speech. Big market. But anyway, Second.
+Eyal Eitan: Want to go
+Avihai Shabtai: Okay.
+Eyal Eitan: book? for
+Avihai Shabtai: achieve.
+Eyal Eitan: bug.
+Shauly Sahar: The
+Eyal Eitan: want to go. Okay.
+Avihai Shabtai: National
+Shauly Sahar: I caugh
+Avihai Shabtai: Okay,
+Shauly Sahar: you.
+Eyal Eitan: One to
+Avihai Shabtai: heat.
+Eyal Eitan: go. Explosive smash.
+Shauly Sahar: I
+Eyal Eitan: want to
+Shauly Sahar: know.
+Eyal Eitan: go.
+Avihai Shabtai: Hello.
+Eyal Eitan: Thank
+Avihai Shabtai: Hello.
+Eyal Eitan: you.
+ 
+ 
+01:06:00
+ 
+Avihai Shabtai: for value.
+Eyal Eitan: Okay.
+Avihai Shabtai: channel.
+Eyal Eitan: Foreign
+Avihai Shabtai: But I want to go
+Eyal Eitan: speech. Foreign speech. Foreign speech.
+Avihai Shabtai: Huh?
+Shauly Sahar: And I don't
+Avihai Shabtai: Speech. Speech.
+Shauly Sahar: No,
+Eyal Eitan: No.
+Avihai Shabtai: Foreign speech. Foreign speech. Foreign speech. The
+Eyal Eitan: Okay.
+Avihai Shabtai: Rosinker.
+Eyal Eitan: Okay. Okay. Want to go? Okay. second. Second Okay.
+Avihai Shabtai: Fore
+Eyal Eitan: Okay. Hello. specific to the book. Second
+Avihai Shabtai: She has to experiment. Second
+Eyal Eitan: Is that
+Avihai Shabtai: performance performance. What's
+Eyal Eitan: okay?
+Avihai Shabtai: up?
+Eyal Eitan: want to go. Okay.
+Avihai Shabtai: Okay. Okay. Okay.
+Eyal Eitan: Yeah. Okay.
+Avihai Shabtai: want to go. Okay. as preetch. Okay.
+Eyal Eitan: Hello. Open performance. Connect the sinker. for
+Avihai Shabtai: Canetch
+Shauly Sahar: preet.
+Avihai Shabtai: B2.
+ 
+ 
+01:12:42
+ 
+Shauly Sahar: Thank you.
+Eyal Eitan: want to go. We want to go.
+Avihai Shabtai: Come on. Come
+Eyal Eitan: respons
+Avihai Shabtai: on.
+Shauly Sahar: I think
+Avihai Shabtai: Go.
+Shauly Sahar: Yeah.
+Eyal Eitan: empty. Whatever.
+Avihai Shabtai: Okay.
+Eyal Eitan: Can can for
+Avihai Shabtai: Let me let me let me let me the center.
+Eyal Eitan: the
+Avihai Shabtai: Okay. foreign secret.
+Eyal Eitan: distribution. Okay.
+Avihai Shabtai: Okay.
+Eyal Eitan: What a
+Avihai Shabtai: Okay.
+Eyal Eitan: sec.
+Avihai Shabtai: Performance scanner. foreign.
+Shauly Sahar: I'm
+Avihai Shabtai: Okay.
+Eyal Eitan: Okay. Okay. to go.
+Avihai Shabtai: Thanks.
+Shauly Sahar: Um can
+Avihai Shabtai: Okay.
+Shauly Sahar: Vlad Fore! Foreign! Foreign! Huh? Hello. Give it a sound. Goodbye. I don't I don't know.
+Avihai Shabtai: with blood flows.
+Shauly Sahar: Um, we have we
+Avihai Shabtai: Mother ticket pick.
+Vlad Kalnitski: Hey
+Shauly Sahar: Hey.
+Vlad Kalnitski: goat.
+Shauly Sahar: Yeah. Vlad.
+ 
+ 
+01:21:39
+ 
+Avihai Shabtai: Come.
+Vlad Kalnitski: I need quar.
+Shauly Sahar: They got feature.
+Avihai Shabtai: Mine.
+Shauly Sahar: I seem currency. Okay. It is what it is.
+Avihai Shabtai: Okay. Reconciliation.
+Shauly Sahar: Currency conversion. Book date versus cancel
+Avihai Shabtai: Okay.
+Shauly Sahar: date.
+Avihai Shabtai: issue.
+Shauly Sahar: Want
+Avihai Shabtai: More
+Shauly Sahar: to
+Avihai Shabtai: Can the
+Shauly Sahar: in a booking
+Avihai Shabtai: next
+Shauly Sahar: revenue.
+Avihai Shabtai: Is that is that can
+Shauly Sahar: Okay. Okay. Uh
+Avihai Shabtai: Okay.
+Shauly Sahar: feature.
+Avihai Shabtai: Okay. Can
+Shauly Sahar: Okay. Revenue
+Avihai Shabtai: Okay.
+Shauly Sahar: confirmation sceed. Okay.
+Avihai Shabtai: Okay.
+Shauly Sahar: Okay.
+Avihai Shabtai: Okay.
+Shauly Sahar: Load
+Avihai Shabtai: notific. Okay.
+Shauly Sahar: Shadow returns.
+Avihai Shabtai: conversion.
+Shauly Sahar: Okay.
+Avihai Shabtai: Wow. currency rate.
+Shauly Sahar: I know.
+Avihai Shabtai: Ah, reconciliation. video per booking exchange rate. Oh no, exchange rate.
+Shauly Sahar: I got foreign.
+Avihai Shabtai: No, no, no, no.
+ 
+ 
+01:28:50
+ 
+Avihai Shabtai: I'm a chill.
+Vlad Kalnitski: as notification.
+Shauly Sahar: Okay.
+Vlad Kalnitski: The lo history.
+Shauly Sahar: Master booking history.
+Vlad Kalnitski: Can
+Shauly Sahar: update. Okay, I need
+Avihai Shabtai: Um, what was I invited?
+Shauly Sahar: That's me.
+Avihai Shabtai: Okay.
+Shauly Sahar: Okay.
+Avihai Shabtai: Is that
+Shauly Sahar: Okay.
+Avihai Shabtai: there?
+Shauly Sahar: plus revenue.
+Avihai Shabtai: cancellation. Okay.
+Shauly Sahar: Okay, we clearly Okay.
+Avihai Shabtai: for
+Shauly Sahar: No.
+Avihai Shabtai: exchange. for
+Shauly Sahar: Hello. Okay.
+Avihai Shabtai: Whatever you want to go
+Shauly Sahar: cancellation policy.
+Avihai Shabtai: to cancellation. cancellation.
+Shauly Sahar: Sabo
+Avihai Shabtai: Exchange rate of Am I going on?
+Shauly Sahar: want to go. Can
+Avihai Shabtai: Agent yeah. Oh, be it.
+Shauly Sahar: Recommended
+Avihai Shabtai: Net
+Shauly Sahar: price
+Avihai Shabtai: price
+Shauly Sahar: on
+Avihai Shabtai: fee.
+Shauly Sahar: Let's
+Avihai Shabtai: That's okay. As
+Shauly Sahar: call
+Avihai Shabtai: Okay.
+Shauly Sahar: Be sure
+Avihai Shabtai: Okay. Okay.
+ 
+ 
+01:36:05
+ 
+Avihai Shabtai: Yes.
+Shauly Sahar: is the nonref refundable nonrefundable.
+Avihai Shabtai: Huh?
+Shauly Sahar: lalom. partner. Fore
+Avihai Shabtai: Okay. You want to go to Okay.
+Shauly Sahar: speech.
+Avihai Shabtai: Hello. Oh, your local notificant.
+Shauly Sahar: Let's see.
+Avihai Shabtai: Okay.
+Shauly Sahar: Sh.
+Avihai Shabtai: I don't know. Um, lotus. Sag. Next.
+Shauly Sahar: Foreign
+Avihai Shabtai: Info input.
+Shauly Sahar: The show
+Avihai Shabtai: Sana
+Shauly Sahar: There it is. Maza.
+Avihai Shabtai: Okay.
+Shauly Sahar: Come. Put the ball in the basket.
+Avihai Shabtai: Activating trip
+Shauly Sahar: Cazello.
+Avihai Shabtai: cabins private. Private transfers.
+Shauly Sahar: She want to go. Alma Julia Alabins.
+Avihai Shabtai: cabins connections. Discounts any evidence promotion. Um, can Yeah. Okay. So, as um what we got is
+Shauly Sahar: Beautiful.
+Avihai Shabtai: Cancellation based on booking status.
+Shauly Sahar: Okay. Shad. Can to read the task
+Avihai Shabtai: telephone. Okay. do enable discount to client.
+ 
+ 
+01:45:05
+ 
+Avihai Shabtai: Extra ticket information.
+Shauly Sahar: And can
+Avihai Shabtai: Thank
+Shauly Sahar: man.
+Avihai Shabtai: you.
+Shauly Sahar: Okay.
+Avihai Shabtai: Okay. Can I
+Shauly Sahar: for if cabins mitoch
+Avihai Shabtai: Private transfers. Private transfers. Fore
+Shauly Sahar: Only box chart.
+Avihai Shabtai: is the mure. can program is
+Shauly Sahar: Philip again can
+Avihai Shabtai: Vlad is multi. Enable discount to client. Super bonus. dependencies
+Shauly Sahar: Okay, H
+Avihai Shabtai: consideration.
+Shauly Sahar: no effort unknown un okay will do uh design
+Avihai Shabtai: Kilo
+Shauly Sahar: Not effort. Discovery to be designed to be
+Avihai Shabtai: design.
+Shauly Sahar: determined to be
+Avihai Shabtai: Okay, sir.
+Shauly Sahar: deleted.
+Avihai Shabtai: If we have time. Okay. Dependency as a bon discounts. This comes RFC as an simple there. This container simple. Yes. Boom. Booking status. This ID should be done.
+Shauly Sahar: F4. Foreign
+Avihai Shabtai: Okay. Okay.
+Shauly Sahar: I got the
+ 
+ 
+01:51:46
+ 
+Avihai Shabtai: Discount.
+Shauly Sahar: right. Oh, okay. Support.
+Avihai Shabtai: Okay. Squad squad with big
+Shauly Sahar: Gamma
+Avihai Shabtai: catalog. Let me search.
+Shauly Sahar: inventory seat classes. says,
+Avihai Shabtai: Yeah, I don't
+Shauly Sahar: "Let's
+Avihai Shabtai: know.
+Shauly Sahar: Okay. Excellent. Sh. Okay. mute.
+Avihai Shabtai: Approach one. Okay.
+Shauly Sahar: Okay.
+Avihai Shabtai: Not recommended. Approach two. Boom. Boom. Boom. Boom. Boom. Verdict. Recommended. Approach. Verdict. Approach comparison. I'm not sure what's called V. Maybe one oppose change.
+Shauly Sahar: What's done?
+Avihai Shabtai: Extend the existing class table using class code and alias field.
+Shauly Sahar: Okay. Mani Mabel
+Avihai Shabtai: Descript reuse existing class code var and alias v columns in class table to store the same and name respectively.
+Shauly Sahar: a video.
+Avihai Shabtai: external class specifically designed to hold external class metadata. Okay. The table would have a for foreign key
+ 
+ 
+01:57:25
+ 
+Shauly Sahar: class ID.
+Avihai Shabtai: to the internal class ID and include fields for partner ID, external class ID and external class name. This correctly model is the one to many relationship between internal classes and external partner mapping.
+Shauly Sahar: seem like a dark mode. No.
+Avihai Shabtai: No, I know can. Okay. Can class ID,
+Shauly Sahar: Class ID operator
+Avihai Shabtai: partner ID, Maz
+Shauly Sahar: ID. is a per client.
+Avihai Shabtai: Okay.
+Shauly Sahar: Okay. ID not sleeper plus.
+Avihai Shabtai: A class ID class
+Shauly Sahar: Okay.
+Avihai Shabtai: ID
+Shauly Sahar: The alias extension.
+Avihai Shabtai: wise created by on update step
+Shauly Sahar: Okay.
+Avihai Shabtai: architectly support one to many
+Shauly Sahar: Low down by kilo.
+Avihai Shabtai: correctly support one to many. One internal class can have multiple externalities present. Ah, okay. Does not touch any existing table or logic maintained by inventory team as a first class entity. Mitigation migration from map class to reduce the initial data population effort for existing data. Uh the existing map from map class can be migrated the new table as a new time seed.
+ 
+ 
+02:01:03
+ 
+Avihai Shabtai: Okay. Call to keep class external sync with future changes in map class. Database trigger can be added automatically propagate new or updated records. Wow. This approach allows approach two to launch with fully populated data set from day one. When the inventory team to reenter existing mapping manually once the migration is completed is complete and the new table is fully adopted the trigger and be removed and map class decoupled from class external lama requires design migration script trigger setup and middleware lookup. Logic trigger introduces a temporary coupling between mapor effort medium high reduced from high due to data seeding from upl verdict approach reuse effort low consigned for this purpose. Yes.
+Shauly Sahar: Come there, folks.
+Avihai Shabtai: Temporary bridge with a plant mig. Ah okay. Proceed with approach to if timeline is constraint. Timeline is constraint. Yeah, that's okay. Okay. Yes. But we have it in DB for many integration already. So it will be for many of them.
+ 
+ 
+02:03:50
+ 
+Avihai Shabtai: We can hardcore it only for the booster.
+Shauly Sahar: Canio That's
+Avihai Shabtai: It definitely will affect search somehow.
+Shauly Sahar: him.
+Avihai Shabtai: I mean latency uh but the number of clients who really need it look looks limited. I don't as a temporary but fast and reliable solution. I suggest creating the a new table something like class alias store class ID operator ID operator class ID and operator class name then join this table and search and extend class DTO is it DTO
+Shauly Sahar: the database transform object. The object
+Avihai Shabtai: we could also create a trigger to populate whenever any change are made to the map class table in the future when all map command are moved to the SI system. Maz, we will need to change the way the current data in the table is maintained. Alex
+Shauly Sahar: I don't
+Avihai Shabtai: details.
+Shauly Sahar: know.
+Avihai Shabtai: Okay.
+Shauly Sahar: They should sana.
+Avihai Shabtai: Sana, we reviewed your revised RFC regarding sit class. Boom. Um as from our uh point of view all your suggestions are basically transparent.
+ 
+ 
+02:07:03
+ 
+Shauly Sahar: Okay.
+Avihai Shabtai: We will get the
+Shauly Sahar: Shen partner
+Avihai Shabtai: partner.
+Shauly Sahar: can
+Avihai Shabtai: Per partner
+Shauly Sahar: say partner No. All right.
+Avihai Shabtai: suggestions and from from our point of view. There are two main response
+Shauly Sahar: point.
+Avihai Shabtai: one. We need it fast. Uh it blocks uh the migration to consume want to go. Um the busus
+Shauly Sahar: The bus want to
+Avihai Shabtai: integration and there
+Shauly Sahar: go.
+Avihai Shabtai: for the triplex sunset. sunset time. We need
+Shauly Sahar: to know if we can uh what what's the granularity that we can control this field. Sh.
+Avihai Shabtai: That's no
+Shauly Sahar: Okay.
+Avihai Shabtai: We need as to know we need to make sure that the solution will be relevant. Are you partner partner wise or operator
+Shauly Sahar: What's
+Avihai Shabtai: wise?
+Shauly Sahar: here?
+Avihai Shabtai: for Okay. for
+Shauly Sahar: more integria.
+Avihai Shabtai: Want to go?
+Shauly Sahar: Can want to go API classes.
+Avihai Shabtai: Master
+ 
+ 
+02:15:03
+ 
+Shauly Sahar: F4.
+Avihai Shabtai: Yo, as man with
+Shauly Sahar: I
+Avihai Shabtai: him.
+Shauly Sahar: got
+Avihai Shabtai: lot of stuff. Why? Why passenger name seat fees So let's start.
+Shauly Sahar: Call
+Avihai Shabtai: They got a seat
+Shauly Sahar: the
+Avihai Shabtai: class.
+Shauly Sahar: Natali.
+Avihai Shabtai: Still, I
+Shauly Sahar: Can
+Avihai Shabtai: guess
+Shauly Sahar: um classes Can I see that? All right. Um um
+Avihai Shabtai: I'm trying to make sure that the solution will be relevant. It will be will be for all latam lower latam clients for all
+Shauly Sahar: All client that consume
+Avihai Shabtai: clients. Yes. that consume that consume
+Shauly Sahar: uh
+Avihai Shabtai: the specifically. Want to go scoring ranking scoring. Okay. per partner.
+Shauly Sahar: Okay. Zakfellow.
+Avihai Shabtai: What are we doing? We need to make sure that the solution will be for all clients that consume the anibus inventory.
+Shauly Sahar: Can
+Avihai Shabtai: All clients operator.
+Shauly Sahar: The per
+ 
+ 
+02:21:28
+ 
+Avihai Shabtai: Supplier can
+Shauly Sahar: supplier.
+Avihai Shabtai: mark
+Shauly Sahar: to go.
+Avihai Shabtai: As insert table, blah blah
+Shauly Sahar: Me dad. Me
+Avihai Shabtai: blah.
+Shauly Sahar: dad.
+Avihai Shabtai: Why? Oh my god.
+Shauly Sahar: This volume
+Avihai Shabtai: Ah, it's
+Shauly Sahar: Um, honey must machine. Okay.
+Avihai Shabtai: Okay.
+Shauly Sahar: Okay.
+Avihai Shabtai: Let us search
+Shauly Sahar: I like the song again.
+Avihai Shabtai: to go Asia.
+Shauly Sahar: Henley,
+Avihai Shabtai: want to go.
+Shauly Sahar: it's all
+Avihai Shabtai: doesn't
+Shauly Sahar: Amazon
+Avihai Shabtai: show
+Shauly Sahar: discard pizza as a sit classes.
+Avihai Shabtai: again.
+Shauly Sahar: says,
+Avihai Shabtai: want to go cloud. Okay.
+Shauly Sahar: "He
+Avihai Shabtai: The definition of new client can on board on the new system with their existing TC resources consumption. The the definition of Dstone
+Shauly Sahar: No,
+Avihai Shabtai: who milestone
+Shauly Sahar: we get a client. Thanks.
+Avihai Shabtai: can Okay.
+Shauly Sahar: Oh,
+Avihai Shabtai: activating.com.
+Shauly Sahar: My
+Avihai Shabtai: Ticket issuance failure when purchasing real velvet train from
+ 
+ 
+02:26:18
+ 
+Shauly Sahar: gear.
+Avihai Shabtai: Bangkok to Changai. The error of message returned by the API booking item missing. We have several questions that require your assistance.
+Shauly Sahar: Okay.
+Avihai Shabtai: The API response indicates that we didn't pass additional field related parameters. However, we are not clear on how to pass this field. Could you please provide a relevant request example for our request log for the failure order is
+Shauly Sahar: Okay.
+Avihai Shabtai: attached. No, no, no.
+Shauly Sahar: Okay. Okay.
+Avihai Shabtai: We notice the T railway ticket type include pickup paper ticket and others. Provide all enumeration for of ticket types and the corresponding order creation request example for each type. This will enable us to pass parameters according to API standard and ensure the success rate of ticket issuance. Some train schedule require passing the seat selection field.
+Shauly Sahar: Okay.
+Avihai Shabtai: Could you please provide the enumeration for this field on the barrel automatic
+Shauly Sahar: See selection
+Avihai Shabtai: selection?
+Shauly Sahar: is
+Avihai Shabtai: Noation for this field.
+Shauly Sahar: okay.
+ 
+ 
+02:28:52
+ 
+Avihai Shabtai: Did you provide API documentation? Did you complete API documentation? It's difficult for us to have comprehensive understanding for the of the endpoints. Currently, we can only attempt to analyze and resolve issues various serves with significant integration efficiency. If a complete API could be provided, documentation could be provided. would be a great assistance to our anyway. We're testing again. field.
+Shauly Sahar: I'm not
+Avihai Shabtai: We believe we believe it is sufficient to display the original route options to the customer.
+Shauly Sahar: in
+Avihai Shabtai: As for advanced booking period issue, we would appreciate if the API could return an indicator or a clear error message to help us provide relevant hands. We have put forward our preferred solution. Would like your request assessment. Now we need a one to push it
+Shauly Sahar: Probably
+Avihai Shabtai: up.
+Shauly Sahar: so. Fore!
+Avihai Shabtai: search. Okay.
+Shauly Sahar: Foreign! Foreign!
+Avihai Shabtai: Can we have better message? Okay.
+Shauly Sahar: Email, mobile phone, passenger, first name,
+Avihai Shabtai: That's
+Shauly Sahar: last name, passenger ID, Jander, date of birth,
+Avihai Shabtai: it.
+Shauly Sahar: his child. Okay. Islam. Additional fields.
+Avihai Shabtai: Okay.
+Shauly Sahar: Okay. Uh, delivery points. Pickup ticket at one to go. Kuk branch. Okay.
+Avihai Shabtai: Pick up a ticket that want to go
+Shauly Sahar: Okay. Can delivery
+Avihai Shabtai: branch.
+Shauly Sahar: cost additional cost delivery hotel checkin. foreign.
+Avihai Shabtai: Okay. Okay.
+Shauly Sahar: It's ma
+Avihai Shabtai: trip.com
+Shauly Sahar: for mountain.
+Avihai Shabtai: API API documentation. Could you provide API documentation? Can due to the lack of complete API documentation, it's difficult for us to compare
+Shauly Sahar: Gone.
+Avihai Shabtai: documentation. I'm not clear how to pass the field an additional field the request pickup type. Could you provide the enumerations of ticket types and the corresponding order creation request example for each order?
+ 
+ 
+Transcription ended after 02:35:38
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.

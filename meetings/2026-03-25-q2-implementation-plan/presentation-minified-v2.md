@@ -89,7 +89,7 @@ All direct DB reads inside F3. Q2 = new clients only, native 12go IDs.
 | **GetItinerary**       | Booking schema parser (~1,180 lines)         | High       |
 | **CreateBooking**      | Reserve request assembly (reverse of parser) | High       |
 | **ConfirmBooking**     | Timeout handling, no-persistence design      | Medium     |
-| **Incomplete Results** | Async fallback for slow Create/Confirm       | Medium     |
+| **Incomplete Results** | Async fallback for slow Create/Confirm       | High       |
 | **SeatLock**           | Race condition until 12go ships native lock  | Low        |
 
 
@@ -114,9 +114,9 @@ All direct DB reads inside F3. Q2 = new clients only, native 12go IDs.
 
 | Endpoint              | Key Challenge                       | Difficulty |
 | --------------------- | ----------------------------------- | ---------- |
-| **GetBookingDetails** | Runtime API call replaces DB read   | Medium     |
+| **GetBookingDetails** | Runtime API call replaces DB read   | Low        |
 | **GetTicket**         | Ticket URL stability unknown        | Medium     |
-| **CancelBooking**     | Use 12go's `refund_amount` directly | Medium     |
+| **CancelBooking**     | Use 12go's `refund_amount` directly | Low        |
 
 
 ---
@@ -140,17 +140,20 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 **Not a blocker** -- this is an improvement. Either way we need client_id-to-API-key correspondence in the DB.
 
 **Proposal**:
+
 1. Remove `client_id` from all B2B endpoint URLs
 2. Derive client identity from the API key (F3 already resolves `apikey` -> `usr_id`)
 3. Assign a human-readable alias (e.g., "bookaway") during onboarding for metrics/logs
 
 **Draft**: `b2b_clients` table in B2B migration schema:
 
-| Field | Purpose |
-|-------|---------|
-| `client_id` (PK) | Human-readable alias |
-| `api_key_usr_id` (FK) | Links to F3 user/apikey |
-| `webhook_url`? | Notification delivery *(depends on notification architecture)* |
+
+| Field                 | Purpose                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `client_id` (PK)      | Human-readable alias                                           |
+| `api_key_usr_id` (FK) | Links to F3 user/apikey                                        |
+| `webhook_url`?        | Notification delivery *(depends on notification architecture)* |
+
 
 ---
 
@@ -161,13 +164,13 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 ### What Changes for Each Client
 
 
-| Change | Client Action | Our Action |
-|---|---|---|
-| **New base URL** | Update config | Provide URL + docs |
-| **New API key** | Adopt 12go API key | Provision key |
-| **Station/Operator IDs** | Re-fetch master data or use mapping | Build mapping table from Fuji DynamoDB |
-| **Existing bookings** | Nothing | Keep old system for post-booking ops only |
-| **Notifications** | Confirm webhook URL | Re-register |
+| Change                   | Client Action                       | Our Action                                |
+| ------------------------ | ----------------------------------- | ----------------------------------------- |
+| **New base URL**         | Update config                       | Provide URL + docs                        |
+| **New API key**          | Adopt 12go API key                  | Provision key                             |
+| **Station/Operator IDs** | Re-fetch master data or use mapping | Build mapping table from Fuji DynamoDB    |
+| **Existing bookings**    | Nothing                             | Keep old system for post-booking ops only |
+| **Notifications**        | Confirm webhook URL                 | Re-register                               |
 
 
 **Key message**: For most clients, migration = new URL + new API key + re-fetch station list. Rollout: internal/test -> low-volume -> high-volume.
@@ -183,6 +186,8 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 ### Data to Export Before .NET Shutdown
 
 Not yet scheduled -- no rush. But before shutting down each piece:
+
 - Station/Operator/POI ID mappings (Fuji DynamoDB)
 - API key inventory (AppConfig + Postgres)
 - Client identity records (David's service)
+
