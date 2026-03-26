@@ -2,307 +2,731 @@
     "vehicles": [
         {
             "id": "16779-Train",
-            "name": "train",
+            "name": "Train",
             "seat_classes": [
                 {
                     "id": "12",
-                    "name": "2nd Class Sleeper AC"
+                    "name": "2nd Class Sleeper AC",
+                    "description": "",
+                    "keywords": null,
+                    "images": [
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/12-0-0-0-inside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_INSIDE"
+                        },
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/12-0-0-0-outside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_OUTSIDE"
+                        }
+                    ],
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Food",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "16",
-                    "name": "Class 3 Fan"
+                    "name": "Class 3 Fan",
+                    "description": "",
+                    "keywords": null,
+                    "images": [
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/16-0-0-0-inside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_INSIDE"
+                        },
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/16-0-0-0-outside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_OUTSIDE"
+                        }
+                    ],
+                    "amenities": [
+                        "WC"
+                    ]
                 },
                 {
                     "id": "15",
-                    "name": "2nd Class Fan seats only"
+                    "name": "2nd Class Fan seats only",
+                    "description": "",
+                    "keywords": null,
+                    "images": [
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/15-0-0-0-inside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_INSIDE"
+                        },
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/15-0-0-0-outside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_OUTSIDE"
+                        }
+                    ],
+                    "amenities": [
+                        "WC",
+                        "Food",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "14",
-                    "name": "2nd Class AC seats only"
+                    "name": "2nd Class AC seats only",
+                    "description": "",
+                    "keywords": null,
+                    "images": [
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/14-0-0-0-inside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_INSIDE"
+                        },
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/14-0-0-0-outside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_OUTSIDE"
+                        }
+                    ],
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Food",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "5894",
-                    "name": "1st Class Sleeper AC"
+                    "name": "1st Class Sleeper AC",
+                    "description": "",
+                    "keywords": null,
+                    "images": [
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/5894-0-0-0-inside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_INSIDE"
+                        },
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/5894-0-0-0-outside.jpeg",
+                            "width": 1200,
+                            "height": 800,
+                            "type": "TYPE_CLASS_OUTSIDE"
+                        }
+                    ],
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "6985-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "2057",
-                    "name": "Standard"
+                    "name": "Standard",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "231-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "4",
-                    "name": "VIP"
+                    "name": "VIP",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "6",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Steward"
+                    ]
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "32030-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "7",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "3129",
-                    "name": "Super VIP"
+                    "name": "Super VIP",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "5741",
-                    "name": "Super VIP Bus"
+                    "name": "Super VIP Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "3125-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "409",
-                    "name": "VIP 20"
+                    "name": "VIP 20",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "2485",
-                    "name": "Express 44"
+                    "name": "Express 44",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "1721",
-                    "name": "VIP 33"
+                    "name": "VIP 33",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "33644-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "3",
-                    "name": "VIP 24"
+                    "name": "VIP 24",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "4",
-                    "name": "VIP"
+                    "name": "VIP",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "6",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Steward"
+                    ]
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "27971-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "6",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Steward"
+                    ]
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "31995-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "6",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Steward"
+                    ]
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "50197-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "5",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "12804-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "1992",
-                    "name": "Express 40"
+                    "name": "Express 40",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "6575",
-                    "name": "VIP Bus"
+                    "name": "VIP Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "13981-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "2324",
-                    "name": "First Class"
+                    "name": "First Class",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "3301",
-                    "name": "Gold Class"
+                    "name": "Gold Class",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "26146-Van",
-            "name": "van",
+            "name": "Van",
             "seat_classes": [
                 {
                     "id": "6271",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "3178-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "7",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "6272",
-                    "name": "Express"
+                    "name": "Express",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "7525",
-                    "name": "Minivan + Bus"
+                    "name": "Minivan + Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "3077",
-                    "name": "Standard"
+                    "name": "Standard",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "7-Train",
-            "name": "train",
+            "name": "Train",
             "seat_classes": [
                 {
                     "id": "12",
-                    "name": "2nd Class Sleeper AC"
+                    "name": "2nd Class Sleeper AC",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Food",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "14",
-                    "name": "2nd Class AC seats only"
+                    "name": "2nd Class AC seats only",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Food",
+                        "Steward"
+                    ]
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "30038-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "4385",
-                    "name": "Bus"
+                    "name": "Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "30461-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "4",
-                    "name": "VIP"
+                    "name": "VIP",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": [
+                        "Aircon",
+                        "WC",
+                        "Snack",
+                        "Food",
+                        "TV",
+                        "Steward"
+                    ]
                 },
                 {
                     "id": "7923",
-                    "name": "Bus VIP24"
+                    "name": "Bus VIP24",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "7925",
-                    "name": "Premium Bus"
+                    "name": "Premium Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "7926",
-                    "name": "Premium Bus"
+                    "name": "Premium Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "1726",
-                    "name": "VIP 32"
+                    "name": "VIP 32",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "3494",
-                    "name": "Normal Bus"
+                    "name": "Normal Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "3874",
-                    "name": "Bus + Van"
+                    "name": "Bus + Van",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "7943",
-                    "name": "Bus Standard"
+                    "name": "Bus Standard",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "7922",
-                    "name": "Bus VIP24"
+                    "name": "Bus VIP24",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "40424-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "4385",
-                    "name": "Bus"
+                    "name": "Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "30461-Van",
-            "name": "van",
+            "name": "Van",
             "seat_classes": [
                 {
                     "id": "6246",
-                    "name": "Minivan + Bus"
+                    "name": "Minivan + Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 },
                 {
                     "id": "1726",
-                    "name": "VIP 32"
+                    "name": "VIP 32",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "46913-Bus",
-            "name": "bus",
+            "name": "Bus",
             "seat_classes": [
                 {
                     "id": "5121",
-                    "name": "Bus"
+                    "name": "Bus",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         },
         {
             "id": "3178-Van",
-            "name": "van",
+            "name": "Van",
             "seat_classes": [
                 {
                     "id": "3077",
-                    "name": "Standard"
+                    "name": "Standard",
+                    "description": "",
+                    "keywords": null,
+                    "images": null,
+                    "amenities": []
                 }
-            ]
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
         }
     ],
     "segments": [
@@ -1471,7 +1895,7 @@
     ],
     "itineraries": [
         {
-            "id": "TH000300044mDt00c01hdkRw:2026-04-01T18:57",
+            "id": "TH000300044mDt00c01hdkRw-2026-04-01-18:57",
             "departure_segments": [
                 "16779-3-4-2026-04-01T18:57-2026-04-02T07:15-12"
             ],
@@ -1486,14 +1910,14 @@
             ],
             "number_of_available_seats": 57,
             "pricing": {
-                "net_price": {
-                    "amount": "457.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "507.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "457.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1504,7 +1928,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00c03BNR3q:2026-04-01T20:23",
+            "id": "TH000300044mDt00c03BNR3q-2026-04-01-20:23",
             "departure_segments": [
                 "16779-3-4-2026-04-01T20:23-2026-04-02T08:40-12"
             ],
@@ -1519,14 +1943,14 @@
             ],
             "number_of_available_seats": 32,
             "pricing": {
-                "net_price": {
-                    "amount": "409.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "459.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "409.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1537,7 +1961,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00g03BNR3q:2026-04-01T20:23",
+            "id": "TH000300044mDt00g03BNR3q-2026-04-01-20:23",
             "departure_segments": [
                 "16779-3-4-2026-04-01T20:23-2026-04-02T08:40-16"
             ],
@@ -1552,14 +1976,14 @@
             ],
             "number_of_available_seats": 42,
             "pricing": {
-                "net_price": {
-                    "amount": "643.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "693.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "643.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1570,7 +1994,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00c0IrgTo0:2026-04-01T14:34",
+            "id": "TH000300044mDt00c0IrgTo0-2026-04-01-14:34",
             "departure_segments": [
                 "16779-3-4-2026-04-01T14:34-2026-04-02T04:05-12"
             ],
@@ -1585,14 +2009,14 @@
             ],
             "number_of_available_seats": 19,
             "pricing": {
-                "net_price": {
-                    "amount": "480.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "530.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "480.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1603,7 +2027,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00c0JFdHk0:2026-04-01T22:50",
+            "id": "TH000300044mDt00c0JFdHk0-2026-04-01-22:50",
             "departure_segments": [
                 "16779-3-4-2026-04-01T22:50-2026-04-02T12:10-12"
             ],
@@ -1618,14 +2042,14 @@
             ],
             "number_of_available_seats": 34,
             "pricing": {
-                "net_price": {
-                    "amount": "790.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "840.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "790.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1636,7 +2060,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00f0JFdHk0:2026-04-01T22:50",
+            "id": "TH000300044mDt00f0JFdHk0-2026-04-01-22:50",
             "departure_segments": [
                 "16779-3-4-2026-04-01T22:50-2026-04-02T12:10-15"
             ],
@@ -1651,14 +2075,14 @@
             ],
             "number_of_available_seats": 11,
             "pricing": {
-                "net_price": {
-                    "amount": "250.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "300.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "250.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1669,7 +2093,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00g0JFdHk0:2026-04-01T22:50",
+            "id": "TH000300044mDt00g0JFdHk0-2026-04-01-22:50",
             "departure_segments": [
                 "16779-3-4-2026-04-01T22:50-2026-04-02T12:10-16"
             ],
@@ -1684,14 +2108,14 @@
             ],
             "number_of_available_seats": 24,
             "pricing": {
-                "net_price": {
-                    "amount": "372.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "422.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "372.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1702,7 +2126,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00e02CsiAv:2026-04-01T09:13",
+            "id": "TH000300044mDt00e02CsiAv-2026-04-01-09:13",
             "departure_segments": [
                 "16779-3-4-2026-04-01T09:13-2026-04-01T19:30-14"
             ],
@@ -1717,14 +2141,14 @@
             ],
             "number_of_available_seats": 25,
             "pricing": {
-                "net_price": {
-                    "amount": "217.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "267.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "217.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1735,7 +2159,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00f03BNR3q:2026-04-01T20:22",
+            "id": "TH000300044mDt00f03BNR3q-2026-04-01-20:22",
             "departure_segments": [
                 "16779-3-4-2026-04-01T20:22-2026-04-02T08:40-15"
             ],
@@ -1750,14 +2174,14 @@
             ],
             "number_of_available_seats": 55,
             "pricing": {
-                "net_price": {
-                    "amount": "613.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "663.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "613.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1768,7 +2192,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt1x403BNR3q:2026-04-01T20:22",
+            "id": "TH000300044mDt1x403BNR3q-2026-04-01-20:22",
             "departure_segments": [
                 "16779-3-4-2026-04-01T20:22-2026-04-02T08:40-5894"
             ],
@@ -1783,14 +2207,14 @@
             ],
             "number_of_available_seats": 27,
             "pricing": {
-                "net_price": {
-                    "amount": "599.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "649.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "599.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1801,7 +2225,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH000300044mDt00f0IrgTo0:2026-04-01T14:34",
+            "id": "TH000300044mDt00f0IrgTo0-2026-04-01-14:34",
             "departure_segments": [
                 "16779-3-4-2026-04-01T14:34-2026-04-02T04:05-15"
             ],
@@ -1816,14 +2240,14 @@
             ],
             "number_of_available_seats": 26,
             "pricing": {
-                "net_price": {
-                    "amount": "700.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "750.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "700.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1834,7 +2258,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH000300044mDt00g0IrgTo0:2026-04-01T14:34",
+            "id": "TH000300044mDt00g0IrgTo0-2026-04-01-14:34",
             "departure_segments": [
                 "16779-3-4-2026-04-01T14:34-2026-04-02T04:05-16"
             ],
@@ -1849,14 +2273,14 @@
             ],
             "number_of_available_seats": 37,
             "pricing": {
-                "net_price": {
-                    "amount": "666.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "716.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "666.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1867,7 +2291,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH000300044mDt1x401hdkRw:2026-04-01T18:57",
+            "id": "TH000300044mDt1x401hdkRw-2026-04-01-18:57",
             "departure_segments": [
                 "16779-3-4-2026-04-01T18:57-2026-04-02T07:15-5894"
             ],
@@ -1882,14 +2306,14 @@
             ],
             "number_of_available_seats": 20,
             "pricing": {
-                "net_price": {
-                    "amount": "399.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "449.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "399.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1900,7 +2324,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p01kN1OFb0xb03SPY6d:2026-04-01T07:25",
+            "id": "TH013p01kN1OFb0xb03SPY6d-2026-04-01-07:25",
             "departure_segments": [
                 "6985-4055-5133-2026-04-01T07:25-2026-04-01T19:18-2057"
             ],
@@ -1915,14 +2339,14 @@
             ],
             "number_of_available_seats": 43,
             "pricing": {
-                "net_price": {
-                    "amount": "214.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "235.40",
                     "currency": "THB",
                     "price_type": "Exact"
+                },
+                "net_price": {
+                    "amount": "214.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "21.40",
@@ -1933,7 +2357,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l03Jb00403SPY6d:2026-04-01T18:30",
+            "id": "TH013p030l03Jb00403SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "231-4055-11553-2026-04-01T18:30-2026-04-02T06:45-4"
             ],
@@ -1948,14 +2372,14 @@
             ],
             "number_of_available_seats": 59,
             "pricing": {
-                "net_price": {
-                    "amount": "477.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "527.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "477.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1966,7 +2390,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030l03Jb00603SPY6d:2026-04-01T17:00",
+            "id": "TH013p030l03Jb00603SPY6d-2026-04-01-17:00",
             "departure_segments": [
                 "231-4055-11553-2026-04-01T17:00-2026-04-02T05:15-6"
             ],
@@ -1981,14 +2405,14 @@
             ],
             "number_of_available_seats": 30,
             "pricing": {
-                "net_price": {
-                    "amount": "372.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "422.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "372.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -1999,7 +2423,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030l0Adb00703SPY6d:2026-04-01T07:00",
+            "id": "TH013p030l0Adb00703SPY6d-2026-04-01-07:00",
             "departure_segments": [
                 "32030-4055-11553-2026-04-01T07:00-2026-04-01T18:00-7"
             ],
@@ -2020,14 +2444,14 @@
             ],
             "number_of_available_seats": 59,
             "pricing": {
-                "net_price": {
-                    "amount": "167.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "217.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "167.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2038,7 +2462,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l0Adb0Ot03SPY6d:2026-04-01T19:30",
+            "id": "TH013p030l0Adb0Ot03SPY6d-2026-04-01-19:30",
             "departure_segments": [
                 "32030-4055-11553-2026-04-01T19:30-2026-04-02T05:15-3129"
             ],
@@ -2059,14 +2483,14 @@
             ],
             "number_of_available_seats": 51,
             "pricing": {
-                "net_price": {
-                    "amount": "385.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "435.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "385.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2077,7 +2501,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l0Adb1uB03SPY6d:2026-04-01T19:45",
+            "id": "TH013p030l0Adb1uB03SPY6d-2026-04-01-19:45",
             "departure_segments": [
                 "32030-4055-11553-2026-04-01T19:45-2026-04-02T06:05-5741"
             ],
@@ -2098,14 +2522,14 @@
             ],
             "number_of_available_seats": 48,
             "pricing": {
-                "net_price": {
-                    "amount": "529.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "579.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "529.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2116,7 +2540,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l0Opb06B03SPY6d:2026-04-01T21:19",
+            "id": "TH013p030l0Opb06B03SPY6d-2026-04-01-21:19",
             "departure_segments": [
                 "3125-4055-11553-2026-04-01T21:19-2026-04-02T07:49-409"
             ],
@@ -2131,14 +2555,14 @@
             ],
             "number_of_available_seats": 26,
             "pricing": {
-                "net_price": {
-                    "amount": "286.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "336.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "286.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2149,7 +2573,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l0Opb0E503SPY6d:2026-04-01T20:10",
+            "id": "TH013p030l0Opb0E503SPY6d-2026-04-01-20:10",
             "departure_segments": [
                 "3125-4055-11553-2026-04-01T20:10-2026-04-02T06:40-2485"
             ],
@@ -2164,14 +2588,14 @@
             ],
             "number_of_available_seats": 25,
             "pricing": {
-                "net_price": {
-                    "amount": "627.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "677.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "627.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2182,7 +2606,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l0Opb0rL03SPY6d:2026-04-01T07:00",
+            "id": "TH013p030l0Opb0rL03SPY6d-2026-04-01-07:00",
             "departure_segments": [
                 "3125-4055-11553-2026-04-01T07:00-2026-04-01T17:30-1721"
             ],
@@ -2197,14 +2621,14 @@
             ],
             "number_of_available_seats": 33,
             "pricing": {
-                "net_price": {
-                    "amount": "543.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "593.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "543.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2215,7 +2639,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p030l0sib00303SPY6d:2026-04-01T20:00",
+            "id": "TH013p030l0sib00303SPY6d-2026-04-01-20:00",
             "departure_segments": [
                 "33644-4055-11553-2026-04-01T20:00-2026-04-02T07:00-3"
             ],
@@ -2230,14 +2654,14 @@
             ],
             "number_of_available_seats": 50,
             "pricing": {
-                "net_price": {
-                    "amount": "571.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "621.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "571.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2248,7 +2672,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030l0sib00403SPY6d:2026-04-01T16:00",
+            "id": "TH013p030l0sib00403SPY6d-2026-04-01-16:00",
             "departure_segments": [
                 "33644-4055-11553-2026-04-01T16:00-2026-04-02T02:00-4"
             ],
@@ -2263,14 +2687,14 @@
             ],
             "number_of_available_seats": 48,
             "pricing": {
-                "net_price": {
-                    "amount": "494.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "544.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "494.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2281,7 +2705,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030l0sib00603SPY6d:2026-04-01T06:00",
+            "id": "TH013p030l0sib00603SPY6d-2026-04-01-06:00",
             "departure_segments": [
                 "33644-4055-11553-2026-04-01T06:00-2026-04-01T16:30-6"
             ],
@@ -2296,14 +2720,14 @@
             ],
             "number_of_available_seats": 23,
             "pricing": {
-                "net_price": {
-                    "amount": "639.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "689.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "639.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2314,7 +2738,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030l7h9b00603SPY6d:2026-04-01T20:00",
+            "id": "TH013p030l7h9b00603SPY6d-2026-04-01-20:00",
             "departure_segments": [
                 "27971-4055-11553-2026-04-01T20:00-2026-04-02T06:10-6"
             ],
@@ -2329,14 +2753,14 @@
             ],
             "number_of_available_seats": 43,
             "pricing": {
-                "net_price": {
-                    "amount": "558.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "608.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "558.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2347,7 +2771,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030l8k3b00603SPY6d:2026-04-01T10:15",
+            "id": "TH013p030l8k3b00603SPY6d-2026-04-01-10:15",
             "departure_segments": [
                 "31995-4055-11553-2026-04-01T10:15-2026-04-01T20:25-6"
             ],
@@ -2362,14 +2786,14 @@
             ],
             "number_of_available_seats": 43,
             "pricing": {
-                "net_price": {
-                    "amount": "419.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "469.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "419.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2380,7 +2804,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p030ld3Db00503SPY6d:2026-04-01T07:00",
+            "id": "TH013p030ld3Db00503SPY6d-2026-04-01-07:00",
             "departure_segments": [
                 "50197-4055-11553-2026-04-01T07:00-2026-04-01T18:25-5"
             ],
@@ -2395,14 +2819,14 @@
             ],
             "number_of_available_seats": 15,
             "pricing": {
-                "net_price": {
-                    "amount": "215.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "285.95",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "215.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "70.95",
@@ -2413,7 +2837,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p0Dqc3kwb0w803SPY6d:2026-04-01T07:25",
+            "id": "TH013p0Dqc3kwb0w803SPY6d-2026-04-01-07:25",
             "departure_segments": [
                 "12804-4055-151540-2026-04-01T07:25-2026-04-01T17:35-1992"
             ],
@@ -2428,14 +2852,14 @@
             ],
             "number_of_available_seats": 57,
             "pricing": {
-                "net_price": {
-                    "amount": "363.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "417.45",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "363.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "54.45",
@@ -2446,7 +2870,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p0Dqc3kwb1I303SPY6d:2026-04-01T19:00",
+            "id": "TH013p0Dqc3kwb1I303SPY6d-2026-04-01-19:00",
             "departure_segments": [
                 "12804-4055-151540-2026-04-01T19:00-2026-04-02T05:10-6575"
             ],
@@ -2461,14 +2885,14 @@
             ],
             "number_of_available_seats": 39,
             "pricing": {
-                "net_price": {
-                    "amount": "571.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "656.65",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "571.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "85.65",
@@ -2479,7 +2903,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH013p0sap3Dvb0Bu03SPY6d:2026-04-01T10:15",
+            "id": "TH013p0sap3Dvb0Bu03SPY6d-2026-04-01-10:15",
             "departure_segments": [
                 "13981-4055-108277-2026-04-01T10:15-2026-04-01T20:15-2324"
             ],
@@ -2494,14 +2918,14 @@
             ],
             "number_of_available_seats": 22,
             "pricing": {
-                "net_price": {
-                    "amount": "357.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "403.41",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "357.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "46.41",
@@ -2512,7 +2936,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH013p0sap3Dvb0Rf03SPY6d:2026-04-01T20:46",
+            "id": "TH013p0sap3Dvb0Rf03SPY6d-2026-04-01-20:46",
             "departure_segments": [
                 "13981-4055-108277-2026-04-01T20:46-2026-04-02T06:02-3301"
             ],
@@ -2527,14 +2951,14 @@
             ],
             "number_of_available_seats": 22,
             "pricing": {
-                "net_price": {
-                    "amount": "552.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "602.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "552.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2545,7 +2969,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0932030l6NIb1D903SPY6d:2026-04-01T18:30",
+            "id": "TH0932030l6NIb1D903SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "26146-34784-11553-2026-04-01T18:30-2026-04-02T06:30-6271"
             ],
@@ -2560,14 +2984,14 @@
             ],
             "number_of_available_seats": 32,
             "pricing": {
-                "net_price": {
-                    "amount": "264.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "303.60",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "264.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "39.60",
@@ -2578,7 +3002,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH09tz030l0Pgb00703SPY6d:2026-04-01T18:30",
+            "id": "TH09tz030l0Pgb00703SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "3178-36429-11553-2026-04-01T18:30-2026-04-02T05:30-7"
             ],
@@ -2593,14 +3017,14 @@
             ],
             "number_of_available_seats": 58,
             "pricing": {
-                "net_price": {
-                    "amount": "459.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "550.80",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "459.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "91.80",
@@ -2611,7 +3035,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH09tz030l0Pgb1Da03SPY6d:2026-04-01T18:30",
+            "id": "TH09tz030l0Pgb1Da03SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "3178-36429-11553-2026-04-01T18:30-2026-04-02T05:30-6272"
             ],
@@ -2626,14 +3050,14 @@
             ],
             "number_of_available_seats": 33,
             "pricing": {
-                "net_price": {
-                    "amount": "649.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "778.80",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "649.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "129.80",
@@ -2644,7 +3068,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH09tz030l0Pgb1Xn03SPY6d:2026-04-01T18:45",
+            "id": "TH09tz030l0Pgb1Xn03SPY6d-2026-04-01-18:45",
             "departure_segments": [
                 "3178-36429-11553-2026-04-01T18:45-2026-04-02T06:45-7525"
             ],
@@ -2659,14 +3083,14 @@
             ],
             "number_of_available_seats": 20,
             "pricing": {
-                "net_price": {
-                    "amount": "300.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "360.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "300.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "60.00",
@@ -2677,7 +3101,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH09tz030l0Pgv0ND03SPY6d:2026-04-01T16:00",
+            "id": "TH09tz030l0Pgv0ND03SPY6d-2026-04-01-16:00",
             "departure_segments": [
                 "3178-36429-11553-2026-04-01T16:00-2026-04-02T01:40-3077"
             ],
@@ -2692,14 +3116,14 @@
             ],
             "number_of_available_seats": 19,
             "pricing": {
-                "net_price": {
-                    "amount": "428.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "513.60",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "428.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "85.60",
@@ -2710,7 +3134,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH09tz1sFX0Pgb1Da03SPY6d:2026-04-01T19:00",
+            "id": "TH09tz1sFX0Pgb1Da03SPY6d-2026-04-01-19:00",
             "departure_segments": [
                 "3178-36429-348561-2026-04-01T19:00-2026-04-02T06:15-6272"
             ],
@@ -2725,14 +3149,14 @@
             ],
             "number_of_available_seats": 31,
             "pricing": {
-                "net_price": {
-                    "amount": "387.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "464.40",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "387.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "77.40",
@@ -2743,7 +3167,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0CgB0004007t00c01hdkRw:2026-04-01T18:40",
+            "id": "TH0CgB0004007t00c01hdkRw-2026-04-01-18:40",
             "departure_segments": [
                 "7-147101-4-2026-04-01T18:40-2026-04-02T07:15-12"
             ],
@@ -2758,14 +3182,14 @@
             ],
             "number_of_available_seats": 50,
             "pricing": {
-                "net_price": {
-                    "amount": "641.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "691.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "641.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2776,7 +3200,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB0004007t00c03BNR3q:2026-04-01T20:05",
+            "id": "TH0CgB0004007t00c03BNR3q-2026-04-01-20:05",
             "departure_segments": [
                 "7-147101-4-2026-04-01T20:05-2026-04-02T08:40-12"
             ],
@@ -2791,14 +3215,14 @@
             ],
             "number_of_available_seats": 17,
             "pricing": {
-                "net_price": {
-                    "amount": "697.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "747.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "697.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2809,7 +3233,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB0004007t00e02CsiAv:2026-04-01T09:05",
+            "id": "TH0CgB0004007t00e02CsiAv-2026-04-01-09:05",
             "departure_segments": [
                 "7-147101-4-2026-04-01T09:05-2026-04-01T19:30-14"
             ],
@@ -2824,14 +3248,14 @@
             ],
             "number_of_available_seats": 28,
             "pricing": {
-                "net_price": {
-                    "amount": "769.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "819.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "769.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2842,7 +3266,7 @@
             "ticket_type": "PickUp"
         },
         {
-            "id": "TH0CgB00044mDt00c01hdkRw:2026-04-01T18:40",
+            "id": "TH0CgB00044mDt00c01hdkRw-2026-04-01-18:40",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T18:40-2026-04-02T07:15-12"
             ],
@@ -2857,14 +3281,14 @@
             ],
             "number_of_available_seats": 17,
             "pricing": {
-                "net_price": {
-                    "amount": "521.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "571.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "521.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2875,7 +3299,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt1x401hdkRw:2026-04-01T18:40",
+            "id": "TH0CgB00044mDt1x401hdkRw-2026-04-01-18:40",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T18:40-2026-04-02T07:15-5894"
             ],
@@ -2890,14 +3314,14 @@
             ],
             "number_of_available_seats": 56,
             "pricing": {
-                "net_price": {
-                    "amount": "431.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "481.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "431.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2908,7 +3332,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0CgB00044mDt00c0IrgTo0:2026-04-01T14:15",
+            "id": "TH0CgB00044mDt00c0IrgTo0-2026-04-01-14:15",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T14:15-2026-04-02T04:05-12"
             ],
@@ -2923,14 +3347,14 @@
             ],
             "number_of_available_seats": 53,
             "pricing": {
-                "net_price": {
-                    "amount": "504.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "554.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "504.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2941,7 +3365,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00f0IrgTo0:2026-04-01T14:15",
+            "id": "TH0CgB00044mDt00f0IrgTo0-2026-04-01-14:15",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T14:15-2026-04-02T04:05-15"
             ],
@@ -2956,14 +3380,14 @@
             ],
             "number_of_available_seats": 44,
             "pricing": {
-                "net_price": {
-                    "amount": "300.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "350.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "300.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -2974,7 +3398,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00g0IrgTo0:2026-04-01T14:15",
+            "id": "TH0CgB00044mDt00g0IrgTo0-2026-04-01-14:15",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T14:15-2026-04-02T04:05-16"
             ],
@@ -2989,14 +3413,14 @@
             ],
             "number_of_available_seats": 23,
             "pricing": {
-                "net_price": {
-                    "amount": "754.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "804.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "754.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3007,7 +3431,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00c0JFdHk0:2026-04-01T22:30",
+            "id": "TH0CgB00044mDt00c0JFdHk0-2026-04-01-22:30",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T22:30-2026-04-02T12:10-12"
             ],
@@ -3022,14 +3446,14 @@
             ],
             "number_of_available_seats": 24,
             "pricing": {
-                "net_price": {
-                    "amount": "630.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "680.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "630.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3040,7 +3464,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00f0JFdHk0:2026-04-01T22:30",
+            "id": "TH0CgB00044mDt00f0JFdHk0-2026-04-01-22:30",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T22:30-2026-04-02T12:10-15"
             ],
@@ -3055,14 +3479,14 @@
             ],
             "number_of_available_seats": 55,
             "pricing": {
-                "net_price": {
-                    "amount": "794.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "844.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "794.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3073,7 +3497,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00g0JFdHk0:2026-04-01T22:30",
+            "id": "TH0CgB00044mDt00g0JFdHk0-2026-04-01-22:30",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T22:30-2026-04-02T12:10-16"
             ],
@@ -3088,14 +3512,14 @@
             ],
             "number_of_available_seats": 36,
             "pricing": {
-                "net_price": {
-                    "amount": "564.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "614.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "564.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3106,7 +3530,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00f03BNR3q:2026-04-01T20:05",
+            "id": "TH0CgB00044mDt00f03BNR3q-2026-04-01-20:05",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T20:05-2026-04-02T08:40-15"
             ],
@@ -3121,14 +3545,14 @@
             ],
             "number_of_available_seats": 37,
             "pricing": {
-                "net_price": {
-                    "amount": "717.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "767.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "717.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3139,7 +3563,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt00g03BNR3q:2026-04-01T20:05",
+            "id": "TH0CgB00044mDt00g03BNR3q-2026-04-01-20:05",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T20:05-2026-04-02T08:40-16"
             ],
@@ -3154,14 +3578,14 @@
             ],
             "number_of_available_seats": 46,
             "pricing": {
-                "net_price": {
-                    "amount": "259.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "309.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "259.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3172,7 +3596,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0CgB00044mDt1x403BNR3q:2026-04-01T20:05",
+            "id": "TH0CgB00044mDt1x403BNR3q-2026-04-01-20:05",
             "departure_segments": [
                 "16779-147101-4-2026-04-01T20:05-2026-04-02T08:40-5894"
             ],
@@ -3187,14 +3611,14 @@
             ],
             "number_of_available_seats": 59,
             "pricing": {
-                "net_price": {
-                    "amount": "567.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "617.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "567.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3205,7 +3629,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0DkV01kN1OFb0xb03SPY6d:2026-04-01T18:10",
+            "id": "TH0DkV01kN1OFb0xb03SPY6d-2026-04-01-18:10",
             "departure_segments": [
                 "6985-151213-5133-2026-04-01T18:10-2026-04-02T11:32-2057"
             ],
@@ -3220,14 +3644,14 @@
             ],
             "number_of_available_seats": 55,
             "pricing": {
-                "net_price": {
-                    "amount": "224.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "246.40",
                     "currency": "THB",
                     "price_type": "Exact"
+                },
+                "net_price": {
+                    "amount": "224.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "22.40",
@@ -3238,7 +3662,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0FoZ030l7Oub18J03SPY6d:2026-04-01T17:30",
+            "id": "TH0FoZ030l7Oub18J03SPY6d-2026-04-01-17:30",
             "departure_segments": [
                 "30038-159153-11553-2026-04-01T17:30-2026-04-02T05:30-4385"
             ],
@@ -3253,14 +3677,14 @@
             ],
             "number_of_available_seats": 58,
             "pricing": {
-                "net_price": {
-                    "amount": "206.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "257.50",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "206.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "51.50",
@@ -3271,7 +3695,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0FoZ1sws7Oub18J03SPY6d:2026-04-01T18:50",
+            "id": "TH0FoZ1sws7Oub18J03SPY6d-2026-04-01-18:50",
             "departure_segments": [
                 "30038-159153-347972-2026-04-01T18:50-2026-04-02T05:40-4385"
             ],
@@ -3286,14 +3710,14 @@
             ],
             "number_of_available_seats": 12,
             "pricing": {
-                "net_price": {
-                    "amount": "442.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "552.50",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "442.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "110.50",
@@ -3304,7 +3728,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0san0sap3Dvb0Bu03SPY6d:2026-04-01T20:30",
+            "id": "TH0san0sap3Dvb0Bu03SPY6d-2026-04-01-20:30",
             "departure_segments": [
                 "13981-108275-108277-2026-04-01T20:30-2026-04-02T05:55-2324"
             ],
@@ -3319,14 +3743,14 @@
             ],
             "number_of_available_seats": 25,
             "pricing": {
-                "net_price": {
-                    "amount": "518.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "568.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "518.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3337,7 +3761,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0san0sap3Dvb0Rf03SPY6d:2026-04-01T20:31",
+            "id": "TH0san0sap3Dvb0Rf03SPY6d-2026-04-01-20:31",
             "departure_segments": [
                 "13981-108275-108277-2026-04-01T20:31-2026-04-02T06:02-3301"
             ],
@@ -3352,14 +3776,14 @@
             ],
             "number_of_available_seats": 19,
             "pricing": {
-                "net_price": {
-                    "amount": "647.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "697.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "647.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3370,7 +3794,7 @@
             "ticket_type": "PaperTicket"
         },
         {
-            "id": "TH0tma030l0Pgb1Da03SPY6d:2026-04-01T20:00",
+            "id": "TH0tma030l0Pgb1Da03SPY6d-2026-04-01-20:00",
             "departure_segments": [
                 "3178-112850-11553-2026-04-01T20:00-2026-04-02T05:35-6272"
             ],
@@ -3385,14 +3809,14 @@
             ],
             "number_of_available_seats": 52,
             "pricing": {
-                "net_price": {
-                    "amount": "464.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "556.80",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "464.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "92.80",
@@ -3403,7 +3827,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH0vN2030l03Jb00403SPY6d:2026-04-01T18:50",
+            "id": "TH0vN2030l03Jb00403SPY6d-2026-04-01-18:50",
             "departure_segments": [
                 "231-122204-11553-2026-04-01T18:50-2026-04-02T06:45-4"
             ],
@@ -3418,14 +3842,14 @@
             ],
             "number_of_available_seats": 57,
             "pricing": {
-                "net_price": {
-                    "amount": "304.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "354.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "304.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3436,7 +3860,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH10JG030l0Pgb1Da03SPY6d:2026-04-01T20:00",
+            "id": "TH10JG030l0Pgb1Da03SPY6d-2026-04-01-20:00",
             "departure_segments": [
                 "3178-241160-11553-2026-04-01T20:00-2026-04-02T05:35-6272"
             ],
@@ -3451,14 +3875,14 @@
             ],
             "number_of_available_seats": 28,
             "pricing": {
-                "net_price": {
-                    "amount": "337.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "404.40",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "337.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "67.40",
@@ -3469,7 +3893,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH10JG030l7Vjb00403SPY6d:2026-04-01T19:50",
+            "id": "TH10JG030l7Vjb00403SPY6d-2026-04-01-19:50",
             "departure_segments": [
                 "30461-241160-11553-2026-04-01T19:50-2026-04-02T06:00-4"
             ],
@@ -3484,14 +3908,14 @@
             ],
             "number_of_available_seats": 54,
             "pricing": {
-                "net_price": {
-                    "amount": "247.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "297.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "247.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3502,7 +3926,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH10JG030l7Vjb23N03SPY6d:2026-04-01T19:00",
+            "id": "TH10JG030l7Vjb23N03SPY6d-2026-04-01-19:00",
             "departure_segments": [
                 "30461-241160-11553-2026-04-01T19:00-2026-04-02T04:35-7923"
             ],
@@ -3517,14 +3941,14 @@
             ],
             "number_of_available_seats": 48,
             "pricing": {
-                "net_price": {
-                    "amount": "647.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "697.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "647.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3535,7 +3959,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH10JG030l7Vjb23P03SPY6d:2026-04-01T18:30",
+            "id": "TH10JG030l7Vjb23P03SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "30461-241160-11553-2026-04-01T18:30-2026-04-02T04:05-7925"
             ],
@@ -3550,14 +3974,14 @@
             ],
             "number_of_available_seats": 47,
             "pricing": {
-                "net_price": {
-                    "amount": "166.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "216.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "166.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3568,7 +3992,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH10JG030l7Vjb23Q03SPY6d:2026-04-01T18:30",
+            "id": "TH10JG030l7Vjb23Q03SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "30461-241160-11553-2026-04-01T18:30-2026-04-02T04:05-7926"
             ],
@@ -3583,14 +4007,14 @@
             ],
             "number_of_available_seats": 40,
             "pricing": {
-                "net_price": {
-                    "amount": "236.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "286.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "236.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3601,7 +4025,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH10JG1tEX7Vjb23P03SPY6d:2026-04-01T18:30",
+            "id": "TH10JG1tEX7Vjb23P03SPY6d-2026-04-01-18:30",
             "departure_segments": [
                 "30461-241160-352343-2026-04-01T18:30-2026-04-02T04:30-7925"
             ],
@@ -3616,14 +4040,14 @@
             ],
             "number_of_available_seats": 59,
             "pricing": {
-                "net_price": {
-                    "amount": "573.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "623.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "573.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3634,7 +4058,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1dWZ03vMaw0b18J03SPY6d:2026-04-01T19:00",
+            "id": "TH1dWZ03vMaw0b18J03SPY6d-2026-04-01-19:00",
             "departure_segments": [
                 "40424-291957-13502-2026-04-01T19:00-2026-04-02T06:00-4385"
             ],
@@ -3649,14 +4073,14 @@
             ],
             "number_of_available_seats": 25,
             "pricing": {
-                "net_price": {
-                    "amount": "586.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "636.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "586.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3667,7 +4091,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mdB01kN7Vjv1CK03SPY6d:2026-04-01T18:00",
+            "id": "TH1mdB01kN7Vjv1CK03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-323739-5133-2026-04-01T18:00-2026-04-02T06:00-6246"
             ],
@@ -3682,14 +4106,14 @@
             ],
             "number_of_available_seats": 47,
             "pricing": {
-                "net_price": {
-                    "amount": "251.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "281.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "251.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "30.00",
@@ -3700,7 +4124,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mdB030l7Vjb0rQ03SPY6d:2026-04-01T06:00",
+            "id": "TH1mdB030l7Vjb0rQ03SPY6d-2026-04-01-06:00",
             "departure_segments": [
                 "30461-323739-11553-2026-04-01T06:00-2026-04-01T18:00-1726"
             ],
@@ -3715,14 +4139,14 @@
             ],
             "number_of_available_seats": 49,
             "pricing": {
-                "net_price": {
-                    "amount": "269.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "319.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "269.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3733,7 +4157,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL001kN7Vjb0rQ03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL001kN7Vjb0rQ03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-5133-2026-04-01T18:00-2026-04-02T06:00-1726"
             ],
@@ -3748,14 +4172,14 @@
             ],
             "number_of_available_seats": 29,
             "pricing": {
-                "net_price": {
-                    "amount": "594.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "644.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "594.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3766,7 +4190,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL001kN7Vjb0Um03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL001kN7Vjb0Um03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-5133-2026-04-01T18:00-2026-04-02T06:00-3494"
             ],
@@ -3781,14 +4205,14 @@
             ],
             "number_of_available_seats": 20,
             "pricing": {
-                "net_price": {
-                    "amount": "362.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "412.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "362.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3799,7 +4223,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL001kN7Vjb10u03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL001kN7Vjb10u03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-5133-2026-04-01T18:00-2026-04-02T06:00-3874"
             ],
@@ -3814,14 +4238,14 @@
             ],
             "number_of_available_seats": 46,
             "pricing": {
-                "net_price": {
-                    "amount": "309.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "359.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "309.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3832,7 +4256,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL001kN7Vjb23N03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL001kN7Vjb23N03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-5133-2026-04-01T18:00-2026-04-02T06:00-7923"
             ],
@@ -3847,14 +4271,14 @@
             ],
             "number_of_available_seats": 35,
             "pricing": {
-                "net_price": {
-                    "amount": "472.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "522.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "472.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3865,7 +4289,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL001kN7Vjb24703SPY6d:2026-04-01T18:00",
+            "id": "TH1mL001kN7Vjb24703SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-5133-2026-04-01T18:00-2026-04-02T06:00-7943"
             ],
@@ -3880,14 +4304,14 @@
             ],
             "number_of_available_seats": 29,
             "pricing": {
-                "net_price": {
-                    "amount": "210.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "260.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "210.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3898,7 +4322,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL0030l7Vjb23M03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL0030l7Vjb23M03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-11553-2026-04-01T18:00-2026-04-02T06:00-7922"
             ],
@@ -3913,14 +4337,14 @@
             ],
             "number_of_available_seats": 57,
             "pricing": {
-                "net_price": {
-                    "amount": "566.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "616.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "566.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3931,7 +4355,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL0030l7Vjb23N03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL0030l7Vjb23N03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-11553-2026-04-01T18:00-2026-04-02T06:00-7923"
             ],
@@ -3946,14 +4370,14 @@
             ],
             "number_of_available_seats": 19,
             "pricing": {
-                "net_price": {
-                    "amount": "485.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "535.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "485.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3964,7 +4388,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL0030l7Vjb23P03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL0030l7Vjb23P03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-11553-2026-04-01T18:00-2026-04-02T06:00-7925"
             ],
@@ -3979,14 +4403,14 @@
             ],
             "number_of_available_seats": 18,
             "pricing": {
-                "net_price": {
-                    "amount": "608.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "658.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "608.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -3997,7 +4421,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL01tEX7Vjb23P03SPY6d:2026-04-01T18:00",
+            "id": "TH1mL01tEX7Vjb23P03SPY6d-2026-04-01-18:00",
             "departure_segments": [
                 "30461-325810-352343-2026-04-01T18:00-2026-04-02T06:00-7925"
             ],
@@ -4012,14 +4436,14 @@
             ],
             "number_of_available_seats": 58,
             "pricing": {
-                "net_price": {
-                    "amount": "151.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "201.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "151.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -4030,7 +4454,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL2030lccFb1kB03SPY6d:2026-04-01T19:30",
+            "id": "TH1mL2030lccFb1kB03SPY6d-2026-04-01-19:30",
             "departure_segments": [
                 "46913-325812-11553-2026-04-01T19:30-2026-04-02T06:00-5121"
             ],
@@ -4045,14 +4469,14 @@
             ],
             "number_of_available_seats": 49,
             "pricing": {
-                "net_price": {
-                    "amount": "649.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "699.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "649.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -4063,7 +4487,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL203vMaw0b18J03SPY6d:2026-04-01T17:30",
+            "id": "TH1mL203vMaw0b18J03SPY6d-2026-04-01-17:30",
             "departure_segments": [
                 "40424-325812-13502-2026-04-01T17:30-2026-04-02T05:30-4385"
             ],
@@ -4078,14 +4502,14 @@
             ],
             "number_of_available_seats": 39,
             "pricing": {
-                "net_price": {
-                    "amount": "298.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "348.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "298.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -4096,7 +4520,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1mL21c5kccFb1kB03SPY6d:2026-04-01T19:30",
+            "id": "TH1mL21c5kccFb1kB03SPY6d-2026-04-01-19:30",
             "departure_segments": [
                 "46913-325812-284786-2026-04-01T19:30-2026-04-02T06:00-5121"
             ],
@@ -4111,14 +4535,14 @@
             ],
             "number_of_available_seats": 27,
             "pricing": {
-                "net_price": {
-                    "amount": "629.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "679.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "629.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
@@ -4129,7 +4553,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1rtX030l0Pgv0ND03SPY6d:2026-04-01T16:00",
+            "id": "TH1rtX030l0Pgv0ND03SPY6d-2026-04-01-16:00",
             "departure_segments": [
                 "3178-343973-11553-2026-04-01T16:00-2026-04-02T04:00-3077"
             ],
@@ -4144,14 +4568,14 @@
             ],
             "number_of_available_seats": 49,
             "pricing": {
-                "net_price": {
-                    "amount": "317.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "380.40",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "317.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "63.40",
@@ -4162,7 +4586,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1sv1030l0Pgb1Da03SPY6d:2026-04-01T20:00",
+            "id": "TH1sv1030l0Pgb1Da03SPY6d-2026-04-01-20:00",
             "departure_segments": [
                 "3178-347883-11553-2026-04-01T20:00-2026-04-02T05:35-6272"
             ],
@@ -4177,14 +4601,14 @@
             ],
             "number_of_available_seats": 46,
             "pricing": {
-                "net_price": {
-                    "amount": "603.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "723.60",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "603.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "120.60",
@@ -4195,7 +4619,7 @@
             "ticket_type": "ShowOnScreen"
         },
         {
-            "id": "TH1wio030l7Vjb23N03SPY6d:2026-04-01T19:00",
+            "id": "TH1wio030l7Vjb23N03SPY6d-2026-04-01-19:00",
             "departure_segments": [
                 "30461-362476-11553-2026-04-01T19:00-2026-04-02T04:35-7923"
             ],
@@ -4210,14 +4634,14 @@
             ],
             "number_of_available_seats": 20,
             "pricing": {
-                "net_price": {
-                    "amount": "242.00",
-                    "currency": "THB"
-                },
                 "gross_price": {
                     "amount": "292.00",
                     "currency": "THB",
                     "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "242.00",
+                    "currency": "THB"
                 },
                 "taxes_and_fees": {
                     "amount": "50.00",
