@@ -129,11 +129,12 @@ All direct DB reads inside F3. Q2 = new clients only, native 12go IDs.
 | **Notifications** | Architecture undecided, needs analysis | High       |
 
 
-Three approaches under consideration (extend webhook table / in-process F3 / reuse existing path). **Defer or offload to another developer.** Clients can poll GetBookingDetails as fallback.
+Three approaches under consideration (extend webhook table / in-process F3 / reuse existing path). **Defer or offload to another developer.** 
 
 ---
 
-## 5. Client Identity & Authentication 
+## 5. Client Identity & Authentication
+
 **Current TC system**: `client_id` is a human-readable string (e.g., "bookaway") sent by the client in every URL path (`/v1/{client_id}/...`). It's used for routing, metrics, logging, and per-client configuration. The API key is validated separately at the gateway level.
 
 **12go F3**: Clients are users in the `usr` table (`usr_id` integer) with role `partner` or `partner_light`. API keys live in the `apikey` table linked by `usr_id`. There is no equivalent of `client_id` anywhere -- only numeric `usr_id` and `usr_name` (agent name, not suitable for this purpose). We will need to store a human-readable client identifier somewhere: either add a field to the existing `usr` table or maintain a separate B2B lookup table that associates `usr_id` with a `client_id`.
@@ -160,7 +161,8 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 
 ---
 
-## 6. Existing Client Migration (Q3+) 
+## 6. Existing Client Migration (Q3+)
+
 > Assuming Q2 is complete -- 10 endpoints work for new clients. How do we move existing clients?
 
 ### What Changes for Each Client
@@ -198,13 +200,13 @@ Not yet scheduled -- no rush. But before shutting down each piece:
 ## 7. Help Needed
 
 
-| What                              | Impact If Missing                                        |
-| --------------------------------- | -------------------------------------------------------- |
-| PHP buddy sessions                | Timeline extends, higher delivery risk                   |
-| QA resource                       | Bugs caught later, integration testing falls on me alone |
-| Webhook notifications offload     | Clients can't receive push updates                       |
-| Kafka event spec                  | No visibility into new system adoption                   |
-| Monitoring/metrics discovery      | Fly blind on production alerts                           |
+| What                          | Impact If Missing                                        |
+| ----------------------------- | -------------------------------------------------------- |
+| PHP buddy sessions            | Timeline extends, higher delivery risk                   |
+| QA resource                   | Bugs caught later, integration testing falls on me alone |
+| Webhook notifications offload | Clients can't receive push updates                       |
+| Kafka event spec              | No visibility into new system adoption                   |
+| Monitoring/metrics discovery  | Fly blind on production alerts                           |
 
 
 ---

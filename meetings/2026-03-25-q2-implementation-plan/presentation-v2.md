@@ -209,15 +209,22 @@ The current system also discards everything from the webhook payload except the 
 
 This feature requires more analysis. Three approaches are being considered:
 
-**Approach A -- Extend existing webhook subscriber table.** Register new B2B clients in 12go's existing webhook subscriber table. Distinguish B2B clients from regular ones. When a notification arrives, check if it's a B2B booking and transform the payload to TC format before forwarding to the client's registered webhook URL.
+**Approach A -- Extend existing webhook subscriber table.** *(recommended)* Register new B2B clients in 12go's existing webhook subscriber table (the one Shauly showed on Mar 12 -- URL, user ID, API key per subscriber). 12go already knows which booking belongs to which client, so the `bid -> client_id` association comes for free. Configure the webhook URL per client to point to our B2B module (e.g., `?client_id=bookaway`), which transforms the payload to TC format and forwards to the client's registered webhook URL. Lightweight: no Kafka, no DB lookup, no re-fetching from 12go API -- just receive, transform, forward.
 
 **Approach B -- In-process subscription in F3.** Subscribe to the booking event within F3 (via in-memory event bus or whatever mechanism F3 uses internally). Maintain a separate B2B webhook configuration table. Handle transformation and outbound delivery within the F3 process.
 
-**Approach C -- Leverage the existing 12go->TC webhook path.** 12go already sends TC-format notifications via webhook, and we currently do the transformation on our side. Could we reuse or adapt this existing path for B2B clients? This would mean the transformation layer already exists -- we'd just need to route it correctly.
+**Approach C -- Sustain the existing .NET notification pipeline.** Keep the current BookingNotificationService + PostBookingService + Kafka + PostgreSQL chain running. The existing path already transforms 12go's `{ "bid" }` into a client-facing notification: 12go sends webhook -> BookingNotificationService publishes Kafka event -> PostBookingService consumes it, looks up booking in PostgreSQL to find `client_id`, re-fetches from 12go API, updates local DB, publishes downstream `ReservationChanged` Kafka event -> a downstream service (likely Carmel, not in our repos) delivers to the client. B2B clients would be plugged into this existing chain.
+
+Problems with Approach C:
+- Contradicts the no-persistence design -- the pipeline depends on the `BookingEntities` PostgreSQL table for `bid -> client_id` lookup, which we're eliminating
+- Does far more than needed -- two Kafka hops, a DB lookup, a re-fetch from 12go API, and a DB update, when all we need is receive-transform-forward
+- Ties us to keeping the full .NET stack running (BookingNotificationService, PostBookingService, Kafka, PostgreSQL) just for notifications
+- Carmel (the outbound delivery service) is a black box -- no code in our repos, unknown how it resolves client webhook URLs
+- Adds maintenance burden on infrastructure we're trying to decommission
 
 Each approach has different implications for: where client webhook URLs are stored, how booking->client association is resolved, whether we need new Kafka consumers, and how much new code is required.
 
-**Presumptive approach**: This needs more digestion before committing to an architecture. Potentially offloadable to another developer -- Shauly is open to it depending on estimation. Core post-booking operations (GetBookingDetails, GetTicket, CancelBooking) work without notifications -- clients can poll GetBookingDetails as a fallback.
+**Presumptive approach**: Approach A is the simplest path -- it leverages 12go's existing per-client webhook routing with minimal new code. Needs further validation with Sana on how to hook into 12go's webhook subscriber table. Potentially offloadable to another developer -- Shauly is open to it depending on estimation. Core post-booking operations (GetBookingDetails, GetTicket, CancelBooking) work without notifications -- clients can poll GetBookingDetails as a fallback.
 
 ---
 
