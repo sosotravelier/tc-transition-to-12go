@@ -221,11 +221,17 @@ Each approach has different implications for: where client webhook URLs are stor
 
 ---
 
-## 5. Client Identity & Authentication *(new section -- draft)*
+## 5. Client Identity & Authentication
+
+### Current State: TC vs F3
+
+**TC system**: `client_id` is a human-readable string (e.g., "bookaway") sent by the client in every URL path (`/v1/{client_id}/bookings`). It's used for routing, metrics/logging, per-client configuration, and Kafka event correlation. The API key (`x-api-key` header) is validated separately at the AWS API Gateway level.
+
+**12go F3**: Clients are users in the `usr` table (`usr_id` integer) with role `partner` or `partner_light`. API keys live in the `apikey` table linked by `usr_id`. The `ApiAgent` service resolves API key -> user, exposing `getId()`, `getName()`, `getRole()`. There is no equivalent of TC's `client_id` anywhere in F3 -- only the numeric `usr_id` and `usr_name` (agent name, not suitable for this purpose). We will need to store a human-readable client identifier somewhere: either add a field to the existing `usr` table, or maintain a separate B2B lookup table that associates `usr_id` with a `client_id`.
 
 ### The Problem
 
-Currently, clients send their own `client_id` in every URL path (`/v1/{client_id}/bookings`). This is redundant -- we should be able to determine the client's identity from their API key. Requiring clients to self-identify adds no security (if the API key is compromised, the `client_id` is too) and adds friction to the API surface.
+The `client_id` in the URL is redundant -- we should be able to determine the client's identity from their API key. Requiring clients to self-identify adds no security (if the API key is compromised, the `client_id` is too) and adds friction to the API surface. But F3 has no client alias concept today, so we need to introduce one for metrics, logs, and tracing.
 
 ### Proposal: Drop `client_id` from URL, Derive from API Key
 
@@ -258,7 +264,7 @@ Create a `b2b_clients` table in the B2B migration schema (following the same sep
 
 ---
 
-## 6. Existing Client Migration (Q3+) *(new section -- draft)*
+## 6. Existing Client Migration (Q3+)
 
 > Assumption: Q2 is complete -- 10 endpoints work for new clients using 12go native IDs. This section covers what it takes to move existing B2B clients onto the new system.
 
@@ -296,15 +302,10 @@ Two completely separate ID namespaces: Fuji CMS IDs (8-char like `ILTLVTLV`) vs 
 
 Bookings created before cutover have TC booking IDs (KLV-encoded or short Base62 format) that the new system doesn't understand.
 
-**Solution: Don't migrate them.** Keep the current .NET system running for post-booking operations only (GetBookingDetails, GetTicket, CancelBooking). No new bookings go through it. As existing bookings expire naturally, traffic to the old system drops to zero and it can be decommissioned.
+Two approaches:
 
-This avoids:
-
-- Building booking ID mapping tables
-- Decoding KLV or looking up Base62 IDs
-- Risk of losing access to old bookings
-
-Mitigating factors: most legacy bookings expire within weeks; FlixBus is shutting down; DeOniBus is migrating to 12go -- non-12go booking IDs sunset on their own.
+- **Option A: Keep old .NET system running** for post-booking operations only (GetBookingDetails, GetTicket, CancelBooking, Notifications). No new bookings go through it. As existing bookings expire naturally, traffic to the old system drops to zero and it can be decommissioned. Avoids building mapping tables or decoding IDs. Mitigating factors: most legacy bookings expire within weeks; FlixBus is shutting down; DeOniBus is migrating to 12go -- non-12go booking IDs sunset on their own.
+- **Option B: Export a booking ID mapping table** from TC's Denali PostgreSQL (`BookingEntities` table: TC booking ID -> 12go `bid`). Add translation logic to post-booking endpoints and notifications in the new system. Allows full .NET shutdown sooner, but adds implementation work. Note: KLV-format IDs are decodable (12go `bid` is embedded in key position 04), but short Base62 IDs are fully opaque and require the DB export -- no other recovery path exists.
 
 **Problem 3: API Key Transition**
 
@@ -320,6 +321,53 @@ Mitigating factors: most legacy bookings expire within weeks; FlixBus is shuttin
 - **Station/Operator/POI ID mappings** from Fuji DynamoDB -- only source of Fuji CMS <-> 12go integer ID relationships
 - **API key inventory** from AppConfig (x2) + Postgres -- to know which 12go key each client uses
 - **Client identity records** from David's `client-identity` Postgres -- to preserve client metadata
+
+> Full migration strategy analysis available in `design/archive/migration-strategy-2026-02-20/` for reference.
+
+---
+
+## 7. Help Needed
+
+
+| What                            | Impact If Missing                                                                         |
+| ------------------------------- | ----------------------------------------------------------------------------------------- |
+| PHP buddy sessions              | Timeline extends; higher risk of delivering features slower without PHP expertise backing |
+| QA resource                     | Bugs caught later, integration testing falls on me alone                                  |
+| Webhook notifications offload   | Clients can't receive push updates                                                        |
+| Kafka event spec (which events) | No visibility into clients onboarded on the new system until spec is delivered            |
+| Monitoring/metrics discovery    | We fly blind on what to preserve; production alerts may break silently                    |
+
+
+---
+
+## 8. Open Items from Part 1 (Mar 25, Sections 1--4.2)
+
+> These came up during the first half of the presentation. Captured here for tracking -- some may need decisions before implementation proceeds.
+
+### 8.1 Stations & Static Data -- Ownership & Implementation
+
+Eyal suggested stations/operators should be the catalog team's responsibility: "this is something which I think it's more suitable for the catalog." Eliran agreed: "the responsibility or the ownership should be on teams because it's like something that is very catalog oriented."
+
+- **Unresolved**: Does the catalog team take this into their Q2 plan? If we want to onboard new clients by end of Q2, this needs to be in someone's sprint. Soso has the design ready (knows which tables, how to map to TC contracts), but if catalog has a bigger vision, they'd redo it.
+- **Sub-question**: Do we keep the S3 dump mechanism or switch to paginated HTTP / streaming? Eyal said "it's not a major issue" either way -- product decision.
+
+### 8.2 Rechecks in Search -- Ownership & Approach
+
+This was the longest discussion. Key tension: the current TC recheck behavior (fire-and-forget call to 12go on 206) may not scale for all B2B clients -- Eyal warned it could hit 12go's rate limits and affect B2C. Eyal's view: the syncer is a more natural component to handle B2B freshness, rather than every B2B search triggering a recheck to integrations. Avihai agreed: "we need to discuss how we improve it on the 12go side" -- this is "deep in the kishka of search." Eliran concluded: "it's probably search needs to handle this."
+
+- **Unresolved**: (a) Product decision on how we want B2B search to behave re: freshness, (b) whether search team implements the recheck/syncer optimization or Soso replicates current TC behavior as a stopgap.
+
+### 8.3 BI Events -- Unified Solution for 12go & TC
+
+Eliran raised whether we can send one set of booking events that serves both TC and 12go, rather than building TC-specific events that get replaced later. Eyal confirmed TC events describe the full funnel (search -> confirm), not just transactions. 12go uses different tooling (not BigQuery). Shauly: "maybe it's already being [done on 12go side]. I don't know." Eliran's suggestion: investigate what 12go already has before building anything -- "the BI/data track needs further investigation."
+
+- **Unresolved**: Who investigates what 12go already emits? What's the target schema? This is the "parallel discovery" workstream -- no owner assigned yet.
+
+### 8.4 Other Items Touched On
+
+- **Incomplete Results** -- Avihai confirmed we must keep this (clients depend on it). Timeout values (15s? 20s?) are configuration, but the mechanism must exist.
+- **Itinerary ID format** -- Taken offline ("let's take it off now" -- Avihai). Still needs a decision.
+- **Contract changes for static data** -- Do we keep TC format or adopt 12go format? Avihai leaned toward "do as much as we can to not change things on the client side." Not decided.
 
 ---
 

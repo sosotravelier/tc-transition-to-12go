@@ -133,9 +133,12 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 
 ---
 
-## 5. Client Identity & Authentication *(new section -- draft)*
+## 5. Client Identity & Authentication 
+**Current TC system**: `client_id` is a human-readable string (e.g., "bookaway") sent by the client in every URL path (`/v1/{client_id}/...`). It's used for routing, metrics, logging, and per-client configuration. The API key is validated separately at the gateway level.
 
-**Problem**: Clients currently send their own `client_id` in every URL path (`/v1/{client_id}/...`). This is redundant -- we should determine the client from the API key.
+**12go F3**: Clients are users in the `usr` table (`usr_id` integer) with role `partner` or `partner_light`. API keys live in the `apikey` table linked by `usr_id`. There is no equivalent of `client_id` anywhere -- only numeric `usr_id` and `usr_name` (agent name, not suitable for this purpose). We will need to store a human-readable client identifier somewhere: either add a field to the existing `usr` table or maintain a separate B2B lookup table that associates `usr_id` with a `client_id`.
+
+**Problem**: The `client_id` in the URL is redundant -- we should determine the client from the API key. But F3 has no client alias concept, so we need to introduce one.
 
 **Not a blocker** -- this is an improvement. Either way we need client_id-to-API-key correspondence in the DB.
 
@@ -157,8 +160,7 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 
 ---
 
-## 6. Existing Client Migration (Q3+) *(new section -- draft)*
-
+## 6. Existing Client Migration (Q3+) 
 > Assuming Q2 is complete -- 10 endpoints work for new clients. How do we move existing clients?
 
 ### What Changes for Each Client
@@ -179,7 +181,7 @@ Three approaches under consideration (extend webhook table / in-process F3 / reu
 
 **1. Station/Operator/POI IDs** -- Fuji CMS IDs (8-char) vs 12go integers. No translation in 12go. **Hybrid approach**: build mapping table (safety net from Fuji DynamoDB export), encourage clients to adopt native IDs on their timeline.
 
-**2. Existing Bookings** -- Pre-cutover bookings have TC booking IDs the new system doesn't understand. **Solution: don't migrate them.** Keep old .NET system running for post-booking operations only (cancel, get ticket, get details). No new bookings go through it. Old bookings expire naturally; old system traffic drops to zero.
+**2. Existing Bookings** -- Pre-cutover bookings have TC booking IDs the new system doesn't understand. Two approaches: (a) **keep old .NET system running** for post-booking operations only (cancel, get ticket, get details, notifications) -- no new bookings go through it, old bookings expire naturally, old system traffic drops to zero; or (b) **export a booking ID mapping table** from TC's Denali DB (TC booking ID -> 12go `bid`) and add translation logic to post-booking endpoints and notifications in the new system -- allows full .NET shutdown sooner but adds implementation work. KLV-format IDs are decodable (12go `bid` is embedded), but short Base62 IDs require the DB export.
 
 **3. API Key Transition** -- ~20-30 active clients. Two approaches: (a) clients adopt 12go API keys directly when they migrate (Shauly's preferred -- simple but requires client cooperation), or (b) mapping table in F3 that translates old TC API keys to 12go keys transparently (no client changes, but adds maintenance).
 
@@ -190,4 +192,47 @@ Not yet scheduled -- no rush. But before shutting down each piece:
 - Station/Operator/POI ID mappings (Fuji DynamoDB)
 - API key inventory (AppConfig + Postgres)
 - Client identity records (David's service)
+
+---
+
+## 7. Help Needed
+
+
+| What                              | Impact If Missing                                        |
+| --------------------------------- | -------------------------------------------------------- |
+| PHP buddy sessions                | Timeline extends, higher delivery risk                   |
+| QA resource                       | Bugs caught later, integration testing falls on me alone |
+| Webhook notifications offload     | Clients can't receive push updates                       |
+| Kafka event spec                  | No visibility into new system adoption                   |
+| Monitoring/metrics discovery      | Fly blind on production alerts                           |
+
+
+---
+
+## 8. Open Items from Part 1 (Mar 25, Sections 1--4.2)
+
+**1. Stations & Static Data -- ownership & implementation**
+
+Eyal suggested stations/operators should be the catalog team's responsibility ("this is something which I think it's more suitable for the catalog"). Eliran agreed: "the ownership should be on teams because it's very catalog oriented."
+
+- **Unresolved**: Does the catalog team take this into their Q2 plan? If we want to onboard new clients by end of Q2, this needs to be in someone's sprint. Design is ready (tables, TC contract mapping), but if catalog has a bigger vision, they'd redo it.
+- **Sub-question**: Keep the S3 dump mechanism or switch to paginated HTTP / streaming? Eyal said "it's not a major issue" either way -- product decision.
+
+**2. Rechecks in Search -- ownership & approach**
+
+Longest discussion. Key tension: current TC recheck behavior (fire-and-forget on 206) may not scale for all B2B clients -- Eyal warned it could hit 12go's rate limits and affect B2C. Eyal's view: the syncer is a more natural component to handle B2B freshness. Avihai agreed: "we need to discuss how we improve it on the 12go side" -- this is "deep in the kishka of search." Eliran concluded: "it's probably search needs to handle this."
+
+- **Unresolved**: (a) Product decision on how B2B search should behave re: freshness, (b) whether search team implements the recheck/syncer optimization or Soso replicates current TC behavior as a stopgap.
+
+**3. BI Events -- unified solution for 12go & TC**
+
+Eliran raised whether we can send one set of booking events serving both TC and 12go, rather than building TC-specific events that get replaced later. Eyal confirmed TC events describe the full funnel (search -> confirm), not just transactions. 12go uses different tooling (not BigQuery). Shauly: "maybe it's already being [done on 12go side]. I don't know." Eliran's suggestion: investigate what 12go already has before building anything.
+
+- **Unresolved**: Who investigates what 12go already emits? What's the target schema? No owner assigned yet.
+
+**4. Other items touched on**
+
+- **Incomplete Results** -- Avihai confirmed we must keep this (clients depend on it). Timeout values (15s? 20s?) are configuration, but the mechanism must exist.
+- **Itinerary ID format** -- Taken offline ("let's take it off now" -- Avihai). Still needs a decision.
+- **Contract changes for static data** -- Do we keep TC format or adopt 12go format? Avihai leaned toward "do as much as we can to not change things on the client side." Not decided.
 
