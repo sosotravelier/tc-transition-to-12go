@@ -1,0 +1,1289 @@
+Mar 30, 2026
+part 2 - Updated design for tc->12go transition - Transcript
+00:00:00
+ 
+Avihai Shabtai: Did you bring it on maybe?
+Soso Tughushi: Yes.
+Avihai Shabtai: Okay.
+Soso Tughushi: Hello. Thanks everybody for gathering. Um so this meeting is continuation of uh our meeting from previous week and Thursday about it was Wednesday about transition design. Um so let's just start from where we were left. So we talked about search. Do you see the screen by the way?
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah. So we we talked about search and there is a time to talk about booking uh funnel. So by booking funnel we what I mean is get itinerary create booking confirm booking uh incomplete results. I think we maybe we discussed this too but no there were some points that were missing. Yeah. Um and sit lock. So I think everybody understands what uh they are. Um and uh we said that incomplete results would need to be delivered uh as a very high uh demand conclusion. Um seat lock is already being developed by David as as I know and uh well the biggest risk well there are a few issues in all of these endpoints.
+ 
+ 
+00:01:45
+ 
+Soso Tughushi: one is just the uh booking schema. So right now the code on net sites is quite tangled and it's like uh parsing of JSON and transforming it into our own format. We also have a work around workaround for the onib bus because um they had uh before the transition um to uh want to go integration that we have had uh separate integration and they had different schema. So there is a code also for the transforming uh the one to go format to the only bus format. Uh so um so so this just module is uh something that will require thorough first of all understanding and testing and big code and um I mean right now it's written on net and I would just need to rewrite it on PHP uh with let's say I would extract the specs or examples from existing uh booking schemas how it should look like and similar way how So I did the search I would do with code the development of of this part the module
+Eliran Friedman: Regarding seat lock,
+Soso Tughushi: here.
+Eliran Friedman: it's been developed for all the integrations right on on one to go like on TC.
+ 
+ 
+00:03:13
+ 
+Soso Tughushi: This
+Eliran Friedman: So why do we need like to do anything there? I think before we release
+Shauly Sahar: I think yes but sitlock
+Eliran Friedman: it.
+Shauly Sahar: was implemented only on the anibus integration on TC
+Eliran Friedman: Okay.
+Shauly Sahar: and now uh as SA said David is implement starting to implement the part of TC to connect to one to go.
+Eliran Friedman: Okay.
+Shauly Sahar: So after that it will be kind of another API that we need to uh um
+Eliran Friedman: Now I just see a rest condition until want to go ships native lock.
+Shauly Sahar: migrate.
+Eliran Friedman: So we're doing like is it like something temporary that we're doing or like we have a solution for the long run that that is being done.
+Shauly Sahar: I think by the time that uh SSA will implement that we already have it in in place.
+Eliran Friedman: Yeah. Just to make sure we're not doing like some some temporary solution for for a solution that will be solved like anyway for everyone. This
+Soso Tughushi: One more thing is that uh so this uh booking schema is used where doing get itinerary and um also it is necessary in the create booking endpoint.
+ 
+ 
+00:04:30
+ 
+Soso Tughushi: So um so uh right now we I mean not right in the target design we would just store it in a radius uh the later on to validate let's say create uh booking fields against that schema and then like provide meaningful errors if some fields are missing uh to the user.
+Eliran Friedman: And that's like how is compared to what one to go
+Shauly Sahar: I
+Soso Tughushi: uh want to go returns let's say different format of error uh if some
+Shauly Sahar: got
+Eliran Friedman: has.
+Soso Tughushi: fields are missing u and um and yeah I mean this is something
+Shauly Sahar: it.
+Soso Tughushi: that we would do before sending to one to go to validate if first uh what we know is correct and then giving it to downstream integrations and the integrations could als also reject by some additional uh reasons. Uh but uh this would be just some general error instead of something specific that we provide.
+Eyal Eitan: And so I think that not like search the booking flow has more let's call it presentation layer and the JSON of the booking schema.
+ 
+ 
+00:05:48
+ 
+Eyal Eitan: This is something very sensitive in our API and it's very sensitive in the API that want to go has in their BFF with the website. Maybe we need to think in this case to think what we want in the next stage to have in connect for the booking flow. Maybe in this case specific we might it's better to to implement already in the new architecture that we want and not just put something inside F3 and then put to to separate it because it's a lot it's a lot of work. I mean the booking scheme and all of that it's not just a easy win. I mean it's not a quick win to do as in the search. search is just taking the schema of the API and just translate and in this case I think it's more than that and you have some business logic in here like you need to call several APIs for the gatinary right at
+Soso Tughushi: Mhm.
+Eyal Eitan: to whatever so it's more it's it's something bigger and I think
+Soso Tughushi: Yes.
+Eyal Eitan: maybe we should consider to just think about how we want to the booking flow to be to look in next quarter or whatever in the connect system and see what's the gaps Oh, and maybe we should consider doing it.
+ 
+ 
+00:07:04
+ 
+Eyal Eitan: Go all the way instead of doing some patch currently and then decide what to do. I'm talking to you
+Soso Tughushi: Yeah.
+Eliran Friedman: to understand like what's the different like we're not like aligning like to to using like a want to go system wherever
+Eyal Eitan: and
+Eliran Friedman: we can in the
+Shauly Sahar: No,
+Eliran Friedman: end
+Shauly Sahar: currently we are trying to be as close to the uh the TC API. We are not correct.
+Eliran Friedman: from the from the input and the output right but once you are inside like the system it's like should
+Shauly Sahar: Correct.
+Eliran Friedman: behave like quant is behaving no
+Shauly Sahar: But we need to translate and see that we can continue to to do the same translations. uh to to represent that in in the same
+Eliran Friedman: I'm just saying that like in the end the idea behind that this
+Eyal Eitan: Yes.
+Eliran Friedman: project was to align about how I want to go is is walking
+Shauly Sahar: format.
+Eyal Eitan: Yes.
+Eliran Friedman: now.
+Eyal Eitan: What I'm saying is it's in the search we have it's like it's the different the same thing different language the API of want to go and ours the booking flow the the funnel
+ 
+ 
+00:08:07
+ 
+Eliran Friedman: Mhm.
+Eyal Eitan: itself is it's different want to go as a cart we don't have a cart in the want to in to connect API we use a different booking schema which is a JSON schema which it's like a different UI for the booking
+Eliran Friedman: What's what like how like the B2B want to go
+Eyal Eitan: Currently it works
+Eliran Friedman: works?
+Eyal Eitan: with the with the one to go
+Eliran Friedman: No,
+Eyal Eitan: website
+Eliran Friedman: but like their B2B APIs like they have B2B end points,
+Eyal Eitan: for yes for one client. Yes,
+Eliran Friedman: right?
+Eyal Eitan: they have one client as far as I understand which work with the B2B but it's not what was shown is to is to take the connect API and use it for the bit for the B2B right as a decision. So the alignment between the connect API in the booking flow and the want to go
+Eliran Friedman: Mhm.
+Eyal Eitan: API in the booking flow is is bigger. The the gaps are are greater than and it's a different thing. So I think at the end it's not just having a different API.
+ 
+ 
+00:09:08
+ 
+Eyal Eitan: It's just you have some additional logic business logic there and and it's a lot it's more work. I mean it's not just calling the same things in different names.
+Eliran Friedman: I think we need to understand like what is the difference like in order
+Eyal Eitan: Yes,
+Eliran Friedman: to like this is not is going to
+Eyal Eitan: we know for example look at can go over it. I mean I'm not sure if there is all the datas here
+Eliran Friedman: go over
+Soso Tughushi: I mean well it's just there is like one to go
+Eyal Eitan: but yes you can.
+Soso Tughushi: what one to go returns and then there is this thousand line transformation to align it to TC. So we would call one to go uh add to cardart at which point uh we are getting the ID which we are later using as a booking token because uh I mean we are basically so this API for one to go is was written for UI and in the UI they have a flow that they are adding to cart and then doing a checkout.
+ 
+ 
+00:10:11
+ 
+Soso Tughushi: So the add to cart action corresponds in our case to get itinerary to get the ID
+Eliran Friedman: We need sorry to stop.
+Soso Tughushi: and
+Eliran Friedman: We don't need s this discussions by the way.
+Soso Tughushi: he declined the meeting
+Eliran Friedman: Yeah. But I think Sana is like one of the the guys can tell us like the
+Soso Tughushi: invite.
+Eliran Friedman: best about like uh all of these things that you are presenting now.
+Eyal Eitan: Yeah, I think that we know the API. The the question is is if we want to integrate with the one to go API or we would like to go deeper and I think specifically in the booking schema it's better to go deeper and get the the the object model and then translate it to what we need and then
+Shauly Sahar: Butch.
+Avihai Shabtai: What you're saying is to eliminate to eliminate the get get add to cardart and uh all
+Eyal Eitan: to
+Avihai Shabtai: those API calls
+Eliran Friedman: All
+Eyal Eitan: I'm not sure if we can eliminate it because this is embedded in the core of the one to go
+ 
+ 
+00:10:58
+ 
+Avihai Shabtai: that
+Eliran Friedman: right.
+Eyal Eitan: system.
+Avihai Shabtai: so what do you
+Eyal Eitan: I mean that okay let me rephrase my my thinking okay so what I'm saying is in the booking flow okay we have a different flow okay the the connect flow and the want to go flow is different this is one thing okay one example is the cart that want to go have that we don't have and the other thing big thing is the booking schema now we can say okay want one to go system is a is a black box. We integrate with the API of fun to go like we did previously in connect. This is what we have and translate from want to go B2B API to ours. I think a better approach will be to go deeper before want to go is adding the presentation layer of creating the response of the B2B API and the booking scheme and everything and get the the the object model from the business logic of one to go and translate it to a different API which is the B2B API.
+ 
+ 
+00:12:06
+ 
+Avihai Shabtai: Okay, got
+Eyal Eitan: In this case, I think it makes more sense because there's additional logic there and the the
+Avihai Shabtai: it.
+Eyal Eitan: logic is not simple. I mean if uh s written here more than thousand words lines of code to translate the booking schema. This is between one JSON of one to go to ours. But if we go to the to the the object model it will be
+Shauly Sahar: But a this is again maybe I I'm not understand but the idea is
+Eyal Eitan: simpler.
+Shauly Sahar: like that so will not call the API inside there he will call the actual methods.
+Soso Tughushi: Yeah, internal methods but basically it's one-on-one mapping. I mean uh in the API there is only one method call which returns exactly
+Shauly Sahar: Yes.
+Soso Tughushi: what API was returning. So um I'm not bypassing let's say layers or I'm not querying anything from the database. It's just I'm avoiding network hope to do all of that. There was no significant redesign of want to go and and I treat it as a a black box.
+ 
+ 
+00:13:14
+ 
+Eyal Eitan: Yeah.
+Soso Tughushi: uh because because there was an understanding well what I understood was that at first we would rewrite this module into F3 and also there was a plan to do a complete redesign or refactoring of F3 itself and we were and there was an argument that it would be easier
+Eliran Friedman: Do
+Soso Tughushi: to refactor everything together rather than multiple services uh scattered in different
+Eliran Friedman: you think that like for booking flow it's different case than search? You think it's like uh it's like something like bigger or like more complex that like
+Soso Tughushi: languages.
+Eliran Friedman: we cannot do the same approach as we tried for
+Eyal Eitan: If you ask me,
+Eliran Friedman: search.
+Eyal Eitan: I think I think it's bigger and it's different because in the in this search, we will take the part of the search and we we will beat an autonomous service in Q2, maybe Q3 which will handle the search entirely in the booking flow. It will take more time.
+Eliran Friedman: Mhm.
+Eyal Eitan: It will not be in Q2 probably not in Q4 because it has much more many more dependencies
+ 
+ 
+00:14:18
+ 
+Shauly Sahar: All
+Eyal Eitan: with F2 as well with the accounting etc. So it will be a very slower process. So if we are going to put everything in F3 it's going to be there for let's say two three four quarters. So we need to to decide now if you want to to start thinking about the next the next thing and do the adjustment line in F3 or just put everything in F in F3 and
+Shauly Sahar: right. Cool.
+Eyal Eitan: live with it for a long period of time probably.
+Shauly Sahar: I I don't want to get into that project to do some changing in the API uh and then have another like another um it again to me it's like a diff like a bit out of scope of what we are trying to do right uh here at least for my opinion
+Eyal Eitan: It's okay. I'm just saying that we need to consider. I didn't say we need to do it. I'm just saying let's think what are the gaps where we want to go and if it's worth a while to do it currently in F3.
+ 
+ 
+00:15:25
+ 
+Eliran Friedman: That's that's why I'm trying to understand because like in in search we said that we'll do a PC in F3 then s did a PC and we saw that like we can like close it like in few days right then we said okay it makes sense and it's worth it do we think that in bookings it will be more complex to to take this approach
+Eyal Eitan: Yeah,
+Eliran Friedman: that question I'm not sure what the answer
+Eyal Eitan: I think there there so you say but you it's you have the word but as far as I can see this is it's more complex. It's not a few days.
+Eliran Friedman: the it look like in in search also will will also work here. I think it's like uh we need to rethink about uh what we want to do.
+Soso Tughushi: When it comes to specifically booking schema, I in the at up front I knew that this would be most complex piece of code that we would need to migrate and I was thinking in terms of the execution of this Um, I don't know.
+ 
+ 
+00:16:22
+ 
+Soso Tughushi: I mean, yeah, I didn't open this uh box enough to to assess uh whether or not I I should uh let's say I didn't I mean I imagine that if I wanted to answer this question, I would look at it from different perspective. I would look at what the clients are expecting uh like what kind of booking schema and if I could get this uh booking schema directly from database or directly from internal services without transformation. I mean right now the transformation logic logic is there. I know how to perform translation of want to go to TC right even though it's in different language and I'm not sure what it would take let's say to get this booking schema JSON directly from database and if it makes sense to uh do it at all also I don't know how it would look like uh let's say I mean if we want to rethink uh the booking schema or the whole flow I I I'm just having hard time imagining how it would it could change. Uh and yeah, that's that's my take.
+ 
+ 
+00:17:39
+ 
+Soso Tughushi: I mean, we let's say we we can say that this is important and uh we should dedicate let's say some time to discovery of this flow. Um but well from my perspective I just wanted to you know like achieve what was given to on my table to just do the transition and kill the the
+Eliran Friedman: basically like bookings booking flow in like
+Soso Tughushi: services.
+Eliran Friedman: this is like selfcontain or it's also like using one to go for most of the
+Soso Tughushi: It use it it used to use multiple integrations.
+Eliran Friedman: things.
+Soso Tughushi: So they were unified and for one to go it would be it was using the same uh flow that I have written right now. So uh in the get it inary implementation of want to go this was what was happening like get add to cardart and uh there was like when doing create booking we would need to do reserve on one to go site and do get booking detail and so on. So this is how it's currently working in fact I mean if we got we got rid of other integrations and now it's working like this from this
+ 
+ 
+00:18:54
+ 
+Shauly Sahar: I I want to maybe emphasize a bit. I think that it's possible to do the same as also did before if we want to start thinking about API changes of TC API changes. just change the scope uh completely at that uh at that point and we I think it will drag us to another like uh things that we want to um to address. Um I think it's part maybe for the unification of the API that uh Lean we started to to speak about it how we can go outside of TC uh for the that want to go will use the same API. I think here is like the main where we see we will see the main problems of
+Eliran Friedman: Okay.
+Shauly Sahar: unification.
+Eliran Friedman: So this is like something that that I need to I need further to understand because like when we discuss about search we said it's like mostly like manipulation of like data from one format to a different format.
+Shauly Sahar: Correct.
+Eliran Friedman: It sounds like here we have a different
+Shauly Sahar: It's the same.
+ 
+ 
+00:20:02
+ 
+Shauly Sahar: It's like more complex transformation,
+Eliran Friedman: problem.
+Shauly Sahar: but we'll probably need to save some state at the side because it's something that between the get itinerary and the create booking we need to to know what was saved before h etc. Maybe we'll discover that it's much more simple when we start to implement it with the actual uh objects there. Maybe it will will have it as is. Uh but I I I doubt because I think it probably will uh uh represent the
+Eliran Friedman: Okay.
+Shauly Sahar: same.
+Eliran Friedman: And we like we we're checking like doing it in F. We wanted to check about like something else.
+Shauly Sahar: I think that we need to go all the way uh with the same same approach. I don't want to take
+Eliran Friedman: I just see it makes sense. That's the question. I think the question if it makes sense here or we see like do we have something else?
+Soso Tughushi: I mean what's the biggest argument uh for for the um refactoring to be to do it now or the redesign um uh I mean a contract going to do that it would take a planning would take way more and that we
+ 
+ 
+00:21:08
+ 
+Eliran Friedman: the
+Soso Tughushi: also have existing clients which rely on existing uh structure or existing booking funnel. Uh the
+Eyal Eitan: Is it on the end? I mean, we are talking about change the API.
+Soso Tughushi: pro.
+Eyal Eitan: I didn't mean change the API. I mean,
+Shauly Sahar: Okay. So what?
+Eyal Eitan: is there a plan to change API?
+Soso Tughushi: Oh,
+Eyal Eitan: Okay. So,
+Soso Tughushi: I
+Shauly Sahar: No.
+Eyal Eitan: okay.
+Eliran Friedman: the goal the goal of this project is to in the end have one system that serves both TC and one to go.
+Soso Tughushi: well
+Eliran Friedman: This is like something that we can agree on. Now the question is like in this case do we need to take a different paradigm than what you talked about in search? Maybe this is the case. I don't know like I'm asking what do you think?
+Shauly Sahar: I I think that the the using the same API is something that from my perspective I'm I'm
+Soso Tughushi: So,
+Shauly Sahar: question I'm questioning that and and we discussed that we need to like in in on top of what SOS is
+ 
+ 
+00:22:09
+ 
+Eliran Friedman: No,
+Shauly Sahar: doing to
+Eliran Friedman: you're using we we can agree that for now we want to use this API right like the now we wanted to use this API and in the previous
+Shauly Sahar: Okay.
+Eliran Friedman: uh discussion on search we decided that we'll try to do in F3 and we saw that like it wasn't that bad was pretty simple and straightforward so we did it if you're doing like the same pattern here we think it will work as well or it will be will not work as we expected. It will be like much more spaghettiical. It will be much more hard to maintain. I don't know.
+Eyal Eitan: I think it's I think it's more complex. I'm just try to to to explain if we are let's say we are building connect API in search. So want to go BFF for example can call this API and easily change the naming and serve the the website all the data is there it's the same data it's the same flow in the booking flow it's in the booking flow it's a different thing they cannot call the connect API and use it in their website we don't have the add toart methods we the schema is different and the schema is something they render on the web page so it's it's it's totally different in this case I will guess that we'll have
+ 
+ 
+00:23:21
+ 
+Eyal Eitan: some core booking service and some presentation layer for the B2B and one for the B2C of one to go. It makes more sense to me example in this stage because there are there are things in common but there are major things one is the flow which is different and the second thing is the booking schema which is a big thing and it's not just a different label on the field. So this is why I'm saying that the API doesn't change in the B2B. This is a product decision. So this it's not a question here. I think that the the thing is to consider here is is whether to do it in F3 have the business logic the state and the booking schema in this phase or maybe think about the next stage of maybe taking something as core in the F3 and move it out outside to a different service for the okay surely doesn't want that I'm just saying we need to consider what's the cost because put it everything on F3 It probably will be simpler I guess if it's I don't know the PHP issue is a different thing but when I don't know what what's the cost how much work will will it be also I don't know looked at the code maybe he probably knows better than me
+ 
+ 
+00:24:42
+ 
+Eliran Friedman: But what what do you think that we need like to do it in a new service and implement all the flow from scratch?
+Eyal Eitan: I think that a different path to consider is taking the F3 currently as it is in the booking and extract the the core things as an API in F3. So one F3 will be the same for the website. It will use the same logic as it is and we will have an option out from outside calling this core functionality from our service in go whatever and get the data as it is in the data structure not JSON not things like that and just put all the logic that we need in a different service that we can maintain and evolve and whatever in the language that you want. I I'm saying this is something we need to consider if maybe it's it's in if you look at the the ROI it's it's quite similar and if it is I
+Shauly Sahar: But yeah,
+Eyal Eitan: think
+Shauly Sahar: you're talking about something that we are doing right now with what Sana is taking the search out, right?
+ 
+ 
+00:25:45
+ 
+Shauly Sahar: So let's take it the booking out when the time will come and and not
+Eyal Eitan: yes
+Shauly Sahar: like in advance to together right now with uh this uh this
+Eyal Eitan: but flow is
+Shauly Sahar: change.
+Eliran Friedman: Do you think that we need like to and then like we're now taking search we will then like also take booking out and just like the question is just if we have like few alternatives here or we don't like I think if we have few alternatives let's see what are they and uh again like uh we can take out all the booking flow from F3 but then like we will not reach to sunset TC I guess like and at least like two cues. Uh this will probably will be the the timeline. Uh if we don't have any other chunks then let's think about it. But uh in the end we will need also to make sure that like what we are extracting will go together with one to go because we do want to have one system in the end. So like uh in search we are unifying the two system.
+ 
+ 
+00:26:44
+ 
+Eliran Friedman: So if you want to take out the booking flow from it means to take out outside the booking flow also from for for one to go and there we might have like the opposite direction of complexity uh to make sure that one to go can work with this new service or whatever. So it just sounds like as as complex as as well. By the way, maybe we can like do what SAS wanted to do um insert and we like create a new service that will be a wrapper and then it will call F3. I don't know if we see value in that. And we think like it it makes more sense to add like let's say in the search we're going to do it probably in go. Let's say the booking also in go. So we want to create like a new go service that has like the TC API do some manipulation stores things in radius
+Shauly Sahar: I don't think so because later
+Eliran Friedman: and then calls F3. Does it make sense? I don't know.
+ 
+ 
+00:27:37
+ 
+Shauly Sahar: on you're going to probably cut this part. I think
+Soso Tughushi: Well, Al said that uh I mean this flow or the refactoring of booking
+Shauly Sahar: if
+Soso Tughushi: funnel might not happen for years. Right now they're just I mean there is a plan to extract search and
+Eliran Friedman: No,
+Soso Tughushi: uh
+Eliran Friedman: I think I think like years is like a exaggeration like booking flow probably be the next one after search but you know we do want to do it like you know not everything at once but the question is if you have alternatives that's I think like the question the question is like how do we see it like so when you when you thought about it. How did you see it? I I want to just get into your thoughts. What What was your suggestion? Because not understand it yet. You You wanted
+Soso Tughushi: There there were there were a few let's say ideas.
+Eliran Friedman: to
+Soso Tughushi: uh at first I wanted to treat uh want to go as a black box and uh do this transition to let's say kill the TC services right I mean if let's say um I mean there was two options right to do it as a separate
+ 
+ 
+00:28:39
+ 
+Eliran Friedman: Hey.
+Soso Tughushi: service or built it into the F3 right so now I'm exploring the path of building it into the F3 let's say if we wanted to do it as a separate service I mean we
+Eliran Friedman: Mhm.
+Soso Tughushi: would for uh need to sustain uh keep the existing API or exiting shape and we would in this case need to investigate uh if we could uh make it work uh independently of uh F3 uh endpoints. I mean if we want to I don't know for it to become a new standard then maybe it makes sense to let's say pay more attention to this part whether or not we should call the existing F3 services or let's say uh identify what are the databases or what are the components the F3 users that could be already taken out and put it into this separate micro service or the separate module.
+Eliran Friedman: basically
+Soso Tughushi: But this this I don't know this triggers me a bit because it sounds like an like big big work or core design. I
+Eyal Eitan: But this is not what I intended.
+ 
+ 
+00:30:00
+ 
+Eyal Eitan: So I mean I don't think this is an optimal way to go because it will mean
+Soso Tughushi: mean,
+Eyal Eitan: that in to different places we use the same databases. So if something changes we will break and vice versa.
+Soso Tughushi: yeah, for
+Eyal Eitan: What I said it's just one option is to just put some layer as an API layer in
+Soso Tughushi: sure.
+Eyal Eitan: F3 with business logic. It's not just a layer of transport translation because you need different business logic.
+Soso Tughushi: Correct.
+Eyal Eitan: You need to call several APIs internally in order to to receive what you want and you have the booking schema you need to transform. This is one option. The other option is saying okay I'm taking the business logic the core in the F3 and exposing it outside. So I'm skipping the the the API layer of want to go B2B API for the booking flow. I'm just extracting the the business logic outside and have our own service using this API and doing the translation. So the this is the two two ways I thought about because I think this will get us closer to what we want in the next stage or next next stage.
+ 
+ 
+00:31:07
+ 
+Soso Tughushi: when you say extract uh the API or the business logic from one to go. Uh for me this part is what I what we were doing. I mean uh do you want I mean you want what's the problem of uh using the add to card method instead in instead of uh let's say having some new endpoint uh that
+Eyal Eitan: Yeah,
+Soso Tughushi: uh that would have the extracted business logic. I mean for me this part is already extracted business logic from want to go's F3 core.
+Eyal Eitan: I understand it functionality it will be the same but it's suboptimal because what you're doing is you're calling the API the B2B API for to go it's been translated to some logic I mean let's for example take the booking schema they are creating a JSON object with all the booking schema and then you take it to your API and then translate this JSON object to a different JSON object which is the connect booking schema. So it's it's suboptimal. I mean it's okay.
+Soso Tughushi: understood. So there is a there is a domain core what what you're saying in
+ 
+ 
+00:32:18
+ 
+Eyal Eitan: But what? Yeah. Yeah. I'm sure they have something.
+Soso Tughushi: the FF3 and and there is the adapter which and this this is the adapter I'm
+Eyal Eitan: Yes.
+Soso Tughushi: using uh uh and it's suboptimal to use the adapter that is meant
+Eyal Eitan: Yes.
+Soso Tughushi: for some UI and instead I could well and get this information from the core domain models or something well the
+Eyal Eitan: Yeah, this is what I think. Yeah, this is what we should
+Soso Tughushi: yeah if I Um I I doubt I doubt I'm I'm just pessimistic
+Eyal Eitan: explore.
+Soso Tughushi: uh that on one to go side there will be some I don't know DDD design or
+Shauly Sahar: All
+Soso Tughushi: like uh I don't know separate core that yeah but maybe I will I will explore and and
+Eyal Eitan: Yeah,
+Shauly Sahar: right. So for
+Eyal Eitan: in the search I saw they have some business logic layer.
+Soso Tughushi: and
+Shauly Sahar: me,
+Eyal Eitan: It's not the DD but they have some business logic layer and they have some the present the API layer of just creating a
+ 
+ 
+00:33:13
+ 
+Soso Tughushi: there is there is only in the in the controller called to application service which
+Eyal Eitan: response.
+Soso Tughushi: directly queries database. I mean the application layer is mimicking uh whatever uh is uh getting to the controller. I mean controllers are uh quite thin. I mean there is no not much transformation going on there. Uh I mean what we see in the end points is their internal domain logic as I understand. I mean there is no different separation. Yeah.
+Shauly Sahar: I I I think that what we need to understand is like what exactly method we need to connect there. Um and it should be like uh the the lowest highest uh um common common one. Um so it can be done easily on on our side.
+Soso Tughushi: I mean right now the let's say in the my specs the create booking uh doesn't call
+Shauly Sahar: Um
+Soso Tughushi: this uh endpoint itself. It just calls exactly what is behind this controller. But I'm not sure if this is the smallest unit I I I I I can call.
+ 
+ 
+00:34:31
+ 
+Soso Tughushi: I'm assuming it is.
+Eliran Friedman: But can can we also like try to adapt a bit to the want to go away like do maybe like there are some things in TC why not only in the
+Shauly Sahar: because it will break the Okay.
+Eliran Friedman: client for example Example,
+Shauly Sahar: Okay.
+Eliran Friedman: it's like right here that the key challenge in the get gener like the booking schema par is like 1,000 lines of code. Let's say that we are like creating like something that connects to one to go's booking get it. Can we like do some kind of adjustment to keep the API that we have but you know adjust it to one to go. What will you lose? I would say at
+Soso Tughushi: Let's say I could call directly database look at from where the existing trip details
+Eliran Friedman: least
+Soso Tughushi: is taking the data and let's say have smaller layer or query it from the database in the way in the format I want instead of uh doing the translation on top of what want go is returning.
+ 
+ 
+00:35:28
+ 
+Shauly Sahar: Yeah. I think what we have there is like um want to go um um
+Eliran Friedman: concentrate.
+Shauly Sahar: concatenate the trip ID into the name of the schema level and this is something that we are removing from uh the client you know this kind of a thing uh what what else like male and female it's appear as zero and one all those uh things that uh
+Eliran Friedman: But it's it's that like again not not we can do it now we can like
+Shauly Sahar: but do you want to return to the client zero and
+Eliran Friedman: uh no we can like if you like rewrite
+Shauly Sahar: one maybe I I'm sure that
+Eliran Friedman: the parser like
+Shauly Sahar: su can do it at least with one line
+Eliran Friedman: uh
+Shauly Sahar: less I'm sure he can do that uh in more optimal way uh but again as as as he said and and as I expect this will be the most complex one and and I think that in general we have some some gaps there in in TC API that in the future we'll need to to enhance and I want I don't want to get into that now in this in this parts.
+ 
+ 
+00:36:49
+ 
+Eliran Friedman: Okay,
+Eyal Eitan: What happened?
+Eliran Friedman: I can
+Soso Tughushi: So as an action action point can we say that okay maybe in the get itinerary to create a
+Eliran Friedman: see
+Soso Tughushi: booking schema let's try to do some alternative and let's say create dedicated uh method in one to go instead of reusing existing one to do this transformation to to avoid this transformation I mean it's not guaranteed that the amount of lines that will be needed will be less than that. Uh but yeah, maybe I don't know. I don't I mean it's it's unknown and um yeah, maybe it's worth investing it.
+Shauly Sahar: So, so can we continue with the other items that you have opened? I I don't remember that we discussed that. Uh,
+Soso Tughushi: Yeah. So there is another problem in this booking funnel is uh booking
+Shauly Sahar: yeah.
+Soso Tughushi: ID. So first of all about the format of the booking ID if it should be obuscated or not. I mean uh want to go just returns an ID and uh we whether or not we will be fine to return to the client's different formatted ID.
+ 
+ 
+00:38:08
+ 
+Soso Tughushi: Um there is also I mean the I will talk about it later just this booking ID uh that we have in TC um that we are returning to the clients it also contains some other information except for uh one to go's ID. So point is that uh when we will do this transition I mean when we will want to migrate the clients to new system or to new old system uh you we will uh need to uh what decide what to do with the existing bookings that we have in TC. I
+Avihai Shabtai: But we already we already have like we changed the booking
+Soso Tughushi: mean,
+Avihai Shabtai: ID.
+Soso Tughushi: we changed the
+Shauly Sahar: Now the the booking ID in TC is currently we have the option like Vlad did the shortening of that so it doesn't hold everything it's just an ID and and we are having it in um in the database to to pull all the necessarily information but some of the bookings are still have this long one but anyway we still use it as an ID to pull the information from the from the uh database
+ 
+ 
+00:39:30
+ 
+Avihai Shabtai: But you don't need to pass it in order to understand what's going on.
+Shauly Sahar: Correct.
+Eyal Eitan: the booking flow it's one thing but after the booking it's a different thing it's just a string maybe in the booking flow there is some logic currently there isn't I know that in the shortening it's just a a random number it's not something logical
+Avihai Shabtai: Mhm.
+Eyal Eitan: but before that it was something in anyway I think it's a string for the client.
+Avihai Shabtai: Yes. Yes.
+Eyal Eitan: It's a string.
+Shauly Sahar: Yeah.
+Eyal Eitan: So the client shouldn't concern if it's a number, if it's string offiscated or not.
+Avihai Shabtai: Yeah.
+Eyal Eitan: It shouldn't break
+Soso Tughushi: Yeah,
+Eyal Eitan: anyone.
+Soso Tughushi: for new client it will not be a problem at all. For existing ones, I will just get to it later on about when we will talk about
+Shauly Sahar: Okay.
+Soso Tughushi: migration
+Shauly Sahar: Yes. I I think that we should consider using the one to go API booking
+Soso Tughushi: ID.
+Shauly Sahar: ID. It will be easier like to to that will not have another ID all over the system.
+ 
+ 
+00:40:27
+ 
+Shauly Sahar: So I would vote for for that.
+Eyal Eitan: Mhm.
+Soso Tughushi: Yeah. Um then well incomplete results but I think we resolved it.
+Eliran Friedman: Generally speaking like the guidance should be that we need like to follow want to go wherever we
+Soso Tughushi: Yeah.
+Eliran Friedman: can. Yeah, because if anywhere that you're doing something different and want to go then you know we need also to make sure that like somehow we unified want to go to
+Avihai Shabtai: Yeah, the booking ID is not just different.
+Eliran Friedman: TC
+Avihai Shabtai: It's it's another layer like you have another translation booking ID on their end and then another one and when you expose it to clients they don't even know which ID they need to take if they are looking at the agent portal and so on. Soldier.
+Soso Tughushi: Yeah. Um after that there are post blocking uh operations.
+Eliran Friedman: booking in general like do we need like to we have our own database of booking we have also like we always
+Soso Tughushi: So
+Eliran Friedman: use also one to go's booking database
+ 
+ 
+00:41:35
+ 
+Soso Tughushi: well everything that we are booking we are storing it on our site too.
+Eliran Friedman: but also always also want to go
+Soso Tughushi: This was yeah always also as well as on
+Eliran Friedman: right
+Soso Tughushi: the integration site whether or not it was one to go or anything else.
+Eliran Friedman: It's not always want to go.
+Soso Tughushi: I mean,
+Eliran Friedman: Sometimes it can be like if it's not a want to go integration then it doesn't
+Soso Tughushi: yeah.
+Eliran Friedman: go.
+Shauly Sahar: I think that you you maybe ask something different. Can you reiterate your
+Eliran Friedman: Yeah. When we are now doing a booking in TC it and it's not like a one to go
+Shauly Sahar: question?
+Eliran Friedman: integration. Do we also create a booking want to go or
+Soso Tughushi: Don't
+Eliran Friedman: not?
+Shauly Sahar: Uh I Okay, so that's a good question.
+Avihai Shabtai: Okay.
+Shauly Sahar: Um for the LATAM clients in the Anibus,
+Soso Tughushi: know.
+Eyal Eitan: No.
+Shauly Sahar: we are creating the booking post uh post the confirmation on on on the nali on TC.
+ 
+ 
+00:42:30
+ 
+Shauly Sahar: Um and and and we'll stop with that once we'll uh move everything to one
+Eyal Eitan: Come back.
+Shauly Sahar: to go.
+Eliran Friedman: But we don't want to go in the the only option.
+Eyal Eitan: you're talking about what's what's now or what we want currently every every
+Eliran Friedman: Yeah. What's now? What's today?
+Eyal Eitan: reservation every booking which is done through TC is been saved in TC and then what happens is if there is a client owner if the the owner of the reservation of this client is not TC and usually it's not it's one to go we send the post notification to the owner which is one to go the reservation has been made take the credit off support the client and whatever so what they do they put the reservation in their system as well I'm not sure if it's the same data if they use all the data or not but it's not like
+Eliran Friedman: Okay.
+Eyal Eitan: the same business procedure as the booking is on one to go site
+Eliran Friedman: But in in this suggestion, you're going to always go to want to go directly, right?
+ 
+ 
+00:43:33
+ 
+Shauly Sahar: Correct.
+Soso Tughushi: Yeah,
+Eliran Friedman: Okay.
+Soso Tughushi: there is no need to store any data about uh booking details on our site. Before we would use store whatever was returned from get itinerary u just our booking details uh that that would be returned so that we wouldn't bother the downstream services anymore and we would just get it from our uh database instead. But now we can just do a pipe thing and whenever we need booking
+Eliran Friedman: Mhm.
+Soso Tughushi: details just to query for one to go and do transpiration every every time.
+Eyal Eitan: Did we check that we don't have any gaps between the data the data model in our database of reservation and want to go we'll have all the data for all
+Soso Tughushi: Yeah, I think yes. I
+Shauly Sahar: Yeah.
+Eyal Eitan: the
+Shauly Sahar: And we we are trying to keep not adding additional things like uh there
+Soso Tughushi: think
+Shauly Sahar: there are before we'll do this migration and we'll know for sure that we have that. For example, I think that they want the cancellation policy or something like that.
+ 
+ 
+00:44:38
+ 
+Shauly Sahar: And
+Soso Tughushi: Yeah,
+Shauly Sahar: yeah.
+Soso Tughushi: another post booking not operation is get ticket URL. We have this capability where we would query want to go and store it on our site uh the PDF uh just temporarily. Now want to go already has an endpoint which also returns PDF and we need to well the only difficulty in there is to align on on it. Uh if uh the expiration of the PDF that was returned that is returned by one to go is uh same as uh what we have or if there is any uh gap there.
+Shauly Sahar: I I think that there is two gaps here is one is like uh we going to give them URL of one to go.
+Soso Tughushi: Yeah.
+Shauly Sahar: Um this is how and um I think that it's also exist in the get booking details. So so right or is it like a dedicated API in one to go?
+Soso Tughushi: Um uh get booking details. Sorry, I don't understand.
+Shauly Sahar: The ticket the get ticket how do we get it in one to go from the get booking details or is
+ 
+ 
+00:46:01
+ 
+Soso Tughushi: Yeah,
+Shauly Sahar: it a dedicated API?
+Soso Tughushi: there is uh get booking same endpoint just extract ticket URL.
+Shauly Sahar: Okay.
+Soso Tughushi: Yeah. So yeah,
+Shauly Sahar: Yeah.
+Soso Tughushi: I mean it warm ups nicely. I mean in the worst case scenario if we will see that this is no good and it the want to go returned ticket needs additional saving uh on our side we can just put again in what what we are doing into S3 and just uh uh I mean download whatever was returned from want to go and put it into S3 and then return that S3 URL but I doubt we would need that it's just my intuition
+Eliran Friedman: We can just take one to go
+Soso Tughushi: Yeah, why not? I mean,
+Eliran Friedman: ticket.
+Soso Tughushi: if they will say that if the URL is weird and they're going to complain,
+Shauly Sahar: It's
+Soso Tughushi: I don't know. Things can be weird.
+Avihai Shabtai: Yeah, I could say it's a product issue. I would say we care about
+Shauly Sahar: Yeah.
+ 
+ 
+00:47:10
+ 
+Avihai Shabtai: the
+Eyal Eitan: We need to think about the I don't know some branding and stuff. I mean when we get the ticket we would like it to have one to go logo or tra logo
+Avihai Shabtai: This is not your from today.
+Eyal Eitan: or
+Avihai Shabtai: This is uh today.
+Shauly Sahar: This is what we
+Avihai Shabtai: This is what we get.
+Shauly Sahar: get
+Avihai Shabtai: We don't do anything today.
+Eyal Eitan: Okay.
+Eliran Friedman: So is that the path that needs to like to
+Avihai Shabtai: So Let's
+Shauly Sahar: maybe.
+Eliran Friedman: visualize?
+Shauly Sahar: Yeah. And it's also I think it's it's not just just the this but it's also how the client will get
+Avihai Shabtai: go.
+Shauly Sahar: it. But we'll get to it in a maybe in another slide or or or two.
+Eliran Friedman: in what?
+Shauly Sahar: In another slide or two. I think that uh also having.5
+Eliran Friedman: Sorry.
+Soso Tughushi: Yeah.
+Shauly Sahar: something
+Soso Tughushi: Um then another postbooking operation is cancellation of booking and uh right now when we are cancelling we are also calculating the amount to be refunded and it's part of the response and we have also corresponding uh endpoint on one to go just to get the refund options.
+ 
+ 
+00:48:22
+ 
+Soso Tughushi: uh there is also in progress work to do the consellation uh policies. I'm not sure how it's different than this but I don't expect here to be something
+Shauly Sahar: Yeah.
+Soso Tughushi: uh drastically different. I mean there will be no I mean uh I think previously would call also uh during this uh cancellation. Now there is no need and we can just take refund amount that is uh returned uh by want to go when we are calling this post. So the difficulty for this part is also low
+Eliran Friedman: W get medium. So why get medium and not
+Soso Tughushi: again uh just
+Eliran Friedman: low?
+Soso Tughushi: because uh there is an unknown there if we would need to rewrite it into different S3 or not. I mean uh this is
+Shauly Sahar: Heat.
+Eliran Friedman: that we can give like a C name or ISS to the relocation
+Soso Tughushi: why
+Eliran Friedman: now I guess like we can some like resolve it on the network level not necessarily
+Eyal Eitan: What?
+Soso Tughushi: also true but it's just additional work that might be required this is what I saying
+ 
+ 
+00:49:39
+ 
+Eyal Eitan: Okay.
+Soso Tughushi: I mean forget booking details and cancel booking there is no unknowns or no extra hopes we need to do just transformational knowledge where this
+Eliran Friedman: Okay.
+Eyal Eitan: Yeah,
+Soso Tughushi: requires extra
+Eliran Friedman: Okay.
+Eyal Eitan: but if if the clients are getting a URL for the ticket,
+Soso Tughushi: There.
+Eyal Eitan: I don't think it's matter if the URL is an S3 somewhere or a URL for want to go. It's a URL. So, I don't think from the client perspective, this is a breaking change or something unless you think otherwise,
+Shauly Sahar: Correct.
+Eyal Eitan: but it seems
+Shauly Sahar: It's it's a product uh um like
+Eliran Friedman: I think also if you need like different URL I guess we can like somehow like make sure that like we have the right URL.
+Shauly Sahar: item
+Eliran Friedman: I don't think it's an issue.
+Soso Tughushi: Yeah.
+Eliran Friedman: Don't like an issue.
+Avihai Shabtai: Yeah, probably more important is the logo and the ticket which is guarantee to go.
+Soso Tughushi: Don't
+Avihai Shabtai: Oh, I'm not sure that the most important is the URL name,
+ 
+ 
+00:50:34
+ 
+Shauly Sahar: Yeah.
+Avihai Shabtai: but okay.
+Eliran Friedman: Okay, let's just
+Shauly Sahar: So, so let's go go to the identification part because I think it's
+Eliran Friedman: continue.
+Shauly Sahar: uh
+Soso Tughushi: Yeah. So maybe so I have two versions like a normal one and minified version just for presentation. Sorry for switching back and forth. Uh so uh client identity and authentication. Uh so right now uh we are sending uh to uh one to go such uh no we are our endpoints that P2B clients are calling have this format V1 then client ID and in the header they are also putting the API key. Uh and first of all uh there is no notion of client ID inside F3 for now. Uh the client ID is used mostly on our site to um in the metrics uh in looking up which client to call with the web hook URL and um maybe somewhere else too. So yeah so and it's like human readable so we have book away I don't know others as our clients and um we need to have uh something like this on on their site um a good
+ 
+ 
+00:52:03
+ 
+Eyal Eitan: Why? Why do we need currently one API uses the API
+Soso Tughushi: question so
+Shauly Sahar: correct that that he has a proposal for that.
+Eyal Eitan: key, right?
+Shauly Sahar: Uh that's
+Soso Tughushi: first of all I want to get rid of this client ID and the URL and just uh only send the API key uh because we can identify the users based on the API
+Eyal Eitan: I don't think it's a good idea.
+Soso Tughushi: key.
+Eyal Eitan: And I'll tell you why. Because I think that if you use only the API key, it means that everyone can use this API key and identify the client. But once we we have those two parameters together, we can do some coalition and do verification that the API key belongs to this client. And I don't see what what this is a breaking chance.
+Soso Tughushi: I mean why why do the validation
+Eyal Eitan: I mean changing this one is a kind right.
+Soso Tughushi: is it I mean they if they are have let's say URL that they're sending I mean uh they just need to change the URL anyway I mean when going we got they going to migrate to us then they're going to at least change the base URL And I'm not sure maybe maybe they will be fine with removing it.
+ 
+ 
+00:53:12
+ 
+Eyal Eitan: Oh, it's okay.
+Soso Tughushi: Point is that right
+Eyal Eitan: It's a breaking chain. It's a small one.
+Soso Tughushi: now.
+Eyal Eitan: It's There's no penalty for them. It just But it means that they need to change something in order for that to work. That's what I'm
+Soso Tughushi: Correct. Yeah.
+Eyal Eitan: saying.
+Soso Tughushi: This is not a blocker. I mean we can do with client ID. It's just for me it doesn't make sense. I mean uh right now we have on our side David wrote a service to validate whether or not the API key that they sent correspond to this client ID. If not they can throw there.
+Eyal Eitan: But
+Soso Tughushi: What I'm proposing we can just when we receive the API key to the to know to get from database what is their client ID and use that instead of force them to know their own uh client ids.
+Eyal Eitan: there's no validation in that. I mean you're using only one identifier which is the API key. It means that if I know the API key I can call do a booking and identify myself as a ferry scanner.
+ 
+ 
+00:54:05
+ 
+Eyal Eitan: Right. Nothing
+Soso Tughushi: Correct. If you know API key and you are not supposed to have it,
+Eyal Eitan: can
+Soso Tughushi: then it's big security gap. I mean it should be a secret.
+Eyal Eitan: Yeah. But I
+Soso Tughushi: So why I mean right now our B2B clients are identified by API key and client ID and if they pass incorrect one then we scream at them and then why give them option at all
+Eyal Eitan: Yeah,
+Soso Tughushi: to pass us.
+Eyal Eitan: it it's just allow allows us currently it's just stale data but it allows us to do some impersonation later on to say okay a client ID is I don't know TCD dev and this is the APIK I want to use and this is a feature and I can verify that I can do the this operation on someone's behalf or things like that. So I
+Soso Tughushi: So we wanted to have multiple clients on same API uh key
+Eyal Eitan: We we would like to have the option to impersonate as the client for example support would like to do something on behalf of someone.
+ 
+ 
+00:55:01
+ 
+Eyal Eitan: These are the additional features that currently doesn't exist in want to go and know in to connect but yes it allows us to have something and for visibility sakes it allows us to look at the logs and identify what's the client is without going to the database. So I I understand it totally what you're saying doesn't make sense because one to go API doesn't have it but if we if we are changing the URL when we will develop our connect API it will be harder to break it again so maybe it's it's better to keep it there and maybe use it later on currently we will not use it we will not touch it we'll just take the API key as you said but later on we can probably do some features
+Soso Tughushi: correct. But I think what also the use case that you described also can be achieved with only API key. So somebody impersonating somebody else means that uh this API key that they are sending uh belongs uh to a user with this company and they maybe they are sending separate uh I don't know header to say oh I want to this support role instead of somebody
+ 
+ 
+00:56:08
+ 
+Eyal Eitan: Yep.
+Soso Tughushi: else. Hi
+Avihai Shabtai: I I just want I I just want to say that I don't understand the real value of removing the CL like this is a change for the clients. It need to be extremely just it's it needs to be extremely justified from my point of view at least in order to
+Soso Tughushi: Yeah.
+Avihai Shabtai: do that. I don't think this is the case according to what we are talking about. So, uh,
+Soso Tughushi: Agreed. I mean uh I it was my duty to push uh when I don't see something I that makes sense. But yeah, I mean for sure this would be a it could be a breaking chain for somebody. uh so we can just keep it. Uh in any case we would need in the uh want to go database some correspondence of API key uh or user ID. I mean right now when they are sending API key one to go F3 knows what is their user ID. So we need some user correspondence of their user ID with the client ID that we have on our site.
+ 
+ 
+00:57:11
+ 
+Soso Tughushi: So it could be added either in the users table on their site as an optional column nable column or a separate B2B module table just where we would have correspondence of their user ID or agent ID and uh our client ID just because we want to have
+Shauly Sahar: Okay. I I have Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: I I I want to ask what is the um product requirement for that Aikhai because currently want to go has a number in the client ID. You are familiar with that, right? And probably we would like to have some meaningful name there, right?
+Avihai Shabtai: Uh yeah, I didn't think about it to be honest, but uh
+Shauly Sahar: But this this is important because um I think that we can do if the client will need to put like instead of book away like 3,457 as the client ID is something is this something that we we want to
+Eliran Friedman: What are
+Eyal Eitan: But why to touch it?
+Shauly Sahar: have?
+Eyal Eitan: I don't understand. I mean there is an uploading for the client.
+ 
+ 
+00:58:17
+ 
+Eliran Friedman: they?
+Eyal Eitan: We give him a name and we said this is the name you send.
+Shauly Sahar: Yeah,
+Eyal Eitan: In this stage we don't touch this name at all.
+Shauly Sahar: but currently we don't but Yeah.
+Eyal Eitan: We don't need correlation
+Shauly Sahar: Yeah. But uh we don't have name for the clients today.
+Eyal Eitan: nothing.
+Shauly Sahar: When you're creating that, you just get an ID
+Eyal Eitan: Yes. But this this is the nature we need to keep,
+Avihai Shabtai: on what to go side.
+Shauly Sahar: number.
+Eyal Eitan: right? You're talking about not this thing. You're talking about adding a new client to the system, B2B client,
+Shauly Sahar: Yes. So what do I give him?
+Eyal Eitan: right?
+Shauly Sahar: I give him a number or I give him a meaningful um
+Eyal Eitan: So one to go currently, they have a name, right? When they create a new client, there's no
+Soso Tughushi: they have agent name uh uh but it's it could be like big string even like some
+Eyal Eitan: name.
+Soso Tughushi: something LTD blah blah blah I mean uh it's it
+ 
+ 
+00:59:04
+ 
+Shauly Sahar: with via Yeah. via TC
+Avihai Shabtai: Yeah. In for hardware.
+Soso Tughushi: doesn't
+Eliran Friedman: That's my question.
+Shauly Sahar: something.
+Eliran Friedman: What's the correlation of the like how is this like behaved versus like one to go's authorization authentication system? Like do we use any of one to go systems or do we just having our own systems?
+Soso Tughushi: we rely on uh want to go authentication system right now. I mean the point is that when we will do the migration uh whatever the API key uh is required from uh one to go we're just going to give them give our our clients new ids right now new API keys right now we would give them our AP AWS API gateway key and instead we would just give them one to go uh key for this client and they going to send it in the same way they would put it in the same header that they would put uh that uh gateway key.
+Eliran Friedman: But how how will it work out of the box when you need to develop it?
+ 
+ 
+01:00:05
+ 
+Eliran Friedman: No.
+Shauly Sahar: Yes,
+Soso Tughushi: I did it already in just I added uh in this pull request
+Eyal Eitan: Yeah.
+Shauly Sahar: the
+Soso Tughushi: uh ability to read this API key in from the header instead of
+Eliran Friedman: I mean in general I think that like it's okay that we don't want to break anything on our side but we
+Soso Tughushi: what
+Eliran Friedman: need to see how we maybe we need only one authentication system and we don't need to like all the cases in my opinion we like taking a different path than one to go. Uh it's something that like we talking about all the time. We need to see also like to close the loop if want to
+Shauly Sahar: Yeah,
+Eliran Friedman: go.
+Shauly Sahar: but what he did is just where he take the key from the request. It's not. And then he called the there is some method that check if it's
+Eliran Friedman: the same method.
+Shauly Sahar: uh
+Eliran Friedman: Okay. No, it's it's good.
+Shauly Sahar: Yes.
+Eliran Friedman: I'm just saying that like whenever we're taking a different path,
+ 
+ 
+01:00:52
+ 
+Soso Tughushi: Yes.
+Eliran Friedman: we just need to make sure that like we we're not creating again, you know, two separate mechanism for everything. So, as long as you're reusing like one to go the authentication and authorization, then it's
+Soso Tughushi: Yeah. Yeah,
+Eliran Friedman: good.
+Soso Tughushi: that's that's um the
+Shauly Sahar: We probably will need to add another layer on top of that for this client.
+Eyal Eitan: I think I
+Soso Tughushi: question.
+Shauly Sahar: Uh
+Eyal Eitan: think in in general case I think I'm with you and you're correct but I think in this in the authentication and the security stuff I think the B2B API might evolve faster than the API of want to go because they use it for B2 site. So maybe for the authentication it will be makes sense to have something external from ours and just delegate what one to go wants currently but have the option to evolve later on with additional authentication methods and things like
+Eliran Friedman: Yeah,
+Eyal Eitan: that.
+Eliran Friedman: I feel that like in the end from my perspective, you just need to make sure that like want to go is yet another consumer just like any other brand.
+ 
+ 
+01:01:59
+ 
+Eliran Friedman: Uh so like it's like now you're doing immigration but in the end you don't need to say in one to go it's like that and for 10 it's like that for 10 book away want to go all of them should like behave kind of the same from my from my perspective. So we need to see how we can like close the gap that like one to go will just become yet another brand currently it's not like that but uh again it's kind of the path that actually is dealing about unify the notization okay but for now you're taking like one to go system you're just wrapping it with another step to extract the client from the
+Soso Tughushi: All
+Eliran Friedman: URL
+Shauly Sahar: We need to but we need to understand what what exactly we give to the client
+Soso Tughushi: right.
+Eliran Friedman: it's very better that we all Grid should be like a readable uh like
+Shauly Sahar: because
+Eliran Friedman: readable name is
+Shauly Sahar: Yeah.
+Eyal Eitan: No,
+Eliran Friedman: better.
+Eyal Eitan: the API key I mean if it is something we take from AWS then it's not the API key that want to go uses.
+ 
+ 
+01:02:57
+ 
+Shauly Sahar: Correct.
+Eyal Eitan: So we need to map key.
+Shauly Sahar: The client will leave. Client will
+Eyal Eitan: This is not a security this is not something good security wise.
+Shauly Sahar: need
+Eyal Eitan: So the other option is to to build the API key in one to go system and expose that to the client and don't do any authentication in the in the gateway just navigate it
+Shauly Sahar: but I don't again I don't know if this is something
+Eyal Eitan: and
+Shauly Sahar: that done on the API gateway by the way. Um,
+Eyal Eitan: or us ah I don't know I don't think they have an API gateway at all they have
+Shauly Sahar: a day I
+Eyal Eitan: just changing
+Shauly Sahar: uh
+Soso Tughushi: Yeah,
+Eyal Eitan: anything.
+Soso Tughushi: this uh keys are validated in the database. They query, oh, is does this user exist in our database and is the API key correct? This is how they do it.
+Eyal Eitan: So this is a question I think that we can do whatever want to go ahead currently but I think this something we need to decide security wise if we want to keep doing that the database saving the API key over there or use some tooling or other system or whatever we want authentication in the API near the API let's call
+ 
+ 
+01:04:10
+ 
+Shauly Sahar: Anyway, we have to understand what we are doing here um in terms of on boarding the client again because we don't have the actual string there which I think it's it's a gap.
+Soso Tughushi: Yeah, I mean uh in any case we I mean question is do we I mean we for sure are receiving the client ID in in the URL and then we are using it in multiple ways like uh metrics uh monitoring or we also sometimes have a client configuration and we would search for the web hook URL based on this client ID.
+Shauly Sahar: record.
+Soso Tughushi: Question is uh I mean and sometimes we have capab like ability to uh look at each client uh and filter their uh metrics uh I mean just to see what are their sales or what are the confirmation rates
+Eyal Eitan: Yeah,
+Soso Tughushi: only for bookway and
+Eyal Eitan: but all all of this stuff is going to be in a minute, right? You're talking about what we have currently in the NALI and the other services.
+Soso Tughushi: Yeah, correct. Yeah.
+Eyal Eitan: But when we once we move to want to go,
+ 
+ 
+01:05:18
+ 
+Soso Tughushi: So,
+Eyal Eitan: we will have what they put in the metrics and hopefully they put the user ID or whatever there is the agent name or I don't know what
+Soso Tughushi: Yeah, correct. Correct.
+Eyal Eitan: right.
+Soso Tughushi: I mean maybe we don't even need um any of it and let's say when we want to I don't know when we are looking at the logs they have the uh user ID instead of the client ID which can be used to identify them and find them. I mean that's more yeah but in any case uh we still need this table or we still need this notion of client ID because they are sending us this client ID and we need to validate if what they sent is corresponds to the API key that they also sent.
+Eyal Eitan: What I said we don't have to I mean if want to go doesn't use this we can start
+Shauly Sahar: we can do that.
+Eyal Eitan: without doing anything with
+Shauly Sahar: Yeah, but yeah,
+Eyal Eitan: it.
+Soso Tughushi: We can just ignore it.
+Shauly Sahar: as we did with but as we did in TC that at the beginning we didn't care about it and later on we validate the e the the the reason for that to be very easy uh to to implement that because we keep it strict from the get-go.
+ 
+ 
+01:06:29
+ 
+Shauly Sahar: So we need to make sure that we know how to create this uh string like
+Soso Tughushi: Yeah.
+Shauly Sahar: readable string and and to give it to the the client. So and and when the time will come which I think that might be easy way to to to do that uh we should uh just uh implement what Davidid did uh in TC if
+Soso Tughushi: To basically reject the incorrect client ids.
+Shauly Sahar: they are not matched together. Yes.
+Soso Tughushi: Yeah. And in any case, in this case, if this CL creation of client ID also part of the client on boarding then we just need uh uh to put this client ID somewhere in database either in the existing user tables or separate B2B
+Eliran Friedman: immigration
+Soso Tughushi: scheme.
+Shauly Sahar: Yeah.
+Soso Tughushi: Uh we are out of time.
+Eyal Eitan: Okay.
+Shauly Sahar: Yeah.
+Soso Tughushi: Um I don't know another round or should we extend?
+Eliran Friedman: the last part, right? Okay.
+Soso Tughushi: Yeah,
+Eliran Friedman: But until here that that covers all the flow for new
+Avihai Shabtai: for you too.
+ 
+ 
+01:07:34
+ 
+Eliran Friedman: clients.
+Avihai Shabtai: I would say
+Soso Tughushi: for Q2 there is also just one thing that I missed out about notifications. I mean I I was assuming that uh I would be doing uh it let's say alone and I would need uh help uh on your side about PHP body sessions uh the Kafka event uh discovery as well as monitoring and metric discovery and I also uh see a risk that uh me testing it all of this could be time consuming so I would also request some uh QA resource uh for uh the Q2 to for me to well I mean I would for sure as a programmer do my internal testing before going it further but as practice shows it's always uh something that slips between
+Eliran Friedman: And like regarding like testing in general and like this kind of stuff,
+Soso Tughushi: fingers
+Eliran Friedman: want to go has end to end testing or integration testing or anything like that, do you know?
+Soso Tughushi: I I think they do have QAs and they have QA environments. Uh uh but also it's developers who decide whether or not certain feature needs at first QA approval before uh releasing it to the
+ 
+ 
+01:08:57
+ 
+Eliran Friedman: Today we show you show me that we have kind of an end to end testing on uh like do
+Soso Tughushi: production.
+Shauly Sahar: on TC. Yeah,
+Eliran Friedman: we can we can like keep kind of an end to end testing on the new flow like maybe we can check if you want to go as end to end testing or something like that.
+Shauly Sahar: I I think that we can add test to the the one that we currently have on the TC because it's like it's like another API. Actually, it's supposed to be the same API calls, right,
+Eyal Eitan: Yeah.
+Shauly Sahar: with just with different IDs.
+Eliran Friedman: Just to make sure that we are not losing uh any code cover,
+Eyal Eitan: Thank
+Eliran Friedman: any test coverage, any confidence in the in the
+Soso Tughushi: Yeah,
+Eliran Friedman: system.
+Soso Tughushi: but the guy who wrote this QA uh automation engineer was fired. So, uh it's going to be somebody some resource who would need to like adjust or make sure that this I think
+Eliran Friedman: like not familiar with that.
+ 
+ 
+01:09:46
+ 
+Shauly Sahar: is is familiar a bit like he he he was
+Soso Tughushi: no well he's
+Shauly Sahar: working a bit on that with um Ivan But um I I don't think that they did much of progress
+Eliran Friedman: Okay, we just need to to see like another item in terms of like tests and integration test
+Shauly Sahar: there.
+Eliran Friedman: and we just need to see we have coverage. So let's see if we can like either use like this is test or use one to go test end to end test if they have it. I don't know just to see that like after every deploy we have confidence by the way we also like need to start trigger like some of these test also on one to go deploys to see that like want to go
+Soso Tughushi: Yeah.
+Eliran Friedman: doesn't break us like we just need to see that
+Soso Tughushi: Well, yeah.
+Shauly Sahar: Yeah.
+Eliran Friedman: like now that we're inside like want to go system uh much deeper also their deploys are not breaking
+Soso Tughushi: Yeah. But right now it's on separate cloud.
+ 
+ 
+01:10:48
+ 
+Shauly Sahar: Yeah.
+Soso Tughushi: I mean I don't know how to wire we
+Eliran Friedman: No, no. Once you finish all of them,
+Soso Tughushi: deploy
+Eliran Friedman: I mean once we are all inside F3 or or want to go just to see that you
+Soso Tughushi: correct then we should also plan about this migration of this automation tests to the on
+Eliran Friedman: know
+Soso Tughushi: thego one and put put it in the in their pipeline.
+Eliran Friedman: pipeline as well because in the end like they can also break you.
+Soso Tughushi: Yeah.
+Eliran Friedman: not in the it's vice versa.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah.
+Eliran Friedman: Okay. Generally speaking, like it seems that like this part is much more complex than the previous one.
+Soso Tughushi: You mean the web uh booking?
+Eliran Friedman: Booking mostly booking I guess.
+Soso Tughushi: Uh yeah.
+Eliran Friedman: Yeah.
+Soso Tughushi: Yeah, for sure.
+Eliran Friedman: Because And what about you something about notifications,
+Soso Tughushi: This is the main part.
+Eliran Friedman: right?
+Soso Tughushi: Yeah. Yeah. I wanted to I mean just uh I don't think I mean notification is also quite um um not easy module I would say because right now we receive notifications uh with web hooks on our site.
+ 
+ 
+01:11:57
+ 
+Soso Tughushi: uh we in the notification we have the booking ID in one to go format and we have uh correspondence of booking ID with client ID for us to determine to who to route this notification to. So we have uh in between us uh and the clients this notification service which receives information and then we basically decide who to send further the line and uh the point is that want to go doesn't send us the client ID to who this notification belongs to and we need to have for every booking I booking that we create the correspondence of booking ID and the client uh and also the the web hooks. So it's not an easy module uh I would say and there are I just designed let's say multiple ways to uh to migrate uh all of this like uh where is it notifications? Yeah. So three approaches to either natively implement it in F3 just to determine whether or not this is a problem is that currently uh the booking the notification that want to go set via web hook is in separate different format than what B2B clients uh uh expect.
+ 
+ 
+01:13:21
+ 
+Soso Tughushi: So we just need an adapter uh and there is one way to do it either directly in line when what to go is issuing the notification to check if it's B2B or not B2B user uh somehow from the database and if it's a B2B then send it in different
+Eliran Friedman: Yeah.
+Soso Tughushi: format. Another way is to just subscribe to booting notifications and or from B2B module already and do this transformation on our site. uh to be or not to be not B2B. Uh uh and um yeah and the road they basically do the same mechanism of having the correspondence of booking ID uh to client URL or client. So the point is that I wanted to let's say uh use somebody else's help in development or implementation of of this module and um yeah and that that's that's it actually.
+Eliran Friedman: where where is it want to go the written notification in which service in Free as well?
+Soso Tughushi: It's in F3 I think. Yeah, I remember. Uh
+Shauly Sahar: I think that they have maybe a worker or something like that.
+ 
+ 
+01:14:34
+ 
+Soso Tughushi: yeah.
+Shauly Sahar: I don't I don't
+Soso Tughushi: Yeah, I cannot really uh recall but I did the research which I was
+Shauly Sahar: remember.
+Soso Tughushi: forgotten of course. Um yeah um there is also a third option let's say to keep it through our existing flow which I really don't like. I mean for now just to have this net services actually it goes not through one service but two services. One is our uh book tink notification service in Denali which then delegates it with help of Kafka to another service to send out the notification to the clients.
+Eliran Friedman: Mhm.
+Soso Tughushi: Um so yeah there it's there is it has some difficulty it's not easy thing to write but it's totally manageable. I will just require like a resource another developer to offload this work
+Shauly Sahar: Also, this is something that clients tend to implement months on
+Soso Tughushi: to.
+Shauly Sahar: after they they are in production. So, I'm not sure it's like uh yeah, if it's super critical to do that from the get-go because
+Eliran Friedman: Why again?
+ 
+ 
+01:15:51
+ 
+Shauly Sahar: clients usually don't understand until they are deeply invested on
+Avihai Shabtai: No,
+Shauly Sahar: the production that they want want this
+Eliran Friedman: But like for
+Shauly Sahar: feature. Uh it took time that they did uh get by bus did uh furry scanner did
+Eliran Friedman: example,
+Shauly Sahar: that lately or I think I don't yeah I know I think
+Avihai Shabtai: I don't think they want to do it. I don't think they need it.
+Shauly Sahar: that they are doing that uh
+Avihai Shabtai: Yeah.
+Shauly Sahar: yeah
+Eliran Friedman: so you mean like it can be something in the migration phase or
+Shauly Sahar: maybe we can do that uh in the later step.
+Eliran Friedman: like it's not a requirement for the for new clients. You say
+Shauly Sahar: It will take the client uh time to to get to to that point that they wanted the notification. That's what I'm saying.
+Eliran Friedman: it is something that they will ask about for example
+Shauly Sahar: Uh probably
+Eliran Friedman: new something that like they want to know that we have it or like
+ 
+ 
+01:16:50
+ 
+Shauly Sahar: we should have it anyway, right? I it's not something that we can drop, but uh
+Eyal Eitan: It's something that we we can you can get in pull or in push. So you can always call get thread details whatever you want and get the data.
+Eliran Friedman: Mhm.
+Shauly Sahar: Get working
+Eyal Eitan: This is a mechanism to get the information in a push.
+Shauly Sahar: details.
+Eyal Eitan: So all not all the clients would like to have this option.
+Eliran Friedman: Mhm.
+Soso Tughushi: Yeah.
+Eliran Friedman: Okay.
+Soso Tughushi: Yeah. So it it can be deferred if necessary. I mean I mean it's all again all up to products. Yeah. So when let's say we uh onboard the new uh client everything is set but when we are dealing with existing client we would
+Eliran Friedman: Everything is set.
+Soso Tughushi: h well more or less thought about or
+Eliran Friedman: It's like, you know.
+Soso Tughushi: in the current design I mean I we have designed things there are also some variables
+Eliran Friedman: Yeah.
+Soso Tughushi: for new clients let's say uh where we can give them just a new URL and new API key and that's going to be only change I mean we are aiming for that however uh we also have this translation layer uh of ids so we from uh our side we're returning different station and operator ids versus what they have in the want to go so when we will want to migrate existing client either they should we should give them old ID versus new ID and
+ 
+ 
+01:18:23
+ 
+Soso Tughushi: change change it on your Right. Yes.
+Shauly Sahar: Yeah, I wanted to talk about the new base URL.
+Soso Tughushi: Shy.
+Shauly Sahar: Um, this is probably something that um it will not be TC API the domain
+Eyal Eitan: Why
+Shauly Sahar: that we currently have.
+Eyal Eitan: not? This is DNS record. What? Why? Why not keep it?
+Shauly Sahar: Um I don't I don't know how to do that like um in our own uh way as I'm going
+Avihai Shabtai: Ask. Yes.
+Shauly Sahar: to assign it to you.
+Eyal Eitan: It's just a different mapping in the DNS from
+Shauly Sahar: Yeah,
+Soso Tughushi: Maybe.
+Eyal Eitan: this
+Shauly Sahar: but Tal told me that it will go into the our AWS um uh services
+Eyal Eitan: You're talking about the rollout. I
+Shauly Sahar: now. Okay.
+Eyal Eitan: mean
+Shauly Sahar: Now search so implement the search. How can he get into that um API? Like if you'll type http api.traalier.comv1so ravalier.comv1so search itineraries and put the API key it will go to tal's AWS it's not only for the existing it's from
+ 
+ 
+01:19:45
+ 
+Avihai Shabtai: Why why is it relevant only for existing clients and not for the new ones as well?
+Shauly Sahar: the from the get-go from even for new ones
+Avihai Shabtai: Yeah.
+Eyal Eitan: In the roll out when we roll out things we need to to mitigate that of course because the same domain will need to be mapped according to the client if it's new one or or old one to the current connect or the new connect, right? So, we'll need some mapping logic or some logic somewhere in AWS. We need to to figure out how to do it. But once everything is in want to go,
+Soso Tughushi: What?
+Eyal Eitan: it's a simple mapping, right? So, it doesn't matter.
+Shauly Sahar: Who is doing this mapping?
+Eliran Friedman: Oh, it can be like devil on the devil
+Eyal Eitan: Yes, it's a DNS record. you just map between the the string the DNS itself the URL to the IP and the
+Eliran Friedman: side.
+Eyal Eitan: AP will not be API gateway in AWS of the current account it will be something else but yes you need in the migration phase to have something some logic right
+ 
+ 
+01:20:40
+ 
+Soso Tughushi: Yeah, I I expect that I
+Eyal Eitan: so you need to understand
+Eliran Friedman: All
+Soso Tughushi: expect I expect that we at some point we're going to have the two systems running in
+Eyal Eitan: yes
+Soso Tughushi: parallel. So they would be using the same URL and based on the client ID we would determine uh where the
+Eyal Eitan: mhm It's okay if we are going to change the something from the client side.
+Eliran Friedman: right.
+Eyal Eitan: recurren says okay we can always say we will change the the versioning of the API to v2 and map v2 to the new one and v1 to the current one and that's
+Shauly Sahar: Okay. So, so what we need to do is like let's open a task for that and speak with Dal to give us the option
+Eyal Eitan: it
+Shauly Sahar: and how to because anyway it's something that he will need to investigate and do for for
+Soso Tughushi: Okay.
+Shauly Sahar: us.
+Eliran Friedman: It's also better.
+Soso Tughushi: Yeah,
+Eliran Friedman: I think that like T will be the owner of this task and not
+ 
+ 
+01:21:31
+ 
+Shauly Sahar: Yeah.
+Eliran Friedman: you.
+Soso Tughushi: there is another uh issue with API key. So if we're going to reuse the one to go authentication and mechanism, then we're going to give them let's say new API key. This is something either can be broken or maybe also we can do something some work around under the hood.
+Avihai Shabtai: Yeah.
+Eliran Friedman: Okay.
+Soso Tughushi: Yeah.
+Avihai Shabtai: Okay.
+Soso Tughushi: Um yeah in similar way maybe also it's going to be up to uh but point is that right now the API keys that they are passing us is used for authentication on um API gateway and we do have the mapping how to map uh this API key uh user to um want to go API key uh but yeah it's maybe only won't be able to do that or maybe will require just help from developer to uh give him the mappings. There is a actually table for that.
+Eliran Friedman: Maybe we can go as well.
+Soso Tughushi: Uh
+Eliran Friedman: Now here like the pair client API
+Soso Tughushi: again.
+Eliran Friedman: key and we cannot just like add this API key also like to
+ 
+ 
+01:22:47
+ 
+Soso Tughushi: Yeah.
+Eliran Friedman: want to go systems.
+Shauly Sahar: Um maybe yeah that's one option that we thought that we'll keep the same one that we have in the TC.
+Eliran Friedman: Let's check if we can add it like to the original one. We can just like create a new one and like update the client that they need to up the API key.
+Avihai Shabtai: Yeah, this is not a big issue probably.
+Eliran Friedman: also good for security reasons to like to rotate it once in a while. So don't think it's a big uh polyatic
+Shauly Sahar: Okay.
+Eliran Friedman: line.
+Avihai Shabtai: I would say that if we are talking about the the next item, the API key would be the the smallest issue. Uh if you're talking about station and operator
+Shauly Sahar: Okay.
+Eliran Friedman: I got I got to go now.
+Soso Tughushi: Yeah.
+Eliran Friedman: See the time and I have a minutes and four minutes. Uh I needed to go. We have like a lot of things more like on the these
+Soso Tughushi: Well, these two items actually and that's it actually.
+ 
+ 
+01:23:40
+ 
+Eliran Friedman: items
+Soso Tughushi: Then there was a summary about previous work previous meetings. So yeah like what to do with station and operator ids how to translate them. Uh same as with uh bookings like there is the old bookings and new booking IDs and how do we map them.
+Eliran Friedman: that we have in the system. We know what is like the latest departure.
+Soso Tughushi: True.
+Shauly Sahar: Um, we checked that together, right? Um we saw that most of the bookings were like uh few months in advance but there are really really few um specifically from not like from theibus and and what's the other one that we migrated uh flexbus. Yeah, that were a bit later.
+Avihai Shabtai: Thanks.
+Eliran Friedman: What is that
+Shauly Sahar: No,
+Eliran Friedman: one?
+Shauly Sahar: I think it was like the end of this like 2006, maybe November or something. We can we can check it. But anyway, from Flicks bus, we don't have any more bookings and from the Anibus at some point we will not have any more bookings as well.
+ 
+ 
+01:24:51
+ 
+Shauly Sahar: So, we need to take uh uh this correct.
+Eliran Friedman: the code now you're going to want to go
+Shauly Sahar: Yes.
+Eliran Friedman: always.
+Shauly Sahar: and from one to go. It's probably something that maybe we
+Eliran Friedman: So I think I think maybe maybe this one can just be resolved by later on.
+Shauly Sahar: can.
+Eliran Friedman: Maybe like just time passes all the bookies will be closed
+Shauly Sahar: Yeah,
+Eliran Friedman: and
+Shauly Sahar: but we'll for sure have the one to go bookings there. And for that maybe we can kind of create a table in in one to go that will uh try to check if this ids exist there and then change them back to the one to go uh um API uh booking ID.
+Soso Tughushi: Yeah. Yeah. I mean, let's say the booking ID is uh used for postbooking operations. So, let's say we can keep our existing net services uh until the last booking that we had in the old system is expired, right? And serve these uh clients from there.
+ 
+ 
+01:25:57
+ 
+Eliran Friedman: I really drop off the meeting you can continue I will talk with you sh about the next steps let's think about how we are continuing also with you later on we'll see how we are resolving all the open items
+Shauly Sahar: Okay.
+Eliran Friedman: okay started to work on the items from the previous meeting I will we'll trying to finalize like the
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah.
+Eliran Friedman: owners for each one that was talked there about the catalog and about the reaps we'll also like do a
+Shauly Sahar: Cool.
+Soso Tughushi: Yeah. Oh.
+Avihai Shabtai: So about the booking is it enough until the expiration of the last departure date or we need it also for uh even after for I don't know uh recon
+Soso Tughushi: I mean if we I mean point is that uh we would need this mapping for boot king notifications. So uh let's say they would uh the existing bookings that would be left in the old TC system they would get stale data unless uh we would update
+Avihai Shabtai: Okay.
+Soso Tughushi: them. So that's the problem.
+ 
+ 
+01:26:58
+ 
+Soso Tughushi: I mean, we could say that,
+Avihai Shabtai: Okay.
+Soso Tughushi: okay, you're going to not get the notifications for this once.
+Avihai Shabtai: No. No. Okay.
+Shauly Sahar: I I think that we'll need to probably it will be we have two options as
+Soso Tughushi: Yeah.
+Shauly Sahar: also said either to keep the old system running just for the booking updates which might have we might have problems for that. I don't know.
+Soso Tughushi: Yeah.
+Shauly Sahar: Or just when we migrate the client, we can take the bookings that he he did and and migrate them to the one to go system and then we know all the operation is existing in the one uh system and that's
+Avihai Shabtai: There you go.
+Shauly Sahar: it.
+Avihai Shabtai: Okay.
+Soso Tughushi: Well,
+Avihai Shabtai: Okay.
+Soso Tughushi: this
+Avihai Shabtai: We didn't touch the mapping, but this is something that uh right the station and the
+Soso Tughushi: Yeah, about stations and operators. Well, I see two ways. Either do we do again mapping similar to Fuji this lookup table or we just give them clients. Okay, this were the old station ids and there was a change and please migrate to new
+ 
+ 
+01:28:01
+ 
+Avihai Shabtai: I don't see a way. Yeah, I don't see a way to avoid it to be
+Soso Tughushi: ones.
+Avihai Shabtai: honest.
+Shauly Sahar: Okay.
+Soso Tughushi: Cool.
+Avihai Shabtai: Yeah.
+Soso Tughushi: Um I guess that's it.
+Shauly Sahar: Yes. So, can you stay for one second just to I I I need to bring my uh uh uh electricity. Yeah.
+Avihai Shabtai: Power.
+Soso Tughushi: Yeah, sure, sure, sure.
+Avihai Shabtai: Okay.
+Soso Tughushi: Yeah, no, thanks.
+Avihai Shabtai: Bye.
+Soso Tughushi: Oh, and yeah.
+Avihai Shabtai: Thank you very much.
+Soso Tughushi: No,
+Avihai Shabtai: So, so thank you very much. Very thorough and uh yeah,
+Soso Tughushi: no,
+Avihai Shabtai: even even I got it.
+Soso Tughushi: f***.
+Avihai Shabtai: So, uh that's amazing.
+Soso Tughushi: Yeah.
+Avihai Shabtai: Thank you. Thank you, man.
+Soso Tughushi: All right. Hey. computer died. I cannot hear you. I can see you, but
+Shauly Sahar: You see me? You hear me?
+Soso Tughushi: Yep.
+Shauly Sahar: Yeah. Okay.
+Soso Tughushi: Yes.
+Shauly Sahar: It was like the last electron in the computer.
+ 
+ 
+01:31:08
+ 
+Soso Tughushi: The electron itself,
+Shauly Sahar: Yeah. It it it was holding the the last of the Okay.
+Soso Tughushi: right?
+Shauly Sahar: Uh first I think it was a long but very good and and essential sessions uh to put others in in the picture as well. Um I I think that we have some paths to to to get progress with but also we have like many items that we need to kind of uh close and and decide and I I want that we'll start with doing the following. Okay, let's open an epic Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: And let's start put stories under under it.
+Soso Tughushi: Mhm.
+Shauly Sahar: Okay. Uh even for the open items that we have. Okay. It's like I want to track it like um how you call it like a project and and probably will as as you understand will get some help from from others uh probably
+Soso Tughushi: there.
+Shauly Sahar: uh so even if we have something in the search that is not closed and for example the the how you how we call it the reax like I want to have stories like uh for that that either will decide to postpone it maybe for next phase or it will let someone uh handle uh handle it maybe you maybe somebody else okay I just want to have the flexibility for that and also to create the visibility okay
+ 
+ 
+01:33:07
+ 
+Soso Tughushi: Yes.
+Shauly Sahar: um so yeah that's that's what I want if you can do I don't know how much work it will be for you and Um uh
+Soso Tughushi: Yeah. Well, I have the institution.
+Shauly Sahar: okay. So when do you think that we can have it
+Soso Tughushi: Uh tomorrow. No. Uh maybe on Thursday. I mean I did uh tomorrow I I need probably two days maximum. I mean maybe one and a half day snow but not more.
+Shauly Sahar: But anyway, we have like um only tomorrow like a mutual working day and then only Monday is another the next week mutual working day.
+Soso Tughushi: I mean I could let's say I mean I need to present many of
+Shauly Sahar: Yeah.
+Soso Tughushi: the create many of the stories so I could show you in the evening uh what I created so
+Shauly Sahar: Yeah.
+Soso Tughushi: far and then continue with the rest of the stories.
+Shauly Sahar: And maybe we can touch point with Elan on Monday because it will be on the only one
+Soso Tughushi: Sure.
+ 
+ 
+01:34:17
+ 
+Shauly Sahar: only day that we can uh Yeah. Okay. Let's start with that and also let's discuss what you're starting to what you can start do in the meantime. Okay.
+Soso Tughushi: Sure. Come on.
+Shauly Sahar: Cool.
+Soso Tughushi: Right.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah.
+Shauly Sahar: Perfect. Thanks.
+Soso Tughushi: Cool.
+Shauly Sahar: How how it was for you?
+Soso Tughushi: Ah, I don't know. Still lots.
+Shauly Sahar: Um
+Soso Tughushi: I I expected I don't know that uh Elan would be more on board or know more uh into things. I didn't know that all this was new information for him and
+Shauly Sahar: yeah, you know he he knows only the surface and only from problems for for
+Soso Tughushi: uh
+Shauly Sahar: now. Yeah. And and as I told you what I he he asked me to to do the next thing it's like how how can we use the a if how and if we can use the unified API that we TC have to be used by um one to go system later on like they want to understand if this is possible or not.
+ 
+ 
+01:35:29
+ 
+Shauly Sahar: It's again nothing it's it will be probably on top of what you're doing because you you are not changing uh anything and I I
+Soso Tughushi: Yeah.
+Shauly Sahar: I I think I I'm a bit doubt on that. I want to suggest something that really close to what you are doing like we have the layer and then we have two different representation uh on on that. I think that will be eventually the solution but I need to explain him that and and to show him and also to the other ones as well.
+Soso Tughushi: Yeah.
+Shauly Sahar: By the way, I I will need some help with you about this uh how to do that in the
+Soso Tughushi: Sure.
+Shauly Sahar: code because I'm struggling with that a bit but in just in the terms of uh methodology so maybe we can do discuss that tomorrow.
+Soso Tughushi: No problem.
+Shauly Sahar: Okay. uh I will tell you what I I was trying to do and I will uh want to understand what's the best uh approach to do that in terms of uh you know using that what model or what uh things to to have uh I I played with that a bit in the
+Soso Tughushi: Mhm.
+Shauly Sahar: last uh few days to to analyze some big queries that we have and then I I realized that uh if I want to iterate it I probably need to create some prompt for that Right. and to say and then to
+Soso Tughushi: Yeah, if you have repetitive actions and you want to basic say prompts,
+Shauly Sahar: execute
+Soso Tughushi: you can create a skill uh MD file which uh it's basically custom command or repetitive prompt
+Shauly Sahar: yeah so then I understand that I probably need that but I wanted to
+Soso Tughushi: that
+Shauly Sahar: understand what's the best way and then he I saw that he wanted me to open a PR that in order that
+Soso Tughushi: Yeah.
+Shauly Sahar: it would be available and I was uh not
+ 
+ 
+Transcription ended after 01:37:39
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.

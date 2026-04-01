@@ -24,7 +24,7 @@ You are presenting to a team of 2-3 senior .NET developers who are currently goi
 ## Context Files to Read
 
 ### Required
-1. `prompts/context/system-context.md` -- full system context (read Team Composition carefully)
+1. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 2. `prompts/context/codebase-analysis.md` -- what to keep/discard
 3. `current-state/overview.md` -- architecture diagrams and flows
 4. `current-state/integration/12go-api-surface.md` -- the 12go API we call
@@ -45,6 +45,8 @@ You are presenting to a team of 2-3 senior .NET developers who are currently goi
 15. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
 16. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
 17. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## Framing
 

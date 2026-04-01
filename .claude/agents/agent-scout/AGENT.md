@@ -26,8 +26,10 @@ Audit the current agent roster and project workflows to propose new agents that 
 3. `CLAUDE.md` -- project instructions
 4. `.claude/skills/*/SKILL.md` -- skills that might benefit from agent support
 5. `design/` directory -- understand what the agents produce
-6. `prompts/context/system-context.md` -- project context
+6. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 7. `current-state/` directory structure -- understand the domain
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## What to Produce
 

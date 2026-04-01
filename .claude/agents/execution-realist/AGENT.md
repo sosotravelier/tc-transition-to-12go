@@ -22,7 +22,7 @@ You are not pessimistic -- you are calibrated. You have shipped hard things. You
 ## Context Files to Read
 
 ### Required
-1. `prompts/context/system-context.md` -- full system context (Team Composition is critical)
+1. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 2. `design/evaluation-criteria.md` -- scoring rubric
 3. All design proposals in `design/alternatives/*/design.md`
 
@@ -34,6 +34,8 @@ You are not pessimistic -- you are calibrated. You have shipped hard things. You
 6. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
 7. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
 8. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## Task
 

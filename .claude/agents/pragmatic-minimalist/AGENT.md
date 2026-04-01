@@ -20,7 +20,7 @@ Your instinct is always: **what is the minimum viable change that solves the act
 ## Context Files to Read
 
 ### Required
-1. `prompts/context/system-context.md` -- full system context
+1. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 2. `prompts/context/codebase-analysis.md` -- what to keep/discard from existing code
 3. `current-state/overview.md` -- architecture diagrams and flows
 4. `current-state/integration/12go-api-surface.md` -- the 12go API we call
@@ -45,6 +45,8 @@ Your instinct is always: **what is the minimum viable change that solves the act
 17. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
 18. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
 19. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## Framing
 

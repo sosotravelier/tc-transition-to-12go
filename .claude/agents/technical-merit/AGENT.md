@@ -22,7 +22,7 @@ You do not care about team learning curves or organizational politics. You evalu
 ## Context Files to Read
 
 ### Required
-1. `prompts/context/system-context.md` -- full system context (Scale Context is important)
+1. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 2. `design/evaluation-criteria.md` -- scoring rubric
 3. All design proposals in `design/alternatives/*/design.md`
 4. `current-state/integration/12go-api-surface.md` -- what we proxy to
@@ -35,6 +35,8 @@ You do not care about team learning curves or organizational politics. You evalu
 7. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
 8. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
 9. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## Task
 

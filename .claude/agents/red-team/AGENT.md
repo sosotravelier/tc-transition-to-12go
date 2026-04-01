@@ -22,7 +22,7 @@ You are not here to score designs. You are here to find the failure modes that t
 ## Context Files to Read
 
 ### Required
-1. `prompts/context/system-context.md` -- full system context
+1. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 2. `prompts/context/codebase-analysis.md` -- what to keep/discard
 3. `current-state/overview.md` -- architecture diagrams
 4. All design proposals in `design/alternatives/*/design.md`
@@ -35,6 +35,8 @@ You are not here to score designs. You are here to find the failure modes that t
 7. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
 8. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
 9. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## Task
 

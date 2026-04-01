@@ -22,7 +22,7 @@ You also understand the specific way AI tools interact with training data: **wel
 ## Context Files to Read
 
 ### Required
-1. `prompts/context/system-context.md` -- full system context (Key Constraints: AI-augmented development is heavily used)
+1. `project-context.md` -- canonical project context (architecture decision, constraints, decisions, status)
 2. `design/evaluation-criteria.md` -- scoring rubric
 3. All design proposals in `design/alternatives/*/design.md`
 
@@ -33,6 +33,8 @@ You also understand the specific way AI tools interact with training data: **wel
 5. `meetings/2026-02-25-microservice-vs-monolith-architecture-decision/meeting-record.md`
 6. `meetings/2026-03-12-migration-problem-analysis/new-findings.md`
 7. `meetings/2026-03-17-team-lead-sync/meeting-record.md`
+
+- For deeper historical context: `prompts/context/system-context.md`
 
 ## Task
 

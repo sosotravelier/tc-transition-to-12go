@@ -4,10 +4,9 @@
 
 ## Quick Orientation
 
-1. Read this file (you're here)
-2. Read [README.md](README.md) for project overview and document index
-3. Read [current-state/overview.md](current-state/overview.md) for architecture diagrams and endpoint-to-12go mapping
-4. Read the specific docs relevant to your task (linked below)
+1. Read [`project-context.md`](project-context.md) — canonical project context (architecture decision, endpoint status, all decisions, constraints, open questions)
+2. Read this file for source repository paths, agent roles, key source files, and decision log
+3. Read the specific docs relevant to your task (linked below)
 
 **Live project tracking** (sprint status, gaps, next steps): [Notion page](https://www.notion.so/bookaway/Transfer-TC-functionality-into-12Go-s-system-3053459fb0c681938b4dd6591341e42d)
 

@@ -216,6 +216,7 @@ This feature requires more analysis. Three approaches are being considered:
 **Approach C -- Sustain the existing .NET notification pipeline.** Keep the current BookingNotificationService + PostBookingService + Kafka + PostgreSQL chain running. The existing path already transforms 12go's `{ "bid" }` into a client-facing notification: 12go sends webhook -> BookingNotificationService publishes Kafka event -> PostBookingService consumes it, looks up booking in PostgreSQL to find `client_id`, re-fetches from 12go API, updates local DB, publishes downstream `ReservationChanged` Kafka event -> a downstream service (likely Carmel, not in our repos) delivers to the client. B2B clients would be plugged into this existing chain.
 
 Problems with Approach C:
+
 - Contradicts the no-persistence design -- the pipeline depends on the `BookingEntities` PostgreSQL table for `bid -> client_id` lookup, which we're eliminating
 - Does far more than needed -- two Kafka hops, a DB lookup, a re-fetch from 12go API, and a DB update, when all we need is receive-transform-forward
 - Ties us to keeping the full .NET stack running (BookingNotificationService, PostBookingService, Kafka, PostgreSQL) just for notifications

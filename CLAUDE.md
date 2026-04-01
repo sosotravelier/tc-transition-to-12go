@@ -1,40 +1,65 @@
 # CLAUDE.md
 
-This project is configured in [AGENTS.md](AGENTS.md). **Read it first** — it contains the project context, source repository paths, agent roles, document conventions, and decision log.
+**If `project-context.md` exists**, read it first — it is the canonical project context. If it doesn't exist yet, run `/build-project-context` to construct it from project documents.
+
+For agent roles, source repository paths, and document conventions, see [AGENTS.md](AGENTS.md).
 
 ---
 
-## Quick Start
+## Context Architecture (Three-Tier)
 
-Run the full design and evaluation pipeline using slash commands:
+| Tier | What | When Loaded |
+|------|------|-------------|
+| **Tier 1 (Hot)** | This file + `project-context.md` | Every session |
+| **Tier 2 (Domain)** | Agent prompts in `.claude/agents/`, endpoint docs in `current-state/endpoints/`, `prompts/context/codebase-analysis.md` | Per task |
+| **Tier 3 (Cold)** | `prompts/context/system-context.md` (historical), `design/archive/`, `meetings/`, full `current-state/` | On demand |
 
-- **`/run-design-phase`** — Launch all 6 design agents in parallel, archive previous outputs, synthesize decision map
-- **`/run-evaluation-phase`** — Launch all 4 analyzer agents in parallel, produce comparison matrix and recommendation
+If `project-context.md` has `Last Verified` older than 7 days, flag it: "Project context may be stale — last verified on [date]."
 
-These skills handle archiving, pre-flight checks, agent dispatch, and quality verification automatically.
+## For Implementation Work
+
+1. Read `project-context.md` (always)
+2. Read the specific endpoint doc in `current-state/endpoints/` for your task
+3. Read `prompts/context/codebase-analysis.md` if porting .NET logic
+
+## Project Context Maintenance
+
+- **After processing a meeting**: `/update-project-context meeting <date>`
+- **After completing an endpoint**: `/update-project-context milestone <endpoint>`
+- **Weekly**: `/update-project-context review`
+
+## Slash Commands
+
+| Command | Purpose |
+|---------|---------|
+| **`/build-project-context`** | Build project-context.md from scratch by processing documents chronologically (16 steps) |
+| **`/update-project-context`** | Update project-context.md with new decisions, status changes, or weekly review |
+| **`/process-transcript`** | Extract decisions and action items from a meeting transcript |
+| **`/run-design-phase`** | Launch all 6 design agents in parallel |
+| **`/run-evaluation-phase`** | Launch all 4 analyzer agents in parallel |
+| **`/prep-meeting`** | Scaffold a meeting folder with templates |
 
 ## Project Structure
 
-- **Custom agents** are in `.claude/agents/` — each has a single `AGENT.md` with the full prompt
+- **Custom agents** in `.claude/agents/` — each has a single `AGENT.md` with the full prompt
   - 6 design agents: `pragmatic-minimalist`, `platform-engineer`, `data-flow-architect`, `team-first-developer`, `disposable-architecture`, `clean-slate-designer`
   - 4 analyzer agents: `red-team`, `execution-realist`, `ai-friendliness`, `technical-merit`
   - 2 meta agents: `agent-scout`, `skill-scout`
-- **Shared context** in `prompts/context/` — `system-context.md` and `codebase-analysis.md` are injected into all agent prompts
-- **Path-specific rules** in `.claude/rules/` enforce document templates (frontmatter, required sections, diagram standards)
+- **Shared context** in `prompts/context/` — `codebase-analysis.md` for implementation details
+- **Path-specific rules** in `.claude/rules/` enforce document templates
+- **Research** in `research/` — agent frameworks survey, context engineering patterns
 
 ## Running Multi-Agent Workflows
 
-Agent roles in `AGENTS.md` map directly to Claude Code's **Agent tool**. To run a phase:
-
-- Launch multiple agents in a **single message** to run them in parallel (no hard cap)
-- Each agent reads its full prompt from `.claude/agents/<name>/AGENT.md`
+- Launch multiple agents in a **single message** to run them in parallel
+- Each agent reads its prompt from `.claude/agents/<name>/AGENT.md`
 - Each agent writes to its own output path — no file conflicts
-- Use `run_in_background: true` for long-running agents so they don't block
+- Use `run_in_background: true` for long-running agents
 
-**Phase 2 (Design):**
-> "Run all 6 design agents in parallel. Each reads its prompt from `.claude/agents/<name>/AGENT.md` and writes to `design/alternatives/<name>/design.md`."
+## Sidecar Usage
 
-**Phase 3 (Evaluation):**
-> "Run all 4 analyzer agents in parallel. Each reads its prompt from `.claude/agents/<name>/AGENT.md` and the 6 design docs, then writes to `design/v4/analysis/`."
+When working in other repos (F3, etc.), load `project-context.md` via absolute path for B2B transition context:
 
-All 6 design agents or all 4 analyzer agents can run simultaneously — Claude Code has no fixed parallel limit.
+```
+Read /Users/sosotughushi/RiderProjects/transition-design/project-context.md
+```
