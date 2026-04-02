@@ -1,0 +1,183 @@
+{
+    "vehicles": [
+        {
+            "id": "16779-Train",
+            "name": "Train",
+            "seat_classes": [
+                {
+                    "id": "16",
+                    "name": "Class 3 Fan",
+                    "description": "",
+                    "keywords": null,
+                    "images": [
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/16-inside.jpg",
+                            "width": 800,
+                            "height": 534,
+                            "type": "TYPE_CLASS_INSIDE"
+                        },
+                        {
+                            "url": "https://cdn5.12go.asia/static/images/operator/16779/class/16-outside.jpg",
+                            "width": 960,
+                            "height": 640,
+                            "type": "TYPE_CLASS_OUTSIDE"
+                        }
+                    ],
+                    "amenities": [
+                        "WC",
+                        "WC"
+                    ]
+                }
+            ],
+            "images": null,
+            "description": null,
+            "keywords": null,
+            "amenities": null
+        }
+    ],
+    "segments": [
+        {
+            "id": "16779-3-4-2026-04-05T20:22-2026-04-06T08:45-16",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-04-05T20:22",
+            "arrival_time": "2026-04-06T08:45",
+            "travel_duration": "PT12H23M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "16",
+            "transportation_types": [
+                "Train"
+            ]
+        },
+        {
+            "id": "16779-3-4-2026-04-05T14:32-2026-04-06T04:00-16",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-04-05T14:32",
+            "arrival_time": "2026-04-06T04:00",
+            "travel_duration": "PT13H28M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "16",
+            "transportation_types": [
+                "Train"
+            ]
+        },
+        {
+            "id": "16779-3-4-2026-04-05T22:47-2026-04-06T11:40-16",
+            "from_station": "3",
+            "to_station": "4",
+            "departure_time": "2026-04-05T22:47",
+            "arrival_time": "2026-04-06T11:40",
+            "travel_duration": "PT12H53M",
+            "vehicle_id": "16779-Train",
+            "operating_carrier_id": "16779",
+            "seat_class_id": "16",
+            "transportation_types": [
+                "Train"
+            ]
+        }
+    ],
+    "itineraries": [
+        {
+            "id": "TH000300044mDt00g03BNR3q-2026-04-05-20:22",
+            "departure_segments": [
+                "16779-3-4-2026-04-05T20:22-2026-04-06T08:45-16"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 83,
+            "pricing": {
+                "gross_price": {
+                    "amount": "370.37",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "308.00",
+                    "currency": "THB"
+                },
+                "taxes_and_fees": {
+                    "amount": "62.37",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        },
+        {
+            "id": "TH000300044mDt00g0IrgTo0-2026-04-05-14:32",
+            "departure_segments": [
+                "16779-3-4-2026-04-05T14:32-2026-04-06T04:00-16"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 178,
+            "pricing": {
+                "gross_price": {
+                    "amount": "278.00",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "228.00",
+                    "currency": "THB"
+                },
+                "taxes_and_fees": {
+                    "amount": "50.00",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "ShowOnScreen"
+        },
+        {
+            "id": "TH000300044mDt00g0JFdHk0-2026-04-05-22:47",
+            "departure_segments": [
+                "16779-3-4-2026-04-05T22:47-2026-04-06T11:40-16"
+            ],
+            "connection_guaranteed": true,
+            "cancellation_policies": [
+                {
+                    "from": null,
+                    "penalty": {
+                        "percent": 100
+                    }
+                }
+            ],
+            "number_of_available_seats": 133,
+            "pricing": {
+                "gross_price": {
+                    "amount": "322.27",
+                    "currency": "THB",
+                    "price_type": "Recommended"
+                },
+                "net_price": {
+                    "amount": "268.00",
+                    "currency": "THB"
+                },
+                "taxes_and_fees": {
+                    "amount": "54.27",
+                    "currency": "THB"
+                }
+            },
+            "confirmation_type": "Instant",
+            "ticket_type": "PaperTicket"
+        }
+    ]
+}
