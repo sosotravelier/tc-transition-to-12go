@@ -21,7 +21,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 | #   | Endpoint                | Status       | Difficulty | Notes                                                  |
 | --- | ----------------------- | ------------ | ---------- | ------------------------------------------------------ |
 | 1   | Search                  | POC complete | Low        | Recheck → search team, not Soso                        |
-| 2   | GetItinerary            | Not started  | High       | Split from schema; **next priority**. Schema is separate task, prerequisite for CreateBooking |
+| 2   | GetItinerary            | Spec complete (ST-2484) | High       | Split from schema; **next priority**. Schema is separate task, prerequisite for CreateBooking |
 | 3   | Stations/Operators/POIs | Not started  | Medium     | Ownership may move to catalog team (Eliran discussing) |
 | 4   | CreateBooking           | Not started  | High       | Core funnel; explore internal F3 method for schema     |
 | 5   | ConfirmBooking          | Not started  | Medium     |                                                        |
@@ -57,7 +57,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - PHP 8.3/Symfony 6.4 inside F3, separate B2B schema
 - Default stateless, but persistence needs may emerge (migration, notifications, TC-as-first-client)
 - Booking schema parser is make-or-break (~1180 LOC C#)
-- Jira epic tracks all work (Soso's + others' open items); possible Jira → Linear migration (company-wide)
+- Jira epic **ST-2483** ("Q2 B2B API Transition") tracks all work in ST project; first story ST-2484 (GetItinerary without schema) created. Possible Jira → Linear migration (company-wide)
 - QA automation engineer gone — test ownership unresolved
 
 ## 6. Open Questions
@@ -116,5 +116,6 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 | `meetings/2026-03-23-.../meeting-record.md` | CI/CD flow, separate schema, background jobs         |
 | `meetings/2026-03-25-.../meeting-record.md` | **MOST AUTHORITATIVE**: 9 decisions, scope changes   |
 | `meetings/2026-03-30-.../meeting-record.md` | Pre-holiday sync: GetItinerary next, schema split, migration plan scope |
+| Jira epic ST-2483 (ST project)              | Q2 B2B API Transition — all stories and dependencies                 |
 
 

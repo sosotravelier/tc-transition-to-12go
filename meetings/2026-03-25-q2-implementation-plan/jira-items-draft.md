@@ -2,6 +2,22 @@
 
 > Per Shauly: "Even for the open items... I want to have stories for that, that either will decide to postpone it maybe for next phase or it will let someone handle it."
 
+### Jira Ticket Tracking
+
+| # | Story | Jira | Status |
+|---|-------|------|--------|
+| — | **Epic: Q2 B2B API Transition** | **ST-2483** | Created 2026-04-02 |
+| 5 | GetItinerary (without booking schema) | ST-2484 | Created 2026-04-02 |
+| 1 | Spike: Q2 Open Decisions | — | Not yet created |
+| 2 | Foundation: Client Identity & B2B Module | — | Not yet created |
+| 3 | Static Data (Stations, Operators, POIs) | — | Not yet created |
+| 5b | Booking Schema Parser | — | Not yet created |
+| 6 | CreateBooking | — | Not yet created |
+| 7 | ConfirmBooking | — | Not yet created |
+| 8 | Post-Booking Operations | — | Not yet created |
+| 9 | SeatLock | — | Not yet created |
+| 10 | Notifications | — | Not yet created (deferrable) |
+
 **Acceptance criteria applied to ALL endpoint stories:**
 
 - Forward `x-correlation-id` header through 12go API calls and include in structured events
