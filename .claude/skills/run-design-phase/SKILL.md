@@ -111,6 +111,35 @@ Agents to launch:
 5. `disposable-architecture`
 6. `clean-slate-designer`
 
+<HARD-GATE>
+Do NOT proceed to synthesis until ALL 6 design docs exist and are substantive:
+
+```bash
+for agent in pragmatic-minimalist platform-engineer data-flow-architect team-first-developer disposable-architecture clean-slate-designer; do
+  FILE="design/alternatives/${agent}/design.md"
+  if [ ! -f "$FILE" ]; then
+    echo "MISSING: ${agent}"
+  elif [ $(wc -w < "$FILE") -lt 500 ]; then
+    echo "TOO SHORT: ${agent} ($(wc -w < "$FILE") words — may be incomplete)"
+  else
+    echo "OK: ${agent} ($(wc -w < "$FILE") words)"
+  fi
+done
+```
+
+If any agent is MISSING: re-dispatch that agent.
+If any agent is TOO SHORT: review the output — if incomplete, re-dispatch with more context.
+</HARD-GATE>
+
+## Step 4b: Handle Agent Failures
+
+| Agent Status | Action |
+|---|---|
+| Design exists, >500 words | Proceed |
+| Design exists, <500 words | Review — may be intentionally minimal. If incomplete, re-dispatch with full context |
+| Design missing (agent produced no output) | Re-dispatch with same prompt + all required files explicitly listed |
+| Agent references Denali/Etna/Fuji source (clean-slate only) | Violates instructions — re-dispatch with explicit warning |
+
 ## Step 5: Synthesize Decision Map
 
 After all 6 design agents complete, run the synthesize-decision-map skill to generate `design/decision-map.md`.

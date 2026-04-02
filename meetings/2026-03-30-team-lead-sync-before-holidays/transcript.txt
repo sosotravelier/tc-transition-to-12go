@@ -1,0 +1,439 @@
+Mar 31, 2026
+Soso / Shauly - Transcript
+00:00:00
+ 
+Shauly Sahar: with a something about the ferry scanner with this uh thing because only after I I finished the call then I got the Gemini uh uh
+Soso Tughushi: O now I see in the first part of the meeting I see that it lasted
+Shauly Sahar: response
+Soso Tughushi: for two and a half hours. Yeah. Oh wow. This is why it honated stuff today.
+Shauly Sahar: I think yeah I I for I think that Vlad comes and we discuss something about these uh things there like it was like our office there. Uh so
+Soso Tughushi: lot. Yeah.
+Shauly Sahar: yeah
+Soso Tughushi: Hey.
+Shauly Sahar: so I I hope that the eye will not take it into
+Soso Tughushi: Yeah.
+Shauly Sahar: consideration. H yeah we should close that and uh start an a different meeting. Never mind.
+Soso Tughushi: I tried to answer meeting today with the help of AI but uh
+Shauly Sahar: Oh
+Soso Tughushi: it did such bad job at it that I just wrote down exactly
+Shauly Sahar: yeah.
+Soso Tughushi: sometimes it's not useful
+Shauly Sahar: Um yeah.
+ 
+ 
+00:01:45
+ 
+Shauly Sahar: So I So this is like second thing I wanted. I want you to put everything on that Jira as we discuss so we can uh uh by the way um we probably going to move to
+Soso Tughushi: Yeah.
+Shauly Sahar: linear you're familiar with that now it's like
+Soso Tughushi: You know what?
+Shauly Sahar: uh probably very good tool uh for project management and has a lot of new features and easier I ask immediately instead
+Soso Tughushi: It's from J.
+Shauly Sahar: of Jira H there is migration from Jira to linear. So everything that you put will probably will be able to to migrate it uh later.
+Soso Tughushi: interesting character is MCP for linear.
+Shauly Sahar: I think that the what is name Claude has a linear connector as well.
+Soso Tughushi: Yeah,
+Shauly Sahar: Yeah.
+Soso Tughushi: that's
+Shauly Sahar: Uh yes it's just a side note. Um, okay. I want to see what we can progress in the next few days. Okay. So, I want to put the operator at the side. Okay. Um, I don't know where you are staying, where you are with the search.
+ 
+ 
+00:03:15
+ 
+Soso Tughushi: uh without uh rejects.
+Shauly Sahar: Yeah. Yeah. I I know. But
+Soso Tughushi: I added this missing fields and formatting.
+Shauly Sahar: okay,
+Soso Tughushi: You will see
+Shauly Sahar: I think that maybe the next thing that we need to do and maybe it's just before the like uh the meeting maybe we can start implementing the get itinerary without the
+Soso Tughushi: Sure.
+Shauly Sahar: schema like like break it like yeah like you can take the itinerary from um the response of the search and and do the get itinerary
+Soso Tughushi: Okay.
+Shauly Sahar: Um
+Soso Tughushi: Yeah. So,
+Shauly Sahar: yeah,
+Soso Tughushi: creation of booking token just the rest of the details about the trip and no uh sit.
+Shauly Sahar: without the without the schema. Yeah.
+Soso Tughushi: Sure.
+Shauly Sahar: Um what what else? Uh we need to make sure that we have a good logs and error handling like uh I don't know if you touch it in the search by the way uh for bad like uh bad uh like same errors. I I I I didn't show it.
+ 
+ 
+00:04:46
+ 
+Soso Tughushi: No uh logs.
+Shauly Sahar: And I don't know
+Soso Tughushi: Yeah,
+Shauly Sahar: how
+Soso Tughushi: in the search I wouldn't log anyway because well maybe only request but
+Shauly Sahar: in debug I don't know.
+Soso Tughushi: it's
+Shauly Sahar: Yeah. Yeah. We'll also need to understand that part as as well.
+Soso Tughushi: yeah
+Shauly Sahar: Yeah. Okay. Um, oh, on Monday I killed my time. Okay. Anyway, I I will I forgot about it. H I will um Yeah, I will I um I blocked some of the time for uh covering something, but I I want to have this meeting on on on Monday. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: You are back on the other Monday, right? Like a week after that.
+Soso Tughushi: Yes. Yeah.
+Shauly Sahar: Okay. Um, anything else
+Soso Tughushi: Yeah,
+Shauly Sahar: also?
+Soso Tughushi: I mean I right now I'm uh like drafting let's say Gates uh but yeah it's not really ready to be to show you. I mean um basically yeah I mean what we have uh the open decisions that we need to take uh the researches that we need to make like uh first uh Jet would be like foundation uh to add the client ID and uh uh in the B2B module uh to create the table I mean it's not sequentially it's just going to first thing I wrote this because this going to be the common thing that should be used
+ 
+ 
+00:06:57
+ 
+Soso Tughushi: by everything but it can be done later on just to identify the client ID.
+Shauly Sahar: That's correct. We can take it like as
+Soso Tughushi: Um
+Shauly Sahar: um maybe additional things later on. I don't know.
+Soso Tughushi: yeah.
+Shauly Sahar: But I want I I want it to be written. So for example,
+Soso Tughushi: Yes.
+Shauly Sahar: this is something that if for example if we have somebody that can help us from the team or or somebody we can okay tell him this is what we want. Let's let's do
+Soso Tughushi: Correct.
+Shauly Sahar: that.
+Soso Tughushi: Yes. Mhm. There is uh the three stories about static data stations, operators, POIs, the get itinerary.
+Shauly Sahar: Okay.
+Soso Tughushi: This includes also the booking schema and also potentially the investigation that they all proposed. I mean instead of doing the translation maybe we can just query it from the
+Shauly Sahar: Yeah.
+Soso Tughushi: database uh what the format that we need.
+Shauly Sahar: Yeah. I'm I'm not sure that I understand exactly what AAL meant in the meeting.
+ 
+ 
+00:08:07
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: Um I didn't have the chance to
+Soso Tughushi: Yeah. Many mether I think what I understood it was slightly different than what he was
+Shauly Sahar: further
+Soso Tughushi: saying but yeah I
+Shauly Sahar: Yeah.
+Soso Tughushi: mean create
+Shauly Sahar: Okay. Um
+Soso Tughushi: booking um confirm booking cancel booking um the post booking operations seat lock the notifications S uh then the recheck could be separate story
+Shauly Sahar: Yeah, we we need to have it as a separate story.
+Soso Tughushi: to
+Shauly Sahar: Again, I'm not sure that it's going to be as a recheck by the way,
+Soso Tughushi: Mhm.
+Shauly Sahar: but maybe we can start with maybe this is something that we can start with. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: Um again if if if you will see again
+Soso Tughushi: That is
+Shauly Sahar: I think that AAL was joining that uh part in in where we stayed me and Aikhai and and um we had yesterday a call with Fer scanner
+Soso Tughushi: Mhm.
+Shauly Sahar: and uh Ahai wanted to to tell to ask okay what we should tell them I told him we should just ask I don't want to tell them anything because I don't know exactly what the best practice for that and he said that he thinks that instead of the recheck we probably the they have like syncer or something like that which is simple similar to our prefetch and he thinks that this is like the correct way to to handle it.
+ 
+ 
+00:09:50
+ 
+Shauly Sahar: Yeah. So, so maybe you can split the get itinerary and the schema to two different uh tasks by the
+Soso Tughushi: Okay.
+Shauly Sahar: way. Um and we
+Soso Tughushi: Yeah.
+Shauly Sahar: welcome of course you
+Soso Tughushi: And but schema also would be prerequisite for create booking.
+Shauly Sahar: cannot do that without it.
+Soso Tughushi: Yeah.
+Shauly Sahar: Yeah.
+Soso Tughushi: So yeah sure uh create booking right so plus based on the schema we are doing additional validations prematurely before sending it
+Shauly Sahar: Yes,
+Soso Tughushi: downstream
+Shauly Sahar: it's also a question if we can lie on what returns from the inner part of want to go. Maybe they have some li again maybe they have some I know that they have some um checks of the validations.
+Soso Tughushi: Mhm.
+Shauly Sahar: uh but I saw that in when we have a good uh validations at the beginning we are getting good uh better results then okay if we don't do that and we are pass it to the integration then things starting to fail there and it's harder to to understand and
+ 
+ 
+00:11:18
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: Yeah. Um and we need to understand how what kind of test like developer test they have like the unit test do they have like some end to end test uh on on their side or they cover everything by unit
+Soso Tughushi: Yeah, I mean there were no uh tests that were running during the automation the uh CI uh but maybe there will be something that runs. Uh sorry in yeah that is then this DNS URL routing investigation that needs to be done by
+Shauly Sahar: Yeah. But we need to discuss Antonica.
+Soso Tughushi: P.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah. Uh, Kafka event um um
+Shauly Sahar: Uh data. Yeah,
+Soso Tughushi: investigation monometric cup
+Shauly Sahar: data. And um yeah,
+Soso Tughushi: analysis.
+Shauly Sahar: I I'm trying to do some analysis of what we have right now just to make our to see that our alerts are we we we have what we need and we don't have more than that. I hope that this will help us to to to have a benchmark for for that.
+ 
+ 
+00:12:46
+ 
+Shauly Sahar: Um
+Soso Tughushi: Mhm.
+Shauly Sahar: yeah.
+Soso Tughushi: Um there is also um this to let's say migrate uh our end to end tests to be used in within the pipeline
+Shauly Sahar: Yeah.
+Soso Tughushi: of
+Shauly Sahar: I I think that I did some changes there lately because we closed the Anibus. to close not close physics bus and uh I I changed it. I used AI. It was very easy. I think that the API probably will be the same. It just we need to change the URL.
+Soso Tughushi: Yeah, that's it. It would be mimicking what client has to do.
+Shauly Sahar: Yeah,
+Soso Tughushi: Maybe we would also change in this test suit some IDs there.
+Shauly Sahar: that's probably what yeah the way that it works and again it was like looking for different integrations. So but it's validate that it's come from the specific integration from specific operator. It just it's like filtering the that specific itinerary. So it's I I think that it will we can utilize it at least for the beginning for some uh uh lift of the the the things uh that we we want to have.
+ 
+ 
+00:14:05
+ 
+Shauly Sahar: It will be easy to to run it like to to utilize it without a big effort.
+Soso Tughushi: Yeah, there is also GRPC
+Shauly Sahar: Okay.
+Soso Tughushi: story.
+Shauly Sahar: But this is something that we said that probably will Yeah. Okay.
+Soso Tughushi: Yeah.
+Shauly Sahar: That's a good good thing.
+Soso Tughushi: Yeah.
+Shauly Sahar: Maybe this is something that we can offload to someone else. Yeah.
+Soso Tughushi: Mhm. There is also during the migration some things to do like uh if we
+Shauly Sahar: Uh
+Soso Tughushi: depends on what's going to be the outcome but let's say to export data regarding stations or from our TC as well as some
+Shauly Sahar: Yeah.
+Soso Tughushi: ID correspondence of us and on to go and such
+Shauly Sahar: So, so for for that I just want to have the plan what's the plan or what's the go to and I don't want a JR ticket for that at the moment unless we'll decide that this is a part of the milestone.
+Soso Tughushi: Okay.
+Shauly Sahar: I don't I I don't want it. I just want to have the full migration pass to understand what are the stages needed that we are not shooting our leg that will find that we have some problem later on.
+ 
+ 
+00:15:28
+ 
+Shauly Sahar: For sure it will not be smooth but I I at least I want to that will be
+Soso Tughushi: Mhm.
+Shauly Sahar: uh with eyes on that. Okay.
+Soso Tughushi: Clear.
+Shauly Sahar: Um and another thing that I want to add is like uh integration environment. Okay. As a
+Soso Tughushi: Yeah.
+Shauly Sahar: story
+Soso Tughushi: Mhm.
+Shauly Sahar: theoretically speaking, this is something that exists. Um but we need to understand uh a bit better on that
+Soso Tughushi: Mhm.
+Shauly Sahar: how it's connected. Is it like out of the box? Um yeah,
+Soso Tughushi: Yeah.
+Shauly Sahar: cool.
+Soso Tughushi: Okay.
+Shauly Sahar: Um anything else for now?
+Soso Tughushi: Oh
+Shauly Sahar: Okay.
+Soso Tughushi: no.
+Shauly Sahar: Um so you will set a meeting. Let's on Monday I close my
+Soso Tughushi: Run.
+Shauly Sahar: schedule. Uh, no. This is like this week. Yeah, I think that I can from 100 p.m. to 3 and a half p.m. I can skip those meetings like my time.
+ 
+ 
+00:17:02
+ 
+Soso Tughushi: Mhm.
+Shauly Sahar: uh so let's let's uh have uh that and and the focus there I want to see the like I want to discuss the booking flow specifically to see like go a bit deeper on on what's what do you think uh we we should do there and and see what's on a as an output for that. Okay,
+Soso Tughushi: Okay.
+Shauly Sahar: cool.
+Soso Tughushi: Yeah.
+Shauly Sahar: Last thing regarding the AI code and etc that I asked you yesterday.
+Soso Tughushi: Yeah.
+Shauly Sahar: So what I did in different uh thing um is a white uh screen
+Soso Tughushi: Moment pressure.
+Shauly Sahar: Just So I tried to do that on code and co-work.
+Soso Tughushi: clock.
+Shauly Sahar: I'm not sure exactly what's the different but uh okay so example I I did this one. Okay I did some research call for for thing and eventually I see that he wants he asked me to if I want to commit it. Okay.
+Soso Tughushi: Mhm.
+Shauly Sahar: So um why and and if so or is it mean that for every project I need to create some uh g project for it?
+ 
+ 
+00:19:22
+ 
+Soso Tughushi: Yeah,
+Shauly Sahar: You did you did it like you created a dedicated
+Soso Tughushi: good question. I created a dedicated repository h but I don't think
+Shauly Sahar: um
+Soso Tughushi: it's a must. Maybe it's asking you something else like maybe it uses local g as a way to isolate the works from different
+Shauly Sahar: Yeah. So you see that it's put it like somewhere like under my the project that I opened
+Soso Tughushi: environments.
+Shauly Sahar: it has like something under code like it's like precommit but when I commit he ask me to open a PR for that
+Soso Tughushi: What the hell? No,
+Shauly Sahar: what yeah
+Soso Tughushi: I said what the hell?
+Shauly Sahar: okay so
+Soso Tughushi: So this is code but it's like usual visual tool. I thought you would be working like terminal or um
+Shauly Sahar: It's the same as the terminal. Yeah, it's like much easier, but probably it
+Soso Tughushi: okay where can you see the files uh let's say in the solution
+Shauly Sahar: will.
+Soso Tughushi: explorer something just to understand like where
+ 
+ 
+00:20:28
+ 
+Shauly Sahar: Um,
+Soso Tughushi: we are or what are the contents of
+Shauly Sahar: yeah,
+Soso Tughushi: this
+Shauly Sahar: it's in the finder. Yeah. Uh um um CD. No. So you see it just it's like it's not created.
+Soso Tughushi: created something here.
+Shauly Sahar: It uses something else that I um I I I didn't want that.
+Soso Tughushi: You did not want that.
+Shauly Sahar: Okay. Yeah,
+Soso Tughushi: Yeah.
+Shauly Sahar: this is like a different project that I have I opened and it's like was there
+Soso Tughushi: Mhm.
+Shauly Sahar: probably um but if I go
+Soso Tughushi: Mhm.
+Shauly Sahar: to at some point I understand that I did something wrong and then I work here and here it doesn't want me to commit for everything. You see it just created like some analysis here.
+Soso Tughushi: Yeah.
+Shauly Sahar: So that's and and I created a dedicated project for that I
+Soso Tughushi: Um,
+Shauly Sahar: believe.
+Soso Tughushi: we could try and ask it like why do you want me to commit or create pull requests?
+Shauly Sahar: Okay.
+ 
+ 
+00:21:44
+ 
+Shauly Sahar: Maybe because this is like because I used code
+Soso Tughushi: Yeah,
+Shauly Sahar: before.
+Soso Tughushi: but we can just tell it like what do you want me to commit this or why there is a need for pull requests.
+Shauly Sahar: Yeah. But you see here it doesn't it didn't uh it didn't ask me to to do
+Soso Tughushi: Uh
+Shauly Sahar: that. Okay.
+Soso Tughushi: yeah.
+Shauly Sahar: But what I understand here is like okay I did some big query analysis and uh
+Soso Tughushi: Mhm.
+Shauly Sahar: I so I I had like a very long uh discussion with him like okay I started with this I didn't go the way that I will create a prompt modify it and then ask him to run the the prompt right so the the correct ways to do like this like create a
+Soso Tughushi: Mhm.
+Shauly Sahar: a prompt and then ask him to execute
+Soso Tughushi: Uh no actually it depends on I mean if you have a prompt that you
+Shauly Sahar: it.
+Soso Tughushi: keep writing again again from the scratch then it makes sense to save this prompt right and tell it to create a prompt and uh store it somewhere and then you would refer to that prompt in later conversations.
+ 
+ 
+00:22:58
+ 
+Shauly Sahar: Okay. Okay. I I'll tell you what I did.
+Soso Tughushi: It's not a must.
+Shauly Sahar: I I'll tell you what I did here. I I tried to look on what fairy scanner search.
+Soso Tughushi: Mhm.
+Shauly Sahar: So I asked him to to check uh how many um what what are the top searches that they had uh and how many searches return
+Soso Tughushi: Mhm.
+Shauly Sahar: results. Okay, but this is something that I now can keep as something that uh and
+Soso Tughushi: Mhm.
+Shauly Sahar: and query that for different uh client, right?
+Soso Tughushi: Correct. So you can tell it now uh create a skill where I would pass you as an
+Shauly Sahar: So
+Soso Tughushi: argument uh the different client ID instead of something and you should be able to do the same actions. What it will do is it will let's say if the first time it spend some time investigation investigating what is the database or what it I am querying what it will do in this prompt would enrich with this detail so that next time it won't think much and it will just follow the instructions
+ 
+ 
+00:24:14
+ 
+Shauly Sahar: Okay.
+Soso Tughushi: better project yes in
+Shauly Sahar: And this skill will live only in my uh club.
+Soso Tughushi: your project in your workspace
+Shauly Sahar: And if I want to share it with the
+Soso Tughushi: then it's you would share it as same file.
+Shauly Sahar: others.
+Soso Tughushi: I'm not sure if this you can define skills that are uh common in every conversation or or every workspace.
+Shauly Sahar: Um so I Okay. So you said that I can all probably cannot use the same skill in diff in different project because in in the workshop that we had I think that they asked
+Soso Tughushi: Yes.
+Shauly Sahar: to add a fronted skill right
+Soso Tughushi: Yeah. But it was in the in one uh in one repository we were
+Shauly Sahar: and
+Soso Tughushi: working once there.
+Shauly Sahar: oh it's it was there it wasn't something that comes from the uh
+Soso Tughushi: Yeah. Uh I mean we are adding the skill from the internet but we write it in one of the workspaces or in the file
+Shauly Sahar: Okay. So,
+ 
+ 
+00:25:18
+ 
+Soso Tughushi: system.
+Shauly Sahar: so skill is like an MD file. MD file.
+Soso Tughushi: Yes.
+Shauly Sahar: Yeah. Not MD5. MD file.
+Soso Tughushi: Yeah. Skill is just an empty file uh which basically it's like a custom command. You write down this skill in skill dots skills place and then when you write slash do something it just shows me with intellisense that there is a skill
+Shauly Sahar: Got it.
+Soso Tughushi: available
+Shauly Sahar: So here probably if I go like
+Soso Tughushi: maybe in code or something. Yeah, I don't use this UI and that's why slash
+Shauly Sahar: I I I I saw it slash Yeah, you saw a font and design. It was we had that
+Soso Tughushi: Yeah. Oh, interesting. I would also try with that. I think co-work can also write
+Shauly Sahar: Yeah,
+Soso Tughushi: some
+Shauly Sahar: I think that what I saw in like you have the chat here that it's like like a regular
+Soso Tughushi: Yeah.
+Shauly Sahar: chat. Yeah. Uh the co-work is like for things that are not for
+ 
+ 
+00:26:35
+ 
+Soso Tughushi: Is
+Shauly Sahar: coding and the yeah I think that I I read about it there and also when I I work with the code here it also for example you see it it allow you to to have some preview here so you can see the the actual thing uh that it uh create if it's create some file or here in my it show me like the the Excel here on on the side.
+Soso Tughushi: Mhm. Yeah. Interesting.
+Shauly Sahar: Oh, you see the it has like skills
+Soso Tughushi: Mhm.
+Shauly Sahar: here.
+Soso Tughushi: Uh do do we have such stuff in code some skills
+Shauly Sahar: What?
+Soso Tughushi: uh skills or something in the right side in the code there is just
+Shauly Sahar: I don't know. Maybe this is like this is like the one that
+Soso Tughushi: sessions but nothing else.
+Shauly Sahar: we work on, right? So you see I have in the preview it show me like
+Soso Tughushi: Yeah.
+Shauly Sahar: the uh the the
+Soso Tughushi: Okay.
+Shauly Sahar: HTML here.
+Soso Tughushi: Mhm.
+Shauly Sahar: Yeah, see it's like as a PR comments.
+ 
+ 
+00:28:08
+ 
+Soso Tughushi: Yeah. Yeah. Get comments from a GitHub pull request. Yeah. It's builtin skill some sort of um
+Shauly Sahar: I also saw that there is like a way maybe
+Soso Tughushi: Yeah.
+Shauly Sahar: to settings maybe capabilities. Beautiful.
+Soso Tughushi: Turn on code execution and file creation to skills. Yeah, I maybe it's something else in this UI context. Those are plugins.
+Shauly Sahar: Yeah, but it's skill plugins. No,
+Soso Tughushi: Yeah,
+Shauly Sahar: it's not
+Soso Tughushi: it's not going to
+Shauly Sahar: connectors.
+Soso Tughushi: talk.
+Shauly Sahar: You see there is like linear connector.
+Soso Tughushi: Yeah. Well, for myself, let's say I would try and comprehend uh what this application does itself. But for you maybe also try to work from Visual Studio Code or terminal with this CL code and see what are the files that it
+Shauly Sahar: Yeah. Yeah.
+Soso Tughushi: creates.
+Shauly Sahar: He creates it somewhere here.
+Soso Tughushi: Yeah.
+Shauly Sahar: You see like under the walk tree and all like you see like it's opening
+ 
+ 
+00:29:49
+ 
+Soso Tughushi: Uhhuh. Work tree. Yeah.
+Shauly Sahar: it's used the same one like because I didn't change the the file
+Soso Tughushi: Yeah.
+Shauly Sahar: then it started to create.
+Soso Tughushi: It's puts it in
+Shauly Sahar: Yeah.
+Soso Tughushi: this.
+Shauly Sahar: And you see like he puts me like the pi python thing here and whatever what was it?
+Soso Tughushi: Mhm.
+Shauly Sahar: Yeah, I don't know. Probably I I should change maybe those. But you see everything is is here, right?
+Soso Tughushi: Yeah.
+Shauly Sahar: Probably because I I use the code uh the code. Yeah.
+Soso Tughushi: Yeah. Yeah. Um yeah. Oh, it's also worth checking some documentation that they have official one provided by
+Shauly Sahar: Yeah,
+Soso Tughushi: cloud anthropic
+Shauly Sahar: I they have here um
+Soso Tughushi: itself.
+Shauly Sahar: where did I think it's here like there is like
+Soso Tughushi: Extend code dictionary store instrument memories permission
+Shauly Sahar: Um
+Soso Tughushi: mode.
+Shauly Sahar: I think that I saw something how to code. Um, but in the in the CLI you don't have this um
+Soso Tughushi: Yeah. No, in CLA I saw just different uh somehow tutorial for it. It had like the description of hooks and skills and
+Shauly Sahar: Yeah.
+Soso Tughushi: stuff.
+Shauly Sahar: Okay. I probably need to read some thing here to understand. Got it. Okay. Yeah. Thanks. Bye.
+ 
+ 
+Transcription ended after 00:32:19
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.

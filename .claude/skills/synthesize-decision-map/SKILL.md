@@ -34,6 +34,33 @@ File structure is defined in `.claude/rules/design-file-structure.md` — all pa
 
 Do NOT read any file in `design/archive/` — you are building from current state only.
 
+<HARD-GATE>
+Do NOT generate decision-map.md until all inputs exist:
+
+```bash
+for agent in pragmatic-minimalist platform-engineer data-flow-architect team-first-developer disposable-architecture clean-slate-designer; do
+  [ -f "design/alternatives/${agent}/design.md" ] && echo "OK: ${agent}" || echo "MISSING design: ${agent}"
+done
+for analyzer in red-team execution-realist ai-friendliness technical-merit; do
+  [ -f "design/analysis/${analyzer}.md" ] && echo "OK: ${analyzer}" || echo "MISSING analysis: ${analyzer}"
+done
+[ -f "design/evaluation-criteria.md" ] && echo "OK: evaluation-criteria" || echo "MISSING: evaluation-criteria.md"
+```
+
+If anything is MISSING, synthesis cannot proceed.
+</HARD-GATE>
+
+## Pre-Synthesis Completeness Check
+
+Before generating, scan all inputs:
+
+- [ ] All 6 designs propose concrete options (not TBD)
+- [ ] All 4 analyses provide evaluation results
+- [ ] Count convergences (6/6 or 5/6 agreement) — expect >5
+- [ ] Count divergences (agents split) — expect 5-15
+
+If convergences < 5 or divergences > 20, flag for user review before proceeding.
+
 ## What to produce
 
 Write a new `design/decision-map.md` with the following structure:
@@ -124,6 +151,23 @@ Top risks from the Red Team analysis that apply regardless of which option is ch
 
 - Use tables for structured comparisons
 - Use relative links when referencing other docs (e.g., `[design](alternatives/pragmatic-minimalist/design.md)`)
+
+## Quality Checklist (Before Finalizing)
+
+Before writing decision-map.md, verify:
+
+- [ ] Executive Summary recommends one design, explains why, mentions runner-up
+- [ ] Convergences table has >5 rows, each shows agent agreement count
+- [ ] Each mermaid diagram has one decision question per block (no multi-decision clusters)
+- [ ] All mermaid diagrams use `flowchart LR` (not TD)
+- [ ] All nodes are concrete — no "TBD" in any diagram
+- [ ] Labels are 2-3 lines max; details in bullets below the diagram
+- [ ] Decision summary table references all 12 evaluation criteria
+- [ ] Open questions each have an owner and note what they block
+- [ ] Red team warnings list top 3-5 cross-cutting risks
+- [ ] All 6 designs are referenced at least once
+
+If any checkbox fails, fix before writing the file.
 
 ## Important constraints
 

@@ -69,6 +69,29 @@ for f in evaluation-criteria.md decision-map.md comparison-matrix.md recommendat
 done
 ```
 
+## Step 3b: Verify Archive
+
+After moving files, verify the archive is complete:
+
+```bash
+ARCHIVE_DIR="design/archive/v${NEXT_VERSION}"
+
+echo "=== Archive contents ==="
+find "${ARCHIVE_DIR}" -type f | wc -l
+echo "files archived"
+
+echo "=== Remaining in design/ ==="
+find design -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l
+echo "top-level md files remaining"
+ls design/alternatives 2>/dev/null | wc -l
+echo "alternatives remaining"
+ls design/analysis 2>/dev/null | wc -l
+echo "analysis remaining"
+```
+
+Expected: archive has files, design/ working directories are empty.
+If verification fails, STOP and investigate before proceeding.
+
 ## Step 4: Report
 
 Print a summary:

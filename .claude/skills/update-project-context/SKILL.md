@@ -42,6 +42,15 @@ Read the relevant endpoint doc from `design/implementation/<endpoint>/status.md`
 ### For `review`:
 No source document needed. Review the project context for staleness.
 
+<HARD-GATE>
+Do NOT propose changes until you have:
+1. Read the current project-context.md completely
+2. Read the source document completely
+3. Compared them for all 8 change types below
+
+Incomplete analysis = incorrect updates.
+</HARD-GATE>
+
 ## Step 4: Identify Changes
 
 Compare the source document against the current project context. Identify:
@@ -97,6 +106,22 @@ Edit `project-context.md` with the confirmed changes. Update the `Last Updated` 
 ## Step 8: Size Check
 
 After editing, count words. If project-context.md exceeds 1,500 words (~6K tokens), warn the user that compression may be needed. The target is 800-1,500 words.
+
+## Step 9: Git Verification
+
+Before committing, run `git diff project-context.md` and confirm:
+
+- [ ] ONLY project-context.md changed (no accidental edits to other files)
+- [ ] Changes match the approved diff from Step 6
+- [ ] No unintended sections modified
+- [ ] Word count still 800-1,500 words (`wc -w project-context.md`)
+
+## When NOT to Update
+
+Do NOT use this skill when:
+- A decision is contradicted but not resolved (e.g., "We said X, but maybe Y?") → Add to Open Questions instead
+- Scope is actively negotiating in real-time → Wait for clarity, then update
+- Information is speculative or unconfirmed → Only update with concrete decisions
 
 ## Quality Rules
 

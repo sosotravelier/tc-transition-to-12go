@@ -9,6 +9,28 @@ Construct `project-context.md` by walking through project documents in chronolog
 
 This mimics how the project understanding actually formed — each event adds, corrects, or refines what came before.
 
+<HARD-GATE>
+Do NOT write project-context.md to the repo until:
+- All 16 steps are complete
+- User has reviewed the final document
+- Word count is 800-1,500 words
+- All 9 sections are populated (no "[Not yet populated]" remains)
+
+Partial builds are not valid project contexts.
+</HARD-GATE>
+
+## Anti-Patterns
+
+These will create a broken project context — STOP if you catch yourself doing any:
+
+| Mistake | Why It Breaks Things |
+|---------|---------------------|
+| Skipping steps (jump from Step 5 to Step 10) | Later steps assume context from earlier ones — gaps compound |
+| Waiting until end to fix size (exceeding 2,000 words) | Compression at the end loses nuance; compress incrementally |
+| Summarizing instead of extracting | Prose paragraphs instead of bullet points inflate size and lose precision |
+| Adding new sections beyond the 9-section template | Breaks the fixed structure that other skills depend on |
+| Not waiting for user confirmation between steps | Errors propagate — one bad extraction corrupts all subsequent steps |
+
 ## Project Context Template
 
 The project context uses this fixed structure. All sections start empty and get populated as documents are processed.
@@ -177,6 +199,22 @@ After all 16 steps:
 3. Set `Status` to the current project phase
 4. Run `wc -w project-context.md` — target is 800-1,500 words
 5. Present the final document to the user for review
+
+### Step 18: Verification Checklist
+
+Before committing project-context.md, verify ALL of these:
+
+- [ ] `wc -w project-context.md` — confirm 800-1,500 words
+- [ ] All 9 sections have content (no "[Not yet populated]" remains)
+- [ ] No section exceeds 300 words
+- [ ] Each decision in section 4 has date and attribution
+- [ ] Open questions in section 6 have owners
+- [ ] Endpoint table in section 3 has status for all endpoints
+- [ ] Reference Index in section 9 has one row per step processed
+- [ ] "Build Step" line has been removed from header
+- [ ] `Last Updated` and `Last Verified` are set to today's date
+
+If any checkbox fails, fix before committing.
 
 ## Special Handling
 

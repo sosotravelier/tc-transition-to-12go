@@ -38,6 +38,18 @@ Agents to launch:
 3. `ai-friendliness` — scores C3 AI-Friendliness, C7 Testing Ease, C10 Elegance (partial)
 4. `technical-merit` — scores C4 Search Performance, C5 Simplicity, C8 Infrastructure Fit, C9 Disposability, C10 Elegance (authoritative), C11 Monitoring/Observability
 
+<HARD-GATE>
+Do NOT synthesize the matrix or recommendation until ALL 4 analysis docs exist:
+
+```bash
+for analyzer in red-team execution-realist ai-friendliness technical-merit; do
+  [ -f "design/analysis/${analyzer}.md" ] && echo "OK: ${analyzer}" || echo "MISSING: ${analyzer}"
+done
+```
+
+If any file is missing, evaluation phase is incomplete. Re-dispatch the missing agent.
+</HARD-GATE>
+
 ## Step 2: Synthesize Comparison Matrix and Recommendation
 
 After all 4 analyzer agents complete:
@@ -50,6 +62,39 @@ After all 4 analyzer agents complete:
 6. Write:
    - `design/comparison-matrix.md` — full scoring table with per-criterion scores from each agent
    - `design/recommendation.md` — the recommendation with justification, including what changes from the previous recommendation and why
+
+## Step 2b: Arithmetic Verification (MANDATORY)
+
+For EACH design, verify scores manually:
+
+1. For each criterion (C1-C12):
+   - Extract the score from the responsible analyzer's doc
+   - Extract the weight from evaluation-criteria.md
+   - Calculate: score x weight
+2. Sum all weighted scores for the design
+3. Compare against the analyzer's stated total
+4. Document any discrepancies
+
+If discrepancies found: re-read the analyzer doc. If still unclear, flag for user review before writing the matrix.
+
+## Step 2c: Red Team Fatal Flaw Verification
+
+For each "fatal flaw" claimed by Red Team:
+
+1. Read the exact flaw description
+2. Cross-reference against the corresponding design doc — confirm the flaw actually exists
+3. Classify: **Fatal** (design cannot work without fixing this) vs **High Risk** (design works but with extra care)
+4. Only mark as "fatal flaw" in the matrix if it's genuinely fatal
+
+## Step 2d: Handling Analyzer Disagreements
+
+If two analyzers score overlapping areas differently:
+
+| Scenario | Action |
+|---|---|
+| Scores differ by <5 points | Document both, note discrepancy |
+| Scores differ by >5 points | Flag as "SCORING CONFLICT" — review both justifications |
+| Only one analyzer scored a criterion | Use that score (by design) |
 
 ## Step 3: Quality Checks
 

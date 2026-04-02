@@ -186,6 +186,17 @@ Next steps:
   3. Use /process-transcript to generate the meeting record (if available)
 ```
 
+## Step 7b: Verify No Placeholders
+
+Before reporting, check the meeting brief for completeness:
+
+- [ ] Meeting date is concrete (not "TBD")
+- [ ] Participants list has at least one name
+- [ ] Purpose is 1-2 specific sentences (not generic)
+- [ ] Current Project Status section has real content from Step 2 (not "TBD")
+
+If any field is incomplete because source docs were missing, note it explicitly in the report so the user knows what to fill in.
+
 ## Important Notes
 
 - Use the existing meeting folder naming convention: `YYYY-MM-DD-slug` with kebab-case slug, max 4 words.

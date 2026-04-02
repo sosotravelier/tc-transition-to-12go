@@ -92,6 +92,43 @@ Questions raised but not answered. For each:
 ### Topics Discussed but Not Resolved
 Broader topics that were discussed but where no clear decision or action was taken. These are candidates for follow-up in the next meeting.
 
+## Step 5b: Quality Check Before Writing
+
+<HARD-GATE>
+Do NOT write meeting-record.md until all extracted items pass these checks.
+</HARD-GATE>
+
+For each extracted decision:
+- [ ] Decision is specific and actionable (not vague like "we should think about X")
+- [ ] "Decided By" has a person's name (not "team" or "everyone")
+- [ ] Context is 1-2 sentences (not paragraphs)
+
+For each action item:
+- [ ] Owner is a specific person (not a team)
+- [ ] Action is concrete ("Implement X" not "work on stuff")
+- [ ] Due date is a date or explicitly "TBD"
+
+For each quote:
+- [ ] Speaker name matches corrections file from Step 2
+- [ ] Quote is cleaned of filler words but meaning preserved
+- [ ] Quote is at least one complete thought
+
+For each open question:
+- [ ] Question is genuinely unresolved as of meeting date
+- [ ] Owner identified (who needs to answer)
+
+**Red flags — reclassify these, don't record as-is:**
+
+| What You Extracted | Problem | Fix |
+|---|---|---|
+| "We should probably..." as action item | Not a commitment | Move to Open Questions or Discussions |
+| "Kind of decided..." as decision | Tentative, not settled | Add to Topics Discussed, not Decisions |
+| Quote with [INAUDIBLE] sections | Unreliable content | Ask user to clarify or drop the quote |
+| Decision that contradicts a previous one | Requires explicit override | Note "Supersedes [date] decision" |
+| Owner is a department/team | Too vague for tracking | Ask user for specific person |
+
+If any check fails, fix before proceeding.
+
 ## Step 6: Write meeting-record.md
 
 Write `meetings/<folder>/meeting-record.md` with this structure:
