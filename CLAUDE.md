@@ -16,6 +16,14 @@ For agent roles, source repository paths, and document conventions, see [AGENTS.
 
 If `project-context.md` has `Last Verified` older than 7 days, flag it: "Project context may be stale — last verified on [date]."
 
+## Implementation Discipline
+
+- A task must fit in one context window. If it cannot, decompose it.
+- RED-GREEN-REFACTOR: write a failing test, make it pass, then refactor. Use `superpowers:test-driven-development` skill.
+- At 70% context usage, summarize progress and start a fresh session.
+- Before coding any endpoint: read `project-context.md` → endpoint doc → `codebase-analysis.md`.
+- Before claiming work is done, run verification. Use `superpowers:verification-before-completion` skill.
+
 ## For Implementation Work
 
 1. Read `project-context.md` (always)
@@ -32,12 +40,14 @@ If `project-context.md` has `Last Verified` older than 7 days, flag it: "Project
 
 | Command | Purpose |
 |---------|---------|
+| **`/jira`** | Jira operations — sprint view, get/create/edit tickets, read/add comments, transitions. Use this for ANY Jira interaction. |
 | **`/build-project-context`** | Build project-context.md from scratch by processing documents chronologically (16 steps) |
 | **`/update-project-context`** | Update project-context.md with new decisions, status changes, or weekly review |
 | **`/process-transcript`** | Extract decisions and action items from a meeting transcript |
 | **`/run-design-phase`** | Launch all 6 design agents in parallel |
 | **`/run-evaluation-phase`** | Launch all 4 analyzer agents in parallel |
 | **`/prep-meeting`** | Scaffold a meeting folder with templates |
+| **`/implement-endpoint`** | End-to-end endpoint implementation: context → brainstorm → TDD → update project state |
 
 ## Project Structure
 
@@ -48,6 +58,7 @@ If `project-context.md` has `Last Verified` older than 7 days, flag it: "Project
 - **Shared context** in `prompts/context/` — `codebase-analysis.md` for implementation details
 - **Path-specific rules** in `.claude/rules/` enforce document templates
 - **Research** in `research/` — agent frameworks survey, context engineering patterns
+- **Superpowers skills** in `skills/` — cherry-picked from [Superpowers](https://github.com/obra/superpowers) (TDD, brainstorming, debugging, verification, parallel agents, git worktrees)
 
 ## Running Multi-Agent Workflows
 

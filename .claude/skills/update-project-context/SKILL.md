@@ -55,7 +55,22 @@ Compare the source document against the current project context. Identify:
 7. **Implementation sequence changes** → update section 8
 8. **New action items or blockers** → update section 8 if they affect sequence
 
-## Step 5: Propose Changes
+## Step 5: Challenge Assumptions
+
+Before proposing changes, scan the **current** project-context.md for statements that may be stated too definitively given the new information. Look for:
+
+1. **"Decided" items that are actually still evolving** — e.g., scope that's being renegotiated, sequences that depend on unresolved ownership, persistence decisions that have edge cases
+2. **Constraints stated as absolute that have known exceptions** — e.g., "no local DB" when notifications or migration may need one
+3. **Missing nuance from the new source** — e.g., a meeting explored an alternative that softens a previous "resolved" decision
+
+For each assumption you'd challenge, add it to your proposed changes as either:
+- A **softening edit** (e.g., "No local persistence" → "Default stateless; persistence TBD for migration/notifications")
+- A **new open question** (e.g., "Existing TC as first client? Would change backward-compat timeline")
+- A **note on a decision** (e.g., append "— under discussion" or "— may evolve")
+
+The goal is to prevent the project context from becoming a false source of certainty. Decisions that are genuinely settled should read as settled. Decisions that are still in flux should read as in flux.
+
+## Step 6: Propose Changes
 
 Show the user a summary of proposed changes as a diff-like list:
 
@@ -75,11 +90,11 @@ SECTION 6 (Open Questions):
 
 Ask the user to confirm before applying.
 
-## Step 6: Apply Changes
+## Step 7: Apply Changes
 
 Edit `project-context.md` with the confirmed changes. Update the `Last Updated` date to today. For `review` type, also update `Last Verified`.
 
-## Step 7: Size Check
+## Step 8: Size Check
 
 After editing, count words. If project-context.md exceeds 1,500 words (~6K tokens), warn the user that compression may be needed. The target is 800-1,500 words.
 
