@@ -58,8 +58,9 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - PHP 8.3/Symfony 6.4 inside F3, separate B2B schema
 - Default stateless, but persistence needs may emerge (migration, notifications, TC-as-first-client)
 - Booking schema parser is make-or-break (~1180 LOC C#)
-- Jira epic **ST-2483** tracks all work in ST project; stories: ST-2484 (GetItinerary), ST-2485 (Client Identity), ST-2486 (Stations), ST-2487 (Operating Carriers), ST-2488 (POIs). Possible Jira → Linear migration (company-wide)
+- Jira epic **ST-2483** tracks all work in ST project; stories: ST-2484 (GetItinerary), ST-2485 (Client Identity), ST-2486 (Stations), ST-2487 (Operating Carriers), ST-2488 (POIs). Integration Environment story planned (not yet created). Possible Jira → Linear migration (company-wide)
 - QA automation engineer gone — test ownership unresolved
+- Cross-cutting AC for all endpoint stories: structured logging (request/response, errors, client context), meaningful error responses, correlation ID forwarding, structured events for Datadog→ClickHouse
 
 ## 6. Open Questions
 
@@ -75,8 +76,8 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - **Existing TC as first client?** Discussion to have TC be the first consumer of new endpoints — would change scope (backward compat needed earlier)
 - **Local persistence scope**: stateless default may not hold for notifications, client migration, or TC-as-first-client scenarios
 - **Implementation sequence**: not finalized — depends on ownership decisions (catalog team) and scope evolution
-- **Integration environment**: exists theoretically, needs connectivity investigation
-- **Logging approach**: F3 logging patterns for B2B endpoints TBD
+- **Integration environment**: dedicated story planned — verify existence, connectivity, booking flow testability (Soso + Sana)
+- **Logging approach**: codified as cross-cutting AC; F3 logging patterns still TBD — needs investigation before first endpoint goes to prod
 - **12go test coverage**: what unit/E2E tests exist in F3 CI? Unknown
 
 ## 7. Key People
@@ -97,7 +98,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 
 ## 8. Implementation Sequence
 
-**Tentative sequence** (not finalized — depends on ownership and scope decisions): Search (POC done) → GetItinerary without schema (next priority) → Booking schema parser (separate task, prerequisite for CreateBooking) → Master data (if not catalog team) → Booking funnel (CreateBooking, Confirm) → Post-booking (GetBookingDetails, GetTicket, Cancel) → SeatLock (lowest). Notifications deferred. Migration plan documented in Q2 (full path, no Jira tickets for migration tasks yet). **Note**: if existing TC becomes first client, sequence and backward-compat requirements change significantly.
+**Tentative sequence** (not finalized — depends on ownership and scope decisions): Search (POC done) → GetItinerary without schema (next priority) → Booking schema parser (separate task, prerequisite for CreateBooking) → Master data (if not catalog team) → Booking funnel (CreateBooking, Confirm) → Post-booking (GetBookingDetails, GetTicket, Cancel) → SeatLock (lowest). Notifications deferred. Migration plan documented in Q2 (full path, no Jira tickets for migration tasks yet). **Integration environment investigation** needed early — prerequisite for booking flow testing. **Note**: if existing TC becomes first client, sequence and backward-compat requirements change significantly.
 
 **Red Team risks**: (1) booking schema parser port, (2) solo developer SPOF, (3) PHP-FPM memory model for mappings, (4) F3 local dev friction.
 
@@ -119,5 +120,6 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 | `meetings/2026-03-25-.../meeting-record.md` | **MOST AUTHORITATIVE**: 9 decisions, scope changes   |
 | `meetings/2026-03-30-.../meeting-record.md` | Pre-holiday sync: GetItinerary next, schema split, migration plan scope |
 | Jira epic ST-2483 (ST project)              | Q2 B2B API Transition — all stories and dependencies                 |
+| `meetings/2026-03-25-.../jira-items-draft.md` | Full story breakdown with ACs (23 active + 10 deferred)            |
 
 

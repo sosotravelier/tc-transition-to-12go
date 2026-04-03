@@ -19,6 +19,7 @@
 | 8 | Post-Booking Operations | — | Not yet created |
 | 9 | SeatLock | — | Not yet created |
 | 10 | Notifications | — | Not yet created (deferrable) |
+| 11 | Integration Environment Investigation | — | Not yet created |
 
 **Acceptance criteria applied to ALL endpoint stories:**
 
@@ -26,6 +27,8 @@
 - Map `price_type` correctly (12go `price_restriction` integer → client enum `{Max, Min, Exact, Recommended}`)
 - Emit structured JSON event (e.g., `search.completed`, `booking.created`) for Datadog → ClickHouse pipeline
 - Per-endpoint sanity check: no major latency degradation vs direct 12go call
+- Implement proper structured logging (request/response, errors, client context) following F3 logging patterns
+- Error handling: meaningful error responses for client-facing failures, not raw upstream errors
 
 ---
 
@@ -175,28 +178,42 @@ Group of 3 lower-complexity endpoints.
 
 ---
 
+## 11. Integration Environment Investigation
+
+**Owner**: Soso + Sana
+**Source**: Shauly (Mar 30): "I want to add integration environment as a story. Theoretically it exists but we need to understand how it's connected."
+
+**Acceptance Criteria:**
+
+- Verify integration/staging environment exists and is accessible for B2B development
+- Document how it's connected — database, services, external dependencies
+- Confirm booking flow can be tested end-to-end on this environment (Shauly: "we need to do bookings on that environment")
+- Document any configuration or setup steps needed to use it
+
+---
+
 ## Dependencies on Other Teams
 
-### 11. Search: Define Recheck/206 Behavior
+### 12. Search: Define Recheck/206 Behavior
 
 **Owner**: Search team + Product (Avikhai, Eyal)
 **Blocks**: Search production readiness (indirectly)
 
 Product decision on how B2B search should handle data freshness. Eyal: automatic rechecks could hit 12go rate limits and affect B2C. Syncer may be more natural for B2B. Eliran/Avikhai agreed: "search needs to handle this."
 
-### 12. Define 206/Recheck Best Practice for B2B Clients
+### 13. Define 206/Recheck Best Practice for B2B Clients
 
 **Owner**: Avikhai
 
 BookAway rechecks after 100ms and only once — "does nothing basically." FerryScanner also has issues. Need documented guidance for B2B clients on correct 206/recheck usage.
 
-### 13. DNS/URL Routing Investigation
+### 14. DNS/URL Routing Investigation
 
 **Owner**: Tal (DevOps)
 
 How to route tc-api domain to 12go infrastructure during migration. Options: DNS remapping, v2 path prefix, per-client routing. Also: confirm whether app-level feature flag or AWS API Gateway is the routing mechanism for per-client migration. Gateway can't natively route by path parameter value.
 
-### 14. Kafka Event Investigation
+### 15. Kafka Event Investigation
 
 **Owner**: Data team (TBD)
 
@@ -204,7 +221,7 @@ Determine: (a) what events 12go already emits for booking funnel, (b) what TC ev
 
 
 
-### 15. Monitoring & Metrics Gap Analysis
+### 16. Monitoring & Metrics Gap Analysis
 
 **Owner**: Shauly (discovery) + Soso (implementation)
 
@@ -214,7 +231,7 @@ Compare TC Grafana dashboards vs 12go Datadog. Inventory which Grafana dashboard
 
 ## Discovery
 
-### 16. Cancellation Policy (Placeholder)
+### 17. Cancellation Policy (Placeholder)
 
 **Owner**: Soso
 
@@ -224,7 +241,7 @@ Unknown scope — may require enrichment as we learn more during implementation.
 
 ## Migration Support (Q2 preparation, Q3 execution)
 
-### 17. Draft Existing Client Migration Plan
+### 18. Draft Existing Client Migration Plan
 
 **Owner**: Soso
 
@@ -232,11 +249,13 @@ Shauly: "We need to have a plan... even just as a draft." Covers: station/operat
 
 ### 19. Client Migration Checklist
 
+
 **Owner**: Soso / Product
 
 Step-by-step per-client cutover process. What changes: API key? URL? Booking ID format? Station IDs? In what order? No process exists today. Source: `current-state/migration-issues/client-migration-process.md`.
 
 ### 20. Pre-Cutover Client Credential Validation Script
+
 
 **Owner**: Soso
 
@@ -248,17 +267,20 @@ Test each client_id/key mapping against 12go staging before cutover. Prevents da
 
 ### 21. API Contract Validation Suite (Record/Replay)
 
+
 **Owner**: Soso / QA
 
 Record production responses from old TC system, replay through new B2B endpoints, diff outputs. Critical for contract fidelity before cutover. Source: `current-state/cross-cutting/transition-complexity.md`.
 
 ### 22. Extend TC End-to-End Tests for B2B
 
+
 **Owner**: TBD (QA position vacant)
 
 Shauly: same API, different IDs. QA automation engineer was let go — who picks this up?
 
 ### 23. Add B2B Tests to 12go Deployment Pipeline
+
 
 **Owner**: TBD
 
@@ -272,7 +294,7 @@ Eliran: "Their deploys can also break us." Need tests that run on 12go deploys t
 | #   | Title                                               | Phase             | Notes                                                       |
 | --- | --------------------------------------------------- | ----------------- | ----------------------------------------------------------- |
 | D1  | Webhook notifications implementation                | Q2 late / Q3      | Deferrable. Story #10 captures it.                          |
-| D2  | Existing client migration execution                 | Q3+               | Plan (#17) drafted in Q2.                                   |
+| D2  | Existing client migration execution                 | Q3+               | Plan (#18) drafted in Q2.                                   |
 | D3  | gRPC search integration                             | Q3+               | One client only.                                            |
 | D4  | Formal performance testing                          | Post-Q2           | Shauly: F3 search refactoring may happen first.             |
 | D5  | Client API key rotation (existing clients)          | Q3                | Eliran: "Good for security to rotate." ~20-30 clients.      |
@@ -291,14 +313,14 @@ Eliran: "Their deploys can also break us." Need tests that run on 12go deploys t
 | Category                | Stories | Notes                                                                                                   |
 | ----------------------- | ------- | ------------------------------------------------------------------------------------------------------- |
 | Spike (decisions)       | 1       | 7 subtask checklist items                                                                               |
-| Foundation              | 1       | DB schema + client identity + middleware                                                                |
+| Foundation              | 2       | DB schema + client identity + middleware; integration environment investigation                         |
 | Endpoint implementation | 8       | Static data, search, GetItinerary, CreateBooking, ConfirmBooking, post-booking, SeatLock, notifications |
-| Dependencies on others  | 4       | Search team, Avikhai, Tal, data team                                                                    |
-| Discovery               | 2       | Monitoring, cancellation policy                                                                         |
-| Migration support       | 4       | Migration plan, booking ID decoder, checklist, validation script                                        |
+| Dependencies on others  | 5       | Search team, Avikhai, Tal, data team, monitoring                                                        |
+| Discovery               | 1       | Cancellation policy                                                                                     |
+| Migration support       | 3       | Migration plan, checklist, validation script                                                            |
 | Testing                 | 3       | Contract validation, E2E extension, 12go pipeline                                                       |
 | Deferred                | 10      | Tracked for visibility                                                                                  |
-| **Total active**        | **~23** | Down from 69                                                                                            |
+| **Total active**        | **~23** |                                                                                                         |
 
 
 ### Sources:
