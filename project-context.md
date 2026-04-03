@@ -1,6 +1,6 @@
 # Project Context
 
-**Last Updated**: 2026-04-02 | **Last Verified**: 2026-04-01
+**Last Updated**: 2026-04-03 | **Last Verified**: 2026-04-01
 **Status**: Q2 Implementation — Pre-coding (architecture resolved, scope confirmed, Jira epic created)
 
 ---
@@ -49,6 +49,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - **Mar 30**: GetItinerary split from booking schema — two separate tasks; itinerary (without schema) is next priority (Shauly)
 - **Mar 30**: Migration plan: document full path, no Jira tickets for migration tasks yet (Shauly)
 - **Mar 30**: Integration environment needs investigation — add as story (Shauly)
+- **Apr 3**: Client identity managed via Stats Admin Portal (`/front/stats/`, Partners screen) — not a separate service. F3 is read-only for `apikey`/`usr` tables. New `client_id` field requires Stats portal modification. (Soso discovery)
 
 ## 5. Current Constraints
 
@@ -57,7 +58,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - PHP 8.3/Symfony 6.4 inside F3, separate B2B schema
 - Default stateless, but persistence needs may emerge (migration, notifications, TC-as-first-client)
 - Booking schema parser is make-or-break (~1180 LOC C#)
-- Jira epic **ST-2483** ("Q2 B2B API Transition") tracks all work in ST project; first story ST-2484 (GetItinerary without schema) created. Possible Jira → Linear migration (company-wide)
+- Jira epic **ST-2483** tracks all work in ST project; stories: ST-2484 (GetItinerary without schema), ST-2485 (Client Identity). Possible Jira → Linear migration (company-wide)
 - QA automation engineer gone — test ownership unresolved
 
 ## 6. Open Questions
@@ -67,7 +68,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - **Using 12go IDs**: Eyal flagged as product decision needing formal confirmation
 - **Kafka events**: what does data team need? unified with 12go? no owner assigned
 - **Booking schema optimization**: can internal F3 method reduce transformation?
-- **Client onboarding flow**: how is new B2B client created? where is client_id stored?
+- **Client identity table design**: add `client_code` to existing `usr` table vs new `b2b_clients` table? Stats Admin Portal change needed either way. (Soso + Sana — ST-2485)
 - **Ticket branding**: 12go logo vs client branding on PDFs
 - **E2E test ownership**: QA engineer gone
 - **Existing TC as first client?** Discussion to have TC be the first consumer of new endpoints — would change scope (backward compat needed earlier)
