@@ -10,7 +10,9 @@
 | 5 | GetItinerary (without booking schema) | ST-2484 | Created 2026-04-02 |
 | 1 | Spike: Q2 Open Decisions | — | Not yet created |
 | 2 | Client Identity: client_id resolution | ST-2485 | Created 2026-04-03 — scope refined, two approaches for grooming |
-| 3 | Static Data (Stations, Operators, POIs) | — | Not yet created |
+| 3a | Static Data: Stations | ST-2486 | Created 2026-04-03 |
+| 3b | Static Data: Operating Carriers | ST-2487 | Created 2026-04-03 — open question: multi-transport splitting |
+| 3c | Static Data: POIs | ST-2488 | Created 2026-04-03 — needs product validation on necessity |
 | 5b | Booking Schema Parser | — | Not yet created |
 | 6 | CreateBooking | — | Not yet created |
 | 7 | ConfirmBooking | — | Not yet created |

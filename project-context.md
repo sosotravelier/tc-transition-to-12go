@@ -1,6 +1,6 @@
 # Project Context
 
-**Last Updated**: 2026-04-03 | **Last Verified**: 2026-04-01
+**Last Updated**: 2026-04-03 | **Last Verified**: 2026-04-03
 **Status**: Q2 Implementation — Pre-coding (architecture resolved, scope confirmed, Jira epic created)
 
 ---
@@ -22,7 +22,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 | --- | ----------------------- | ------------ | ---------- | ------------------------------------------------------ |
 | 1   | Search                  | POC complete | Low        | Recheck → search team, not Soso                        |
 | 2   | GetItinerary            | Spec complete (ST-2484) | High       | Split from schema; **next priority**. Schema is separate task, prerequisite for CreateBooking |
-| 3   | Stations/Operators/POIs | Not started  | Medium     | Ownership may move to catalog team (Eliran discussing) |
+| 3   | Stations/Operators/POIs | Specs created (ST-2486/87/88) | Medium     | 3 separate stories; ownership may move to catalog team; POI need questioned by Shauly |
 | 4   | CreateBooking           | Not started  | High       | Core funnel; explore internal F3 method for schema     |
 | 5   | ConfirmBooking          | Not started  | Medium     |                                                        |
 | 6   | GetBookingDetails       | Not started  | Low        | Runtime 12go API call, no local DB                     |
@@ -58,7 +58,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - PHP 8.3/Symfony 6.4 inside F3, separate B2B schema
 - Default stateless, but persistence needs may emerge (migration, notifications, TC-as-first-client)
 - Booking schema parser is make-or-break (~1180 LOC C#)
-- Jira epic **ST-2483** tracks all work in ST project; stories: ST-2484 (GetItinerary without schema), ST-2485 (Client Identity). Possible Jira → Linear migration (company-wide)
+- Jira epic **ST-2483** tracks all work in ST project; stories: ST-2484 (GetItinerary), ST-2485 (Client Identity), ST-2486 (Stations), ST-2487 (Operating Carriers), ST-2488 (POIs). Possible Jira → Linear migration (company-wide)
 - QA automation engineer gone — test ownership unresolved
 
 ## 6. Open Questions
@@ -69,6 +69,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - **Kafka events**: what does data team need? unified with 12go? no owner assigned
 - **Booking schema optimization**: can internal F3 method reduce transformation?
 - **Client identity table design**: add `client_code` to existing `usr` table vs new `b2b_clients` table? Stats Admin Portal change needed either way. (Soso + Sana — ST-2485)
+- **Multi-transport operator splitting**: replicate TC logic (split per transport type) or use 12go native array? (Product/team — ST-2487)
 - **Ticket branding**: 12go logo vs client branding on PDFs
 - **E2E test ownership**: QA engineer gone
 - **Existing TC as first client?** Discussion to have TC be the first consumer of new endpoints — would change scope (backward compat needed earlier)
