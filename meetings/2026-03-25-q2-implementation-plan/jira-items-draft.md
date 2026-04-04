@@ -13,17 +13,19 @@
 | 3a | Static Data: Stations | ST-2486 | Created 2026-04-03 |
 | 3b | Static Data: Operating Carriers | ST-2487 | Created 2026-04-03 — open question: multi-transport splitting |
 | 3c | Static Data: POIs | ST-2488 | Created 2026-04-03 — needs product validation on necessity |
-| 5b | Booking Schema Parser | — | Not yet created |
-| 6 | CreateBooking | — | Not yet created |
-| 7 | ConfirmBooking | — | Not yet created |
-| 8 | Post-Booking Operations | — | Not yet created |
+| 5b | Booking Schema Parser | ST-2490 | Created 2026-04-03 — blocks CreateBooking, spike on F3 internals |
+| 6 | CreateBooking (Reserve) | ST-2491 | Created 2026-04-03 — in-process F3 calls, schema-driven validation |
+| 7 | ConfirmBooking | ST-2492 | Created 2026-04-04 — in-process F3 calls, simplified vs TC |
+| 8a | GetBookingDetails | ST-2493 | Created 2026-04-04 — runtime in-process call, no local DB |
+| 8b | GetTicket | ST-2494 | Created 2026-04-04 — URL passthrough, no S3/CloudFront |
+| 8c | CancelBooking | ST-2495 | Created 2026-04-04 — two-step refund, 12go's refund_amount directly |
 | 9 | SeatLock | — | Not yet created |
 | 10 | Notifications | — | Not yet created (deferrable) |
 | 11 | Integration Environment Investigation | — | Not yet created |
 
 **Acceptance criteria applied to ALL endpoint stories:**
 
-- Forward `x-correlation-id` header through 12go API calls and include in structured events
+- Forward `x-correlation-id` from the client request and include in structured events and logs
 - Map `price_type` correctly (12go `price_restriction` integer → client enum `{Max, Min, Exact, Recommended}`)
 - Emit structured JSON event (e.g., `search.completed`, `booking.created`) for Datadog → ClickHouse pipeline
 - Per-endpoint sanity check: no major latency degradation vs direct 12go call
@@ -95,7 +97,7 @@ Implement GetItinerary endpoint including the booking schema parser — the most
 
 **Acceptance Criteria:**
 
-- Call chain: `GET /trip/{tripId}` → `POST /cart` (add to cart) → `GET /checkout/{cartId}` (get schema)
+- Call chain (in-process F3 service calls, not HTTP): GetTripDetails → AddToCart → GetCheckout (get schema)
 - Port booking schema parser from C# to PHP (~1,180 lines of bracket-notation form field parsing). Use fixture-driven approach with 4 test fixtures extracted from .NET test data.
 - **Explore Eyal's alternative**: instead of translating 12go's JSON API response, consider writing a dedicated F3 method that queries the database (or internal services) directly to build the booking schema in the desired format — avoiding the ~1,180-line transformation entirely. Not guaranteed to be simpler, but worth investigating before committing to the translation approach.
 - Store parsed checkout schema and booking state in Redis (for cross-request state between GetItinerary and CreateBooking — PHP-FPM is per-request)
@@ -114,7 +116,7 @@ Implement GetItinerary endpoint including the booking schema parser — the most
 **Acceptance Criteria:**
 
 - Reconstruct bracket-notation keys from stored schema → assemble 12go `/reserve` request body
-- Call `POST /reserve/{bookingId}`
+- Call F3's internal reservation service (in-process, not HTTP)
 - Use 12go native booking ID (decided in Mar 25 meeting — Shauly, Eyal, Eliran agreed)
 - Handle timeout → async fallback: if reserve exceeds timeout threshold, spin up background job (F3 in-process pattern, Sana confirmed), write result to DB, return incomplete results ID for polling
 - Implement incomplete results polling endpoint (`GET /incomplete_results/{id}`) as part of this story
@@ -128,7 +130,7 @@ Implement GetItinerary endpoint including the booking schema parser — the most
 
 **Acceptance Criteria:**
 
-- Call `POST /confirm/{bookingId}`
+- Call F3's internal confirmation service (in-process, not HTTP)
 - Same timeout → async fallback pattern as CreateBooking (reuse background job infrastructure from #6)
 - No local persistence — 12go is source of truth
 
@@ -143,9 +145,9 @@ Group of 3 lower-complexity endpoints.
 
 **Acceptance Criteria:**
 
-- **GetBookingDetails** — `GET /booking/{bid}` from 12go at runtime. No local persistence. Transform to TC response format.
+- **GetBookingDetails** — Call F3's internal booking details service (in-process). No local persistence. Transform to TC response format.
 - **GetTicket** — extract ticket URL from booking details. Return 12go's URL directly. If URL stability is a concern (see discovery), fallback: download and re-upload to S3.
-- **CancelBooking** — two-step: `GET /booking/{bid}/refund-options` then `POST /booking/{bid}/refund`. Use 12go's `refund_amount` directly (aligns with Vlad's revenue changes).
+- **CancelBooking** — two-step: get refund options then execute refund (in-process F3 service calls). Use 12go's `refund_amount` directly (aligns with Vlad's revenue changes).
 - Verify 12go ticket URL stability and expiration (does URL persist long enough for clients?)
 
 ---
@@ -157,7 +159,7 @@ Group of 3 lower-complexity endpoints.
 
 **Acceptance Criteria:**
 
-- Implement `POST /lock_seats` using 12go's seat lock endpoint
+- Implement seat lock using 12go's internal seat lock service (once available — 12go deploying native lock)
 - 12go deploying native lock (David implementing TC→12go connection). By the time Soso reaches this, should be available.
 - Eliran cautioned: "Just to make sure we're not doing some temporary solution for a solution that will be solved anyway." Validate before implementing.
 
