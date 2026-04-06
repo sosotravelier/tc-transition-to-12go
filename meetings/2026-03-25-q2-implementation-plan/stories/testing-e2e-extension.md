@@ -2,6 +2,7 @@
 
 **Type**: Story
 **Epic**: ST-2483
+**Jira**: ST-2506
 **Owner**: TBD (QA position vacant)
 
 ## Description

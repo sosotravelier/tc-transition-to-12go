@@ -2,6 +2,7 @@
 
 **Type**: Story
 **Epic**: ST-2483 (Q2 B2B API Transition)
+**Jira**: ST-2504
 **Owner**: Soso
 **Prerequisites**:
 - Complete booking funnel (CreateBooking, ConfirmBooking)

@@ -2,6 +2,7 @@
 
 **Type**: Story
 **Epic**: ST-2483
+**Jira**: ST-2501
 **Owner**: Soso
 
 ## Description

@@ -2,6 +2,7 @@
 
 **Type**: Spike
 **Epic**: ST-2483 (Q2 B2B API Transition)
+**Status**: Pending — Jira ticket not yet created
 **Owner**: Shauly / Soso (facilitate), Product / Eyal / Eliran (decide)
 **Prerequisites**: None
 

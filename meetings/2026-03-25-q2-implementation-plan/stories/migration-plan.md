@@ -2,6 +2,7 @@
 
 **Type**: Task
 **Epic**: ST-2483
+**Jira**: ST-2503
 **Owner**: Soso
 
 ## Description

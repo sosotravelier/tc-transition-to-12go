@@ -2,6 +2,7 @@
 
 **Type**: Story
 **Epic**: ST-2483
+**Status**: Pending — Jira ticket not yet created
 **Owner**: Soso / QA
 
 ## Description
