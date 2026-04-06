@@ -232,20 +232,20 @@ B2B Client              TC (Denali)              Supply Integration          12g
 ### Proposed F3 Flow (Simplified)
 
 ```
-B2B Client              F3 (PHP/Symfony)             12go Internal              Redis
+B2B Client              F3 (PHP/Symfony)             12go Internal (in-process)  Redis
     │                       │                            │                        │
     │── GET /itineraries ──>│                            │                        │
     │                       │                            │                        │
     │                       │  Parse itinerary_id        │                        │
     │                       │                            │                        │
-    │                       │── GetTripDetails() ───────>│                        │
-    │                       │<── trip + options ─────────│                        │
+    │                       │~~ GetTripDetails() ~~~~~~>│                        │
+    │                       │<~~ trip + options ~~~~~~~~~│                        │
     │                       │                            │                        │
-    │                       │── AddToCart() ────────────>│                        │
-    │                       │<── cartId ────────────────│                        │
+    │                       │~~ AddToCart() ~~~~~~~~~~~>│                        │
+    │                       │<~~ cartId ~~~~~~~~~~~~~~~~│                        │
     │                       │                            │                        │
-    │                       │── GetCheckout(cartId) ───>│                        │
-    │                       │<── flat JSON fields ──────│                        │
+    │                       │~~ GetCheckout(cartId) ~~>│                        │
+    │                       │<~~ flat JSON fields ~~~~~~│                        │
     │                       │                            │                        │
     │                       │  Parse dynamic fields      │                        │
     │                       │  Build field name mapping  │                        │
@@ -271,7 +271,7 @@ B2B Client              F3 (PHP/Symfony)             12go Internal              
 | Double caching (Redis + DynamoDB) | Single Redis cache | One cache layer |
 | SearchItineraryId parsing (6+ fields) | Simpler ID structure | For new clients only |
 
-### Three 12go API Calls (The Core)
+### Three 12go In-Process Calls (The Core)
 
 | # | Call | Purpose | Input | Output |
 |---|------|---------|-------|--------|
@@ -450,7 +450,7 @@ B2B Client              TC (Denali)              DynamoDB              Supply In
 ### Proposed F3 Flow
 
 ```
-B2B Client              F3 (PHP/Symfony)             Redis                12go Internal
+B2B Client              F3 (PHP/Symfony)             Redis                12go Internal (in-process)
     │                       │                          │                       │
     │── POST /bookings ────>│                          │                       │
     │  {booking_token,      │                          │                       │
@@ -468,11 +468,11 @@ B2B Client              F3 (PHP/Symfony)             Redis                12go I
     │                       │  Translate field names   │                       │
     │                       │  TC → 12go bracket fmt   │                       │
     │                       │                          │                       │
-    │                       │── POST /reserve/{cartId} ───────────────────────>│
-    │                       │<── { BId: "12345" } ────────────────────────────│
+    │                       │~~ reserve(cartId, data) ~~~~~~~~~~~~~~~~~~~~~~~~>│
+    │                       │<~~ { BId: "12345" } ~~~~~~~~~~~~~~~~~~~~~~~~~~~~│
     │                       │                          │                       │
-    │                       │── GET /booking/{BId} ───────────────────────────>│
-    │                       │<── price, status ───────────────────────────────│
+    │                       │~~ getBooking(BId) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>│
+    │                       │<~~ price, status ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~│
     │                       │                          │                       │
     │                       │  Apply markup if needed  │                       │
     │                       │── Store booking ref ────>│                       │
@@ -482,9 +482,9 @@ B2B Client              F3 (PHP/Symfony)             Redis                12go I
     │     total_price }     │                          │                       │
 ```
 
-### Reserve Request Body — Exact Format
+### Reserve Call Payload — Exact Format
 
-The `POST /reserve/{cartId}` body is a flat JSON object with bracket-notation keys:
+The `reserve(cartId)` call takes a flat associative array with bracket-notation keys:
 
 ```json
 {
@@ -580,18 +580,18 @@ B2B Client              TC (Denali)                                      12go AP
 ### Proposed F3 Flow
 
 ```
-B2B Client              F3 (PHP/Symfony)                                 12go Internal
+B2B Client              F3 (PHP/Symfony)                                 12go Internal (in-process)
     │                       │                                                │
     │── POST /confirm ─────>│                                                │
     │                       │                                                │
     │                       │  Validate booking_id                           │
     │                       │  Check not already confirmed                   │
     │                       │                                                │
-    │                       │── POST /confirm/{bookingId} ──────────────────>│
-    │                       │<── confirmation result ───────────────────────│
+    │                       │~~ confirmBooking(bookingId) ~~~~~~~~~~~~~~~~~>│
+    │                       │<~~ confirmation result ~~~~~~~~~~~~~~~~~~~~~~~│
     │                       │                                                │
-    │                       │── GET /booking/{bookingId} ──────────────────>│
-    │                       │<── price, status, ticketUrl ─────────────────│
+    │                       │~~ getBooking(bookingId) ~~~~~~~~~~~~~~~~~~~~~>│
+    │                       │<~~ price, status, ticketUrl ~~~~~~~~~~~~~~~~~│
     │                       │                                                │
     │                       │  Map status                                    │
     │                       │  Apply markup to final price                   │
@@ -621,20 +621,20 @@ B2B Client              F3 (PHP/Symfony)                                 12go In
 ### 12go Two-Step Cancellation
 
 ```
-B2B Client              F3 (PHP/Symfony)                                 12go API
+B2B Client              F3 (PHP/Symfony)                                 12go Internal (in-process)
     │                       │                                                │
     │── POST /cancel ──────>│                                                │
     │                       │                                                │
-    │                       │── GET /booking/{id}/refund-options ───────────>│
-    │                       │<── { available: true,                          │
+    │                       │~~ getRefundOptions(bookingId) ~~~~~~~~~~~~~~>│
+    │                       │<~~ { available: true,                          │
     │                       │     options: [{ refund_amount,                 │
-    │                       │       refund_fxcode, hash }] } ──────────────│
+    │                       │       refund_fxcode, hash }] } ~~~~~~~~~~~~~~│
     │                       │                                                │
     │                       │  Select option with max refund_amount          │
     │                       │                                                │
-    │                       │── POST /booking/{id}/refund ─────────────────>│
+    │                       │~~ refundBooking(bookingId, option) ~~~~~~~~~>│
     │                       │   { hash, refund_fxcode, refund_amount }       │
-    │                       │<── { success: true } ────────────────────────│
+    │                       │<~~ { success: true } ~~~~~~~~~~~~~~~~~~~~~~~~│
     │                       │                                                │
     │<── { booking_status:  │                                                │
     │     "cancelled",      │                                                │
@@ -661,7 +661,7 @@ B2B Client              F3 (PHP/Symfony)                                 12go AP
 
 **TC today**: Reads from local PostgreSQL (NOT from 12go API at runtime).
 
-**F3 approach**: Call `GET /booking/{bookingId}` directly.
+**F3 approach**: Call `getBooking(bookingId)` in-process directly.
 
 | 12go field | TC contract field | Notes |
 |---|---|---|
