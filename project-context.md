@@ -1,6 +1,6 @@
 # Project Context
 
-**Last Updated**: 2026-04-04 | **Last Verified**: 2026-04-03
+**Last Updated**: 2026-04-07 | **Last Verified**: 2026-04-03
 **Status**: Q2 Implementation — Pre-coding (architecture resolved, scope confirmed, Jira epic created)
 
 ---
@@ -11,11 +11,11 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 
 ## 2. Architecture Decision
 
-**Resolved: PHP/Symfony inside F3 monolith** with overlays: PE observability (DogStatsD metrics, structured logging), DA events (5 MVP structured log events), DI adapter boundary (`TwelveGoClientInterface`). Flat 3-layer: handler / mapper / 12go client. The "12go client" layer wraps **in-process calls to F3's internal services** (e.g., BookingProcessor, BookingFormManager) — not HTTP calls to 12go's external API. This is the core architectural win: eliminating the HTTP hop that TC makes today. Separate B2B DB schema. Redis for booking schema cache, APCu for ID mappings. **Persistence**: default is stateless (12go as source of truth), but local persistence may be needed for client migration scenarios, notifications, or if existing TC becomes first client of new endpoints.
+**Resolved: PHP/Symfony inside F3 monolith** with overlays: PE observability (DogStatsD metrics, structured logging), DA events (5 MVP structured log events), DI adapter boundary (`TwelveGoClientInterface`). Flat 3-layer: handler / mapper / 12go client. The "12go client" layer wraps **in-process calls to F3's internal services** (e.g., BookingProcessor, BookingFormManager) — not HTTP calls to 12go's external API. This is the core architectural win: eliminating the HTTP hop that TC makes today. Separate B2B DB schema. Booking state: investigate 12go's existing cart; Redis as fallback. APCu for ID mappings. **Persistence**: default is stateless (12go as source of truth), but local persistence may be needed for client migration scenarios or notifications.
 
 ## 3. What We're Building
 
-**Q2: new clients only, 12go native IDs.** Migration plan is a Q2 documentation deliverable (not code).
+**Q2: new clients only, 12go native IDs.** Migration plan is a Q2 documentation deliverable (not code). **Parallel flow**: existing clients will also route through F3 (via TC, preserving IDs) for validation before new client onboarding.
 
 
 | #   | Endpoint                | Status       | Difficulty | Notes                                                  |
@@ -29,7 +29,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 | 6   | GetBookingDetails       | Story created (ST-2493) | Low        | In-process F3 call, no local DB                        |
 | 7   | GetTicket               | Story created (ST-2494) | Low        | URL passthrough                                        |
 | 8   | CancelBooking           | Story created (ST-2495) | Low        | Use 12go refund_amount directly                        |
-| 9   | SeatLock                | Not started  | Low        | Lowest priority; 12go developing native support        |
+| 9   | SeatLock                | Story created (ST-2504) | Low        | Lowest priority; 12go developing native support        |
 | 10  | Notifications           | Not started  | Medium     | **Deferred** — not needed for new client onboarding    |
 
 
@@ -54,15 +54,21 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - **Apr 4**: Booking funnel stories created with full ACs: ST-2490→2491→2492→2493/2494/2495. Chain: Schema Parser → CreateBooking → ConfirmBooking → Post-booking (Details, Ticket, Cancel)
 - **Apr 4**: Keep schema-driven validation on B2B side before calling F3 internal services — better error messages, fail-fast, PHP PCRE advantage (Shauly Mar 25 + technical analysis)
 - **Apr 4**: New clients get raw 12go prices (no markup). 12go manages billing (no credit line check).
+- **Apr 7**: Existing clients route through new F3 endpoints via parallel flow (preserving IDs) — priority #1 (Eliran)
+- **Apr 7**: Booking funnel (GetItinerary + CreateBooking + ConfirmBooking) rolls out together as one milestone (Eliran + Shauly)
+- **Apr 7**: State management: investigate 12go's cart for booking state; Redis as fallback only (Shauly)
+- **Apr 7**: Use internal F3 methods (get trip details, add to cart) as data source — don't go deeper than existing method layer (Shauly)
+- **Apr 7**: Project elevated to strategic — more resources post-holidays, 2x/week 12go team meetings, dedicated Slack channel (Eliran)
 
 ## 5. Current Constraints
 
-- **Solo developer** (Soso), AI-assisted, Valeri as PHP buddy
+- **Lead developer** (Soso), AI-assisted, Valeri as PHP buddy; additional resources committed post-holidays (Eliran)
+- 2x/week meetings with 12go team contact (TBD) for investigation support
 - Q2 deadline — new clients onboard on new system
 - PHP 8.3/Symfony 6.4 inside F3, separate B2B schema
 - Default stateless, but persistence needs may emerge (migration, notifications, TC-as-first-client)
 - Booking schema parser is make-or-break (~1180 LOC C#)
-- Jira epic **ST-2483** tracks all work in ST project; stories: ST-2484 (GetItinerary), ST-2485 (Client Identity), ST-2486–88 (Static Data), ST-2490 (Schema Parser), ST-2491 (CreateBooking), ST-2492 (ConfirmBooking), ST-2493 (GetBookingDetails), ST-2494 (GetTicket), ST-2495 (CancelBooking). Integration Environment story planned (not yet created). Possible Jira → Linear migration (company-wide)
+- Jira epic **ST-2483** tracks all work. Endpoint stories: ST-2484 (GetItinerary), ST-2490–95 (Schema Parser, booking funnel), ST-2504 (SeatLock). Support: ST-2485 (Client Identity), ST-2486–88 (Static Data), ST-2501 (Cancellation Policy), ST-2502 (Integration Env), ST-2503 (Migration Plan). Dependencies: ST-2497 (206/Recheck), ST-2498 (DNS Routing), ST-2499 (Kafka Events), ST-2500 (Monitoring). Testing: ST-2505 (12go Pipeline), ST-2506 (E2E). Possible Jira → Linear migration (company-wide)
 - QA automation engineer gone — test ownership unresolved
 - Cross-cutting AC for all endpoint stories: structured logging (request/response, errors, client context), meaningful error responses, correlation ID forwarding, structured events for Datadog→ClickHouse
 
@@ -72,13 +78,13 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 - **Itinerary ID format**: deferred, needs decision before search goes to prod
 - **Using 12go IDs**: Eyal flagged as product decision needing formal confirmation
 - **Kafka events**: what does data team need? unified with 12go? no owner assigned
-- **Booking schema optimization**: can internal F3 method reduce transformation?
+- **Cart for booking state?** Can 12go's existing cart handle schema mapping state between GetItinerary and CreateBooking? (Soso + 12go team contact — blocks CreateBooking approach)
 - **Client identity table design**: add `client_code` to existing `usr` table vs new `b2b_clients` table? Stats Admin Portal change needed either way. (Soso + Sana — ST-2485)
 - **Multi-transport operator splitting**: replicate TC logic (split per transport type) or use 12go native array? (Product/team — ST-2487)
 - **Ticket branding**: 12go logo vs client branding on PDFs
 - **E2E test ownership**: QA engineer gone
-- **Existing TC as first client?** Discussion to have TC be the first consumer of new endpoints — would change scope (backward compat needed earlier)
-- **Local persistence scope**: stateless default may not hold for notifications, client migration, or TC-as-first-client scenarios
+- **Parallel flow: where to fork in TC pipeline?** Controller level (Shauly's preference) vs. SI framework level — needs investigation (Soso + Shauly)
+- **Local persistence scope**: stateless default may not hold for notifications or client migration scenarios
 - **Implementation sequence**: not finalized — depends on ownership decisions (catalog team) and scope evolution
 - **Integration environment**: dedicated story planned — verify existence, connectivity, booking flow testability (Soso + Sana)
 - **Logging approach**: codified as cross-cutting AC; F3 logging patterns still TBD — needs investigation before first endpoint goes to prod
@@ -89,7 +95,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 
 | Person  | Role                                         |
 | ------- | -------------------------------------------- |
-| Soso    | Sole developer, AI-assisted                  |
+| Soso    | Lead developer, AI-assisted; more resources post-holidays |
 | Shauly  | Product owner, monitoring discovery          |
 | Eliran  | Leadership, stakeholder alignment            |
 | Eyal    | Architecture/product, booking flow expertise |
@@ -102,9 +108,11 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 
 ## 8. Implementation Sequence
 
-**Tentative sequence** (not finalized — depends on ownership and scope decisions): Search (POC done) → GetItinerary without schema (next priority) → Booking schema parser (separate task, prerequisite for CreateBooking) → Master data (if not catalog team) → Booking funnel (CreateBooking, Confirm) → Post-booking (GetBookingDetails, GetTicket, Cancel) → SeatLock (lowest). Notifications deferred. Migration plan documented in Q2 (full path, no Jira tickets for migration tasks yet). **Integration environment investigation** needed early — prerequisite for booking flow testing. **Note**: if existing TC becomes first client, sequence and backward-compat requirements change significantly.
+**Tentative sequence** (not finalized — depends on ownership and scope decisions): Search (POC done) → GetItinerary without schema (next priority) → Booking schema parser (separate task, prerequisite for CreateBooking) → Master data (if not catalog team) → Booking funnel (CreateBooking, Confirm) → Post-booking (GetBookingDetails, GetTicket, Cancel) → SeatLock (lowest). Notifications deferred. Migration plan documented in Q2. **Integration environment investigation** needed early — prerequisite for booking flow testing.
 
-**Red Team risks**: (1) booking schema parser port, (2) solo developer SPOF, (3) PHP-FPM memory model for mappings, (4) F3 local dev friction.
+**Rollout strategy** (Apr 7): Search can roll out independently. Booking funnel (GetItinerary + CreateBooking + ConfirmBooking) must roll out together (shared cart/state). Existing clients route through F3 via parallel flow for validation before new client onboarding.
+
+**Red Team risks**: (1) booking schema parser port, (2) ~~solo developer SPOF~~ mitigated — more resources committed, (3) PHP-FPM memory model for mappings, (4) F3 local dev friction.
 
 ## 9. Reference Index
 
@@ -123,6 +131,7 @@ Replacement of the B2B API layer between external clients and 12go's travel plat
 | `meetings/2026-03-23-.../meeting-record.md` | CI/CD flow, separate schema, background jobs         |
 | `meetings/2026-03-25-.../meeting-record.md` | **MOST AUTHORITATIVE**: 9 decisions, scope changes   |
 | `meetings/2026-03-30-.../meeting-record.md` | Pre-holiday sync: GetItinerary next, schema split, migration plan scope |
+| `meetings/2026-04-07-.../meeting-record.md` | Booking funnel deep-dive, parallel flow decision, resourcing upgrade |
 | Jira epic ST-2483 (ST project)              | Q2 B2B API Transition — all stories and dependencies                 |
 | `meetings/2026-03-25-.../jira-items-draft.md` | Full story breakdown with ACs (23 active + 10 deferred)            |
 

@@ -1,0 +1,1083 @@
+Apr 6, 2026
+Booking funnel in depth  - Transcript
+00:00:00
+ 
+Shauly Sahar: Hey, I was in a call with Alan a second ago, so he will probably join. In the meantime, somebody's knocking at the door. One second. Okay.
+Soso Tughushi: Okay.
+Shauly Sahar: Wow. Um. You didn't invite Sana.
+Soso Tughushi: No, let me check the notes if I ask him nicely. See if you can join.
+Eliran Friedman: Hey.
+Soso Tughushi: Hello.
+Eliran Friedman: Oh, it's the sun.
+Soso Tughushi: Very good. How are you?
+Eliran Friedman: Good. Thank you.
+Soso Tughushi: How are the uh holidays going?
+Eliran Friedman: Sorry.
+Soso Tughushi: How are the holidays
+Shauly Sahar: Oh.
+Eliran Friedman: It's like a very weird holidays this year,
+Soso Tughushi: going?
+Eliran Friedman: but uh really well. Uh it's happy here in Israel, but yeah.
+Shauly Sahar: Elan, you said that you will will not be in the office on uh Thursday.
+Eliran Friedman: I am uh on vacation on
+Shauly Sahar: Okay.
+Eliran Friedman: Thursday
+Shauly Sahar: It's the Georgian Independence Day by the way, right also?
+Soso Tughushi: It is and
+Shauly Sahar: No,
+Soso Tughushi: um the sixth 6th of
+ 
+ 
+00:03:09
+ 
+Eliran Friedman: to celebrate the Georgian Independence Day.
+Soso Tughushi: April I think.
+Shauly Sahar: it's no on on Thursday.
+Soso Tughushi: No.
+Shauly Sahar: On Thursday, is it?
+Soso Tughushi: Ah yeah yeah. Well, it's it's it's not uh independent.
+Shauly Sahar: Yeah.
+Soso Tughushi: It's related to it, but it's more like a tragedy that happened by Soviets that we want to
+Shauly Sahar: I I you know there is like um the TV show uh the great
+Soso Tughushi: remember.
+Shauly Sahar: race or something like that. Uh you familiar with that?
+Soso Tughushi: Yeah.
+Shauly Sahar: So in Israel they are now in Bilissi. They are uh yeah they're having like um a part of the race there.
+Soso Tughushi: What's what is it called again?
+Shauly Sahar: Uh amazing race the like you're familiar with
+Soso Tughushi: Amazing. Maybe maybe you mean grand
+Shauly Sahar: that.
+Soso Tughushi: tour.
+Shauly Sahar: Um I don't know how they call it in English.
+Soso Tughushi: Is it uh uh
+Shauly Sahar: It's like it's not an Israeli um um it's not an Israeli one.
+Soso Tughushi: Is it uh from top gear people?
+ 
+ 
+00:04:16
+ 
+Shauly Sahar: them. No,
+Soso Tughushi: Uh the Ah
+Shauly Sahar: it's like couple that having like a lot of So they are there and I saw that
+Soso Tughushi: okay.
+Shauly Sahar: there you have a street called 9th of April, right?
+Soso Tughushi: Yeah.
+Shauly Sahar: Yeah.
+Soso Tughushi: Um so one thing is that I forgot to add a sana to the meeting. Um I I asked him now if he can join and I'm just waiting for his answer. Yeah. And um well, AL declined the meeting
+Eliran Friedman: He's on
+Shauly Sahar: Yeah, I told him he he was probably
+Eliran Friedman: location.
+Soso Tughushi: annotation.
+Shauly Sahar: Yeah.
+Soso Tughushi: Yeah, I'm thinking. Yeah, he doesn't reply. I'm not sure what to do. Maybe we can start without him and maybe he will
+Eliran Friedman: Did he say he will join or he didn't he didn't
+Soso Tughushi: jump.
+Eliran Friedman: approve?
+Shauly Sahar: No, I forgot to invite him.
+Eliran Friedman: No, like I think it will be hard like to get S on the last on the last minute because usually it's like very busy all day.
+ 
+ 
+00:06:05
+ 
+Eliran Friedman: Uh, do you think we it's like we can go over some stuff like the three of us or it's better to do it with SA?
+Soso Tughushi: I mean, I I I don't know what was the first uh reason to add him to this call. Maybe he would have some good insight about some of it, but uh I'm pretty sure we can do it
+Eliran Friedman: And then let's see if we want to uh to write down some things to uh to do with him as
+Soso Tughushi: without
+Eliran Friedman: well.
+Soso Tughushi: the question.
+Eliran Friedman: So you you want to start and then if we follow up with
+Soso Tughushi: I'm sorry. Yeah. Yeah. Yeah.
+Eliran Friedman: him on the topics that we need.
+Soso Tughushi: Yes.
+Eliran Friedman: Okay. Just because like we have today and then we have holidays and then you have holidays and
+Soso Tughushi: Exactly. Yes. Mhm. So, uh today I have two topics prepared.
+Eliran Friedman: So,
+Soso Tughushi: Well, this is the booking of flow deep dive. We go into uh more details in it and another one is about what you proposed earlier on Thursday.
+ 
+ 
+00:07:09
+ 
+Eliran Friedman: okay.
+Soso Tughushi: Uh so let's u dive in. So uh here I am discussing u again what we have what are the u format of booking schema that want to go returns the get itinerary flow the create booking flow confirm booking uh booking details um and well I think this is quite comprehensive all of this was uh extracted from the documentation I with help of Corser which where I was burning the tokens like crazy. Um and well
+Eliran Friedman: But you still limit, right? But you didn't get to the limit also with that,
+Soso Tughushi: again with cloud no I mean with
+Eliran Friedman: right? Okay.
+Soso Tughushi: with Corser it was just one time thing when I was running out of it all the
+Eliran Friedman: With CL,
+Soso Tughushi: time.
+Eliran Friedman: it's better, right?
+Soso Tughushi: Yeah, code has more like just better limits or it's cheaper,
+Eliran Friedman: you're using or uh the other one.
+Soso Tughushi: but it's I am all using Opus most of the time.
+Eliran Friedman: Okay. So, also with focus,
+Soso Tughushi: Yeah.
+ 
+ 
+00:08:18
+ 
+Eliran Friedman: it's like you still have enough tokens.
+Soso Tughushi: Yeah. Yeah. Yeah. It's rarely when I run out of my daily quarter.
+Eliran Friedman: Perfect.
+Soso Tughushi: Yeah. Yeah.
+Eliran Friedman: Great.
+Soso Tughushi: So, on the want to go booking scam, this is the response we are getting from want to go. So uh essentially this is the requirements for create booking. So whatever they provide us they are describing what are the fields that are necessary like mobile phone and it is also stated whether or not it is required and the validation they have. Um so point is that different operators might have different set of fields and we have this dynamic schema that we are processing to later on validate or first of all tell them uh what which are the fields that they require to provide us and also we use this uh information to validate when we are receiving the uh request. uh there are the usual fields like uh so the first of all the uh format is weird that we are getting from one to go and we are also normalizing it and transforming it into TC uh contract so
+ 
+ 
+00:09:36
+ 
+Eliran Friedman: Mhm.
+Soso Tughushi: so the mobile email so we have let's say set uh uh fields I mean the fields that are fixate and we also have sometimes the dynamic fields So we know that most of the time we have mobile, email, first name, country ID. Um but there are there is also something that is dynamic like seat selected seats and the selected seats property has uh uh the card ID for example inside of it.
+Shauly Sahar: The trip
+Soso Tughushi: Yeah.
+Shauly Sahar: ID
+Soso Tughushi: Ah yeah. Uh I think it was card ID. Well, let's
+Shauly Sahar: and the cart ID is like a hash of three seven uh
+Soso Tughushi: see.
+Shauly Sahar: seven numbers. This is like uh for for what I remember this is like the uh trip trip
+Soso Tughushi: Mhm. Mhm. Okay.
+Shauly Sahar: ID.
+Soso Tughushi: Yeah. And also we have something like some ID inside of the one of the fields. Um so yeah
+Eliran Friedman: Mhm.
+Soso Tughushi: um so again the categories there are whether or not this is dynamic uh um um the example the pattern how we are receiving it.
+ 
+ 
+00:11:06
+ 
+Soso Tughushi: Um the end just generalization of this uh form fields. So we all most of the time have type uh name title regular expression which is in PHP style um and options also like what are the available options like um so if we have let's say seat selection then we we might uh need have a list of available seats in the options. So this is how we are I don't know client properly. a drop down on their site to show what are the available seats for example or uh like baggage or no baggage or 10 kilogram period and so on.
+Eliran Friedman: Mhm.
+Soso Tughushi: Um so yeah we do some complicated logic to parse this response and translate it into our TC contract. I mean the static ones uh or non-dynamic ones uh we are just translating one to one mapping but the dynamic ones we are putting in some dictionary like additional fields or something. Um yeah dynamic fields. Um yeah I mean this is just this section just uh shows uh what we have want to go I mean with what we are working on
+ 
+ 
+00:12:43
+ 
+Eliran Friedman: I have a question about like I said known wild card patterns 47
+Soso Tughushi: um
+Eliran Friedman: constants. So like if now for example uh want to go write a new uh a new thing that you're not familiar with uh what do you do in this case? Do you throw an arrow or like uh you ignore it or
+Soso Tughushi: It must most most likely it's going to be
+Eliran Friedman: error?
+Shauly Sahar: Uh no it's it's dep it's depend if the if
+Soso Tughushi: um
+Shauly Sahar: the field is required or not. If it's not required we we we skip it. If it's required I think that will return an error.
+Eliran Friedman: It's interesting actually surely because it also relates to SAS I'm not sure if you're familiar with but we are trying to look on on Q2 to better have a unification of APIs between the B2B and the B2C we talked about it multiple times and I think this is another case of why it's important to have some kind of a mechanism that want to go with see the B2B API.
+ 
+ 
+00:13:46
+ 
+Eliran Friedman: I don't like to call it B2B API then that it's TC API as a first class citizen because I guess also in this case what what happens is that one to go can develop something said that the new field is mandatory and then our clients will be will be broken right for
+Soso Tughushi: Mhm.
+Eliran Friedman: this for these cases like a guy happened before it
+Soso Tughushi: Correct.
+Eliran Friedman: happened that like we were broken because of something like
+Soso Tughushi: I I don't recall not this uh something like this happened.
+Shauly Sahar: I I think that eventually you know we mapped most of the things. So if usually when they adding something new it mean that it's a new um inventory continue to our call again it's
+Eliran Friedman: Mhm.
+Shauly Sahar: it's something that that can happen I don't think it happened a lot of time in
+Eliran Friedman: It's funny because it's another another like area where you see that like we are not which hurting our ability to be real
+Shauly Sahar: the
+Eliran Friedman: supplyless I would say because we always have a mapping between like uh want to go and uh and TC okay no
+ 
+ 
+00:14:56
+ 
+Shauly Sahar: Correct.
+Eliran Friedman: it's just like a side note that like is interesting
+Shauly Sahar: Uh yeah, specifically in that part I think that there is some lack in the TC um TC API that we might not cover all the
+Eliran Friedman: Mhm.
+Shauly Sahar: things like it's like something that is known for a lot of time but never got into priority and I think that anyway it's something that when we'll do that probably it will require to break the API and and and answer another one. It's something that we should expect to have
+Eliran Friedman: to do what show.
+Shauly Sahar: sometimes in order to kind of cover some
+Eliran Friedman: Sorry.
+Shauly Sahar: gaps that we know that TC in that particular way area have a gaps we'll probably will need to um to do some enhancements that will required uh to break the AP like to breaking changes to have some breaking changes
+Eliran Friedman: What? What? What enhancement like to do?
+Shauly Sahar: Uh for example,
+Eliran Friedman: What?
+Shauly Sahar: I think that we are not supporting multi- um multi-
+Eliran Friedman: Ah, okay.
+ 
+ 
+00:16:06
+ 
+Shauly Sahar: trips with like
+Eliran Friedman: It will also like expand our our in return inventory. You mean?
+Shauly Sahar: uh yes
+Eliran Friedman: Okay.
+Shauly Sahar: correct.
+Soso Tughushi: Yeah, one thing that also Aal mentioned yesterday not yesterday previous meeting was that we should like let's say this is the response that want to go is returning and uh my approach was u considering uh similar to what we have in TC to translate this thing into the format that TC has and uh what he was arguing maybe I miss
+Eliran Friedman: Mhm.
+Soso Tughushi: separated him but he was saying that we should instead of translating this just get the information from the source. So it involves let's say to see how this is populated and uh maybe redesign our function to call
+Eliran Friedman: Mhm.
+Soso Tughushi: it directly from there without and bypass this layer that populates uh this kind of form and this is also uh uh why it would be useful
+Eliran Friedman: Mhm.
+Soso Tughushi: that if we would just detect new fields it would maybe we could add it automatically instead of right now uh parsing and searching for these wild cards in the
+ 
+ 
+00:17:28
+ 
+Eliran Friedman: And by the way,
+Soso Tughushi: code.
+Eliran Friedman: so so all of that is not not related to search. It's like pure booking logic.
+Soso Tughushi: It's uh booking logic. Yes.
+Eliran Friedman: So it's like a separate modules than like F3 is the search, right? It's like F3, but it's not it's like different models,
+Soso Tughushi: Yes.
+Eliran Friedman: different functions, different areas and not related like to the tool and search and all of
+Soso Tughushi: Yeah. No, no,
+Eliran Friedman: that.
+Soso Tughushi: it's uh it's it's coming from separate endpoint and um and during the search uh this booking schema is not called at all.
+Eliran Friedman: Mhm.
+Soso Tughushi: Yeah. I mean they still live at the same house but different model.
+Eliran Friedman: Okay.
+Shauly Sahar: transforms.
+Eliran Friedman: So what is your suggestion currently like regarding all of that?
+Soso Tughushi: Yeah.
+Eliran Friedman: What what do you plan to do here?
+Soso Tughushi: Uh
+Eliran Friedman: like you think that like it's two options like either to take the JSON and pass it or like to check the functions and just
+ 
+ 
+00:18:23
+ 
+Soso Tughushi: Yeah, just check the functions and let's say do some discovery again.
+Eliran Friedman: like
+Soso Tughushi: I mean, uh right now I did not analyze uh how to better select it.
+Eliran Friedman: this is like but this is like just another case that you need to transform
+Soso Tughushi: Uh but it could be done by code.
+Eliran Friedman: one format into another one if I understand correctly.
+Soso Tughushi: Yeah.
+Eliran Friedman: No,
+Soso Tughushi: Yes.
+Eliran Friedman: no more logic than like just like either take the JSON and pass it or take the call the the related functions, but it's still like just stateless format to return that like should support like what you see as
+Soso Tughushi: Yes, true.
+Eliran Friedman: today
+Soso Tughushi: I mean it's transformation but it's not it's transformationational that inn net takes 1,000 lines. So uh it's not Yeah.
+Eliran Friedman: only this only this But for code we focus it
+Soso Tughushi: Yeah. does this conversion of course.
+Shauly Sahar: What?
+Eliran Friedman: can be
+Soso Tughushi: Yeah. Plus, you know,
+Eliran Friedman: like
+Soso Tughushi: we could question, let's say, the um competency of previous developer who wrote this 10,000 lines, you know,
+ 
+ 
+00:19:26
+ 
+Eliran Friedman: like let's say like in this we can just match like let's say you now would develop it you can just run in shadow mode like the result that you have today from uh from PC versus like this result and It be like one to one match, right?
+Soso Tughushi: again.
+Eliran Friedman: The QA maybe I'll put a headphones.
+Soso Tughushi: Sorry.
+Eliran Friedman: I think that's I feel it
+Soso Tughushi: No, no, I just didn't understand the
+Eliran Friedman: like you hear me now.
+Soso Tughushi: meaning.
+Eliran Friedman: It's better. Okay.
+Shauly Sahar: Now it's better.
+Eliran Friedman: Yeah. I was told that I have an echo in my room. Um I think that like once we finish developing that you can easily do DQA like data quality insurance and like check the the the in shadow course like the regular results versus this one and have like 1% uh confidence that it works right
+Soso Tughushi: Yeah. I mean know if we would let's say compare what was before or what and what's versus what's being returned.
+Eliran Friedman: it should be the same right like there's like the that the QA or like the confidence that we have in this
+ 
+ 
+00:20:28
+ 
+Soso Tughushi: Yeah.
+Eliran Friedman: part should be very high after development.
+Soso Tughushi: Correct.
+Eliran Friedman: Okay.
+Shauly Sahar: But that's correct also for the search
+Eliran Friedman: No, so it's I mean it's good it's good like it just saves like like even if you're using like for example AI
+Soso Tughushi: What?
+Shauly Sahar: part.
+Eliran Friedman: and again we need to see that like the code is generated well and you know it's making we understand basically what you are but we have like an insurance to check that the AI did it part well and we didn't miss anything because if the AI will miss anything will miss something we can easily track it like when something will break that's what I'm
+Shauly Sahar: Correct. The only challenge that I see here and I don't know how big is this challenge is like
+Eliran Friedman: Okay.
+Shauly Sahar: two things. one is uh we are doing some small changes with the oper like ids. So this is something that will be different.
+Eliran Friedman: Mhm.
+Shauly Sahar: And the second thing is like we need to find as much as possible different uh routes in order to compare the different uh responses because it's not like you are doing one or two uh itineraries and that's it.
+ 
+ 
+00:21:47
+ 
+Shauly Sahar: You need to be able to have like a very large
+Soso Tughushi: Yeah.
+Shauly Sahar: uh data
+Eliran Friedman: Mhm.
+Shauly Sahar: set.
+Soso Tughushi: Correct because they based on the integration or based on operator uh the schema could return different values.
+Shauly Sahar: Yeah.
+Eliran Friedman: I do think by the way that uh we need to do the followup with uh with
+Soso Tughushi: Oh,
+Eliran Friedman: Sana but it also needs to be I guess um surely I saw that today we have like later on with Sana just let's make sure that he will arrive but just check with him that he's out of the the meeting I think that if we will talk with Sana on the context that in the end we want to have a unified API or we want to have like better connection between want to go and TC See, then maybe also in this test like we need to see, you know, do they need all the in in a perfect world when you have like the perfect API, do we need all of these suffixes of the trip in the in the field name or something like that.
+ 
+ 
+00:22:49
+ 
+Eliran Friedman: Maybe we can have some understanding together with SA about what can be omitted and what doesn't need to be also in want to go again you know and then they will adapt like the new API and then maybe if we can take it from the functions and not from the JSON I do think that it's better but I'm not sure like I do I do understand and think that like suggestion is is good I just don't know how complex it is to be honest and I think this is like the because then maybe you can can develop a new flow and the new flow that you will develop so will be like the right flow So for most of the clients like in the end most of the client with this API not with like the one to go if you're looking on the on the
+Shauly Sahar: Yeah, but again I don't I have two things that I want to comment here.
+Eliran Friedman: future
+Shauly Sahar: I I don't want to mix what SOS is doing with our uh things like for aligning the API.
+ 
+ 
+00:23:38
+ 
+Shauly Sahar: I think that it will again make this uh the context of this bigger and um and um I I'm I'm not sure that we can track it because maybe it will require some uh changes in the API and I want to do that gradually. Um that that's a
+Eliran Friedman: I I just I just feel that we need like to somehow have Sana in the loop of the this the idea to have Sana with us on what we're trying to achieve and then like you know we can uh because you know if now I don't know like in the end we do need to to to have understanding of what we what it means to have unified API because otherwise we can just go to in two different vectors. So I know that we don't want to mix the products but we need to understand where we are
+Shauly Sahar: That's that's that's that's correct.
+Eliran Friedman: going because I I just want to
+Shauly Sahar: I I agree that we need to
+Eliran Friedman: make sure that if so can have a direction that is towards what we want to be maybe we can do that if not then okay but you know
+ 
+ 
+00:24:49
+ 
+Shauly Sahar: but that's mean that okay if it that's mean that we are going to change something in our API then will
+Eliran Friedman: no nothing our API No,
+Shauly Sahar: be
+Eliran Friedman: just adopting that maybe the new API will be the one that also like you know will be the the right API. This is API.
+Shauly Sahar: Yeah,
+Eliran Friedman: This is what we talked about all along
+Shauly Sahar: but yes,
+Eliran Friedman: right the existing
+Shauly Sahar: but if we're going to do some changes on the TC API, I want uh Okay,
+Eliran Friedman: API
+Shauly Sahar: so the existing API, this is what Susso is doing,
+Eliran Friedman: right but like he he has two options to develop it.
+Shauly Sahar: right?
+Eliran Friedman: One of them is take the JSON that comes on the old API and then transform it.
+Shauly Sahar: Correct. Okay.
+Eliran Friedman: The other one is to just rewrite like the service layer to call the different
+Shauly Sahar: Okay.
+Eliran Friedman: modules and generate it like by its own. So what I'm saying that I do connect connecting to what I suggested the option of just rewriting
+ 
+ 
+00:25:38
+ 
+Shauly Sahar: Awesome.
+Eliran Friedman: the service to the modules is better if you think that this is also like will be the future API. You see what I'm saying?
+Shauly Sahar: Yes.
+Eliran Friedman: But but I understand I understand that it can be a very very very complex project.
+Shauly Sahar: Yeah. Yeah.
+Eliran Friedman: I'm just saying that let's understand if it's a complex project or not and then decide I'm good with both options. I'm just saying if we can have a option that that doesn't count on the one to go API it's better but if we don't have it then it's
+Shauly Sahar: Yeah. What?
+Eliran Friedman: a
+Shauly Sahar: So I have one question. So So in the search part, you didn't took the JSON, right? You use the methods, correct? Yes.
+Soso Tughushi: Yes.
+Shauly Sahar: So we probably here as well because we are not calling the API and getting the the JSON, we are going to use the methods that in F3,
+Soso Tughushi: Yeah.
+Shauly Sahar: right?
+Soso Tughushi: But one second. Uh so I used the method which returns PHP object.
+ 
+ 
+00:26:43
+ 
+Soso Tughushi: that these PHP object properties are still in the format of this JSON that want to go
+Eliran Friedman: Mhm.
+Soso Tughushi: is returning. So it's not I I took something that was selected uh from database that is converting to previous model and then I converted it to TC. So I didn't directly select the from the database the format that I
+Shauly Sahar: Okay. Okay.
+Soso Tughushi: need.
+Shauly Sahar: But this object is being used by one to go API as well, right? So anyway that and that's what we need to make sure
+Soso Tughushi: Yes.
+Shauly Sahar: that what SSO did and what we are want to do in the f in the next API that we are going to use the object that somebody is creating this is the correct uh object that sana is also using in the other APIs and if that's the
+Eliran Friedman: Mhm. Yeah.
+Shauly Sahar: case the and that was My assumption that it is the case then whenever somebody is adding something it mean that we have two representation layers to the same object right now and and that's the the whole uh different right yes and and that's also what I want to
+ 
+ 
+00:28:00
+ 
+Eliran Friedman: That's okay. Yeah, that's okay.
+Shauly Sahar: discuss and challenge if this is not enough for us uh for the for the future
+Eliran Friedman: Okay.
+Shauly Sahar: and uh if we need to
+Eliran Friedman: I I agree by the way it's a different discussion we will do with Sana but in my perspective and by the way I also like talk about it with Sana and he agreed with me we need to stop looking I told you it all the time and I will repeat it repeat it until everyone will align on it we are align on it I think that like want to go is a bit people came from want to go still need to adapt it want to go is not different than any other consumer of the API uh the the fact that like we we forked out of want to And we do speak about like going out to new services in go in the free factor just means that like in the end one to go is going to be just another consumer and because of that there is no in my opinion no rational in having a one to go API and TC API.
+ 
+ 
+00:29:02
+ 
+Eliran Friedman: Uh we need to find the right logic of like which API we need. We can talk about if we think we need a B2B API and B2C API but there is no s there's no sense in the keeping one to go API and this API for the long run. We cannot say that we have B2B and B2C but you know I don't just want to say that like one to go API is is the right because just like because it was the first one that doesn't make sense and let's see
+Shauly Sahar: I I I understand that.
+Eliran Friedman: how like because I also like he thinks that like he sees like want to go just as any other brand like he's trying to think about it but it's not comes naturally for him because he came from want to go. Okay, let's let's continue.
+Shauly Sahar: Yeah. So, so, so just one thing that we need to make sure that whenever we are taking that we are taking that from the lowest dominate like a mutual object that uh uh we have.
+ 
+ 
+00:30:05
+ 
+Shauly Sahar: So it will be easy
+Soso Tughushi: Yeah, but you know like at some point we have to stop.
+Shauly Sahar: to
+Soso Tughushi: I mean right now we are let's say I took as a starting point or the starting ground the uh want to go model and I didn't question from where this data is coming from. I mean we could let's say you say that the the lowest common the monominator would be a database table right I mean I would select it in different way and uh and then we can go further than that let's say okay this database format is incorrect and maybe we should store this data incorrectly not incorrectly in in the way that TC would benefit. So just I want to know where is this line which we are crossing and after which we are accepting that this is a black box or something for a given stage because yeah I don't know we wanted to move fast uh we wanted to estimate or uh I don't know migrate everything as fast well as fast as possible as I thought to uh F3 right and shut down the uh existing infrastructure if if we going okay I mean we I can let's say launch another set of agents and analyze instead of let's say this this one uh this is this was the current flow that when we are doing get itenerary we would do
+ 
+ 
+00:31:44
+ 
+Soso Tughushi: three uh calls to one to go HTTP endpoint and with this new flow what I'm proposing that we instead of HTTP we will just call internal methods but essentially the same models or same methods that were used uh by the uh endpoints just uh bypassing the HTTP hop uh and then and you're saying that okay we should question this part two because this get trip details also returns the same model as uh existing uh that is used by B2C Right. And um and um and maybe instead of this we should do one call which will already return some data that is in our format and and I mean let's say this get trip details goes directly to the database SQL query right and uh the the database t format also can be something that we could open and let's say investigate what writes to that database and uh and change that format
+Shauly Sahar: I I Okay, I understand what you're saying.
+Soso Tughushi: too.
+Shauly Sahar: The only thing I I don't think that we need to go too deep. Okay. I I think that the get deep details is a good starting point.
+ 
+ 
+00:33:16
+ 
+Shauly Sahar: Okay. I I'm just question if the get trip detail is the same method that uh that is being used on the other API that uh sana like the one to go API is using. That's that's just my question. If it's the same then we are more than 100% okay. If it's not the same then we need to understand if uh we want to continue with that at least for now and maybe in the future do some modification for that uh or or
+Soso Tughushi: So the trip details endpoint that we are calling uh this controller of
+Shauly Sahar: no.
+Soso Tughushi: trip details it calls just get trip details.
+Shauly Sahar: Yeah.
+Soso Tughushi: And well there is also there is also add to cart we are calling right uh which is exact I mean it is standing uh behind the controller this add to cart method yeah and we are uh using model
+Shauly Sahar: Yeah.
+Soso Tughushi: so you know I mean it I'm fine with whatever we're going to decide I mean I can let's say instead of of a two start investigate uh I mean uh what if instead of three calls so we would do one select
+ 
+ 
+00:34:35
+ 
+Shauly Sahar: I can just
+Soso Tughushi: statement but then I should I should be sure that uh you know after that uh like uh if we open one more box and there is another one inside we we will just uh don't touch it let's say don't touch the database
+Shauly Sahar: Okay. I I I I would ask Sana for those APIs is this if this this the same method that he is using on like want to go is using in their flow okay or they have a different version that they are using that's that's all that I want
+Eliran Friedman: What what what do they expose to their B2B
+Shauly Sahar: to this is what they exposed to the
+Eliran Friedman: clients? The B2B clients are doing a card and all of
+Shauly Sahar: B2B there is only one
+Eliran Friedman: that.
+Shauly Sahar: uh client But yes, so we also do that but we encapsulate it in in the get it
+Eliran Friedman: No, I understand.
+Shauly Sahar: inner
+Eliran Friedman: But like uh the B2B client is doing like using the APIs with uh
+Shauly Sahar: the cart. Yeah,
+ 
+ 
+00:35:38
+ 
+Eliran Friedman: Yeah.
+Shauly Sahar: I believe
+Soso Tughushi: So B2 is B2B card controllers.
+Shauly Sahar: so.
+Soso Tughushi: So I think this is to be uh end point. They do have cart end point and yeah I think they still have the add to cardart method but again I'm not sure maybe there is some other source but as I know the v2 is for v2 no
+Shauly Sahar: No,
+Eliran Friedman: I think by by the way I think that also in book away I remember correctly there's a card that was
+Shauly Sahar: V.
+Eliran Friedman: removed and uh we are still using cards just like because we you know just to support maybe in the future like you know more than one card item.
+Shauly Sahar: So, so if you can go to the code there again uh and the V where you saw the V something. Okay, I think that if you open the API
+Soso Tughushi: Yeah.
+Shauly Sahar: v1, you have search controller here,
+Soso Tughushi: Yeah.
+Shauly Sahar: right?
+Soso Tughushi: Correct.
+Shauly Sahar: So,
+Soso Tughushi: Search
+Shauly Sahar: this is like Yeah.
+Soso Tughushi: control.
+ 
+ 
+00:36:44
+ 
+Shauly Sahar: So and and they did like a new like the V2 is like what they want to use that currently they starting to use in in one to go API. Okay.
+Soso Tughushi: Okay,
+Shauly Sahar: And where is the oral code or is not here yet?
+Soso Tughushi: it's in B2B API separate
+Shauly Sahar: Okay.
+Soso Tughushi: separate
+Shauly Sahar: So I think that in the V2 they have like their like what they wanted to start uh forking for the their um want to go API
+Eliran Friedman: What are we looking
+Shauly Sahar: and you see they they're wrapping the the search of the V1
+Eliran Friedman: for?
+Soso Tughushi: legacy search controller. So legacy search controller but I'm not sure if legacy ah yeah we one yeah we one. So basically they are exactly doing the same as we are in B2B like they're calling
+Shauly Sahar: Yeah. But yeah,
+Soso Tughushi: the B1 and transforming the
+Shauly Sahar: but probably they will do some modification on that uh later on.
+Soso Tughushi: model.
+Shauly Sahar: Yeah. Yeah. Let's let's uh
+ 
+ 
+00:38:10
+ 
+Soso Tughushi: Yeah.
+Shauly Sahar: continue.
+Soso Tughushi: Yeah. So um so about get it inary flow what we have currently in TC is that we have get itary endpoint then we have Denali service which calls SI framework which then goes one to go API and plus it writes to Dynamo things. So in the Dynamo we are writing a booking uh token uh well actually we are writing a schema
+Eliran Friedman: What floor is it?
+Soso Tughushi: uh
+Shauly Sahar: Yes.
+Eliran Friedman: The previous one was Oh,
+Soso Tughushi: yeah this is previous one.
+Eliran Friedman: okay. This is like the the upper one.
+Soso Tughushi: So, so yeah, so when we are calling at it error,
+Eliran Friedman: Okay.
+Soso Tughushi: we are storing something in the Dynamo DB and when we are doing uh create booking, then we are reading from the Dynamo. So um yeah and in the process we are also generating a booking uh token um as well as this booking scheme.
+Eliran Friedman: What do we say in Dynamo DB?
+Soso Tughushi: uh we save in Dynamo DB uh pricing which will be eliminated I think exchange rate conversion also um as well as well uh schema uh booking scheme.
+ 
+ 
+00:39:30
+ 
+Shauly Sahar: and how to map it to the one to go um values.
+Soso Tughushi: Yeah.
+Shauly Sahar: For example,
+Eliran Friedman: Wh why why is it not stateless?
+Shauly Sahar: if you If you go to
+Eliran Friedman: Like why do we need to be stateful of that?
+Shauly Sahar: the SO example on the can you go to the example of the card not not there up.
+Soso Tughushi: Yeah. C.
+Shauly Sahar: So you see like we have passenger zero baggage something like
+Soso Tughushi: Yeah.
+Eliran Friedman: Ah,
+Shauly Sahar: this I need to translate it to into baggage for the passenger
+Eliran Friedman: okay.
+Shauly Sahar: and also uh if you can see there is like in the options you have like none and
+Eliran Friedman: So also just just a remark like while I'm doing it like basically so what TC
+Shauly Sahar: which
+Eliran Friedman: did just like do the same here is we just wrap around one to go API but like we didn't do any code changes in one to go uh when connected TC to want to go like in the end we we kept like saying that one to go can do their stuff we will just like you know rub them and make sure that like we didn't like try to change any API want to go has or how they do things or ask them to expose us like new methods also like in the previous case I'm saying not on this one in the existing we
+ 
+ 
+00:40:51
+ 
+Eliran Friedman: just like try to go with whatever they have not not talking with them about changing
+Shauly Sahar: Correct.
+Eliran Friedman: any API or any exposing new method or anything like that and we just do the adaptations 1% on TC
+Shauly Sahar: Correct. But I remind you that one to go supposed to be only one integration out of um millions that we supposed to have in TC. So um we started with them
+Eliran Friedman: Got it.
+Shauly Sahar: um you know and and and did something and then we add more integration to
+Eliran Friedman: Okay.
+Shauly Sahar: the schema that we have. So that's also why the the schema is is very like the most complex part of the of the transformation and
+Eliran Friedman: No, I I that's interesting because I feel like this is something that has to change now.
+Shauly Sahar: also
+Eliran Friedman: Like I feel like this is the core thing that needs to be changed basically. Not again not saying in this project, not saying on on the the connecting to the perspective that you want to be in in the end we need like to find a better way to uh to expose the API.
+ 
+ 
+00:42:01
+ 
+Eliran Friedman: Uh I don't feel that like you know this is like a just like wrapping up on to go's implementation
+Shauly Sahar: What do you suggest to to do some more uh transparent um mapping?
+Eliran Friedman: but like we can like the reason we're doing it because we don't store any reference like that they have today like we don't know how to recompose like the the format they have. For example,
+Shauly Sahar: Uh yes, also uh for schema validation on TC side to see that the
+Eliran Friedman: For
+Shauly Sahar: client uh return us the data as we have in the as we want in the schema.
+Eliran Friedman: example, like the card is not like we cannot just use the card like the card doesn't store all of that uh info.
+Shauly Sahar: Yes, but we need to go go upstairs uh soo for a second. So actually you see the the value that you have and uh here like in the option of the baggage is like you see it's like non
+Eliran Friedman: Mhm.
+Shauly Sahar: and 10k 10 kilograms.
+Eliran Friedman: Mhm.
+Shauly Sahar: This is something that we don't show to the customer.
+ 
+ 
+00:43:23
+ 
+Shauly Sahar: We show them the text. Okay.
+Eliran Friedman: Isn't that
+Shauly Sahar: But actually what we need to send is the value and the value for example for
+Eliran Friedman: Mhm.
+Shauly Sahar: women's the female for gender it's like sometimes zero and one it's it's something that you don't want to expose it to the customer.
+Eliran Friedman: Mhm.
+Shauly Sahar: And so that's why we had to have this uh mapping
+Eliran Friedman: But you cannot like do the reverse mapping instead of like storing it. It's not stateless like some of the things
+Soso Tughushi: Yeah, I mean uh point is that let's say we when we have create
+Eliran Friedman: here.
+Soso Tughushi: booking right we are reading again from uh Dynamob to get this schema and Elan is saying that why don't
+Eliran Friedman: No,
+Soso Tughushi: we that instead of reading from Dynamo get this from the API again
+Shauly Sahar: the card from the card.
+Soso Tughushi: and
+Shauly Sahar: H it's an option. It's an option but
+Soso Tughushi: Okay.
+Eliran Friedman: I'm just I'm just saying in the end I want to go as an API like add toart and use card.
+ 
+ 
+00:44:16
+ 
+Shauly Sahar: uh
+Eliran Friedman: So maybe we can just use the card for this
+Shauly Sahar: yeah again the the advantage that currently we have
+Eliran Friedman: flow.
+Shauly Sahar: is like we don't have other integrations. So we can do all this uh manipulation without additional layer in in the in the in uh in the between
+Eliran Friedman: Yeah, because I feel that now we are in a bit of a different position.
+Shauly Sahar: the
+Eliran Friedman: Now we are inside want to go system like it's not like we areing them from the outside. Now now I understand like what you're saying you say like okay we were outside so we didn't have any control in in their API and we
+Shauly Sahar: Yeah.
+Eliran Friedman: were supposed to connect to other B2B APIs. So we just like it was by design that we are not not training anything in one to go but now I think once we are
+Soso Tughushi: That's
+Eliran Friedman: inside want to go and we do have access to the internal maybe we can use their card just like just a thought again not sure if it's like possible or not but if we can reuse their card because card is the
+ 
+ 
+00:45:12
+ 
+Shauly Sahar: Yeah.
+Eliran Friedman: state basically the here we did all that because we were stateless but here maybe we can use their card I don't
+Shauly Sahar: Yeah. and kind of a kind of a static mapping that we know how we
+Eliran Friedman: Yeah, it's the exact same thing as the previous slide point about like uh composing and
+Shauly Sahar: we
+Eliran Friedman: decomposing. It's like the if you if you know how to build how to remove the trip ID in the end of B. Maybe you can also return it when you need it. If you need it, by the way, maybe you don't need I don't know.
+Shauly Sahar: think that we need it, but I I I but yeah, what you're s suggesting might might work
+Eliran Friedman: I think it's worth like checking it if it's if it's possible. I hope it is because then it's like the if you can make sure that all the state is using the
+Shauly Sahar: instead.
+Eliran Friedman: existing one to go databases and objects just like manipulate it from the outside it will be better even if it's a bit more work and more complex I think it's better solution but again so let me know let me know what you
+ 
+ 
+00:46:26
+ 
+Soso Tughushi: I mean I'm open for for such investigations.
+Eliran Friedman: Good.
+Soso Tughushi: I mean I I just have let's say anxiety about uh you know like for me it's unusual to be in this hesitant state when we are designing something and I got used to more on implementing something that is already set in stone. uh but if it's okay then I don't know I can can spend more time on this and uh uh you know explore the alternatives and try to do it in better way point is that I mean right now I cannot I mean with how I did things uh for now in the investigation I was basically independent I mean uh I would investigate based on what is written in the code and uh I didn't let's say consult
+Eliran Friedman: Yeah.
+Soso Tughushi: son on every step because it's very hard to catch him or the rest. But I imagine that to do such more groundup approaches, we would need some tighter collaboration.
+Eliran Friedman: So I think today Shi and I have a discussion with Sana about like you know again about framing out the whoever we want to approach with the API and by the way this design also like demonstrate to me how much it's important to to talk about it and I I do want to also say to S like that in this project like I want him to be involved and to to escort you in the when you're taking decisions that you will be able to to help you with them.
+ 
+ 
+00:47:57
+ 
+Eliran Friedman: Uh because it's important because in the end and I know it's not a simple task also. I know I know it's like not a straightforward task. I think it requires a lot of research and all the time that you already said like you you lift up one stone and then you see you know a whole new world that was covered that was that is like being unfolded. uh I think it's just important to do all the instructions that we can and then take decisions even if it takes more time I'm okay with that uh because in the end you know in the we're now taking out the search flow from F3 later on we'll take also booking flow from F3 and I want to see like for this meantime while we're in F3 we do try to do like things in one to system as as close as they we can to the actual modules and databases if you It doesn't make sense and it's complex and we have like we're hitting a wall. Let's talk about it. Okay.
+ 
+ 
+00:48:55
+ 
+Soso Tughushi: Yeah. Yeah. Just I was uh thinking how to how how
+Eliran Friedman: By the way, it's also I don't I don't want to you know I I I my thought even is that like you
+Soso Tughushi: to
+Eliran Friedman: know now SAS team is is going to start and move F search flow out of F3 because they are the expert of search maybe for booking you can also take part in the after like we this project probably in Q3 or Q4 of taking the booking flow outside of uh of F3 in steps maybe you can also be like I want that like we'll work on that. Okay. I don't want you know because maybe you'll get into the details and know how things are working and all of that. Uh so maybe even you know I do want also you to take some things like that like taking things outside of F3 to a new services. So maybe your research now and your understanding now will help you to get into the booking flow and then maybe you can also like take part in like taking it out of F3.
+ 
+ 
+00:49:51
+ 
+Eliran Friedman: Just a thought. I I just don't want I don't want you to think that like you know that the fact that you're not doing that means that you will stay forever in F3.
+Soso Tughushi: Okay.
+Eliran Friedman: I feel that like you can also and should also take things out of F3 after you have understanding on how things work and getting a bit into the details.
+Soso Tughushi: Uh well, good to know. Just um yeah uh we need to at first. Yeah, I understand your point and and um I I
+Eliran Friedman: Okay,
+Soso Tughushi: noted
+Shauly Sahar: one one more thing. So, so it's I know that maybe it's a bit frustrated to do like back and forth,
+Eliran Friedman: great.
+Shauly Sahar: but uh even for the timelines like as said we need to make sure that what we are doing is like uh the correct way even uh on on on timelines and also we discussed that and and probably uh will put more people to the effort because I think like it's we we think that the the the effort here is like very complex and and we need to paralyze things.
+ 
+ 
+00:50:59
+ 
+Shauly Sahar: So we are also working on that. So hopefully more hands will be on on on that and what you did is like will help us to to paralyze that uh for a few people.
+Soso Tughushi: Yeah, I mean if you want to let's say do more deep types I know on my side that I need to be closer to on to go team or owner of this service which is SA which I don't know or or somebody else who he will designate and again reoccuring meetings would do this trick instead of me trying to find the meeting calendars and uh
+Eliran Friedman: You think that a weekly you think that a weekly uh meeting will help you?
+Soso Tughushi: free
+Eliran Friedman: You think that he will or like you need it like more when you need like someone just like you need to ping
+Soso Tughushi: yeah weekly is not enough by twice a week maybe Tuesday and Thursday
+Eliran Friedman: him.
+Soso Tughushi: because you know if there is an iteration of one week um I mean let's say on Tuesday I would present something and then they would think about it and Thursday they would go come back to Okay.
+ 
+ 
+00:52:07
+ 
+Soso Tughushi: Because uh most of the time if I would send something in advance, nobody reads it. And uh I mean I I I suggest
+Eliran Friedman: Yeah,
+Soso Tughushi: by
+Eliran Friedman: my question is if you think like let's say even two times a week like 30 minutes is enough or you need like someone that like will like will you by the way
+Soso Tughushi: No, two two times a week would be enough. Yeah. Uh 30
+Eliran Friedman: it's something that Valer can also help you with or we need s because you said like Valer will ask for you in some
+Soso Tughushi: minutes. Yeah.
+Eliran Friedman: things.
+Soso Tughushi: Yeah, I'm not sure what's the competency of I mean most I mean if if
+Eliran Friedman: Okay. Did you start?
+Soso Tughushi: Yeah, I I I don't know.
+Eliran Friedman: He started.
+Soso Tughushi: I don't know him or we didn't kick off
+Eliran Friedman: He didn't start to help you. We said like V will help you with the with things,
+Soso Tughushi: this
+Eliran Friedman: right?
+Soso Tughushi: again.
+ 
+ 
+00:52:53
+ 
+Soso Tughushi: What's the question?
+Eliran Friedman: One of the last one of the last suggestion that we had is that V will help you.
+Soso Tughushi: Yes.
+Eliran Friedman: Did we do anything with that
+Soso Tughushi: Yeah, he would be B2B body.
+Eliran Friedman: or
+Soso Tughushi: uh but I would assume that we would involve him when it would be implementation phase and not the planning phase but I mean we can already kick off that
+Eliran Friedman: May maybe again like because s is very busy maybe if val can also help with that it
+Soso Tughushi: process.
+Eliran Friedman: will be good. If you do need sana, we need to think what is the best way to have sana engaged and like if you think two times a week or 30 minutes is enough, let's go with that. If you think that other things are needed, we'll do that.
+Soso Tughushi: Yeah. I mean, if if the valid is the person,
+Eliran Friedman: But
+Soso Tughushi: then why not? There's not nothing special about.
+Eliran Friedman: maybe there is something special about Sana because Sana is the if
+ 
+ 
+00:53:45
+ 
+Soso Tughushi: Yeah.
+Eliran Friedman: you s to go today. This is what what I learned when you say the one to go system it's sun is is one to go
+Soso Tughushi: Okay.
+Eliran Friedman: system one one man show in the worst possible way I would
+Soso Tughushi: Okay.
+Eliran Friedman: say uh it's like you know when Sana is on vacation then uh want to go stop uh but that's that's a different topic okay so I also wrote down to myself to
+Soso Tughushi: Now,
+Eliran Friedman: see like today when we speak with Sana we'll also speak about it about this with him because I have a just like make sure kana is like available in this
+Shauly Sahar: He was available.
+Eliran Friedman: time
+Shauly Sahar: I was inviting him but he didn't reply. Uh,
+Eliran Friedman: just ask him today if you can join the meeting that's why that he will be there okay just don't want to feel that we he will be surprised about this
+Shauly Sahar: sure.
+Eliran Friedman: meeting yeah you
+Shauly Sahar: I sent it last week, but yeah.
+Soso Tughushi: uh from the rest of the meeting here.
+ 
+ 
+00:54:49
+ 
+Soso Tughushi: So there are technical details about uh like how we are parsing. So when we see contact mobile, we are pattern matching and we are translating it to mobile and well there is this is like snippet of or sell the code from the existing net code. Uh this is how we got to thousand lines I think. Uh there is also quite
+Eliran Friedman: But uh Um so just a question about the previous we said that
+Soso Tughushi: complicated.
+Eliran Friedman: we'll look on using the card. If we cannot use the card what will we do? We add Dynamo DB and all of that. What what's the other option?
+Soso Tughushi: I mean uh we we could use the card but I mean uh what what I was saying that instead of writing to Dynamo DB or in our case I mean this is what I'm proposing right so when we do get itinerary I would write instead
+Eliran Friedman: Oh, okay. Yeah,
+Soso Tughushi: to radius and if we wanted it to be stateless then we can just instead of writing to
+ 
+ 
+00:55:39
+ 
+Eliran Friedman: perfect. Yeah, I agree.
+Soso Tughushi: radius we can just query the yeah previous time maybe it was a restriction that we
+Eliran Friedman: Perfect. Okay.
+Soso Tughushi: don't want to bother the downstream API pay too much on a rebooking because we already got the response from get it in early and this is why we would c it.
+Eliran Friedman: Okay, looks good. Yeah.
+Soso Tughushi: Um and there is also option to yeah like to have fully
+Eliran Friedman: Yeah, looks good. Looks
+Shauly Sahar: Yeah. So,
+Soso Tughushi: yeah
+Shauly Sahar: so do you have any more on that booking part?
+Eliran Friedman: good.
+Soso Tughushi: well just flow explanation about how booking parser works.
+Shauly Sahar: Um
+Soso Tughushi: What else? Create booking. Uh there is nothing surprising here. We just read from Dynamo when we are creating it. We also perform a validation against this uh uh booking schema. Um
+Eliran Friedman: And what is the proposal to take it all? Just like the same thing. Take it from
+ 
+ 
+00:56:40
+ 
+Soso Tughushi: yeah. Oh yeah.
+Eliran Friedman: this
+Soso Tughushi: I mean this can be changed to just take it from directly from card.
+Eliran Friedman: phone out.
+Shauly Sahar: Yeah, let's let's try to utilize whatever we have and and if we don't have let's
+Soso Tughushi: Yeah.
+Shauly Sahar: Try let's use radius uh for the addition.
+Soso Tughushi: Yeah. Yeah. One of the reasons it's also why I wouldn't I mean I was hesitant to open the box
+Shauly Sahar: Okay.
+Soso Tughushi: and treat this uh one of the want to go items in the as a black box is because we might have also inside of the side effects like uh publishing to Kafka I mean I don't know I haven't checked it or some logging that I thought it would be already encapsulated and I wouldn't let's say break the business invariant Uh but yeah, if we're going to take the ownership of of I don't know all this IP effects also that comes uh from want to go methods then yeah makes sense to open it up. Uh sorry it was um deviation
+ 
+ 
+00:57:49
+ 
+Shauly Sahar: Um, anything special that we need to look
+Soso Tughushi: create.
+Eliran Friedman: Is there anything else like like getting back to Y's
+Soso Tughushi: No, we
+Shauly Sahar: here
+Soso Tughushi: just
+Eliran Friedman: comment on the previous design review? He said like we might have some uh complex logic on booking that cannot like be written in F3 or might be like do you see anything like that? Any red flag that like something that is like more complex than what we just uh unfolded?
+Soso Tughushi: So I know I mean may we are we would calculate the estimated price in previous flow but basically when we are creating a booking we just validate it and maybe we have some side effects that we do like u reporting or sending to pricing module but since we're going to take one to go I mean since the will be sunset I don't think there will be much
+Shauly Sahar: I think only the or handling is like uh the the part that we need to make sure that is
+Soso Tughushi: there
+Shauly Sahar: um exposed as as much as we can and I I know that we didn't do a good job there.
+ 
+ 
+00:59:07
+ 
+Soso Tughushi: to error handle.
+Shauly Sahar: uh the error no here like when we get the errors from the one to go
+Soso Tughushi: Wat.
+Shauly Sahar: probably for example I don't know like millions of other errors that can be like uh their reservation failed due to um money balance I think it's in the confirm but uh for that we provided inaccurate data uh all those things uh that we need to make sure that we Expose it to the customer correctly.
+Soso Tughushi: Yeah. Yeah. I mean also I remember when we were transitioning to want to go and shutting down TC one of the reason was that this one want to go was battle tested and for the business it would be risk to go on TC all the floor and now if we are let's say breaking uh things and u disassembling it could be also additional risk I mean of course we would do gradual rollouts and testing I think um but just I don't know this is
+Eliran Friedman: I think we need to we need to
+Soso Tughushi: something that was in
+ 
+ 
+01:00:24
+ 
+Eliran Friedman: see where are the areas where we have something that is very unique per integration or per supplier or something like that and where are the generic stuff because if you're changing something that is pretty much generic then once it works you know in like one two three four times it works. If there are some very specific logic for certain cases then it will be probably yeah harder to to check and I think again
+Soso Tughushi: Welcome.
+Eliran Friedman: I feel that like the getitenary and like all the the first things are easier because it's stateless and it's like potent and it's like very it's very easy to check it because it doesn't have any destructive ways or it doesn't create any resource. the the create booking is something that is harder to check because uh that's the the end game and that's like the it will be hard to do DQ I guess on the create booking
+Shauly Sahar: No, that's the usually we are doing uh everything up until create booking.
+Eliran Friedman: phase.
+Shauly Sahar: We don't confirm booking.
+Eliran Friedman: Mhm. Okay.
+ 
+ 
+01:01:24
+ 
+Soso Tughushi: Yeah, create booking is
+Eliran Friedman: So also also also confirm booking can be uh tested heavily and
+Shauly Sahar: Create
+Soso Tughushi: safe.
+Eliran Friedman: shadow and shadow
+Shauly Sahar: create yeah that's what I wanted uh to to discuss um no you cannot do okay for sure create booking you cannot do shadow because you cannot create the booking twice right so that's uh will not
+Eliran Friedman: Mhm.
+Shauly Sahar: uh um work for us the only thing that you can do is like maybe do the same itinerary. Do that in parallel and see that the data is is similar in in in some way like you are able the price is correct,
+Eliran Friedman: Mhm.
+Shauly Sahar: you don't get errors uh for booking that uh and and etc.
+Eliran Friedman: Okay. So, let's also like try to think about in each uh each phase, how do we do the QA and how do we do like shadow calling
+Shauly Sahar: Yeah. So,
+Eliran Friedman: like
+Shauly Sahar: so do you have the part of how what we what Lean suggested? Uh
+Soso Tughushi: Yes, it's also quite detailed.
+ 
+ 
+01:02:40
+ 
+Soso Tughushi: Um but um important thing is so again what you are proposing to call the new endpoints that we're going to
+Eliran Friedman: Where do you think
+Soso Tughushi: have
+Eliran Friedman: conversation
+Shauly Sahar: Yeah, you need to be very careful.
+Soso Tughushi: Yeah, trust.
+Eliran Friedman: every word that I say counts?
+Soso Tughushi: Of course. Yeah, it counts
+Shauly Sahar: Yeah, of course. Also, also if you stay in a meeting and discuss million of other topics like we did,
+Soso Tughushi: anyway.
+Shauly Sahar: it's get into the motel. Me and stayed like for three hours on the after the last meeting and discussed different topics and so was uh put it for the model. You
+Soso Tughushi: Yeah,
+Eliran Friedman: This is crazy.
+Soso Tughushi: I see it's like two hours.
+Eliran Friedman: Wow.
+Soso Tughushi: I mean after one hour it was done.
+Shauly Sahar: see
+Eliran Friedman: And it it was good. like it was good just like input
+Soso Tughushi: Uh limit I mean it catches important
+Eliran Friedman: the
+Soso Tughushi: things but uh you see sometimes there are gaps and I cannot figure out why.
+ 
+ 
+01:03:40
+ 
+Eliran Friedman: I guess also like the sometimes like when you have our accent and it doesn't like really understand what you're trying to say,
+Soso Tughushi: Um yeah and also names uh trans like detecting names is very bad.
+Eliran Friedman: right?
+Soso Tughushi: Yeah. And I have let's say some rules to translate names. When you hear something that resembles I or Yah then it means a or Yeah.
+Eliran Friedman: You have you have to present. It's awesome. Really, you have to present it. Uh it's it's super interesting. Okay.
+Soso Tughushi: Yeah, I had lots of things here that I have done that are fun. Um, so did you see your quote uh here or ah
+Shauly Sahar: Yeah. Yeah. Here.
+Eliran Friedman: Why disapproach?
+Soso Tughushi: conversation?
+Shauly Sahar: Yeah. Yeah. In two in paragraph two here.
+Soso Tughushi: Yeah.
+Eliran Friedman: That's
+Soso Tughushi: Uh yeah yeah yeah I
+Shauly Sahar: Yeah.
+Soso Tughushi: mean yeah yeah I mean uh like when also when I was replying I also analyzed it with AI but then I wrote you myself because it started to hallucinate something and this time brain was
+ 
+ 
+01:04:50
+ 
+Eliran Friedman: Yeah.
+Soso Tughushi: better um but uh so what uh I how I see this without much reflection factoring in this site is that we have uh well let's say if we look at uh search right we in the nali uh it calls some internal class then another service which calls the SI framework the SI framework allows us to plug in new integrations or replace them and this is um the interrogation point I I I considered uh for our implementation. Uh so uh so this in this SI framework we are passing it integration ID and it loads the implementation of the integration. So it decides where to go. So uh at this point it calls search trip details or
+Eliran Friedman: Yeah.
+Soso Tughushi: anything else right and what like in what we I am proposing to do is to have let's say want to go F3 or well F3 is not something else so we would pass different integration ID and it would load up already a new endpoint uh that is on F3 so from B2B model So yeah so point is that uh let's say for
+ 
+ 
+01:06:16
+ 
+Eliran Friedman: Mhm.
+Soso Tughushi: the search flow uh all this or get there is a get and then there is some internal stuff going on and we reach SI framework and then we change it ID and this ID would result in already uh calling the new
+Eliran Friedman: Mhm.
+Soso Tughushi: endpoint.
+Eliran Friedman: Okay.
+Soso Tughushi: Yeah, but there is also a problem that um so this is SI framework and SI SI framework uh uh has its own models. So what we are getting uh from so right now we are match trying to match this contract with this contract right because for
+Eliran Friedman: Mhm.
+Soso Tughushi: for clients to be seamless but uh what what we would need to do is that when we would get this new contracts we are doing bunch of transformation before returning uh them uh to client.
+Eliran Friedman: Mhm.
+Soso Tughushi: So this like this mediator or know the pipeline which alters the model and point is that we might uh I mean in here we might enrich this uh whatever was returned by SI uh with some other data. So it would be more optimal let's say to do this fork immediately somewhere here.
+ 
+ 
+01:07:43
+ 
+Shauly Sahar: I agree.
+Soso Tughushi: But this would require an effort like significant effort
+Eliran Friedman: Mhm.
+Soso Tughushi: or I mean like uh let's say to modify this class facade to have another code path which would call directly the F3 and I mean this one if we go with this approach it's more or less low hanging fruit and if we are not investing much in TC then it would be fine.
+Shauly Sahar: Yeah, but the problem here with that approach that there is a lot of conversion that okay theoretically in the when you get the result of the search you get the full JSON almost identical to what you want to return to the client almost because there is the mapping and uh some some different thing but then you need to go it back to the pipe And then you lost a lot lost a lot of information. somebody other doing this translation and the results that you're getting is like something that is not very maybe the same as we wanted but it goes to unnecessary path right all this uh so I thought of like extending like u maybe again uh if we have a client specific client ID then it goes called the want to API get the the JSON and maybe on top of this JSON we'll uh do the only modifications that we want to to do and then return the JSON as is without any logic beside this one.
+ 
+ 
+01:09:27
+ 
+Shauly Sahar: You understand what I'm saying?
+Soso Tughushi: So again where would be for coming from which part in this pipeline we would call the F3's uh new
+Shauly Sahar: Um I think in the uh the controller of of
+Soso Tughushi: endpoint.
+Shauly Sahar: the dedicated um service in TC like in Etna search controller or in um Denali controller uh to call the that directly and and the JSON supposed to be
+Soso Tughushi: Oh,
+Shauly Sahar: in the same structure. We just need to maybe modify it a bit to to have the same IDs,
+Soso Tughushi: exactly.
+Shauly Sahar: right?
+Soso Tughushi: So, we would still need to translate the ids that were returned for ID endpoint
+Shauly Sahar: Yeah.
+Soso Tughushi: into
+Shauly Sahar: And maybe also to create the ID that the get itinerary like the itinerary ID to to set it to what because after that the client will be perform that ID and we want that it will continue with the same flow right so that That's
+Soso Tughushi: Yeah, true. Yeah. I mean, yeah,
+Shauly Sahar: true.
+Soso Tughushi: this is what I saw for now.
+ 
+ 
+01:10:41
+ 
+Soso Tughushi: I mean, what you're proposing uh makes sense. Uh and yeah, we would just require significant development time there. I mean not only to do the integration but also to uh do this translation of the uh
+Shauly Sahar: Correct. I I I don't think it's a big effort, but maybe I I am wrong.
+Soso Tughushi: ideas.
+Shauly Sahar: I think that for the search, this is like the easiest part. later on to do the change. You probably will not be able to do that method by method, I think.
+Soso Tughushi: Yeah.
+Shauly Sahar: But we need to go to the details for
+Soso Tughushi: I mean yeah so yeah
+Shauly Sahar: that.
+Soso Tughushi: I mean I was thinking about let's say trans transition period let's say if we going to have only search uh then like um then we could use the rest of the pipe from the old path.
+Shauly Sahar: Correct. I
+Soso Tughushi: Yeah but see it would be seamless uh I mean uh from get it in I will just call.
+Shauly Sahar: agree.
+Soso Tughushi: So this assumes that this is the way we went with uh that we added fork on the SI framework level or uh on like far away I mean in the SI host or in the DALI uh after the SI facet not what you proposed.
+ 
+ 
+01:12:08
+ 
+Shauly Sahar: Yeah. Again, I I'm not sure that it will work,
+Soso Tughushi: uh so yeah because if we if we want to go with this
+Shauly Sahar: but yeah.
+Soso Tughushi: uh what you're proposing then um I mean this middle
+Eliran Friedman: But
+Soso Tughushi: period where let's say we only intereded search and then we would need to ro the existing uh the rest of the endpoint to go into the existing path and I'm not sure if uh somehow the ids would stick or there would be no problems with
+Shauly Sahar: Yeah,
+Soso Tughushi: this because for example or
+Shauly Sahar: I think it's it's need like uh some details.
+Soso Tughushi: let's say we wrote get itinary uh right and we then we want to do create booking scheme since get itinary why needs to write to the
+Shauly Sahar: Yeah.
+Soso Tughushi: database then we cannot launch only get itinary we would need to launch together with create booking schema because we are dependent on the
+Eliran Friedman: that's okay. That's okay. That's okay.
+Shauly Sahar: Yeah. And then you need also the confirm to be with the same
+ 
+ 
+01:13:09
+ 
+Eliran Friedman: But maybe it's okay. Like uh again if you know if we have like for example three end points that needs to be launched on the
+Shauly Sahar: you
+Eliran Friedman: same uh if you can even if we have like let's say three milestones I think it's good. Let's say we can like implement get the search release it then we have one milestone then we can say the next one is get it get booking schema create booking confirm booking
+Shauly Sahar: Yeah.
+Eliran Friedman: it's the second milestone launch it together I think it's also good like anything that can allow us like to have roll out is good and also I think that don't don't forget that also we're doing something that we didn't say in the beginning we're saying that like for new clients they will be on F3 what you're basically doing here that we say that even existing client will be on F3 from day one which is great like in the new flow. So I feel like there are two wins that we need to to to check. I think we all agree that anyway we want to the existing clients will be on on the new flow that we we are aligned on.
+ 
+ 
+01:14:10
+ 
+Eliran Friedman: Then I think that what what you're saying now that maybe we cannot just do one roll out per API we need let's say like less rollouts for multiple APIs. I think it's perfectly fine like I wouldn't get into this like you know uh if this is the limitation that we need to like let's say roll out search first then three or four or more API together I think it's fine at least in my
+Soso Tughushi: Yeah. Yeah.
+Eliran Friedman: opinion
+Soso Tughushi: I mean the for sure uh this I mean we need to better investigate uh let's say what are the first deliverable or the next ones uh
+Eliran Friedman: I feel The number one priority that number one priority needs to be that also existing clients
+Shauly Sahar: Yes.
+Soso Tughushi: and
+Eliran Friedman: will go through the new flow just preserving their ideas. The second priority is to do it in a roll out that that makes sense by milestones and we can
+Shauly Sahar: Yes.
+Eliran Friedman: say that the milestones will not be as runner as HAPI but it's fine I
+ 
+ 
+01:15:08
+ 
+Shauly Sahar: Okay.
+Eliran Friedman: think.
+Shauly Sahar: But just to make sure this is like an intermediate step that after that the clients like will have like much more confidence in what we did because we put water into the pipes to the production maybe in a diff in some different way for for sure we'll discover a lot of things that we will discover much earlier than than uh before. Um yeah, I I
+Soso Tughushi: Yeah, it's good that it's going to be battle tested before launching.
+Eliran Friedman: And we can offer this.
+Soso Tughushi: But again, I mean, we're going to trans transition the existing clients, but after we would decide to sunset the TCS,
+Shauly Sahar: Yeah,
+Soso Tughushi: they would still need to change their IDs.
+Shauly Sahar: that's not this plan doesn't change
+Soso Tughushi: Yeah.
+Eliran Friedman: It just it basically checks everything besides the ID conversion.
+Soso Tughushi: Yeah.
+Shauly Sahar: like and yeah
+Eliran Friedman: I would say that's the
+Shauly Sahar: and the migration of the client itself to to use the other part.
+Eliran Friedman: idea.
+Shauly Sahar: Uh yeah.
+Eliran Friedman: I think it's like the the wins here are huge and again as like Shi said earlier I talked to Shi on on adding more resources.
+ 
+ 
+01:16:15
+ 
+Eliran Friedman: I think that it's a must for this kind of project. We see that it's like we don't want to rush into you know do it like as fast as possible only you running around. We want you to have more more manpower to have more people working on it. It's a strategic project and we need to treat it as one. So probably after the holidays we have more people on this
+Soso Tughushi: Very
+Eliran Friedman: project. Yeah. But by the way for me it's very impressive to see what you're doing with with AI to be honest.
+Soso Tughushi: good.
+Eliran Friedman: like uh it's super inspiring and like if the feedback will also be very interesting from your side if like let's say the before the AI era if you think it would be like uh do you think the AI really improves your velocity and your ability to get into details or like you see like the the benefits of using AI for the research
+Soso Tughushi: I mean I without AI I would not be able to do any of it.
+ 
+ 
+01:17:07
+ 
+Soso Tughushi: I mean I would need to defeat my let's say I don't know I mean learn PHP and uh yeah and velocity it's like 3x
+Eliran Friedman: This is crazy. Really just I I will not let you
+Soso Tughushi: or 5x
+Eliran Friedman: let you down until you'll uh book a a lecture for all TC about what you've done here.
+Soso Tughushi: yeah sure no yeah but also
+Eliran Friedman: This this is like amazing. Like this is really inspiring to be honest.
+Soso Tughushi: there is lots of things that are coming from me let's say the I have let's say vision about how things should be explained and the I know the visual power of diagrams uh and like in advance let's say I think about uh how the meeting could go and what would be I know the like how to maintain the flow of course there are deviations based on when the meeting happens but uh yeah I mean it's not only AI but yeah this I mean point is that I would let's say create rule to make things more visual or tell it to like okay I did this meeting and
+ 
+ 
+01:18:09
+ 
+Eliran Friedman: Yeah.
+Soso Tughushi: uh v2 like let's say I I have established a framework right on every meeting I have meeting notes and after a meeting I have a skill uh let's
+Shauly Sahar: Thanks.
+Soso Tughushi: say process transcript which describes like like so there was a meeting brief then it populates meeting record. Um and also some other stuff like there is also something called system context project context um which has limited words. So it should be like one more less than 1,000 words or 1,00 1 1.5k words where uh this basically follows every conversation that I have to have similar mental uh model of system as I have because let's say if I would do do only uh meeting this documents then it kind of loses focus.
+Eliran Friedman: Basically,
+Soso Tughushi: So
+Eliran Friedman: you are treating you're teaching the AI how you think and you want it to think like you
+Shauly Sahar: How much?
+Soso Tughushi: yeah, hang
+Eliran Friedman: think like super interesting to be honest like I'd be happy
+Shauly Sahar: I
+Soso Tughushi: up.
+Shauly Sahar: need
+Eliran Friedman: like to again whenever you feel ready when you have more time and you finish with the
+ 
+ 
+01:19:30
+ 
+Soso Tughushi: Sure.
+Eliran Friedman: research if you can show demonstrate all of that to the engineers also me to products by the way like it's very very inspiring
+Soso Tughushi: Yeah. I mean yeah this framework let's say or way of thinking I mean of course there are lots of engineering practices I am putting and let's say the universal principle of breaking things down into smaller pieces and solve them. uh but uh yeah I mean this framework let's say I'm designing something right this could be also something that products could make decision upon plus I have let's say uh recently I have created uh epic with uh like 15 stories in it which were also a result of of this repository uh all the specs that I have and accumulated knowledge was translated into jur tickets and I'm using J MCP for that. So I mean of I mean I I did presentation internally for our chist team and I said there that I mean when you have only hammer everything is a nail. This is famous quote uh that everybody hates already probably uh
+Eliran Friedman: What?
+ 
+ 
+01:20:47
+ 
+Soso Tughushi: but if if you if you only have a hammer everything looks like a
+Eliran Friedman: What did he say? Oh,
+Soso Tughushi: nail.
+Eliran Friedman: yeah. Yeah.
+Soso Tughushi: So point is that I know this tool and right now I'm putting everything here. I'm sure for products uh or for I don't know designers there will be some other tools uh that would be dedicated for that but I think some of it can be translated. Okay, I'm going to do this
+Eliran Friedman: Okay, perfect.
+Soso Tughushi: uh
+Eliran Friedman: Uh, if you want, by the way, I'm not sure we don't have a channel for this project, right? In Slack.
+Soso Tughushi: for this project.
+Shauly Sahar: Uh I think that we created for me you
+Eliran Friedman: Let's let's let's create let's take if we have a B session we can convert it or create a new
+Shauly Sahar: maybe no it's a dedicated
+Eliran Friedman: one how does it
+Shauly Sahar: channel I'm almost sure that there is a dedicated
+Eliran Friedman: called
+Shauly Sahar: channel give me one Second.
+Eliran Friedman: I think it's time to treat like this project as a as it as a formal project and also add SA to there and then like maybe it will be a bit more fluent
+ 
+ 
+01:21:54
+ 
+Soso Tughushi: Yeah, probably after this meeting uh there is like current constraint that I am a solo developer and
+Shauly Sahar: Um
+Soso Tughushi: you contradicted something to it. So after I would analyze the transcript this uh part should change most likely.
+Eliran Friedman: Mhm.
+Shauly Sahar: I um almost sure that I opened
+Eliran Friedman: Anyway,
+Shauly Sahar: the I'm
+Eliran Friedman: let's let's have a channel add me and S as well and let's try to
+Shauly Sahar: sure that you are there. Okay. Um I I just need to um
+Eliran Friedman: migration and what would it
+Shauly Sahar: Yeah. No,
+Eliran Friedman: be?
+Shauly Sahar: I know. I I will need to find it like from the millions of
+Eliran Friedman: Anyway, let's let's find a channel. Let's if I'm not there, add me add sana. Let's summarize the meeting that we had. Let's let's try to summarize every meeting also there. Okay, great.
+Soso Tughushi: Yeah.
+Eliran Friedman: Looks very good.
+Shauly Sahar: Okay.
+Eliran Friedman: So it's like again it's a great research and it's a very strategic project and I think that like the the what you're doing here is super super important like what you're doing here is one one uh part the other part is that we are talking with s abouting things from search from F3 to new services and then we'll also connect it to one API that will be the best then we'll also extract booking after what you're doing here so it's all very gradual in order like to have the new TC framework that you
+ 
+ 
+Transcription ended after 01:23:52
+
+This editable transcript was computer generated and might contain errors. People can also change the text after it was created.
