@@ -80,6 +80,16 @@ Knowledge-transfer session with Sana on CI/CD, local dev, DB schemas, background
 - **Background jobs: F3 in-process approach recommended** — Runs after HTTP response in the same PHP-FPM process (documented in F3 README). F2 queue approach exists but is not recommended. Caveat: long-running tasks may affect worker throughput.
 - **Feature flags not needed for search endpoint** — GrossBook manages feature flags per-user. B2B per-client flags are feasible but not yet implemented. No flag needed for initial search endpoint merge.
 
+## Meeting Outcomes (2026-04-07)
+
+Booking funnel deep-dive with Eliran, Shauly, and Soso:
+
+- **Existing clients to route through new F3 endpoints** — Priority #1 for parallel flow. Existing clients go through F3 (preserving their IDs) before new client onboarding. Validates the system with real traffic. Search rolls out independently; booking funnel (GetItinerary + CreateBooking + ConfirmBooking) rolls out together.
+- **State management: use 12go's cart, not new state stores** — Instead of DynamoDB/Redis for booking schema between GetItinerary and CreateBooking, investigate using 12go's existing cart. Redis as fallback only.
+- **Internal F3 methods as data source** — Use get trip details / add to cart methods directly (same as search POC approach). Don't go deeper to database layer. Verify with 12go team contact that these are the same methods used by B2C flows.
+- **Unified API direction confirmed** — Eliran: "12go is just another consumer." New B2B endpoints should be designed as the future right API. But don't mix API unification work with current implementation scope.
+- **Project upgraded to strategic status** — More resources after holidays. 2x/week meetings with 12go team contact for investigation support. Dedicated Slack channel being activated.
+
 ## Development Workflow Constraints
 
 These are not arguments in a debate — they are facts about how development will work during the transition period. Any proposed architecture must account for them.
